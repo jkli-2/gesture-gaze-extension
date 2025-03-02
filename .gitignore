@@ -1,0 +1,52 @@
+# ---- Python/Colab Files ----
+__pycache__/
+*.pyc
+*.pyo
+*.ipynb_checkpoints
+.DS_Store
+
+# Virtual environments
+venv/
+.env
+*.venv
+poetry.lock  # (if using Poetry)
+
+# Jupyter Notebook auto-generated files
+*.checkpoint
+colab-logs/
+colab-sessions/
+
+# ---- Machine Learning & Model Training ----
+models/
+datasets/
+*.h5
+*.onnx
+*.pb
+*.tflite
+*.joblib
+*.pkl
+*.ckpt
+
+# ---- JavaScript/Browser Extension ----
+node_modules/
+package-lock.json
+dist/
+build/
+.npm/
+.npm-debug.log
+*.log
+
+# ---- Logs & System Files ----
+logs/
+*.log
+debug.log
+*.out
+*.pid
+
+# ---- Git & IDE Related ----
+.vscode/
+.idea/
+*.swp
+*.swo
+.gitignore  # (To avoid recursive ignore issues)
+
