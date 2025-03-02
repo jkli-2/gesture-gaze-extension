@@ -32,6 +32,6 @@ A 42028 Deep Learning and Convolution Neural Network class project.
  │    └── README.md          <-- Main project overview
  ├── .gitignore             <-- Ignore unnecessary files (e.g., datasets, cache)
  ├── README.md              <-- General project info, how to set up
- ├── requirements.txt        <-- Python dependencies (for ML model training)
+ ├── requirements.txt       <-- Python dependencies (for ML model training)
  ├── package.json           <-- Dependencies (for JavaScript browser extension)
 ```
