@@ -2,36 +2,60 @@
 
 A 42028 Deep Learning and Convolution Neural Network class project.
 
+# Prerequisites
+
+Install `nvm` and `Git`.
+
+We use Node.js 18. After installing `nvm`, run the following:
+
+```
+nvm install 18
+nvm use 18
+nvm alias default 18
+```
+
+# Setup
+
+1. Clone this repo
+2. Run `npm install` to install dependencies
+
+# Build & Run
+
+## 1. Bundle the JS Files ("Compiling")
+
+`npx webpack --config webpack.config.js`
+
+Instead of manually bundling every time you change code, open a terminal and run:
+
+`npv webpack --watch`
+
+This watches for changes and rebuilds automatically.
+
+## 2. Load the Extension in Chrome
+
+- Open Chrome → Go to chrome://extensions/
+- Enable Developer Mode (top right).
+- Click "Load Unpacked" → Select the gesture-gaze-extension/extension folder.
+- Open any website (e.g., Google Docs, YouTube).
+- Press Ctrl + Shift + J (Windows) or Cmd + Option + J (Mac) to open DevTools Console.
+- Move Our hand up/down to see gesture logs.
+
+# Contributing
+
+To keep it simple, we use the `dev` branch. Everyone works in the `dev` branch. It will be merged into `main` when features are ready. But using feature branches is always encouraged for major changes.
+
 # File Structure
 
 ```
 📂 gesture-gaze-extension   <-- Root project folder
  ├── 📂 models              <-- Stores trained models (CNN, gaze tracking)
- │    ├── model_v1/         <-- First trained model (weights, architecture)
- │    ├── model_v2/         <-- Improved version
- │    └── README.md         <-- Model documentation
  ├── 📂 extension           <-- Browser extension source code
- │    ├── 📂 scripts        <-- JavaScript files for gesture control
- │    ├── 📂 ui             <-- Floating UI, cursor visualizations
- │    ├── manifest.json     <-- Browser extension manifest
- │    ├── background.js     <-- Handles extension lifecycle
- │    ├── content.js        <-- Injects scripts into web pages
- │    └── README.md         <-- Setup instructions
  ├── 📂 notebooks           <-- Jupyter/Colab notebooks for ML training
- │    ├── gesture_model.ipynb   <-- Hand gesture training
- │    ├── gaze_model.ipynb      <-- Gaze tracking training
- │    └── data_preprocessing.ipynb <-- Dataset preparation
- ├── 📂 datasets            <-- Store links or small dataset samples (if allowed)
- │    ├── gestures_dataset/  <-- Collected gesture data
- │    ├── gaze_dataset/      <-- Collected gaze tracking data
- │    └── README.md          <-- Dataset description
+ ├── 📂 datasets            <-- Store links or small dataset samples
  ├── 📂 docs                <-- Documentation (Design, API, Reports)
- │    ├── project_charter.md <-- Project scope, goals, features
- │    ├── architecture.md    <-- System design & technical overview
- │    ├── API_spec.md        <-- API details if applicable
- │    └── README.md          <-- Main project overview
  ├── .gitignore             <-- Ignore unnecessary files (e.g., datasets, cache)
  ├── README.md              <-- General project info, how to set up
  ├── requirements.txt       <-- Python dependencies (for ML model training)
+ ├── webpack.config.js      <-- Webpack config (for bundling)
  ├── package.json           <-- Dependencies (for JavaScript browser extension)
 ```
