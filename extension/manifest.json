@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "Gesture & Gaze Control",
+  "version": "0.1",
+  "description": "Control webpages using hand gestures and gaze tracking.",
+  "permissions": ["activeTab", "storage"],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "scripts/background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["scripts/content.js"]
+    }
+  ],
+  "action": {
+    "default_popup": "ui/popup.html"
+  }
+}
