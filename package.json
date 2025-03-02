@@ -1,0 +1,33 @@
+{
+  "name": "gesture-gaze-extension",
+  "version": "1.0.0",
+  "description": "A 42028 Deep Learning and Convolution Neural Network class project.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jkli-2/gesture-gaze-extension.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jkli-2/gesture-gaze-extension/issues"
+  },
+  "homepage": "https://github.com/jkli-2/gesture-gaze-extension#readme",
+  "devDependencies": {
+    "eslint": "^9.21.0",
+    "nodemon": "^3.1.9",
+    "webpack": "^5.98.0",
+    "webpack-cli": "^6.0.1"
+  },
+  "dependencies": {
+    "@mediapipe/holistic": "^0.5.1675471629",
+    "@tensorflow/tfjs": "^4.22.0"
+  }
+}
