@@ -52,6 +52,15 @@ function detectGesture(handLandmarks) {
     return null;
 }
 
+// Welcome page
+chrome.runtime.onInstalled.addListener((details) => {
+    if (details.reason === "install") {
+        chrome.tabs.create({ url: "ui/welcome.html" });
+    } else if (details.reason === "update") {
+        chrome.tabs.create({ url: "ui/welcome.html" });
+    }
+})
+
 // Old codes
 // Test message sending. Wait for an active tab and send a test gesture
 // setTimeout(() => {
