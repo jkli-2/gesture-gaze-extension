@@ -21,13 +21,18 @@
   },
   "homepage": "https://github.com/jkli-2/gesture-gaze-extension#readme",
   "devDependencies": {
+    "@babel/preset-env": "^7.26.9",
+    "babel-loader": "^10.0.0",
+    "copy-webpack-plugin": "^13.0.0",
     "eslint": "^9.21.0",
     "nodemon": "^3.1.9",
     "webpack": "^5.98.0",
-    "webpack-cli": "^6.0.1"
+    "webpack-cli": "^6.0.1",
+    "webpack-config-single-spa": "^7.0.3"
   },
   "dependencies": {
-    "@mediapipe/holistic": "^0.5.1675471629",
+    "@mediapipe/camera_utils": "^0.3.1675466862",
+    "@mediapipe/hands": "^0.4.1675469240",
     "@tensorflow/tfjs": "^4.22.0"
   }
 }

@@ -1,49 +1,51 @@
-// Scrolling
-let lastGesture = null;
+//
+// Pointer
+//
+let pointer;
+let pointerColor;
+let pointerX = -10; // to center align
+let pointerY = -10;
+const speed = 10;
 
-// Listen for messages from the background script
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    if (message.gesture && message.gesture !== lastGesture) {
-        console.log("Received gesture:", message.gesture);
-        handleGesture(message.gesture);
-        lastGesture = message.gesture;  // Store last gesture to avoid repetition
+function createPointer(color = "red") {
+    if (!pointer) {
+        pointer = document.createElement("div");
+        pointer.id = "gesture-pointer";
+        pointer.setAttribute("style", `
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            pointer-events: none;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: transform 0.05s linear;
+        `);
+        if (color) {
+            pointer.style.backgroundColor = color;
+        }
+        document.body.appendChild(pointer);
     }
-});
+}
 
-// Function to execute gestures
-function handleGesture(gesture) {
-    if (gesture === "scroll-up") {
-        window.scrollBy(0, -100);
-    } else if (gesture === "scroll-down") {
-        window.scrollBy(0, 100);
+function removePointer() {
+    if (pointer) {
+        pointer.remove();
+        pointer = null;
+        pointerX = -10;
+        pointerY = -10;
+    }
+}
+
+function changePointerColor(color) {
+    if (pointer) {
+        pointer.style.backgroundColor = color;
+        pointerColor = color;
     }
 }
 
 
-// Pointing
-const pointer = document.createElement("div");
-pointer.id = "gesture-pointer";
-document.body.appendChild(pointer);
-const style = document.createElement("style");
-style.innerHTML = `
-    #gesture-pointer {
-        position: fixed;
-        width: 20px;
-        height: 20px;
-        background-color: red;
-        border-radius: 50%;
-        pointer-events: none;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        transition: transform 0.05s linear;
-    }
-`;
-document.head.appendChild(style);
-
-let pointerX = -10; // half the self
-let pointerY = -10;
-const speed = 10;
 document.addEventListener("keydown", (event) => {
     switch (event.key) {
         case "w":
@@ -63,5 +65,48 @@ document.addEventListener("keydown", (event) => {
 });
 
 function updatePointerPos() {
-    pointer.style.transform = `translate(${pointerX}px, ${pointerY}px)`;
+    if (pointer) {
+        pointer.style.transform = `translate(${pointerX}px, ${pointerY}px)`;
+    }
 }
+
+// Load states
+chrome.storage.sync.get(["pointerState", "pointerColor"], (result) => {
+    if (result.pointerState) {
+        createPointer();
+    }
+    if (result.pointerColor) {
+        changePointerColor(result.pointerColor);
+    }
+})
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    // console.log("Msg in content.js:", message);
+
+    if (message.action === "pointerToggleChanged") {
+        if (message.state) {
+            createPointer(pointerColor);
+        } else {
+            removePointer();
+        }
+    }
+
+    if (message.action === "pointerColorChanged" || message.color) {
+        changePointerColor(message.color);
+    }
+});
+
+// Gesture Recognition
+// let lastGesture = null;
+// startCamera();
+// startCamera((canvas) => {
+//     const hands = initializeGestureRecognition((gesture) => {
+//         console.log("Detected gesture:", gesture);
+//         if (message.gesture !== lastGesture) {
+//             chrome.runtime.sendMessage({ action: "gestureDetected", gesture });
+//             lastGesture = gesture;  // Store last gesture to avoid repetition
+//         }
+//     });
+
+//     hands.send({ image: canvas });
+// });
