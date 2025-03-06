@@ -30,7 +30,6 @@ export async function startCamera(deviceId = null) {
         const constraints = { video: deviceId ? { deviceId: { exact: deviceId } } : true };
         try {
             const stream = await navigator.mediaDevices.getUserMedia(constraints);
-            // console.log("✅ Camera stream acquired:", stream);
             currentStream = stream;
         } catch (error) {
             console.error("Camera error:", error.name, error.message);
@@ -69,6 +68,10 @@ export async function startCamera(deviceId = null) {
         // }
         // processFrame();
     } catch (error) {
-        console.error("Camera access error:", error, );
+        if (error.name === "NotAllowedError") {
+            console.warn("User denied camera access.");
+        } else {
+            console.error("Camera error:", error.name, error.message);
+        }
     }
 }
