@@ -33,7 +33,7 @@ This watches for changes and rebuilds automatically.
 
 ## 2. Load the Extension in Chrome
 
-- Open Chrome → Go to chrome://extensions/
+- Open Chrome → Go to `chrome://extensions/`
 - Enable Developer Mode (top right).
 - Click "Load Unpacked" → Select the gesture-gaze-extension/extension folder.
 - Open any website (e.g., Google Docs, YouTube).

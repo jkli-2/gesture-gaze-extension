@@ -1,112 +1,234 @@
+import DOMFactory from "./domFactory";
+import { getGlobalPreferences, getUserData, getPerSitePreferences } from "./storageHelper";
+import { startCamera } from "./camera";
+
+// Handle preferences and states
+function applyGlobalPref(preferences) {
+    // Dark mode example
+    // if (settings.theme === "dark") {
+    //     document.body.classList.add("dark-mode");
+    // } else {
+    //     document.body.classList.remove("dark-mode");
+    // }
+    if (preferences.pointerState === true) {
+        createPointer();
+    }
+    if (preferences.pointerState === false) {
+        removePointer();
+    }
+    if (preferences.pointerColor) {
+        changePointerColor(preferences.pointerColor);
+    }
+    if (preferences.camPreviewState === true) {
+        if (!DOMFactory.hasElement(camPreviewOverlayId)) {
+            createCamPreviewOverlay();
+            startCamera();
+        }
+    }
+    if (preferences.camPreviewState === false) {
+        removeCamPreviewOverlay();
+    }
+}
+function applyPerSitePref(preferences) {}
+
+getGlobalPreferences(applyGlobalPref);
+// getPerSitePreferences(applyPerSitePref);
+
 //
 // Pointer
 //
-let pointer;
+const pointerId = "pointer";
 let pointerColor;
-let pointerX = -10; // to center align
-let pointerY = -10;
 const speed = 10;
 
 function createPointer(color = "red") {
-    if (!pointer) {
-        pointer = document.createElement("div");
-        pointer.id = "gesture-pointer";
-        pointer.setAttribute("style", `
-            position: fixed;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            pointer-events: none;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            transition: transform 0.05s linear;
-        `);
-        if (color) {
-            pointer.style.backgroundColor = color;
-        }
-        document.body.appendChild(pointer);
-    }
+    return DOMFactory.createElement(pointerId, "div", {
+        dataset: {
+            pointerx: "-10",
+            pointery: "-10",
+        },
+        style: {
+            position: "fixed",
+            width: "20px",
+            height: "20px",
+            borderRadius: "50%",
+            backgroundColor: `${color}`,
+            pointerEvents: "none",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            transition: "transform 0.05s linear",
+        },
+    });
 }
 
 function removePointer() {
-    if (pointer) {
-        pointer.remove();
-        pointer = null;
-        pointerX = -10;
-        pointerY = -10;
-    }
+    DOMFactory.removeElement(pointerId);
 }
 
 function changePointerColor(color) {
-    if (pointer) {
-        pointer.style.backgroundColor = color;
-        pointerColor = color;
-    }
+    pointerColor = color;
+    DOMFactory.updateElement(pointerId, {
+        style: {
+            backgroundColor: `${color}`,
+        },
+    });
 }
-
 
 document.addEventListener("keydown", (event) => {
+    const pointer = DOMFactory.getElement(pointerId);
+    let pointerx = parseInt(pointer.dataset.pointerx);
+    let pointery = parseInt(pointer.dataset.pointery);
     switch (event.key) {
         case "w":
-            pointerY -= speed;
+            pointery -= speed;
             break;
         case "s":
-            pointerY += speed;
+            pointery += speed;
             break;
         case "a":
-            pointerX -= speed;
+            pointerx -= speed;
             break;
         case "d":
-            pointerX += speed;
+            pointerx += speed;
             break;
     }
-    updatePointerPos();
+    updatePointerPos(pointerx.toString(), pointery.toString());
 });
 
-function updatePointerPos() {
-    if (pointer) {
-        pointer.style.transform = `translate(${pointerX}px, ${pointerY}px)`;
-    }
+function updatePointerPos(x, y) {
+    DOMFactory.updateElement(pointerId, {
+        dataset: {
+            pointerx: x,
+            pointery: y,
+        },
+        style: {
+            transform: `translate(${x}px, ${y}px)`,
+        },
+    });
 }
 
-// Load states
-chrome.storage.sync.get(["pointerState", "pointerColor"], (result) => {
-    if (result.pointerState) {
-        createPointer();
-    }
-    if (result.pointerColor) {
-        changePointerColor(result.pointerColor);
-    }
-})
+//
+// Camera Feed Preview Overlay
+//
+// Create overlay container
+const camPreviewOverlayId = "camPreviewOverlay";
+const camVideoId = "camVideo";
+const camOutputCanvasId = "camOutputCanvas";
+const gestureOutputId = "gestureOutput";
+
+function createCamPreviewOverlay(displayWidth = 320, displayHeight = 240) {
+    const camPreviewOverlay = DOMFactory.createElement(camPreviewOverlayId, "div", {
+        style: {
+            position: "fixed",
+            top: "10px",
+            right: "10px",
+            width: `${displayWidth}px`,
+            height: `${displayHeight}px`,
+            background: "grey",
+            border: "2px solid green",
+            zIndex: "9999",
+            opacity: "0.8",
+            display: "block",
+            color: "white",
+            overflow: "hidden",
+            resize: "both",
+            minWidth: "160px",
+            minHeight: "120px",
+            maxWidth: "100vw",
+            maxHeight: "100vh",
+        },
+    });
+    const camVideo = DOMFactory.createElement(
+        camVideoId,
+        "video",
+        {
+            autoplay: true,
+            playsinline: true,
+            style: {
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                position: "absolute",
+                top: "0",
+                left: "0",
+            },
+        },
+        camPreviewOverlay
+    );
+    const camOutputCanvas = DOMFactory.createElement(
+        camOutputCanvasId,
+        "canvas",
+        {
+            width: 320,
+            height: 240,
+            style: {
+                position: "absolute",
+                top: "0",
+                left: "0",
+                width: "100%",
+                height: "100%",
+                pointerEvents: "none",
+            },
+        },
+        camPreviewOverlay
+    );
+    const gestureOutput = DOMFactory.createElement(
+        gestureOutputId,
+        "p",
+        {
+            style: {
+                position: "absolute",
+                bottom: "5px",
+                left: "50%",
+                transform: "translateX(-50%)",
+                background: "rgba(0,0,0,0.6)",
+                padding: "4px 8px",
+                borderRadius: "5px",
+                color: "white",
+                fontSize: "12px",
+            },
+        },
+        camPreviewOverlay
+    );
+    return camPreviewOverlay;
+}
+
+function removeCamPreviewOverlay() {
+    DOMFactory.removeElement(camVideoId);
+    DOMFactory.removeElement(camOutputCanvasId);
+    DOMFactory.removeElement(gestureOutputId);
+    DOMFactory.removeElement(camPreviewOverlayId);
+}
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     // console.log("Msg in content.js:", message);
-
-    if (message.action === "pointerToggleChanged") {
-        if (message.state) {
-            createPointer(pointerColor);
-        } else {
-            removePointer();
+    if (message.type === "global") {
+        if (message.action === "pointerToggleChanged") {
+            if (message.state) {
+                createPointer(pointerColor);
+            } else {
+                removePointer();
+            }
+        } else if (message.action === "pointerColorChanged" || message.color) {
+            changePointerColor(message.color);
+        } else if (message.action === "previewToggleChanged") {
+            if (message.state) {
+                createCamPreviewOverlay();
+                startCamera();
+            } else {
+                removeCamPreviewOverlay();
+            }
+        } else if (message.action === "cameraSelection") {
+            console.log("Cam Select: ", message.deviceId);
+            startCamera((deviceId = message.deviceId)); // Restart camera with new device ID
+        }
+    } else if (message.type === "user") {
+    } else if (message.type === "site") {
+    } else if (message.type === "cmd") {
+    } else if (message.type === "relay") {
+        if (message.action === "updateSetting") {
+            getGlobalPreferences(applyGlobalPref);
         }
     }
-
-    if (message.action === "pointerColorChanged" || message.color) {
-        changePointerColor(message.color);
-    }
 });
-
-// Gesture Recognition
-// let lastGesture = null;
-// startCamera();
-// startCamera((canvas) => {
-//     const hands = initializeGestureRecognition((gesture) => {
-//         console.log("Detected gesture:", gesture);
-//         if (message.gesture !== lastGesture) {
-//             chrome.runtime.sendMessage({ action: "gestureDetected", gesture });
-//             lastGesture = gesture;  // Store last gesture to avoid repetition
-//         }
-//     });
-
-//     hands.send({ image: canvas });
-// });

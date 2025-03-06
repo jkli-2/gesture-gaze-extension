@@ -3,13 +3,13 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = {
     mode: "production",
+    devtool: 'cheap-module-source-map',
     entry: {
         background: "./extension/src/background.js",
         content: "./extension/src/content.js",
         popup: "./extension/src/popup.js",
         camera: "./extension/src/camera.js",
         gesture: "./extension/src/gesture.js",
-        pointer: "./extension/src/pointer.js",
     },
     output: {
         path: path.resolve(__dirname, "extension/dist"),
