@@ -1,8 +1,6 @@
 import {
     getGlobalPreferences,
-    updateGlobalPreferences,
     getUserData,
-    updateUserData,
 } from "./storageHelper";
 
 const videoSelect = document.querySelector("#videoSource");

@@ -1,64 +1,59 @@
-import { Hands } from "@mediapipe/hands";
+// // Example basic gesture detection
+// function detectGesture(handLandmarks) {
+//     const wrist = handLandmarks[0][0];
+//     const indexFingerTip = handLandmarks[0][8];
+//     const middleFingerTip = handLandmarks[0][12];
 
-const hands = new Hands({
-    locateFile: (file) => chrome.runtime.getURL(`third_party/mediapipe/hands/${file}`),
-});
+//     if (indexFingerTip.y < wrist.y && middleFingerTip.y < wrist.y) {
+//         return "scroll-up"; // Gesture: Hand raised
+//     } else if (indexFingerTip.y > wrist.y && middleFingerTip.y > wrist.y) {
+//         return "scroll-down"; // Gesture: Hand lowered
+//     }
+//     return null;
+// }
 
-hands.setOptions({
-    maxNumHands: 2,
-    modelComplexity: 1,
-    minDetectionConfidence: 0.5,
-    minTrackingConfidence: 0.5,
-});
+import * as tf from "@tensorflow/tfjs";
+import * as handpose from "@tensorflow-models/hand-pose-detection";
 
-hands.onResults((results) => {
-    // if (results.multiHandLandmarks.length > 0) {
-    //     const gesture = detectGesture(results.multiHandLandmarks);
-    //     callback(gesture); // Send detected gesture to content.js
-    // }
-    if (results.multiHandLandmarks) {
-        console.log("Hand landmarks detected:", results.multiHandLandmarks);
-    }
-});
+let detector = null;
 
-export async function recognizeGesture(imageBitmap) {
-    console.log("Received image.");
-    if (!hands) {
-        console.error("MediaPipe Hands is not initialized.");
-        return Promise.reject("MediaPipe Hands is not initialized.");
-    }
-    return new Promise((resolve, reject) => {
-        try {
-            const offscreenCanvas = new OffscreenCanvas(imageBitmap.width, imageBitmap.height);
-            const context = offscreenCanvas.getContext("2d");
-            context.drawImage(imageBitmap, 0, 0);
-            console.log("Sending canvas...");
-            // const imageData = context.getImageData(0, 0, offscreenCanvas.width, offscreenCanvas.height);
-
-            hands
-                .send({ image: offscreenCanvas })
-                .then(() => {
-                    resolve("Frame Processed.");
-                })
-                .catch((error) => {
-                    reject(error);
-                });
-        } catch (error) {
-            reject(error);
-        }
+// Before we can use HandLandmarker class we must wait for it to finish
+// loading. Machine Learning models can be large and take a moment to
+// get everything needed to run.
+export async function createGestureRecognizer() {
+    if (detector) return detector;
+    const handModel = handpose.SupportedModels.MediaPipeHands;
+    detector = await handpose.createDetector(handModel, {
+        runtime: "tfjs",
+        modelType: "full", // "lite" for better speed, "full" for accuracy
     });
+    console.log("Finish loading");
+    return detector;
 }
 
-// Example basic gesture detection
-function detectGesture(handLandmarks) {
-    const wrist = handLandmarks[0][0];
-    const indexFingerTip = handLandmarks[0][8];
-    const middleFingerTip = handLandmarks[0][12];
+let results = undefined;
 
-    if (indexFingerTip.y < wrist.y && middleFingerTip.y < wrist.y) {
-        return "scroll-up"; // Gesture: Hand raised
-    } else if (indexFingerTip.y > wrist.y && middleFingerTip.y > wrist.y) {
-        return "scroll-down"; // Gesture: Hand lowered
+export async function predictWebcam(detector, video, canvasElement, gestureOutput) {
+    if (!detector || !video || !canvasElement || !gestureOutput) return;
+
+    const predictions = await detector.estimateHands(video);
+    if (predictions.length > 0) {
+        console.log("✋ Hand Landmarks:", predictions[0].handedness);
     }
-    return null;
+
+    // const canvasCtx = canvasElement.getContext("2d");
+    // canvasCtx.save();
+    // canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+
+    // canvasCtx.restore();
+    // if (results.gestures.length > 0) {
+    //     gestureOutput.style.display = "block";
+    //     gestureOutput.style.width = videoWidth;
+    //     const categoryName = results.gestures[0][0].categoryName;
+    //     const categoryScore = parseFloat(results.gestures[0][0].score * 100).toFixed(2);
+    //     const handedness = results.handednesses[0][0].displayName;
+    //     gestureOutput.innerText = `GestureRecognizer: ${categoryName}\n Confidence: ${categoryScore} %\n Handedness: ${handedness}`;
+    // } else {
+    //     gestureOutput.style.display = "none";
+    // }
 }

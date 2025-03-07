@@ -1,9 +1,10 @@
 import DOMFactory from "./domFactory";
 import { getGlobalPreferences, getUserData, getPerSitePreferences } from "./storageHelper";
-import { startCamera } from "./camera";
+import { startCamera, stopCamera } from "./camera";
+import { createGestureRecognizer, predictWebcam } from "./gesture";
 
 // Handle preferences and states
-function applyGlobalPref(preferences) {
+async function applyGlobalPref(preferences) {
     // Dark mode example
     // if (settings.theme === "dark") {
     //     document.body.classList.add("dark-mode");
@@ -20,13 +21,16 @@ function applyGlobalPref(preferences) {
         changePointerColor(preferences.pointerColor);
     }
     if (preferences.camPreviewState === true) {
-        if (!DOMFactory.hasElement(camPreviewOverlayId)) {
-            createCamPreviewOverlay();
-            startCamera();
-        }
+        createCamPreviewOverlay();
+        startCamera(camVideoElmt);
     }
     if (preferences.camPreviewState === false) {
+        stopCamera();
         removeCamPreviewOverlay();
+    }
+    if (preferences.gestureControlState === true) {
+        gestureRecognizer = await createGestureRecognizer();
+        if (gestureRecognizer) runGestureRecognition();
     }
 }
 function applyPerSitePref(preferences) {}
@@ -117,6 +121,13 @@ const camVideoId = "camVideo";
 const camOutputCanvasId = "camOutputCanvas";
 const gestureOutputId = "gestureOutput";
 
+let camPreviewOverlayElmt = null;
+let camVideoElmt = null;
+let camOutputCanvasElmt = null;
+let gestureOutputElmt = null;
+
+let gestureRecognizer = null;
+
 function createCamPreviewOverlay(displayWidth = 320, displayHeight = 240) {
     const camPreviewOverlay = DOMFactory.createElement(camPreviewOverlayId, "div", {
         style: {
@@ -191,14 +202,34 @@ function createCamPreviewOverlay(displayWidth = 320, displayHeight = 240) {
         },
         camPreviewOverlay
     );
-    return camPreviewOverlay;
+
+    camPreviewOverlayElmt = camPreviewOverlay;
+    camVideoElmt = camVideo;
+    camOutputCanvasElmt = camOutputCanvas;
+    gestureOutputElmt = gestureOutput;
 }
 
 function removeCamPreviewOverlay() {
+    camPreviewOverlayElmt = null;
+    camVideoElmt = null;
+    camOutputCanvasElmt = null;
+    gestureOutputElmt = null;
     DOMFactory.removeElement(camVideoId);
     DOMFactory.removeElement(camOutputCanvasId);
     DOMFactory.removeElement(gestureOutputId);
     DOMFactory.removeElement(camPreviewOverlayId);
+}
+
+async function runGestureRecognition() {
+    if (!camVideoElmt) return;
+    try {
+        await predictWebcam(gestureRecognizer, camVideoElmt, camOutputCanvasElmt, gestureOutputElmt);
+        requestAnimationFrame(() => runGestureRecognition()); // Continuously process frames
+    } catch (error) {
+        console.error("Gesture recognition failed:", error);
+        stopCamera();
+        removeCamPreviewOverlay();
+    }
 }
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
@@ -215,13 +246,16 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         } else if (message.action === "previewToggleChanged") {
             if (message.state) {
                 createCamPreviewOverlay();
-                startCamera();
+                startCamera(camVideoElmt);
             } else {
+                stopCamera();
                 removeCamPreviewOverlay();
             }
         } else if (message.action === "cameraSelection") {
             console.log("Cam Select: ", message.deviceId);
-            startCamera((deviceId = message.deviceId)); // Restart camera with new device ID
+            // Restart camera with new device ID
+            createCamPreviewOverlay();
+            startCamera(camVideoElmt, message.deviceId);
         }
     } else if (message.type === "user") {
     } else if (message.type === "site") {

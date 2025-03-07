@@ -19,7 +19,7 @@
   },
   "web_accessible_resources": [
     {
-        "resources": ["dist/third_party/mediapipe/hands/*"],
+        "resources": ["dist/third_party/*"],
         "matches": ["<all_urls>"]
     }
   ]

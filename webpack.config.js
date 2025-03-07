@@ -1,5 +1,6 @@
 const path = require("path");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 
 module.exports = {
     mode: "production",
@@ -30,8 +31,13 @@ module.exports = {
         ]
     },
     plugins: [
-        new CopyWebpackPlugin({
-            patterns: [{ from: "extension/third_party", to: "third_party" }],
-        }),
+        // new CopyWebpackPlugin({
+        //     patterns: [
+        //         { 
+        //             from: "extension/third_party", 
+        //             to: "third_party"
+        //         }
+        //     ],
+        // })
     ],
 }
