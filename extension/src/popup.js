@@ -1,88 +1,57 @@
-import {
-    getGlobalPreferences,
-    getUserData,
-} from "./storageHelper";
+document.addEventListener("DOMContentLoaded", async () => {
+    const togglePointer = document.getElementById("togglePointer");
+    const pointerColor = document.getElementById("pointerColor");
+    const toggleDetect = document.getElementById("toggleDetect");
+    const toggleStream = document.getElementById("toggleStream");
+    let preferredCamId;
 
-const videoSelect = document.querySelector("#videoSource");
-const togglePreview = document.querySelector("#togglePreview");
-const togglePointer = document.querySelector("#togglePointer");
-const pointerColor = document.querySelector("#pointerColor");
-let preferredCamId;
-
-function applyPopupPref(preferences) {
-    if (preferences.pointerState) {
-        togglePointer.checked = preferences.pointerState;
-    }
-    if (preferences.pointerColor) {
-        pointerColor.value = preferences.pointerColor;
-    }
-    if (preferences.camPreviewState) {
-        togglePreview.checked = preferences.camPreviewState;
-    }
-    if (preferences.camDeviceId) {
+    function applyPopupPref(preferences) {
+        togglePointer.checked = preferences.pointerState || false;
+        pointerColor.value = preferences.pointerColor || "#FF0000";
+        toggleDetect.checked = preferences.detectState || false;
+        toggleStream.checked = preferences.streamState || false;
         preferredCamId = preferences.camDeviceId;
     }
-}
 
-getGlobalPreferences(applyPopupPref);
+    getPreferences(applyPopupPref);
 
-// getUserData((data) => {});
-
-navigator.mediaDevices
-    .enumerateDevices()
-    .then(gotDevices)
-    .catch((error) => console.error("enumerateDevices() error: ", error));
-
-function gotDevices(deviceInfos) {
-    for (const deviceInfo of deviceInfos) {
-        if (deviceInfo.kind === "videoinput") {
-            const option = document.createElement("option");
-            option.value = deviceInfo.deviceId;
-            option.text = deviceInfo.label || `Camera ${videoSelect.length + 1}`;
-            videoSelect.appendChild(option);
-        }
-    }
-    videoSelect.addEventListener("change", () => {
-        const selectedCameraId = videoSelect.value;
-        chrome.runtime.sendMessage({
-            type: "global",
-            action: "cameraSelection",
-            deviceId: selectedCameraId,
-        });
-    });
-}
-
-togglePointer.addEventListener("change", () => {
-    console.log("Sending message to background.js...");
-    chrome.runtime.sendMessage(
-        {
-            type: "global",
-            action: "updateSetting",
-            key: "pointerState",
-            value: togglePointer.checked,
-        },
-        (response) => {
+    function getPreferences(callback) {
+        chrome.storage.local.get(["preferences"], (result) => {
             if (chrome.runtime.lastError) {
-                console.error("Error sending message:", chrome.runtime.lastError);
+                console.error("Error loading preferences:", chrome.runtime.lastError);
+                callback({});
             } else {
-                console.log("Message sent successfully:", response);
+                callback(result.preferences || {});
             }
-        }
-    );
-});
-pointerColor.addEventListener("input", () => {
-    chrome.runtime.sendMessage({
-        type: "global",
-        action: "updateSetting",
-        key: "pointerColor",
-        value: pointerColor.value,
+        });
+    }
+
+    function updatePreferences(key, value) {
+        chrome.storage.local.get(["preferences"], (result) => {
+            let preferences = result.preferences || {};
+            preferences[key] = value;
+            chrome.storage.local.set({ preferences });
+        });
+    }
+
+    togglePointer.addEventListener("change", () => {
+        const state = togglePointer.checked;
+        updatePreferences("pointerState", state);
+        chrome.runtime.sendMessage({ type: "TOGGLE_POINTER", state });
     });
-});
-togglePreview.addEventListener("change", () => {
-    chrome.runtime.sendMessage({
-        type: "global",
-        action: "updateSetting",
-        key: "camPreviewState",
-        value: togglePreview.checked,
+    pointerColor.addEventListener("input", () => {
+        const val = pointerColor.value;
+        updatePreferences("pointerColor", val);
+        chrome.runtime.sendMessage({ type: "POINTER_COLOR", val });
+    });
+    toggleDetect.addEventListener("change", () => {
+        const state = toggleDetect.checked;
+        updatePreferences("detectState", state);
+        chrome.runtime.sendMessage({ type: "TOGGLE_DETECT", state });
+    });
+    toggleStream.addEventListener("change", () => {
+        const state = toggleStream.checked;
+        updatePreferences("streamState", state);
+        chrome.runtime.sendMessage({ type: "TOGGLE_STREAM", state });
     });
 });

@@ -1,268 +1,121 @@
-import DOMFactory from "./domFactory";
-import { getGlobalPreferences, getUserData, getPerSitePreferences } from "./storageHelper";
-import { startCamera, stopCamera } from "./camera";
-import { createGestureRecognizer, predictWebcam } from "./gesture";
-
-// Handle preferences and states
-async function applyGlobalPref(preferences) {
-    // Dark mode example
-    // if (settings.theme === "dark") {
-    //     document.body.classList.add("dark-mode");
-    // } else {
-    //     document.body.classList.remove("dark-mode");
-    // }
-    if (preferences.pointerState === true) {
-        createPointer();
-    }
-    if (preferences.pointerState === false) {
-        removePointer();
-    }
-    if (preferences.pointerColor) {
-        changePointerColor(preferences.pointerColor);
-    }
-    if (preferences.camPreviewState === true) {
-        createCamPreviewOverlay();
-        startCamera(camVideoElmt);
-    }
-    if (preferences.camPreviewState === false) {
-        stopCamera();
-        removeCamPreviewOverlay();
-    }
-    if (preferences.gestureControlState === true) {
-        gestureRecognizer = await createGestureRecognizer();
-        if (gestureRecognizer) runGestureRecognition();
-    }
-}
-function applyPerSitePref(preferences) {}
-
-getGlobalPreferences(applyGlobalPref);
-// getPerSitePreferences(applyPerSitePref);
-
-//
-// Pointer
-//
+const streamIframeId = "gesture-preview-iframe";
 const pointerId = "pointer";
-let pointerColor;
 const speed = 10;
 
-function createPointer(color = "red") {
-    return DOMFactory.createElement(pointerId, "div", {
-        dataset: {
-            pointerx: "-10",
-            pointery: "-10",
-        },
-        style: {
-            position: "fixed",
-            width: "20px",
-            height: "20px",
-            borderRadius: "50%",
-            backgroundColor: `${color}`,
-            pointerEvents: "none",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            transition: "transform 0.05s linear",
-        },
-    });
-}
-
-function removePointer() {
-    DOMFactory.removeElement(pointerId);
-}
-
-function changePointerColor(color) {
-    pointerColor = color;
-    DOMFactory.updateElement(pointerId, {
-        style: {
-            backgroundColor: `${color}`,
-        },
-    });
-}
-
-document.addEventListener("keydown", (event) => {
-    const pointer = DOMFactory.getElement(pointerId);
-    let pointerx = parseInt(pointer.dataset.pointerx);
-    let pointery = parseInt(pointer.dataset.pointery);
-    switch (event.key) {
-        case "w":
-            pointery -= speed;
-            break;
-        case "s":
-            pointery += speed;
-            break;
-        case "a":
-            pointerx -= speed;
-            break;
-        case "d":
-            pointerx += speed;
-            break;
+function createStreamIframe() {
+    const elmt = document.getElementById(streamIframeId);
+    if (!elmt) {
+        const iframe = document.createElement("iframe");
+        iframe.src = chrome.runtime.getURL("ui/offscreen.html");
+        iframe.id = streamIframeId;
+        iframe.style.position = "fixed";
+        iframe.style.bottom = "10px";
+        iframe.style.right = "10px";
+        iframe.style.width = "320px";
+        iframe.style.height = "240px";
+        iframe.style.border = "2px solid #666";
+        iframe.style.zIndex = "9999";
+        iframe.style.display = "none";
+        iframe.allow = "camera";
+        document.body.appendChild(iframe);
     }
-    updatePointerPos(pointerx.toString(), pointery.toString());
+}
+createStreamIframe();
+
+function createPointer() {
+    const elmt = document.getElementById(pointerId);
+    if (!elmt) {
+        const pointer = document.createElement("div");
+        pointer.id = pointerId;
+        pointer.dataset.pointerx = "-10";
+        pointer.dataset.pointery = "-10";
+        pointer.style.position = "fixed";
+        pointer.style.width = "20px";
+        pointer.style.height = "20px";
+        pointer.style.borderRadius = "50%";
+        pointer.style.backgroundColor = "red";
+        pointer.style.pointerEvents = "none";
+        pointer.style.top = "50%";
+        pointer.style.left = "50%";
+        pointer.style.transform = "translate(-50%, -50%)";
+        pointer.style.transition = "transform 0.05s linear";
+        pointer.style.display = "none";
+        document.body.appendChild(pointer);
+    }
+}
+createPointer();
+
+function showElement(id) {
+    const elmt = document.getElementById(id);
+    if (elmt) elmt.style.display = "";
+}
+
+function hideElement(id) {
+    const elmt = document.getElementById(id);
+    if (elmt) elmt.style.display = "none";
+}
+
+function removeElement(id) {
+    const elmt = document.getElementById(id);
+    if (elmt) elmt.remove();
+}
+
+getPreferences((preferences) => {
+    if (preferences.streamState === true) {
+        showElement(streamIframeId);
+    }
+    if (preferences.streamState === false) {
+        hideElement(streamIframeId);
+    }
+    if (preferences.pointerState === true) {
+        showElement(pointerId);
+    }
+    if (preferences.pointerState === false) {
+        hideElement(pointerId);
+    }
+    if (preferences.pointerColor) {
+        document.getElementById(pointerId).style.backgroundColor = preferences.pointerColor;
+    }
+    const state = preferences.detectState;
+    chrome.runtime.sendMessage({ type: "TOGGLE_DETECT", state });
 });
 
-function updatePointerPos(x, y) {
-    DOMFactory.updateElement(pointerId, {
-        dataset: {
-            pointerx: x,
-            pointery: y,
-        },
-        style: {
-            transform: `translate(${x}px, ${y}px)`,
-        },
+function getPreferences(callback) {
+    chrome.storage.local.get(["preferences"], (result) => {
+        if (chrome.runtime.lastError) {
+            console.error("Error loading preferences:", chrome.runtime.lastError);
+            callback({});
+        } else {
+            callback(result.preferences || {});
+        }
     });
 }
 
-//
-// Camera Feed Preview Overlay
-//
-// Create overlay container
-const camPreviewOverlayId = "camPreviewOverlay";
-const camVideoId = "camVideo";
-const camOutputCanvasId = "camOutputCanvas";
-const gestureOutputId = "gestureOutput";
-
-let camPreviewOverlayElmt = null;
-let camVideoElmt = null;
-let camOutputCanvasElmt = null;
-let gestureOutputElmt = null;
-
-let gestureRecognizer = null;
-
-function createCamPreviewOverlay(displayWidth = 320, displayHeight = 240) {
-    const camPreviewOverlay = DOMFactory.createElement(camPreviewOverlayId, "div", {
-        style: {
-            position: "fixed",
-            top: "10px",
-            right: "10px",
-            width: `${displayWidth}px`,
-            height: `${displayHeight}px`,
-            background: "grey",
-            border: "2px solid green",
-            zIndex: "9999",
-            opacity: "0.8",
-            display: "block",
-            color: "white",
-            overflow: "hidden",
-            resize: "both",
-            minWidth: "160px",
-            minHeight: "120px",
-            maxWidth: "100vw",
-            maxHeight: "100vh",
-        },
-    });
-    const camVideo = DOMFactory.createElement(
-        camVideoId,
-        "video",
-        {
-            autoplay: true,
-            playsinline: true,
-            style: {
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                position: "absolute",
-                top: "0",
-                left: "0",
-            },
-        },
-        camPreviewOverlay
-    );
-    const camOutputCanvas = DOMFactory.createElement(
-        camOutputCanvasId,
-        "canvas",
-        {
-            width: 320,
-            height: 240,
-            style: {
-                position: "absolute",
-                top: "0",
-                left: "0",
-                width: "100%",
-                height: "100%",
-                pointerEvents: "none",
-            },
-        },
-        camPreviewOverlay
-    );
-    const gestureOutput = DOMFactory.createElement(
-        gestureOutputId,
-        "p",
-        {
-            style: {
-                position: "absolute",
-                bottom: "5px",
-                left: "50%",
-                transform: "translateX(-50%)",
-                background: "rgba(0,0,0,0.6)",
-                padding: "4px 8px",
-                borderRadius: "5px",
-                color: "white",
-                fontSize: "12px",
-            },
-        },
-        camPreviewOverlay
-    );
-
-    camPreviewOverlayElmt = camPreviewOverlay;
-    camVideoElmt = camVideo;
-    camOutputCanvasElmt = camOutputCanvas;
-    gestureOutputElmt = gestureOutput;
-}
-
-function removeCamPreviewOverlay() {
-    camPreviewOverlayElmt = null;
-    camVideoElmt = null;
-    camOutputCanvasElmt = null;
-    gestureOutputElmt = null;
-    DOMFactory.removeElement(camVideoId);
-    DOMFactory.removeElement(camOutputCanvasId);
-    DOMFactory.removeElement(gestureOutputId);
-    DOMFactory.removeElement(camPreviewOverlayId);
-}
-
-async function runGestureRecognition() {
-    if (!camVideoElmt) return;
-    try {
-        await predictWebcam(gestureRecognizer, camVideoElmt, camOutputCanvasElmt, gestureOutputElmt);
-        requestAnimationFrame(() => runGestureRecognition()); // Continuously process frames
-    } catch (error) {
-        console.error("Gesture recognition failed:", error);
-        stopCamera();
-        removeCamPreviewOverlay();
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+    if (msg.type === "START_STREAM") {
+        showElement(streamIframeId);
     }
-}
+    if (msg.type === "STOP_STREAM") {
+        hideElement(streamIframeId);
+    }
+    if (msg.type === "SHOW_POINTER") {
+        showElement(pointerId);
+    }
+    if (msg.type === "HIDE_POINTER") {
+        hideElement(pointerId);
+    }
+    if (msg.type === "POINTER_COLOR") {
+        document.getElementById(pointerId).style.backgroundColor = msg.val;
+    }
+    if (msg.type === "POINTER") {
+        const pageW = window.innerWidth;
+        const pageH = window.innerHeight;
 
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    // console.log("Msg in content.js:", message);
-    if (message.type === "global") {
-        if (message.action === "pointerToggleChanged") {
-            if (message.state) {
-                createPointer(pointerColor);
-            } else {
-                removePointer();
-            }
-        } else if (message.action === "pointerColorChanged" || message.color) {
-            changePointerColor(message.color);
-        } else if (message.action === "previewToggleChanged") {
-            if (message.state) {
-                createCamPreviewOverlay();
-                startCamera(camVideoElmt);
-            } else {
-                stopCamera();
-                removeCamPreviewOverlay();
-            }
-        } else if (message.action === "cameraSelection") {
-            console.log("Cam Select: ", message.deviceId);
-            // Restart camera with new device ID
-            createCamPreviewOverlay();
-            startCamera(camVideoElmt, message.deviceId);
-        }
-    } else if (message.type === "user") {
-    } else if (message.type === "site") {
-    } else if (message.type === "cmd") {
-    } else if (message.type === "relay") {
-        if (message.action === "updateSetting") {
-            getGlobalPreferences(applyGlobalPref);
-        }
+        const px = (1-msg.x) * pageW;
+        const py = msg.y * pageH;
+
+        const pointer = document.getElementById(pointerId);
+        pointer.style.left = `${px}px`;
+        pointer.style.top = `${py}px`;
     }
 });
