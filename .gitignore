@@ -26,6 +26,7 @@ datasets/
 *.joblib
 *.pkl
 *.ckpt
+*.zip
 
 # ---- JavaScript/Browser Extension ----
 node_modules/
