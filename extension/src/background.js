@@ -115,4 +115,14 @@ chrome.runtime.onMessage.addListener(async (msg, sender, sendResponse) => {
             chrome.tabs.sendMessage(tabs[0].id, { type: "POINTER", x: msg.x, y: msg.y });
         });
     }
+    if (msg.type === "GAZE_MOVE") {
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, { type: "GAZE_MOVE", dx: msg.dx, dy: msg.dy });
+        });
+    }
+    if (msg.type === "CLICK") {
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, { type: "CLICK" });
+        });
+    }
 });

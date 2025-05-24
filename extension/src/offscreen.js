@@ -4,6 +4,7 @@ await tf.ready();
 // console.log("TFJS backend:", tf.getBackend());
 
 let video, canvas, ctx, stream, hands, face, eye_canvas, eye_ctx;
+let wasOKGesture = false;
 let lastHandLandmarks = [];
 let lastFaceLandmarks = [];
 const targetFPS = 30;
@@ -31,6 +32,46 @@ const LEFT_EYE_INDICES = [33, 133, 160, 159, 158, 157, 173, 246];
 const RIGHT_EYE_INDICES = [362, 263, 387, 386, 385, 384, 398, 466];
 const EYES_INDICES = LEFT_EYE_INDICES.concat(RIGHT_EYE_INDICES);
 const EYE_MODEL_INPUT_SHAPE = 96
+
+const CONFIDENCE_THRESHOLD = 0.7;
+
+const CLASS_NAMES = [
+                "center",
+                "left",
+                "right",
+                "up",
+                "down",
+                "up_left",
+                "up_right",
+                "down_left",
+                "down_right"
+            ];
+const GAZE_DIRECTIONS = {
+    center: [0, 0],
+    up: [0, -1],
+    down: [0, 1],
+    left: [-1, 0],
+    right: [1, 0],
+    up_left: [-1, -1],
+    up_right: [1, -1],
+    down_left: [-1, 1],
+    down_right: [1, 1]
+};
+
+function sendGazeDirection(predictedClass, confidence) {
+    const [dx, dy] = GAZE_DIRECTIONS[predictedClass];
+
+    const stepSize = 20;
+    const scaledDx = dx * confidence * stepSize;
+    const scaledDy = dy * confidence * stepSize;
+
+    chrome.runtime.sendMessage({
+        type: "GAZE_MOVE",
+        dx: scaledDx,
+        dy: scaledDy,
+    });
+}
+
 
 const init = async () => {
     video = document.createElement("video");
@@ -128,6 +169,7 @@ const drawLoop = async () => {
         const cropY = Math.max(box.y - margin, 0);
         const cropW = box.w + 2 * margin;
         const cropH = box.h + 2 * margin;
+        const aspect = cropW / cropH;
         const drawBoxDim = {
             x: cropX,
             y: cropY,
@@ -142,56 +184,75 @@ const drawLoop = async () => {
 
         // Draw from video to offscreen canvas
         if (video) {
+            eye_ctx.fillStyle = "#777"; // or compute avg color later
+            eye_ctx.fillRect(0, 0, EYE_MODEL_INPUT_SHAPE, EYE_MODEL_INPUT_SHAPE);
             eye_ctx.save()
             // eye_ctx.scale(-1, 1);
-            eye_ctx.drawImage(video, cropX, cropY, cropW, cropH, 0, 0, EYE_MODEL_INPUT_SHAPE, EYE_MODEL_INPUT_SHAPE);
+
+            let drawW, drawH;
+            if (aspect > 1) {
+                // wide image
+                drawW = EYE_MODEL_INPUT_SHAPE;
+                drawH = EYE_MODEL_INPUT_SHAPE / aspect;
+            } else {
+                // tall image
+                drawH = EYE_MODEL_INPUT_SHAPE;
+                drawW = EYE_MODEL_INPUT_SHAPE * aspect;
+            }
+            const offsetX = (EYE_MODEL_INPUT_SHAPE - drawW) / 2;
+            const offsetY = (EYE_MODEL_INPUT_SHAPE - drawH) / 2;
+
+            eye_ctx.drawImage(video, 
+                cropX, cropY, cropW, cropH, 
+                offsetX, offsetY, drawW, drawH);
             eye_ctx.restore();
             const imageData = eye_ctx.getImageData(0, 0, EYE_MODEL_INPUT_SHAPE, EYE_MODEL_INPUT_SHAPE);
             const inputTensor = tf.browser.fromPixels(imageData)
                 .toFloat()
                 .div(tf.scalar(255.0))
                 .expandDims();
-            const gazeClass = gazeModel.predict(inputTensor).argMax(-1);
-            const classIndex = (await gazeClass.data())[0];
-            const CLASS_NAMES = [
-                "center",
-                "left",
-                "right",
-                "up",
-                "down",
-                "up_left",
-                "up_right",
-                "down_left",
-                "down_right"
-            ];
+
+            const logits = gazeModel.predict(inputTensor); // shape: [1, 9]
+            const probs = await logits.data(); // Float32Array of 9 probabilities
+            let maxProb = -1;
+            let classIndex = -1;
+            for (let i = 0; i < probs.length; i++) {
+                if (probs[i] > maxProb) {
+                    maxProb = probs[i];
+                    classIndex = i;
+                }
+            }
+            
             const label = CLASS_NAMES[classIndex];
-            console.log("Predicted:", label);
+            // console.log(`Predicted: ${label} (confidence: ${(maxProb * 100).toFixed(2)}%)`);
+            if (maxProb >= CONFIDENCE_THRESHOLD) {
+                console.log("Predicted Gaze:", label);
+                sendGazeDirection(label, maxProb);
+            } else {
+                // console.log("Gaze: uncertain");
+            }
+
         }
     }
 
     const hand = lastHandLandmarks[0];
     const indexFingerTip = hand?.[INDEX_TIP] ?? null;
     const thumbFingerTip = hand?.[THUMB_TIP] ?? null;
-    if (indexFingerTip) {
-        const nx = indexFingerTip.x / video.videoWidth;
-        const ny = indexFingerTip.y / video.videoHeight;
-        // console.log(nx, ny);
-
-        chrome.runtime.sendMessage({
-            type: "POINTER",
-            x: nx,
-            y: ny,
-        });
-    }
     if (indexFingerTip && thumbFingerTip) {
         const dx = indexFingerTip.x - thumbFingerTip.x;
         const dy = indexFingerTip.y - thumbFingerTip.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
         // console.log(distance)
         const isOKGesture = distance < 10; // adjust threshold based on scale
-        if (isOKGesture) {
+        if (isOKGesture && !wasOKGesture) {
             console.log("OK gesture detected!");
+            chrome.runtime.sendMessage({
+                type: "CLICK"
+            });
         }
+        wasOKGesture = isOKGesture;
+    } else {
+        wasOKGesture = false;
     }
     ctx.restore();
     requestAnimationFrame(drawLoop);

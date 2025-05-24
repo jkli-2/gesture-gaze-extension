@@ -1,6 +1,10 @@
 const streamIframeId = "gesture-preview-iframe";
+const preprocIframeId = "preproc-preview-iframe";
 const pointerId = "pointer";
 const speed = 10;
+
+let pointerX = window.innerWidth / 2;
+let pointerY = window.innerHeight / 2;
 
 function createStreamIframe() {
     const elmt = document.getElementById(streamIframeId);
@@ -19,6 +23,22 @@ function createStreamIframe() {
         iframe.allow = "camera";
         document.body.appendChild(iframe);
     }
+    // const preprocElmt = document.getElementById(preprocIframeId);
+    // if (!preprocElmt) {
+    //     const iframe = document.createElement("iframe");
+    //     iframe.src = chrome.runtime.getURL("ui/offscreen.html");
+    //     iframe.id = streamIframeId;
+    //     iframe.style.position = "fixed";
+    //     iframe.style.bottom = "10px";
+    //     iframe.style.right = "10px";
+    //     iframe.style.width = "320px";
+    //     iframe.style.height = "240px";
+    //     iframe.style.border = "2px solid #666";
+    //     iframe.style.zIndex = "9999";
+    //     iframe.style.display = "none";
+    //     iframe.allow = "camera";
+    //     document.body.appendChild(iframe);
+    // }
 }
 createStreamIframe();
 
@@ -117,5 +137,32 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         const pointer = document.getElementById(pointerId);
         pointer.style.left = `${px}px`;
         pointer.style.top = `${py}px`;
+    }
+    if (msg.type === "GAZE_MOVE") {
+        pointerX = Math.min(Math.max(0, pointerX + msg.dx), window.innerWidth);
+        pointerY = Math.min(Math.max(0, pointerY + msg.dy), window.innerHeight);
+
+        const pointer = document.getElementById(pointerId);
+        if (pointer) {
+            pointer.style.left = `${pointerX}px`;
+            pointer.style.top = `${pointerY}px`;
+        }
+    }
+    if (msg.type === "CLICK") {
+        const pointer = document.getElementById(pointerId);
+        if (!pointer) return;
+
+        const rect = pointer.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+
+        const target = document.elementFromPoint(cx, cy);
+        if (target) {
+            target.dispatchEvent(new MouseEvent("click", {
+                bubbles: true,
+                cancelable: true,
+                view: window
+            }));
+        }
     }
 });
