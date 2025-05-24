@@ -9,7 +9,7 @@ __pycache__/
 venv/
 .env
 *.venv
-poetry.lock  # (if using Poetry)
+**/poetry.lock
 
 # Jupyter Notebook auto-generated files
 *.checkpoint
@@ -49,5 +49,5 @@ debug.log
 .idea/
 *.swp
 *.swo
-.gitignore  # (To avoid recursive ignore issues)
+.gitignore
 

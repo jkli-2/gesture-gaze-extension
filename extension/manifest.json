@@ -23,7 +23,7 @@
           "src/*",
           "ui/*",
           "wasm/*",
-          "gaze_model/*"
+          "models/*"
         ],
         "matches": ["<all_urls>"]
     }

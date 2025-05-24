@@ -1,15 +1,26 @@
 import * as tf from '@tensorflow/tfjs';
 import * as handpose from '@tensorflow-models/hand-pose-detection';
+import * as faceLandmarksDetection from '@tensorflow-models/face-landmarks-detection';
+
 
 await tf.ready();
 
-const model = handpose.SupportedModels.MediaPipeHands;
-
+const handModel = handpose.SupportedModels.MediaPipeHands;
 const loadHandDetector = async () => {
-  return await handpose.createDetector(model, {
+  return await handpose.createDetector(handModel, {
     runtime: 'tfjs',
     modelType: 'full'
   });
 }
 
-export { tf, loadHandDetector };
+const faceModel = faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh;
+const loadFaceDetector = async () => {
+  return await faceLandmarksDetection.createDetector(faceModel, {
+    runtime: 'tfjs',
+    refineLandmarks: true, // this enables iris/eye landmark precision
+    maxFaces: 1
+  });
+};
+
+
+export { tf, loadHandDetector, loadFaceDetector };
