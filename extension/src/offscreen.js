@@ -83,7 +83,45 @@ const GAZE_DIRECTIONS = { // reversed horizontally
 
 const CENTER_BIAS = [1.0, 0.6];
 
-function sendGazeDirection(predictedClass, confidence) {
+let neutralPose = { pitch: 0, yaw: 0 };
+
+let allowPointerMovement = true;
+let pointerPausedByOneHand = false;
+
+function updatePointerControl(handCount) {
+    if (handCount === 1 && !pointerPausedByOneHand) {
+        allowPointerMovement = false;
+        pointerPausedByOneHand = true;
+        console.log("Pointer paused.");
+    } else if ((handCount === 0 || handCount >= 2) && pointerPausedByOneHand) {
+        allowPointerMovement = true;
+        pointerPausedByOneHand = false;
+        console.log("Pointer resumed.");
+    }
+}
+
+function getPreferences(callback) {
+    chrome.storage.local.get(["preferences"], (result) => {
+        if (chrome.runtime.lastError) {
+            console.error("Error loading preferences:", chrome.runtime.lastError);
+            callback({});
+        } else {
+            callback(result.preferences || {});
+        }
+    });
+}
+getPreferences((preferences) => {
+    neutralPose = { yaw: preferences.neutralPose.yaw, pitch: preferences.neutralPose.pitch }
+})
+
+function getRelativePose(poseYaw, posePitch) {
+    return {
+        pitch: posePitch - neutralPose.pitch,
+        yaw: poseYaw - neutralPose.yaw,
+    };
+}
+
+function sendGazeDirection(predictedClass, confidence, poseYaw, posePitch) {
     const [dx, dy] = GAZE_DIRECTIONS[predictedClass];
 
     const biasedDx = dx + CENTER_BIAS[0];
@@ -93,12 +131,23 @@ function sendGazeDirection(predictedClass, confidence) {
     const scaledDx = biasedDx * confidence * stepSize;
     const scaledDy = biasedDy * confidence * stepSize;
 
-    console.log("gaze move:", scaledDx, scaledDy);
-    chrome.runtime.sendMessage({
-        type: "GAZE_MOVE",
-        dx: scaledDx,
-        dy: scaledDy,
-    });
+    const fusionFactor = 0.5; // 0 = only gaze, 1 = only head pose
+    const relativePose = getRelativePose(poseYaw, posePitch);
+    const normalisedYaw = Math.max(-10, Math.min(10, relativePose.yaw)) / 10;
+    const normalisedPitch = Math.max(-10, Math.min(10, relativePose.pitch)) / 10;
+
+    const poseScale = 20;
+    const fusedDx = scaledDx * (1 - fusionFactor) - normalisedYaw * fusionFactor * poseScale;
+    const fusedDy = scaledDy * (1 - fusionFactor) + normalisedPitch * fusionFactor * poseScale;
+
+    if (allowPointerMovement) {
+        // console.log("gaze move:", fusedDx, fusedDy);
+        chrome.runtime.sendMessage({
+            type: "GAZE_MOVE",
+            dx: fusedDx,
+            dy: fusedDy,
+        });
+    }
 }
 
 const init = async () => {
@@ -140,6 +189,28 @@ function getEyeBoundingBox(landmarks, indices) {
     return { x, y, w, h };
 }
 
+function estimateHeadPose(landmarks) {
+    const leftEye = landmarks[33];
+    const rightEye = landmarks[263];
+    const noseTip = landmarks[1];
+    const forehead = landmarks[10];
+
+    // yaw / horizontal
+    const eyeDx = rightEye.x - leftEye.x;
+    const eyeDy = rightEye.y - leftEye.y;
+    const yaw = Math.atan2(eyeDy, eyeDx);
+
+    // pitch / vertical
+    const noseToForeheadY = forehead.y - noseTip.y;
+    const noseToForeheadZ = forehead.z - noseTip.z;
+    const pitch = Math.atan2(noseToForeheadZ, noseToForeheadY);
+
+    return {
+        yawDegrees: yaw * (180 / Math.PI),
+        pitchDegrees: pitch * (180 / Math.PI),
+    };
+}
+
 function computeCentroid(landmarks, indices) {
     const points = indices.map(i => landmarks[i]);
     const x = points.reduce((sum, p) => sum + p.x, 0) / points.length;
@@ -172,6 +243,7 @@ setInterval(async () => {
     if (!video || video.videoWidth === 0 || video.videoHeight === 0) return;
     try {
         hands = await handDetector.estimateHands(video);
+        updatePointerControl(hands.length);
         if (hands.length === 0) {
             missedHandFrames++;
             if (missedHandFrames >= MAX_MISSED_HAND) {
@@ -241,6 +313,7 @@ const drawLoop = async () => {
         const rightEyeCenter = computeCentroid(lastFaceLandmarks, RIGHT_EYE_INDICES);
         drawPoint(ctx, leftEyeCenter, { color: "#00FF00" });
         drawPoint(ctx, rightEyeCenter, { color: "#00FF00" });
+        const {yawDegrees, pitchDegrees} = estimateHeadPose(lastFaceLandmarks);
 
         // Draw from video to offscreen canvas
         if (video) {
@@ -288,7 +361,7 @@ const drawLoop = async () => {
             // console.log(`Predicted: ${label} (confidence: ${(maxProb * 100).toFixed(2)}%)`);
             if (maxProb >= CONFIDENCE_THRESHOLD) {
                 // console.log("Predicted Gaze:", label);
-                sendGazeDirection(label, maxProb);
+                sendGazeDirection(label, maxProb, yawDegrees, pitchDegrees);
             } else {
                 // console.log("Gaze: uncertain");
             }
@@ -392,6 +465,24 @@ chrome.runtime.onMessage.addListener((msg) => {
     if (msg.type === "START_DETECT") init();
     if (msg.type === "STOP_DETECT" && stream) {
         stream.getTracks().forEach((t) => t.stop());
+    }
+    if (msg.type === "CALIBRATE_POSE") {
+        if (lastFaceLandmarks && lastFaceLandmarks.length > 0) {
+            const pose = estimateHeadPose(lastFaceLandmarks);
+            neutralPose = { yaw: pose.yawDegrees, pitch: pose.pitchDegrees };
+            chrome.storage.local.get(["preferences"], (result) => {
+                if (chrome.runtime.lastError) {
+                    console.error("Error loading data:", chrome.runtime.lastError);
+                } else {
+                    let preferences = result.preferences || {};
+                    preferences.neutralPose = { yaw: pose.yawDegrees, pitch: pose.pitchDegrees };
+                    chrome.storage.local.set({ preferences });
+                }
+            });
+            console.log("Calibrated neutral pose:", neutralPose);
+        } else {
+            console.warn("Cannot calibrate: no face landmarks yet.");
+        }
     }
 });
 

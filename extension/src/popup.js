@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const pointerColor = document.getElementById("pointerColor");
     const toggleDetect = document.getElementById("toggleDetect");
     const toggleStream = document.getElementById("toggleStream");
+    const btnCalibrate = document.getElementById("calibrate-btn");
     let preferredCamId;
 
     function applyPopupPref(preferences) {
@@ -54,4 +55,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         updatePreferences("streamState", state);
         chrome.runtime.sendMessage({ type: "TOGGLE_STREAM", state });
     });
+    btnCalibrate.addEventListener("click", () => {
+        chrome.runtime.sendMessage({ type: "CALIBRATE_POSE" });
+});
 });

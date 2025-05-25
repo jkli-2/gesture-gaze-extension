@@ -47,6 +47,7 @@ function initializeUserStorage() {
                     pointerColor: "#ff0000",
                     streamState: true,
                     camDeviceId: null,
+                    neutralPose: { yaw: 0, pitch: 0 }
                 },
                 data: [
                     {
