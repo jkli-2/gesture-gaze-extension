@@ -12,10 +12,6 @@ chrome.runtime.onStartup.addListener(() => {
     initializeUserStorage();
 });
 
-(async () => {
-    await ensureOffscreenDoc();
-})();
-
 let creating;
 async function ensureOffscreenDoc() {
     const path = "ui/offscreen.html";
@@ -75,6 +71,12 @@ function initializeUserStorage() {
 }
 
 chrome.runtime.onMessage.addListener(async (msg, sender, sendResponse) => {
+    if (msg.type === "OFFSCREEN_READY") {
+        chrome.runtime.sendMessage({ type: "START_DETECT" });
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, { type: "OFFSCREEN_READY" });
+        });
+    }
     if (msg.type === "TOGGLE_DETECT") {
         await ensureOffscreenDoc();
         if (msg.state) {

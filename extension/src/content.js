@@ -5,6 +5,7 @@ const speed = 10;
 
 let pointerX = window.innerWidth / 2;
 let pointerY = window.innerHeight / 2;
+let pointerAnimationColor = "red";
 
 function createStreamIframe() {
     const elmt = document.getElementById(streamIframeId);
@@ -23,22 +24,6 @@ function createStreamIframe() {
         iframe.allow = "camera";
         document.body.appendChild(iframe);
     }
-    // const preprocElmt = document.getElementById(preprocIframeId);
-    // if (!preprocElmt) {
-    //     const iframe = document.createElement("iframe");
-    //     iframe.src = chrome.runtime.getURL("ui/offscreen.html");
-    //     iframe.id = streamIframeId;
-    //     iframe.style.position = "fixed";
-    //     iframe.style.bottom = "10px";
-    //     iframe.style.right = "10px";
-    //     iframe.style.width = "320px";
-    //     iframe.style.height = "240px";
-    //     iframe.style.border = "2px solid #666";
-    //     iframe.style.zIndex = "9999";
-    //     iframe.style.display = "none";
-    //     iframe.allow = "camera";
-    //     document.body.appendChild(iframe);
-    // }
 }
 createStreamIframe();
 
@@ -95,6 +80,7 @@ getPreferences((preferences) => {
     }
     if (preferences.pointerColor) {
         document.getElementById(pointerId).style.backgroundColor = preferences.pointerColor;
+        pointerAnimationColor = preferences.pointerColor;
     }
     const state = preferences.detectState;
     chrome.runtime.sendMessage({ type: "TOGGLE_DETECT", state });
@@ -111,7 +97,79 @@ function getPreferences(callback) {
     });
 }
 
+function createStatusPill(message = "Please wait...") {
+    if (document.getElementById("inference-status-pill")) return;
+
+    const pill = document.createElement("div");
+    pill.id = "inference-status-pill";
+    pill.style.cssText = `
+        position: fixed;
+        bottom: 32px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.7);
+        color: #fff;
+        padding: 8px 20px;
+        border-radius: 999px;
+        font-size: 14px;
+        font-family: sans-serif;
+        z-index: 999999;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+    `;
+    pill.textContent = message;
+    document.body.appendChild(pill);
+
+    requestAnimationFrame(() => {
+        pill.style.opacity = "1";
+    });
+}
+
+function removeStatusPill() {
+    const pill = document.getElementById("inference-status-pill");
+    if (pill) {
+        pill.style.opacity = "0";
+        setTimeout(() => pill.remove(), 300); // match transition duration
+    }
+}
+
+createStatusPill("Loading models, please wait...");
+
+function animateClick(x, y) {
+    const ripple = document.createElement("div");
+    ripple.className = "click-ripple";
+    ripple.style.cssText = `
+        position: fixed;
+        top: ${y}px;
+        left: ${x}px;
+        width: 20px;
+        height: 20px;
+        background: ${pointerAnimationColor};
+        border-radius: 50%;
+        transform: translate(-50%, -50%) scale(0.8);
+        z-index: 999999;
+        pointer-events: none;
+        transition: transform 300ms ease, opacity 300ms ease;
+    `;
+    document.body.appendChild(ripple);
+
+    requestAnimationFrame(() => {
+        ripple.style.transform = "translate(-50%, -50%) scale(4)";
+        ripple.style.opacity = "0";
+    });
+
+    setTimeout(() => {
+        ripple.remove();
+    }, 300);
+}
+
+
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+    if (msg.type === "OFFSCREEN_READY") {
+        removeStatusPill();
+    }
     if (msg.type === "START_STREAM") {
         showElement(streamIframeId);
     }
@@ -126,6 +184,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     }
     if (msg.type === "POINTER_COLOR") {
         document.getElementById(pointerId).style.backgroundColor = msg.val;
+        pointerAnimationColor = msg.val;
     }
     if (msg.type === "POINTER") {
         const pageW = window.innerWidth;
@@ -133,6 +192,9 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
 
         const px = (1-msg.x) * pageW;
         const py = msg.y * pageH;
+
+        pointerX = px;
+        pointerY = py;
 
         const pointer = document.getElementById(pointerId);
         pointer.style.left = `${px}px`;
@@ -164,5 +226,6 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
                 view: window
             }));
         }
+        animateClick(cx, cy);
     }
 });
