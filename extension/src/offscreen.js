@@ -5,8 +5,6 @@ let handDetector, faceDetector, gazeModel;
 
 async function loadModelsOnce() {
     if (modelsLoaded) return;
-    await tf.ready();
-    // console.log("TFJS backend:", tf.getBackend());
     handDetector = await loadHandDetector();
     faceDetector = await loadFaceDetector();
     try {
@@ -269,10 +267,9 @@ const drawLoop = async () => {
 
     for (const landmarks of lastHandLandmarks) {
         drawConnectors(ctx, landmarks, {
-            color: "#FFF",
-            lineWidth: 4,
+            color: "#FFF"
         });
-        drawLandmarks(ctx, landmarks, { color: "#FF00FF", radius: 6 });
+        drawLandmarks(ctx, landmarks, { color: "#FF00FF" });
     }
 
     if (lastFaceLandmarks.length > 0) {

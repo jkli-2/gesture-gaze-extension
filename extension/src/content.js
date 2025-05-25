@@ -38,7 +38,9 @@ function createPointer() {
         pointer.style.width = "20px";
         pointer.style.height = "20px";
         pointer.style.borderRadius = "50%";
+        pointer.style.border = "2px solid white";
         pointer.style.backgroundColor = "red";
+        pointer.style.boxShadow = "0 0 10px rgba(0, 0, 0, 0.6)";
         pointer.style.pointerEvents = "none";
         pointer.style.top = "50%";
         pointer.style.left = "50%";
@@ -97,7 +99,7 @@ function getPreferences(callback) {
     });
 }
 
-function createStatusPill(message = "Please wait...") {
+function createStatusPill(message = "Bottom text") {
     if (document.getElementById("inference-status-pill")) return;
 
     const pill = document.createElement("div");
@@ -112,6 +114,7 @@ function createStatusPill(message = "Please wait...") {
         padding: 8px 20px;
         border-radius: 999px;
         font-size: 14px;
+        font-weight: 600;
         font-family: sans-serif;
         z-index: 999999;
         box-shadow: 0 2px 6px rgba(0,0,0,0.3);
@@ -199,6 +202,13 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         const pointer = document.getElementById(pointerId);
         pointer.style.left = `${px}px`;
         pointer.style.top = `${py}px`;
+    }
+    if (msg.type === "CENTRE_POINTER") {
+        pointerX = window.innerWidth / 2
+        pointerY = window.innerHeight / 2
+        const pointer = document.getElementById(pointerId);
+        pointer.style.left = `${pointerX}px`;
+        pointer.style.top = `${pointerY}px`;
     }
     if (msg.type === "GAZE_MOVE") {
         pointerX = Math.min(Math.max(0, pointerX + msg.dx), window.innerWidth);

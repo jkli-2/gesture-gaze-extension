@@ -2,7 +2,6 @@ import * as tf from '@tensorflow/tfjs';
 import * as handpose from '@tensorflow-models/hand-pose-detection';
 import * as faceLandmarksDetection from '@tensorflow-models/face-landmarks-detection';
 
-
 await tf.ready();
 
 const handModel = handpose.SupportedModels.MediaPipeHands;
@@ -21,6 +20,5 @@ const loadFaceDetector = async () => {
     maxFaces: 1
   });
 };
-
 
 export { tf, loadHandDetector, loadFaceDetector };
