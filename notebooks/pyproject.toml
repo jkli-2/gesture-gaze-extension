@@ -8,11 +8,26 @@ authors = [
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-    "tensorflowjs (>=4.22.0,<5.0.0)"
+    "tensorflowjs (>=4.22.0,<5.0.0)",
+    "tensorflow (>=2.19.0,<3.0.0)",
+    "jupyter (>=1.1.1,<2.0.0)",
+    "opencv-python (>=4.11.0.86,<5.0.0.0)",
+    "tqdm (>=4.67.1,<5.0.0)"
 ]
 
 [tool.poetry]
 package-mode = false
+
+[[tool.poetry.source]]
+name = "pytorch_cpu"
+url = "https://download.pytorch.org/whl/cpu"
+priority = "explicit"
+
+
+[tool.poetry.dependencies]
+torch = {source = "pytorch_cpu"}
+torchvision = {source = "pytorch_cpu"}
+torchaudio = {source = "pytorch_cpu"}
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]

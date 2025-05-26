@@ -19,6 +19,7 @@ function createStreamIframe() {
         iframe.style.width = "320px";
         iframe.style.height = "240px";
         iframe.style.border = "2px solid #666";
+        iframe.style.borderRadius = "8px";
         iframe.style.zIndex = "9999";
         iframe.style.display = "none";
         iframe.allow = "camera";
