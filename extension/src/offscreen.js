@@ -20,6 +20,8 @@ let video, canvas, ctx, stream, hands, face, eye_canvas, eye_ctx;
 let wasOKGesture = false;
 let lastHandLandmarks = [];
 let lastFaceLandmarks = [];
+let lastDx = 0;
+let lastDy = 0;
 const targetFPS = 30;
 const interval = 1000 / targetFPS;
 
@@ -41,7 +43,7 @@ const PINKY_TIP = 20;
 const LEFT_EYE_INDICES = [33, 133, 160, 159, 158, 157, 173, 246];
 const RIGHT_EYE_INDICES = [362, 263, 387, 386, 385, 384, 398, 466];
 const EYES_INDICES = LEFT_EYE_INDICES.concat(RIGHT_EYE_INDICES);
-const EYE_MODEL_INPUT_SHAPE = 96
+const EYE_MODEL_INPUT_SHAPE = 224
 
 const CONFIDENCE_THRESHOLD = 0.8;
 
@@ -119,6 +121,34 @@ function getRelativePose(poseYaw, posePitch) {
     };
 }
 
+function sendRawGazeVector(dx, dy, poseYaw, posePitch) {
+    const biasedDx = dx;
+    const biasedDy = dy - 0.8;
+
+    const stepSize = 5;
+    const scaledDx = biasedDx * stepSize;
+    const scaledDy = biasedDy * stepSize;
+
+    const fusionFactor = 0.5;
+    const relativePose = getRelativePose(poseYaw, posePitch);
+    const normalisedYaw = Math.max(-10, Math.min(10, relativePose.yaw)) / 10;
+    const normalisedPitch = Math.max(-10, Math.min(10, relativePose.pitch)) / 10;
+
+    const poseScale = 5;
+    const fusedDx = scaledDx * (1 - fusionFactor) - normalisedYaw * fusionFactor * poseScale;
+    const fusedDy = scaledDy * (1 - fusionFactor) + normalisedPitch * fusionFactor * poseScale;
+
+    console.log(fusedDx, fusedDy)
+    if (allowPointerMovement) {
+        chrome.runtime.sendMessage({
+            type: "GAZE_MOVE",
+            dx: fusedDx,
+            dy: fusedDy,
+        });
+    }
+}
+
+// Use this if we use classifier based gaze model
 function sendGazeDirection(predictedClass, confidence, poseYaw, posePitch) {
     const [dx, dy] = GAZE_DIRECTIONS[predictedClass];
 
@@ -216,6 +246,13 @@ function computeCentroid(landmarks, indices) {
     return { x, y };
 }
 
+let leftEyeCenter = null;
+let rightEyeCenter = null;
+let gazeOrigin = null;
+let pupilTensor = null;
+let drawBoxDim = null;
+let paddedBoxDim = null;
+
 setInterval(async () => {
     if (!video || video.videoWidth === 0 || video.videoHeight === 0) return;
     const vw = video.videoWidth;
@@ -233,10 +270,91 @@ setInterval(async () => {
             const currLandmarks = face[0].keypoints;
             lastFaceLandmarks = currLandmarks;
             missedFaceFrames = 0;
+            const box = getEyeBoundingBox(lastFaceLandmarks, EYES_INDICES);
+            leftEyeCenter = computeCentroid(lastFaceLandmarks, LEFT_EYE_INDICES);
+            rightEyeCenter = computeCentroid(lastFaceLandmarks, RIGHT_EYE_INDICES);
+            gazeOrigin = {
+                x: (leftEyeCenter.x + rightEyeCenter.x) / 2,
+                y: (leftEyeCenter.y + rightEyeCenter.y) / 2
+            };
+            pupilTensor = tf.tensor2d([[
+                leftEyeCenter.x / vw,
+                leftEyeCenter.y / vh,
+                rightEyeCenter.x / vw,
+                rightEyeCenter.y / vh
+            ]]);
+            const margin_x = box.w * 1.8;
+            const margin_y = box.h;
+
+            const cropX1 = Math.max(0, box.x - margin_x);
+            const cropY1 = Math.max(0, box.y - margin_y);
+            const cropX2 = Math.min(canvas.width, box.x + box.w + margin_x);
+            const cropY2 = Math.min(canvas.height, box.y + box.h + margin_y);
+
+            const cropW = cropX2 - cropX1;
+            const cropH = cropY2 - cropY1;
+
+            drawBoxDim = {
+                x: cropX1,
+                y: cropY1,
+                w: cropW,
+                h: cropH
+            };
+
+            // pad to square
+            const maxSide = Math.max(cropW, cropH);
+            const deltaW = maxSide - cropW;
+            const deltaH = maxSide - cropH;
+            const squareX = cropX1 - deltaW / 2;
+            const squareY = cropY1 - deltaH / 2;
+
+            paddedBoxDim = {
+                maxSide: maxSide,
+                squareX: squareX,
+                squareY: squareY
+            }
         }
     } catch (err) {
         console.warn("Gaze detector error:", err);
     }
+
+    if (!video || video.videoWidth === 0 || video.videoHeight === 0) return;
+    eye_ctx.fillStyle = "#777"; // or compute avg color later
+    eye_ctx.fillRect(0, 0, EYE_MODEL_INPUT_SHAPE, EYE_MODEL_INPUT_SHAPE);
+    eye_ctx.save()
+
+    const aspect = EYE_MODEL_INPUT_SHAPE / paddedBoxDim.maxSide;
+    const drawW = drawBoxDim.w * aspect;
+    const drawH = drawBoxDim.h * aspect;
+    const offsetX = (EYE_MODEL_INPUT_SHAPE - drawW) / 2;
+    const offsetY = (EYE_MODEL_INPUT_SHAPE - drawH) / 2;
+
+    if (
+        drawBoxDim.w <= 0 || drawBoxDim.h <= 0 ||
+        drawW <= 0 || drawH <= 0
+    ) {
+        console.warn("Invalid dimensions", {
+            drawBoxDim, drawW, drawH
+        });
+        return;
+    }
+    eye_ctx.drawImage(video, 
+        drawBoxDim.x, drawBoxDim.y, drawBoxDim.w, drawBoxDim.h, 
+        offsetX, offsetY, drawW, drawH);
+    eye_ctx.restore();
+    const imageData = eye_ctx.getImageData(0, 0, EYE_MODEL_INPUT_SHAPE, EYE_MODEL_INPUT_SHAPE);
+    const imageTensor = tf.browser.fromPixels(imageData)
+        .toFloat()
+        .div(tf.scalar(255.0))
+        .expandDims();
+    const output = gazeModel.predict({
+        "image_input": imageTensor,
+        "pupil_input": pupilTensor
+    });
+
+    const [dx, dy] = (await output.data());
+    lastDx = dx;
+    lastDy = dy;
 
     if (!video || video.videoWidth === 0 || video.videoHeight === 0) return;
     try {
@@ -266,104 +384,24 @@ const drawLoop = async () => {
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
     for (const landmarks of lastHandLandmarks) {
-        drawConnectors(ctx, landmarks, {
-            color: "#FFF"
-        });
+        drawConnectors(ctx, landmarks, { color: "#FFF" });
         drawLandmarks(ctx, landmarks, { color: "#FF00FF" });
     }
 
     if (lastFaceLandmarks.length > 0) {
-        const box = getEyeBoundingBox(lastFaceLandmarks, EYES_INDICES);
-        const margin_x = box.w * 0.5;
-        const margin_y = box.h * 2.0;
-
-        const cropX1 = Math.max(0, box.x - margin_x);
-        const cropY1 = Math.max(0, box.y - margin_y);
-        const cropX2 = Math.min(canvas.width, box.x + box.w + margin_x);
-        const cropY2 = Math.min(canvas.height, box.y + box.h + margin_y);
-
-        const cropW = cropX2 - cropX1;
-        const cropH = cropY2 - cropY1;
-
-        const drawBoxDim = {
-            x: cropX1,
-            y: cropY1,
-            w: cropW,
-            h: cropH
-        };
-
-        // pad to square
-        const maxSide = Math.max(cropW, cropH);
-        const deltaW = maxSide - cropW;
-        const deltaH = maxSide - cropH;
-        const leftPad = Math.floor(deltaW / 2);
-        const topPad = Math.floor(deltaH / 2);
-        const squareX = cropX1 - deltaW / 2;
-        const squareY = cropY1 - deltaH / 2;
-
         ctx.strokeStyle = "#FF00FF";
         ctx.lineWidth = 2;
-        ctx.strokeRect(squareX, squareY, maxSide, maxSide);
+        ctx.strokeRect(paddedBoxDim.squareX, paddedBoxDim.squareY, paddedBoxDim.maxSide, paddedBoxDim.maxSide);
         
-        drawBox(ctx, drawBoxDim, { color: "#00FFFF", lineWidth: 2 });
-        const leftEyeCenter = computeCentroid(lastFaceLandmarks, LEFT_EYE_INDICES);
-        const rightEyeCenter = computeCentroid(lastFaceLandmarks, RIGHT_EYE_INDICES);
+        // drawBox(ctx, drawBoxDim, { color: "#00FFFF", lineWidth: 2 });
         drawPoint(ctx, leftEyeCenter, { color: "#00FF00" });
         drawPoint(ctx, rightEyeCenter, { color: "#00FF00" });
+        drawGazeArrow(ctx, gazeOrigin, lastDx, lastDy, 80, "red");
+        
         const {yawDegrees, pitchDegrees} = estimateHeadPose(lastFaceLandmarks);
-
-        // Draw from video to offscreen canvas
-        if (video) {
-            eye_ctx.fillStyle = "#777"; // or compute avg color later
-            eye_ctx.fillRect(0, 0, EYE_MODEL_INPUT_SHAPE, EYE_MODEL_INPUT_SHAPE);
-            eye_ctx.save()
-
-            const aspect = EYE_MODEL_INPUT_SHAPE / maxSide;
-            const drawW = cropW * aspect;
-            const drawH = cropH * aspect;
-            const offsetX = (EYE_MODEL_INPUT_SHAPE - drawW) / 2;
-            const offsetY = (EYE_MODEL_INPUT_SHAPE - drawH) / 2;
-
-            if (
-                cropW <= 0 || cropH <= 0 ||
-                drawW <= 0 || drawH <= 0
-            ) {
-                console.warn("Skipping inference: invalid dimensions", {
-                    cropW, cropH, drawW, drawH
-                });
-                return;
-            }
-            eye_ctx.drawImage(video, 
-                cropX1, cropY1, cropW, cropH, 
-                offsetX, offsetY, drawW, drawH);
-            eye_ctx.restore();
-            const imageData = eye_ctx.getImageData(0, 0, EYE_MODEL_INPUT_SHAPE, EYE_MODEL_INPUT_SHAPE);
-            const inputTensor = tf.browser.fromPixels(imageData)
-                .toFloat()
-                .div(tf.scalar(255.0))
-                .expandDims();
-
-            const logits = gazeModel.predict(inputTensor);
-            const probs = await logits.data();
-            let maxProb = -1;
-            let classIndex = -1;
-            for (let i = 0; i < probs.length; i++) {
-                if (probs[i] > maxProb) {
-                    maxProb = probs[i];
-                    classIndex = i;
-                }
-            }
-            
-            const label = CLASS_NAMES[classIndex];
-            // console.log(`Predicted: ${label} (confidence: ${(maxProb * 100).toFixed(2)}%)`);
-            if (maxProb >= CONFIDENCE_THRESHOLD) {
-                // console.log("Predicted Gaze:", label);
-                sendGazeDirection(label, maxProb, yawDegrees, pitchDegrees);
-            } else {
-                // console.log("Gaze: uncertain");
-            }
-
-        }
+        const norm = Math.hypot(lastDx, lastDy);
+        const gazeVec = norm > 0 ? [lastDx / norm, lastDy / norm] : [0, 0];
+        sendRawGazeVector(gazeVec[0], gazeVec[1], yawDegrees, pitchDegrees);
     }
 
     const hand = lastHandLandmarks[0];
@@ -457,6 +495,39 @@ function drawConnectors(ctx, landmarks, { color = "#FF0000", lineWidth = 2 } = {
         }
     }
 }
+
+function drawGazeArrow(ctx, origin, dx, dy, scale = 50, color = "red") {
+    const startX = origin.x;
+    const startY = origin.y;
+    const endX = startX + dx * scale;
+    const endY = startY + dy * scale;
+
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(startX, startY);
+    ctx.lineTo(endX, endY);
+    ctx.stroke();
+
+    // Draw arrowhead
+    const angle = Math.atan2(endY - startY, endX - startX);
+    const headLength = 10;
+
+    ctx.beginPath();
+    ctx.moveTo(endX, endY);
+    ctx.lineTo(
+        endX - headLength * Math.cos(angle - Math.PI / 6),
+        endY - headLength * Math.sin(angle - Math.PI / 6)
+    );
+    ctx.lineTo(
+        endX - headLength * Math.cos(angle + Math.PI / 6),
+        endY - headLength * Math.sin(angle + Math.PI / 6)
+    );
+    ctx.lineTo(endX, endY);
+    ctx.fillStyle = color;
+    ctx.fill();
+}
+
 
 chrome.runtime.onMessage.addListener((msg) => {
     if (msg.type === "START_DETECT") init();
