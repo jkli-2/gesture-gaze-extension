@@ -12,7 +12,11 @@ dependencies = [
     "tensorflow (>=2.19.0,<3.0.0)",
     "jupyter (>=1.1.1,<2.0.0)",
     "opencv-python (>=4.11.0.86,<5.0.0.0)",
-    "tqdm (>=4.67.1,<5.0.0)"
+    "tqdm (>=4.67.1,<5.0.0)",
+    "matplotlib (>=3.10.3,<4.0.0)",
+    "scikit-learn (>=1.6.1,<2.0.0)",
+    "imgaug (>=0.4.0,<0.5.0)",
+    "albumentations (>=2.0.7,<3.0.0)"
 ]
 
 [tool.poetry]
