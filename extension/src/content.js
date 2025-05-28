@@ -13,6 +13,113 @@ let pointerAnimationColor = "red";
 const elasticity = 0.15;
 let isPointerDown = false;
 let lastHoveredElement;
+let gazeScrollMode = false;
+let scrollToggleButton = null;
+let stickyScrollMode = false;
+let stickScrollToggleButton = null;
+const GAZE_SCROLL_SPEED_X = 2;
+const GAZE_SCROLL_SPEED_Y = 5;
+
+function stickyScroll(startX, startY, dx, dy) {
+    const startEvent = new MouseEvent("mousedown", {
+        clientX: startX,
+        clientY: startY,
+        bubbles: true
+    });
+    const moveEvent = new MouseEvent("mousemove", {
+        clientX: startX + dx,
+        clientY: startY + dy,
+        bubbles: true
+    });
+    const endEvent = new MouseEvent("mouseup", {
+        clientX: startX + dx,
+        clientY: startY + dy,
+        bubbles: true
+    });
+    const target = document.elementFromPoint(startX, startY);
+    if (target) {
+        target.dispatchEvent(startEvent);
+        target.dispatchEvent(moveEvent);
+        target.dispatchEvent(endEvent);
+    }
+}
+
+function useMaterialIcons() {
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = chrome.runtime.getURL("style/material-icons.css");
+    document.head.appendChild(link);
+}
+useMaterialIcons();
+
+function createFloatingPanel() {
+    const panel = document.createElement("div");
+    panel.id = "omni-panel";
+    panel.style.cssText = `
+        position: fixed;
+        top: 120px;
+        right: 20px;
+        z-index: 999999;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        background: rgba(0, 0, 0, 0.3);
+        padding: 12px 10px;
+        border-radius: 12px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    `;
+
+    const actionButtons = [
+        { label: "arrow_upward", action: () => window.scrollBy(0, -200), title: "Scroll Up" },
+        { label: "arrow_downward", action: () => window.scrollBy(0, 200), title: "Scroll Down" },
+        // { label: "vertical_align_top", action: () => window.scrollTo(0, 0), title: "Scroll to Top" },
+        // { label: "refresh", action: () => location.reload(), title: "Refresh" },
+        { label: "arrow_back", action: () => history.back(), title: "Back" },
+        { label: "arrow_forward", action: () => history.forward(), title: "Forward" },
+        { label: "pan_tool", title: "Gaze Scroll Mode" },
+        // { label: "open_with", title: "Sticky Scroll Mode" }
+
+    ];
+    actionButtons.forEach(({ label, action, title }) => {
+        const btn = document.createElement("div");
+        btn.innerHTML = `<span class="material-icons">${label}</span>`;
+        btn.title = title;
+        btn.style.cssText = `
+            font-family: 'Material Icons';
+            font-size: 24px;
+            background: white;
+            color: black;
+            padding: 6px 10px;
+            border-radius: 8px;
+            text-align: center;
+            user-select: none;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        `;
+        if (label === "pan_tool") {
+            scrollToggleButton = btn;
+            btn.onclick = () => {
+                gazeScrollMode = !gazeScrollMode;
+                btn.style.background = gazeScrollMode ? "#d1eaff" : "white";
+                if (gazeScrollMode) {
+                    hideElement(innerPointerId);
+                    hideElement(outerPointerId);
+                } else {
+                    centerPointers();
+                    showElement(innerPointerId);
+                    showElement(outerPointerId);
+                }
+            };
+        } else {
+            btn.onmouseenter = () => (btn.style.background = "#f0f0f0");
+            btn.onmouseleave = () => (btn.style.background = "white");
+            btn.onclick = action;
+        }
+        panel.appendChild(btn);
+    });
+    document.body.appendChild(panel);
+}
+createFloatingPanel();
 
 function createStreamIframe() {
     const elmt = document.getElementById(streamIframeId);
@@ -123,7 +230,6 @@ function updateBalloonCursor(dx, dy) {
     }
 }
 
-
 function showElement(id) {
     const elmt = document.getElementById(id);
     if (elmt) elmt.style.display = "";
@@ -210,7 +316,7 @@ function removeStatusPill() {
     const pill = document.getElementById("inference-status-pill");
     if (pill) {
         pill.style.opacity = "0";
-        setTimeout(() => pill.remove(), 300); // match transition duration
+        setTimeout(() => pill.remove(), 300);
     }
 }
 
@@ -273,7 +379,6 @@ function animatePointerDown(x, y) {
     }, 150);
 }
 
-
 function animatePointerUp(x, y) {
     const ripple = document.createElement("div");
     ripple.className = "pointer-up-ripple";
@@ -303,7 +408,6 @@ function animatePointerUp(x, y) {
     }, 300);
 }
 
-
 function getContrastyColor(hexColor) {
     if (hexColor.startsWith('#')) hexColor = hexColor.slice(1);
     if (hexColor.length === 3) {
@@ -319,6 +423,20 @@ function getContrastyColor(hexColor) {
     return luminance > 160 ? '#000000' : '#FFFFFF';
 }
 
+function centerPointers() {
+    px = window.innerWidth / 2
+    py = window.innerHeight / 2
+    outerX = px;
+    outerY = py;
+    const outer = document.getElementById(outerPointerId);
+    outer.style.left = `${px}px`;
+    outer.style.top = `${py}px`;
+    innerX = px;
+    innerY = py;
+    const inner = document.getElementById(innerPointerId);
+    inner.style.left = `${px}px`;
+    inner.style.top = `${py}px`;
+}
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     if (msg.type === "OFFSCREEN_READY") {
@@ -363,25 +481,28 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         outer.style.top = `${py}px`;
     }
     if (msg.type === "CENTRE_POINTER") {
-        px = window.innerWidth / 2
-        py = window.innerHeight / 2
-        outerX = px;
-        outerY = py;
-        const outer = document.getElementById(outerPointerId);
-        outer.style.left = `${px}px`;
-        outer.style.top = `${py}px`;
-        innerX = px;
-        innerY = py;
-        const inner = document.getElementById(innerPointerId);
-        inner.style.left = `${px}px`;
-        inner.style.top = `${py}px`;
+        centerPointers();
     }
     if (msg.type === "GAZE_MOVE") {
-        updateBalloonCursor(msg.dx, msg.dy);
+        if (gazeScrollMode) {
+            window.scrollBy(msg.dx * GAZE_SCROLL_SPEED_X, msg.dy * GAZE_SCROLL_SPEED_Y);
+        } else {
+            updateBalloonCursor(msg.dx, msg.dy);
+        }
     }
     if (msg.type === "CLICK") {
         const pointer = document.getElementById(outerPointerId);
         if (!pointer) return;
+        if (gazeScrollMode) {
+            gazeScrollMode = false;
+            if (scrollToggleButton) {
+                scrollToggleButton.style.background = "white";
+            }
+            centerPointers();
+            showElement(innerPointerId);
+            showElement(outerPointerId);
+            return;
+        }
 
         const rect = pointer.getBoundingClientRect();
         const cx = rect.left + rect.width / 2;

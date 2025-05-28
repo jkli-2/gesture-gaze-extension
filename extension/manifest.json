@@ -22,8 +22,9 @@
         "resources": [
           "src/*",
           "ui/*",
-          "wasm/*",
-          "models/*"
+          "fonts/*",
+          "models/*",
+          "style/*"
         ],
         "matches": ["<all_urls>"]
     }
