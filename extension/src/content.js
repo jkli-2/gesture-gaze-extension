@@ -1,11 +1,18 @@
 const streamIframeId = "gesture-preview-iframe";
 const preprocIframeId = "preproc-preview-iframe";
-const pointerId = "pointer";
-const speed = 10;
+const outerPointerId = "outerCursor";
+const innerPointerId = "innerCursor";
 
 let pointerX = window.innerWidth / 2;
 let pointerY = window.innerHeight / 2;
+let innerX = window.innerWidth / 2;
+let innerY = window.innerHeight / 2;
+let outerX = innerX;
+let outerY = innerY;
 let pointerAnimationColor = "red";
+const elasticity = 0.15;
+let isPointerDown = false;
+let lastHoveredElement;
 
 function createStreamIframe() {
     const elmt = document.getElementById(streamIframeId);
@@ -29,29 +36,93 @@ function createStreamIframe() {
 createStreamIframe();
 
 function createPointer() {
-    const elmt = document.getElementById(pointerId);
-    if (!elmt) {
-        const pointer = document.createElement("div");
-        pointer.id = pointerId;
-        pointer.dataset.pointerx = "-10";
-        pointer.dataset.pointery = "-10";
-        pointer.style.position = "fixed";
-        pointer.style.width = "20px";
-        pointer.style.height = "20px";
-        pointer.style.borderRadius = "50%";
-        pointer.style.border = "2px solid white";
-        pointer.style.backgroundColor = "red";
-        pointer.style.boxShadow = "0 0 10px rgba(0, 0, 0, 0.6)";
-        pointer.style.pointerEvents = "none";
-        pointer.style.top = "50%";
-        pointer.style.left = "50%";
-        pointer.style.transform = "translate(-50%, -50%)";
-        pointer.style.transition = "transform 0.05s linear";
-        pointer.style.display = "none";
-        document.body.appendChild(pointer);
+    if (!document.getElementById(innerPointerId)) {
+        const inner = document.createElement("div");
+        inner.id = innerPointerId;
+        inner.className = "gaze-cursor inner";
+        document.body.appendChild(inner);
+    }
+
+    if (!document.getElementById(outerPointerId)) {
+        const outer = document.createElement("div");
+        outer.id = outerPointerId;
+        outer.className = "gaze-cursor outer";
+        document.body.appendChild(outer);
     }
 }
 createPointer();
+
+const style = document.createElement("style");
+style.textContent = `
+  .gaze-cursor {
+    position: fixed;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 999999;
+    transform: translate(-50%, -50%);
+  }
+
+  .gaze-cursor.inner {
+    background: limegreen;
+    opacity: 0.8;
+  }
+
+  .gaze-cursor.outer {
+    background: crimson;
+    width: 22px;
+    height: 22px;
+    opacity: 0.5;
+    border: 2px solid white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+  }
+`;
+document.head.appendChild(style);
+
+function updateBalloonCursor(dx, dy) {
+    innerX = Math.min(Math.max(0, innerX + dx), window.innerWidth);
+    innerY = Math.min(Math.max(0, innerY + dy), window.innerHeight);
+
+    outerX += (innerX - outerX) * elasticity;
+    outerY += (innerY - outerY) * elasticity;
+
+    const innerCursor = document.getElementById(innerPointerId);
+    const outerCursor = document.getElementById(outerPointerId);
+    if (innerCursor && outerCursor) {
+        innerCursor.style.left = `${innerX}px`;
+        innerCursor.style.top = `${innerY}px`;
+
+        outerCursor.style.left = `${outerX}px`;
+        outerCursor.style.top = `${outerY}px`;
+    }
+
+    const hoveredElement = document.elementFromPoint(outerX, outerY);
+    if (hoveredElement && hoveredElement !== lastHoveredElement) {
+        if (lastHoveredElement) {
+            lastHoveredElement.dispatchEvent(new MouseEvent("mouseout", {
+                bubbles: true,
+                clientX: outerX,
+                clientY: outerY
+            }));
+        }
+
+        hoveredElement.dispatchEvent(new MouseEvent("mouseover", {
+            bubbles: true,
+            clientX: outerX,
+            clientY: outerY
+        }));
+
+        hoveredElement.dispatchEvent(new MouseEvent("mouseenter", {
+            bubbles: true,
+            clientX: outerX,
+            clientY: outerY
+        }));
+
+        lastHoveredElement = hoveredElement;
+    }
+}
+
 
 function showElement(id) {
     const elmt = document.getElementById(id);
@@ -76,13 +147,17 @@ getPreferences((preferences) => {
         hideElement(streamIframeId);
     }
     if (preferences.pointerState === true) {
-        showElement(pointerId);
+        showElement(innerPointerId);
+        showElement(outerPointerId);
     }
     if (preferences.pointerState === false) {
-        hideElement(pointerId);
+        hideElement(innerPointerId);
+        hideElement(outerPointerId);
     }
     if (preferences.pointerColor) {
-        document.getElementById(pointerId).style.backgroundColor = preferences.pointerColor;
+        document.getElementById(innerPointerId).style.background = preferences.pointerColor;
+        document.getElementById(outerPointerId).style.background = preferences.pointerColor;
+        document.getElementById(outerPointerId).style.borderColor = getContrastyColor(preferences.pointerColor);
         pointerAnimationColor = preferences.pointerColor;
     }
     const state = preferences.detectState;
@@ -169,6 +244,81 @@ function animateClick(x, y) {
     }, 300);
 }
 
+function animatePointerDown(x, y) {
+    const ripple = document.createElement("div");
+    ripple.className = "pointer-down-ripple";
+    ripple.style.cssText = `
+        position: fixed;
+        top: ${y}px;
+        left: ${x}px;
+        width: 20px;
+        height: 20px;
+        background: ${pointerAnimationColor};
+        border-radius: 50%;
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.8;
+        z-index: 999999;
+        pointer-events: none;
+        transition: transform 100ms ease-out, opacity 100ms ease-out;
+    `;
+    document.body.appendChild(ripple);
+
+    requestAnimationFrame(() => {
+        ripple.style.transform = "translate(-50%, -50%) scale(1.8)";
+        ripple.style.opacity = "0.5";
+    });
+
+    setTimeout(() => {
+        ripple.remove();
+    }, 150);
+}
+
+
+function animatePointerUp(x, y) {
+    const ripple = document.createElement("div");
+    ripple.className = "pointer-up-ripple";
+    ripple.style.cssText = `
+        position: fixed;
+        top: ${y}px;
+        left: ${x}px;
+        width: 20px;
+        height: 20px;
+        background: ${pointerAnimationColor};
+        border-radius: 50%;
+        transform: translate(-50%, -50%) scale(1.2);
+        opacity: 0.5;
+        z-index: 999999;
+        pointer-events: none;
+        transition: transform 300ms ease-out, opacity 300ms ease-out;
+    `;
+    document.body.appendChild(ripple);
+
+    requestAnimationFrame(() => {
+        ripple.style.transform = "translate(-50%, -50%) scale(4)";
+        ripple.style.opacity = "0";
+    });
+
+    setTimeout(() => {
+        ripple.remove();
+    }, 300);
+}
+
+
+function getContrastyColor(hexColor) {
+    if (hexColor.startsWith('#')) hexColor = hexColor.slice(1);
+    if (hexColor.length === 3) {
+        hexColor = hexColor.split('').map(c => c + c).join('');
+    }
+
+    const r = parseInt(hexColor.substring(0, 2), 16);
+    const g = parseInt(hexColor.substring(2, 4), 16);
+    const b = parseInt(hexColor.substring(4, 6), 16);
+
+    // Calculate luminance (per ITU-R BT.709)
+    const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    return luminance > 160 ? '#000000' : '#FFFFFF';
+}
+
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     if (msg.type === "OFFSCREEN_READY") {
@@ -181,13 +331,17 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         hideElement(streamIframeId);
     }
     if (msg.type === "SHOW_POINTER") {
-        showElement(pointerId);
+        showElement(innerPointerId);
+        showElement(outerPointerId);
     }
     if (msg.type === "HIDE_POINTER") {
-        hideElement(pointerId);
+        hideElement(innerPointerId);
+        hideElement(outerPointerId);
     }
     if (msg.type === "POINTER_COLOR") {
-        document.getElementById(pointerId).style.backgroundColor = msg.val;
+        document.getElementById(innerPointerId).style.background = msg.val;
+        document.getElementById(outerPointerId).style.background = msg.val;
+        document.getElementById(outerPointerId).style.borderColor = getContrastyColor(msg.val);
         pointerAnimationColor = msg.val;
     }
     if (msg.type === "POINTER") {
@@ -197,32 +351,36 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         const px = (1-msg.x) * pageW;
         const py = msg.y * pageH;
 
-        pointerX = px;
-        pointerY = py;
-
-        const pointer = document.getElementById(pointerId);
-        pointer.style.left = `${px}px`;
-        pointer.style.top = `${py}px`;
+        innerX = px;
+        innerY = py;
+        const inner = document.getElementById(innerPointerId);
+        inner.style.left = `${px}px`;
+        inner.style.top = `${py}px`;
+        outerX = px;
+        outerY = py;
+        const outer = document.getElementById(outerPointerId);
+        outer.style.left = `${px}px`;
+        outer.style.top = `${py}px`;
     }
     if (msg.type === "CENTRE_POINTER") {
-        pointerX = window.innerWidth / 2
-        pointerY = window.innerHeight / 2
-        const pointer = document.getElementById(pointerId);
-        pointer.style.left = `${pointerX}px`;
-        pointer.style.top = `${pointerY}px`;
+        px = window.innerWidth / 2
+        py = window.innerHeight / 2
+        outerX = px;
+        outerY = py;
+        const outer = document.getElementById(outerPointerId);
+        outer.style.left = `${px}px`;
+        outer.style.top = `${py}px`;
+        innerX = px;
+        innerY = py;
+        const inner = document.getElementById(innerPointerId);
+        inner.style.left = `${px}px`;
+        inner.style.top = `${py}px`;
     }
     if (msg.type === "GAZE_MOVE") {
-        pointerX = Math.min(Math.max(0, pointerX + msg.dx), window.innerWidth);
-        pointerY = Math.min(Math.max(0, pointerY + msg.dy), window.innerHeight);
-
-        const pointer = document.getElementById(pointerId);
-        if (pointer) {
-            pointer.style.left = `${pointerX}px`;
-            pointer.style.top = `${pointerY}px`;
-        }
+        updateBalloonCursor(msg.dx, msg.dy);
     }
     if (msg.type === "CLICK") {
-        const pointer = document.getElementById(pointerId);
+        const pointer = document.getElementById(outerPointerId);
         if (!pointer) return;
 
         const rect = pointer.getBoundingClientRect();
@@ -247,5 +405,33 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
             target.dispatchEvent(new MouseEvent("click", eventInit));
         }
         animateClick(cx, cy);
+    }
+    if (msg.type === "MOUSE_DOWN" || msg.type === "MOUSE_UP") {
+        const eventType = msg.type === "MOUSE_DOWN" ? "mousedown" : "mouseup";
+        isPointerDown = msg.type === "MOUSE_DOWN";
+        const pointer = document.getElementById(outerPointerId);
+        if (!pointer) return;
+
+        const rect = pointer.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+
+        const target = document.elementFromPoint(cx, cy);
+        if (target) {
+            const event = new MouseEvent(eventType, {
+                bubbles: true,
+                cancelable: true,
+                clientX: cx,
+                clientY: cy,
+                buttons: 1
+            });
+            target.dispatchEvent(event);
+        }
+        if (msg.type === "MOUSE_DOWN") {
+            animatePointerDown(outerX, outerY);
+        }
+        if (msg.type === "MOUSE_UP") {
+            animatePointerUp(outerX, outerY);
+        }
     }
 });

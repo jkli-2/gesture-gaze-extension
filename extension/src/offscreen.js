@@ -46,6 +46,7 @@ const EYES_INDICES = LEFT_EYE_INDICES.concat(RIGHT_EYE_INDICES);
 const EYE_MODEL_INPUT_SHAPE = 224
 
 const CONFIDENCE_THRESHOLD = 0.8;
+const OK_SIGN_THRESHOLD = 20;
 
 const CLASS_NAMES = [
                 "center",
@@ -85,8 +86,7 @@ const CENTER_BIAS = [1.0, 0.6];
 
 let neutralPose = { pitch: 0, yaw: 0 };
 
-let allowPointerMovement = true;
-let pointerPausedByOneHand = false;
+let allowPointerMovementByGaze = true;
 const STEP_SIZE_NORMAL = 5;
 const STEP_SIZE_SLOW = 0.4;
 let stepSize = STEP_SIZE_NORMAL;
@@ -110,19 +110,28 @@ function applyDeadzone(dx, dy) {
 }
 
 function updatePointerControl(handCount) {
-    if (handCount === 1 && !pointerPausedByOneHand) {
-        // allowPointerMovement = false;
-        allowPointerMovement = true;
-        pointerPausedByOneHand = true;
-        stepSize = STEP_SIZE_SLOW;
-        deadzone = 0;
-        console.log("Pointer slowed.");
-    } else if ((handCount === 0 || handCount >= 2) && pointerPausedByOneHand) {
-        allowPointerMovement = true;
-        pointerPausedByOneHand = false;
+    // 2 hands: disable gaze control (manual override mode)
+    if (handCount === 2) {
+        allowPointerMovementByGaze = false;
+        stepSize = 0;
+        deadzone = DEADZONE_VAL;
+        return;
+    }
+
+    // 0 or 2+ hands: enable gaze control
+    if (handCount === 0 || handCount > 2) {
+        allowPointerMovementByGaze = true;
         stepSize = STEP_SIZE_NORMAL;
         deadzone = DEADZONE_VAL;
-        console.log("Pointer resumed.");
+        return;
+    }
+
+    // 1 hand: slow gaze mode
+    if (handCount === 1) {
+        allowPointerMovementByGaze = true;
+        stepSize = STEP_SIZE_SLOW;
+        deadzone = 0;
+        return;
     }
 }
 
@@ -163,7 +172,7 @@ function sendRawGazeVector(dx, dy, poseYaw, posePitch) {
 
     const [stableDx, stableDy] = smoothGaze(scaledDx, scaledDy);
     const [dzDx, dzDy] = applyDeadzone(stableDx, stableDy);
-    if (allowPointerMovement) {
+    if (allowPointerMovementByGaze) {
         chrome.runtime.sendMessage({
             type: "GAZE_MOVE",
             dx: dzDx,
@@ -194,7 +203,7 @@ function sendGazeDirection(predictedClass, confidence, poseYaw, posePitch) {
     const fusedDx = scaledDx * (1 - fusionFactor) - normalisedYaw * fusionFactor * poseScale;
     const fusedDy = scaledDy * (1 - fusionFactor) + normalisedPitch * fusionFactor * poseScale;
 
-    if (allowPointerMovement) {
+    if (allowPointerMovementByGaze) {
         // console.log("gaze move:", fusedDx, fusedDy);
         chrome.runtime.sendMessage({
             type: "GAZE_MOVE",
@@ -442,7 +451,7 @@ const drawLoop = async () => {
         const dy = indexFingerTip.y - thumbFingerTip.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
         // console.log(distance)
-        const isOKGesture = distance < 20; // adjust threshold based on scale
+        const isOKGesture = distance < OK_SIGN_THRESHOLD;
         if (isOKGesture && !wasOKGesture) {
             console.log("OK gesture detected!");
             chrome.runtime.sendMessage({
@@ -456,10 +465,11 @@ const drawLoop = async () => {
     if (lastHandLandmarks.length > 1 && indexFingerTip) {
         const nx = thumbFingerTip.x / video.videoWidth;
         const ny = thumbFingerTip.y / video.videoHeight;
+        const [sx, sy] = smoothGaze(nx, ny);
         chrome.runtime.sendMessage({
             type: "POINTER",
-            x: nx,
-            y: ny,
+            x: sx,
+            y: sy,
         });
     }
     ctx.restore();

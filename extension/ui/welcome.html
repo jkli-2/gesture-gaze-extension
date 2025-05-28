@@ -61,10 +61,18 @@
     </p>
     <button id="grant">Grant Webcam Access</button>
 
+    <h2>👋 How to Use Gesture & Gaze Control</h2>
+    <ul style="line-height: 1.6; font-size: 1.05em;">
+      <li><strong>🧿 0 hands:</strong> Gaze-only control — the virtual pointer follows your eyes.</li>
+      <li><strong>✋ 1 hand:</strong> Slows down the pointer for more precise control (e.g. hovering over buttons).</li>
+      <li><strong>👐 2 hands:</strong> Disables gaze control — you can manually move the pointer using your hand.</li>
+      <li><strong>👨‍👩‍👧 2+ hands (e.g. others visible):</strong> Reverts back to gaze control — only the primary user’s intent is recognized.</li>
+      <li><strong>👌 1 hand with “OK” gesture:</strong> Simulates a mouse click at the current pointer position.</li>
+    </ul>
+
     <div class="note">
       <strong>Note:</strong> Some websites use custom interfaces that may block simulated clicks or restrict webcam access via browser policies. Gaze control still works for visual pointing in these cases, but interaction may be limited.
     </div>
-
     <script src="../src/welcome.js"></script>
   </body>
 </html>

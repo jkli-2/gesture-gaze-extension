@@ -128,6 +128,16 @@ chrome.runtime.onMessage.addListener(async (msg, sender, sendResponse) => {
             chrome.tabs.sendMessage(tabs[0].id, { type: "CLICK" });
         });
     }
+    if (msg.type === "MOUSE_DOWN") {
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, { type: "MOUSE_DOWN" });
+        });
+    }
+    if (msg.type === "MOUSE_UP") {
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, { type: "MOUSE_UP" });
+        });
+    }
     if (msg.type === "CENTRE_POINTER") {
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
             chrome.tabs.sendMessage(tabs[0].id, { type: "CENTRE_POINTER" });

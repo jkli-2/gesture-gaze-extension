@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Gesture & Gaze Control",
-  "version": "0.3",
+  "version": "1.0",
   "description": "Control webpages using hand gestures and gaze tracking.",
   "permissions": ["activeTab", "storage", "tabs", "offscreen", "scripting"],
   "host_permissions": ["<all_urls>"],
