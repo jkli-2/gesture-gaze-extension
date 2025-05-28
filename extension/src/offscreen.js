@@ -87,15 +87,41 @@ let neutralPose = { pitch: 0, yaw: 0 };
 
 let allowPointerMovement = true;
 let pointerPausedByOneHand = false;
+const STEP_SIZE_NORMAL = 5;
+const STEP_SIZE_SLOW = 0.4;
+let stepSize = STEP_SIZE_NORMAL;
+
+let smoothedGaze = [0, 0];
+const SMOOTHING_ALPHA = 0.2;
+const DEADZONE_VAL = 1.0;
+let deadzone = DEADZONE_VAL;
+
+// Exponential Moving Average (EMA) smoothing
+function smoothGaze(gazeX, gazeY) {
+    smoothedGaze[0] = (1 - SMOOTHING_ALPHA) * smoothedGaze[0] + SMOOTHING_ALPHA * gazeX;
+    smoothedGaze[1] = (1 - SMOOTHING_ALPHA) * smoothedGaze[1] + SMOOTHING_ALPHA * gazeY;
+    return smoothedGaze;
+}
+
+function applyDeadzone(dx, dy) {
+    if (Math.abs(dx) < deadzone) dx = 0;
+    if (Math.abs(dy) < deadzone) dy = 0;
+    return [dx, dy];
+}
 
 function updatePointerControl(handCount) {
     if (handCount === 1 && !pointerPausedByOneHand) {
-        allowPointerMovement = false;
+        // allowPointerMovement = false;
+        allowPointerMovement = true;
         pointerPausedByOneHand = true;
-        console.log("Pointer paused.");
+        stepSize = STEP_SIZE_SLOW;
+        deadzone = 0;
+        console.log("Pointer slowed.");
     } else if ((handCount === 0 || handCount >= 2) && pointerPausedByOneHand) {
         allowPointerMovement = true;
         pointerPausedByOneHand = false;
+        stepSize = STEP_SIZE_NORMAL;
+        deadzone = DEADZONE_VAL;
         console.log("Pointer resumed.");
     }
 }
@@ -122,33 +148,33 @@ function getRelativePose(poseYaw, posePitch) {
 }
 
 function sendRawGazeVector(dx, dy, poseYaw, posePitch) {
-    const biasedDx = dx;
-    const biasedDy = dy - 0.8;
+    const flippedDx = dx * -1;
 
-    const stepSize = 5;
-    const scaledDx = biasedDx * stepSize;
-    const scaledDy = biasedDy * stepSize;
-
-    const fusionFactor = 0.5;
     const relativePose = getRelativePose(poseYaw, posePitch);
-    const normalisedYaw = Math.max(-10, Math.min(10, relativePose.yaw)) / 10;
-    const normalisedPitch = Math.max(-10, Math.min(10, relativePose.pitch)) / 10;
+    const yawBias = Math.max(-10, Math.min(10, relativePose.yaw)) / 10;
+    const pitchBias = Math.max(-10, Math.min(10, relativePose.pitch*-1)) / 10;
 
-    const poseScale = 5;
-    const fusedDx = scaledDx * (1 - fusionFactor) - normalisedYaw * fusionFactor * poseScale;
-    const fusedDy = scaledDy * (1 - fusionFactor) + normalisedPitch * fusionFactor * poseScale;
+    const poseCompensationFactor = 0.6;
+    const correctedDx = flippedDx - yawBias * poseCompensationFactor;
+    const correctedDy = dy - pitchBias * poseCompensationFactor;
 
-    console.log(fusedDx, fusedDy)
+    const scaledDx = correctedDx * stepSize;
+    const scaledDy = correctedDy * stepSize;
+
+    const [stableDx, stableDy] = smoothGaze(scaledDx, scaledDy);
+    const [dzDx, dzDy] = applyDeadzone(stableDx, stableDy);
     if (allowPointerMovement) {
         chrome.runtime.sendMessage({
             type: "GAZE_MOVE",
-            dx: fusedDx,
-            dy: fusedDy,
+            dx: dzDx,
+            dy: dzDy,
         });
     }
 }
 
+//
 // Use this if we use classifier based gaze model
+//
 function sendGazeDirection(predictedClass, confidence, poseYaw, posePitch) {
     const [dx, dy] = GAZE_DIRECTIONS[predictedClass];
 
@@ -283,7 +309,7 @@ setInterval(async () => {
                 rightEyeCenter.x / vw,
                 rightEyeCenter.y / vh
             ]]);
-            const margin_x = box.w * 1.8;
+            const margin_x = box.w * 1;
             const margin_y = box.h;
 
             const cropX1 = Math.max(0, box.x - margin_x);
@@ -396,11 +422,15 @@ const drawLoop = async () => {
         // drawBox(ctx, drawBoxDim, { color: "#00FFFF", lineWidth: 2 });
         drawPoint(ctx, leftEyeCenter, { color: "#00FF00" });
         drawPoint(ctx, rightEyeCenter, { color: "#00FF00" });
-        drawGazeArrow(ctx, gazeOrigin, lastDx, lastDy, 80, "red");
+        drawGazeArrow(ctx, gazeOrigin, lastDx, lastDy, 10, "red");
         
         const {yawDegrees, pitchDegrees} = estimateHeadPose(lastFaceLandmarks);
         const norm = Math.hypot(lastDx, lastDy);
-        const gazeVec = norm > 0 ? [lastDx / norm, lastDy / norm] : [0, 0];
+        const rawGaze = norm > 0 ? [lastDx / norm, lastDy / norm] : [0, 0];
+        
+        // dampen sensitivity
+        const GAZE_GAIN = 0.3;
+        const gazeVec = [rawGaze[0] * GAZE_GAIN, rawGaze[1] * GAZE_GAIN];
         sendRawGazeVector(gazeVec[0], gazeVec[1], yawDegrees, pitchDegrees);
     }
 
