@@ -231,11 +231,20 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
 
         const target = document.elementFromPoint(cx, cy);
         if (target) {
-            target.dispatchEvent(new MouseEvent("click", {
+            const eventInit = {
                 bubbles: true,
                 cancelable: true,
-                view: window
-            }));
+                clientX: cx,
+                clientY: cy,
+                view: window,
+                buttons: 1
+            };
+
+            target.dispatchEvent(new PointerEvent("pointerdown", eventInit));
+            target.dispatchEvent(new MouseEvent("mousedown", eventInit));
+            target.dispatchEvent(new PointerEvent("pointerup", eventInit));
+            target.dispatchEvent(new MouseEvent("mouseup", eventInit));
+            target.dispatchEvent(new MouseEvent("click", eventInit));
         }
         animateClick(cx, cy);
     }

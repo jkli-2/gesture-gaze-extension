@@ -1,12 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <meta charset="UTF-8" />
     <title>Welcome to Gesture & Gaze Control</title>
+    <style>
+      body {
+        font-family: 'Segoe UI', sans-serif;
+        background: #f4f6f8;
+        color: #333;
+        padding: 40px;
+        max-width: 700px;
+        margin: auto;
+      }
+
+      h1 {
+        color: #2c3e50;
+        font-size: 2em;
+        margin-bottom: 0.5em;
+      }
+
+      p {
+        font-size: 1.2em;
+        line-height: 1.6;
+        margin-bottom: 1.5em;
+      }
+
+      button {
+        background-color: #007bff;
+        color: white;
+        padding: 12px 24px;
+        font-size: 1.1em;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      button:hover {
+        background-color: #0056b3;
+      }
+
+      .note {
+        margin-top: 2em;
+        font-size: 1em;
+        color: #666;
+        background: #fff6d5;
+        padding: 1em;
+        border-left: 4px solid #ffc107;
+        border-radius: 4px;
+      }
+    </style>
   </head>
   <body>
-    <h1>Welcome! Thank you for installing our extension.</h1>
-    <p>We need permission to access your webcam.</p>
+    <h1>Welcome 👋👀</h1>
+    <p>
+      Thank you for installing <strong>Gesture & Gaze Control</strong> — a browser extension that lets you control your screen using your eyes and hands, powered by your webcam.
+    </p>
+    <p>
+      To get started, we'll need your permission to access the webcam. Your data stays on your device and is never uploaded.
+    </p>
     <button id="grant">Grant Webcam Access</button>
+
+    <div class="note">
+      <strong>Note:</strong> Some websites use custom interfaces that may block simulated clicks or restrict webcam access via browser policies. Gaze control still works for visual pointing in these cases, but interaction may be limited.
+    </div>
+
     <script src="../src/welcome.js"></script>
   </body>
 </html>
