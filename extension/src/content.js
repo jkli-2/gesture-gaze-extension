@@ -1,8 +1,10 @@
-const streamIframeId = "gesture-preview-iframe";
-const preprocIframeId = "preproc-preview-iframe";
+const streamPreviewId = "gesture-preview-iframe";
 const outerPointerId = "outerCursor";
 const innerPointerId = "innerCursor";
 
+let isIframeResizing = false;
+let iframeAspectRatio = 4 / 3;
+let startX, startY, startWidth, startHeight;
 let pointerX = window.innerWidth / 2;
 let pointerY = window.innerHeight / 2;
 let innerX = window.innerWidth / 2;
@@ -17,8 +19,8 @@ let gazeScrollMode = false;
 let scrollToggleButton = null;
 let stickyScrollMode = false;
 let stickScrollToggleButton = null;
-const GAZE_SCROLL_SPEED_X = 2;
-const GAZE_SCROLL_SPEED_Y = 5;
+const GAZE_SCROLL_SPEED_X = 1;
+const GAZE_SCROLL_SPEED_Y = 2;
 
 function stickyScroll(startX, startY, dx, dy) {
     const startEvent = new MouseEvent("mousedown", {
@@ -70,10 +72,9 @@ function createFloatingPanel() {
     `;
 
     const actionButtons = [
-        { label: "arrow_upward", action: () => window.scrollBy(0, -200), title: "Scroll Up" },
-        { label: "arrow_downward", action: () => window.scrollBy(0, 200), title: "Scroll Down" },
-        // { label: "vertical_align_top", action: () => window.scrollTo(0, 0), title: "Scroll to Top" },
         // { label: "refresh", action: () => location.reload(), title: "Refresh" },
+        { label: "arrow_upward", action: () => scrollOnScrollable(0, -200), title: "Scroll Up" },
+        { label: "arrow_downward", action: () => scrollOnScrollable(0, 200), title: "Scroll Down" },
         { label: "arrow_back", action: () => history.back(), title: "Back" },
         { label: "arrow_forward", action: () => history.forward(), title: "Forward" },
         { label: "pan_tool", title: "Gaze Scroll Mode" },
@@ -85,16 +86,20 @@ function createFloatingPanel() {
         btn.innerHTML = `<span class="material-icons">${label}</span>`;
         btn.title = title;
         btn.style.cssText = `
+            all: initial;
+            display: inline-block;
             font-family: 'Material Icons';
             font-size: 24px;
             background: white;
             color: black;
-            padding: 6px 10px;
+            padding: 6px 6px;
             border-radius: 8px;
             text-align: center;
             user-select: none;
             cursor: pointer;
             transition: background 0.2s ease;
+            line-height: 1;
+            vertical-align: middle;
         `;
         if (label === "pan_tool") {
             scrollToggleButton = btn;
@@ -121,24 +126,84 @@ function createFloatingPanel() {
 }
 createFloatingPanel();
 
+function setupResize(wrapper, iframe, handle) {
+    handle.addEventListener("mousedown", (e) => {
+        isIframeResizing = true;
+        const wrapperRect = wrapper.getBoundingClientRect();
+        startX = e.clientX;
+        startY = e.clientY;
+        startWidth = wrapperRect.width;
+        startHeight = wrapperRect.height;
+        e.preventDefault();
+    });
+
+    document.addEventListener("mousemove", (e) => {
+        if (!isIframeResizing) return;
+
+        const dx = startX - e.clientX;
+        const newWidth = Math.max(160, startWidth + dx);
+        const newHeight = newWidth / iframeAspectRatio;
+
+        wrapper.style.width = `${newWidth}px`;
+        wrapper.style.height = `${newHeight}px`;
+        iframe.style.width = "100%";
+        iframe.style.height = "100%";
+    });
+
+    document.addEventListener("mouseup", () => {
+        isIframeResizing = false;
+    });
+}
+
+
 function createStreamIframe() {
-    const elmt = document.getElementById(streamIframeId);
-    if (!elmt) {
-        const iframe = document.createElement("iframe");
-        iframe.src = chrome.runtime.getURL("ui/offscreen.html");
-        iframe.id = streamIframeId;
-        iframe.style.position = "fixed";
-        iframe.style.bottom = "10px";
-        iframe.style.right = "10px";
-        iframe.style.width = "320px";
-        iframe.style.height = "240px";
-        iframe.style.border = "2px solid #666";
-        iframe.style.borderRadius = "8px";
-        iframe.style.zIndex = "9999";
-        iframe.style.display = "none";
-        iframe.allow = "camera";
-        document.body.appendChild(iframe);
-    }
+    const elmt = document.getElementById("streamIframeWrapper");
+    if (elmt) return;
+
+    const iframe = document.createElement("iframe");
+    iframe.src = chrome.runtime.getURL("ui/offscreen.html");
+    iframe.id = "streamIframe";
+    iframe.allow = "camera";
+    iframe.style.border = "2px solid #666";
+    iframe.style.borderRadius = "8px";
+    iframe.style.background = "black";
+    iframe.style.opacity = "1";
+    iframe.style.pointerEvents = "auto";
+    iframe.style.position = "absolute";
+    iframe.style.width = "100%";
+    iframe.style.height = "100%";
+
+    const handle = document.createElement("div");
+    handle.id = "streamIframeResizeHandle";
+    handle.innerHTML = `<span class="material-icons">open_with</span>`;
+    handle.style.position = "absolute";
+    handle.style.width = "24px";
+    handle.style.height = "24px";
+    handle.style.top = "1px";
+    handle.style.left = "1px";
+    handle.style.cursor = "nwse-resize";
+    handle.style.zIndex = "10001";
+    handle.style.color = "#aaa";
+    handle.style.display = "flex";
+    handle.style.alignItems = "center";
+    handle.style.justifyContent = "center";
+    handle.style.userSelect = "none";
+    handle.style.background = "rgba(0,0,0,0.4)";
+    handle.style.borderRadius = "6px";
+
+    const wrapper = document.createElement("div");
+    wrapper.id = streamPreviewId;
+    wrapper.style.position = "fixed";
+    wrapper.style.bottom = "10px";
+    wrapper.style.right = "10px";
+    wrapper.style.width = "320px";
+    wrapper.style.height = "240px";
+    wrapper.style.zIndex = "9999";
+    wrapper.appendChild(iframe);
+    wrapper.appendChild(handle);
+    document.body.appendChild(wrapper);
+
+    setupResize(wrapper, iframe, handle);
 }
 createStreamIframe();
 
@@ -230,14 +295,26 @@ function updateBalloonCursor(dx, dy) {
     }
 }
 
-function showElement(id) {
+function showElement(id, useOpacity = false) {
     const elmt = document.getElementById(id);
-    if (elmt) elmt.style.display = "";
+    if (elmt) {
+        if (useOpacity) {
+            elmt.style.opacity = "1";
+        } else {
+            elmt.style.display = ""
+        }
+    };
 }
 
-function hideElement(id) {
+function hideElement(id, useOpacity = false) {
     const elmt = document.getElementById(id);
-    if (elmt) elmt.style.display = "none";
+    if (elmt) {
+        if (useOpacity) {
+            elmt.style.opacity = "0";
+        } else {
+            elmt.style.display = "none";
+        }
+    }
 }
 
 function removeElement(id) {
@@ -247,10 +324,10 @@ function removeElement(id) {
 
 getPreferences((preferences) => {
     if (preferences.streamState === true) {
-        showElement(streamIframeId);
+        showElement(streamPreviewId, useOpacity=true);
     }
     if (preferences.streamState === false) {
-        hideElement(streamIframeId);
+        hideElement(streamPreviewId, useOpacity=true);
     }
     if (preferences.pointerState === true) {
         showElement(innerPointerId);
@@ -438,15 +515,48 @@ function centerPointers() {
     inner.style.top = `${py}px`;
 }
 
+function scrollOnScrollable(dx, dy) {
+    const scrollTarget = findScrollables() || window;
+    scrollTarget.scrollBy(dx, dy);
+}
+
+function findScrollables() {
+    if (document.scrollingElement?.scrollHeight > window.innerHeight) {
+        return document.scrollingElement;
+    }
+
+    const candidates = Array.from(document.querySelectorAll("div, main, section, article"));
+    let bestMatch = null;
+
+    for (const el of candidates) {
+        const style = getComputedStyle(el);
+        const canScroll = el.scrollHeight > el.clientHeight;
+        const overflowY = style.overflowY;
+
+        const isScrollable = canScroll && (
+            overflowY === "auto" ||
+            overflowY === "scroll" ||
+            overflowY === "visible"
+        );
+
+        if (isScrollable) {
+            if (!bestMatch || el.scrollHeight > bestMatch.scrollHeight) {
+                bestMatch = el;
+            }
+        }
+    }
+    return bestMatch;
+}
+
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     if (msg.type === "OFFSCREEN_READY") {
         removeStatusPill();
     }
     if (msg.type === "START_STREAM") {
-        showElement(streamIframeId);
+        showElement(streamPreviewId, useOpacity=true);
     }
     if (msg.type === "STOP_STREAM") {
-        hideElement(streamIframeId);
+        hideElement(streamPreviewId, useOpacity=true);
     }
     if (msg.type === "SHOW_POINTER") {
         showElement(innerPointerId);
@@ -485,7 +595,8 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     }
     if (msg.type === "GAZE_MOVE") {
         if (gazeScrollMode) {
-            window.scrollBy(msg.dx * GAZE_SCROLL_SPEED_X, msg.dy * GAZE_SCROLL_SPEED_Y);
+            // window.scrollBy(msg.dx * GAZE_SCROLL_SPEED_X, msg.dy * GAZE_SCROLL_SPEED_Y);
+            scrollOnScrollable(msg.dx * GAZE_SCROLL_SPEED_X, msg.dy * GAZE_SCROLL_SPEED_Y)
         } else {
             updateBalloonCursor(msg.dx, msg.dy);
         }

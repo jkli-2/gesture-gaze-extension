@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Gesture & Gaze Control",
+  "name": "OmniClick",
   "version": "1.0",
   "description": "Control webpages using hand gestures and gaze tracking.",
   "permissions": ["activeTab", "storage", "tabs", "offscreen", "scripting"],

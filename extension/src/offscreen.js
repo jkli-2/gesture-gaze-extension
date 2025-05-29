@@ -217,10 +217,12 @@ const init = async () => {
     video = document.createElement("video");
     video.setAttribute("playsinline", true);
     video.autoplay = true;
-    video.width = CANVAS_W;
-    video.height = CANVAS_H;
-
+    
     stream = await navigator.mediaDevices.getUserMedia({ video: true });
+    const track = stream.getVideoTracks()[0];
+    const settings = track.getSettings();
+    video.width = settings.width;
+    video.height = settings.height;
     video.srcObject = stream;
     await new Promise((resolve) => {
         video.onloadedmetadata = () => resolve();
@@ -340,8 +342,8 @@ setInterval(async () => {
             const maxSide = Math.max(cropW, cropH);
             const deltaW = maxSide - cropW;
             const deltaH = maxSide - cropH;
-            const squareX = cropX1 - deltaW / 2;
-            const squareY = cropY1 - deltaH / 2;
+            const squareX = Math.max(0, cropX1 - deltaW / 2);
+            const squareY = Math.max(0, cropY1 - deltaH / 2);
 
             paddedBoxDim = {
                 maxSide: maxSide,
@@ -419,19 +421,19 @@ const drawLoop = async () => {
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
     for (const landmarks of lastHandLandmarks) {
-        drawConnectors(ctx, landmarks, { color: "#FFF" });
-        drawLandmarks(ctx, landmarks, { color: "#FF00FF" });
+        drawConnectors(ctx, landmarks, { color: "#FDD835" });
+        drawLandmarks(ctx, landmarks, { color: "#BA68C8" });
     }
 
     if (lastFaceLandmarks.length > 0) {
-        ctx.strokeStyle = "#FF00FF";
+        ctx.strokeStyle = "#BA68C8";
         ctx.lineWidth = 2;
         ctx.strokeRect(paddedBoxDim.squareX, paddedBoxDim.squareY, paddedBoxDim.maxSide, paddedBoxDim.maxSide);
         
-        // drawBox(ctx, drawBoxDim, { color: "#00FFFF", lineWidth: 2 });
-        drawPoint(ctx, leftEyeCenter, { color: "#00FF00" });
-        drawPoint(ctx, rightEyeCenter, { color: "#00FF00" });
-        drawGazeArrow(ctx, gazeOrigin, lastDx, lastDy, 10, "red");
+        // drawBox(ctx, drawBoxDim, { color: "#4FC3F7", lineWidth: 2 });
+        drawPoint(ctx, leftEyeCenter, { color: "#3DDC84" });
+        drawPoint(ctx, rightEyeCenter, { color: "#3DDC84" });
+        drawGazeArrow(ctx, gazeOrigin, lastDx, lastDy, 10, "#FF6B6B");
         
         const {yawDegrees, pitchDegrees} = estimateHeadPose(lastFaceLandmarks);
         const norm = Math.hypot(lastDx, lastDy);
