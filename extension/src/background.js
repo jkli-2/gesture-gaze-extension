@@ -23,6 +23,16 @@ loadModelsOnce().then(() => {
     });
 });
 
+chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+    if (changeInfo.status === 'complete' && modelsLoaded) {
+        chrome.tabs.sendMessage(tabId, { type: "MODEL_READY" }, function (response) {
+            if (chrome.runtime.lastError) {
+                console.warn("Message failed:", chrome.runtime.lastError.message);
+            }
+        });
+    }
+});
+
 chrome.runtime.onConnect.addListener(function (port) {
     console.log("Long-lived connection established:", port.name);
     if (port.name !== "gaze-gesture-connection") return;
