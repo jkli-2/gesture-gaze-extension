@@ -59,8 +59,8 @@ function createFloatingPanel() {
     panel.id = "omni-panel";
     panel.style.cssText = `
         position: fixed;
-        top: 120px;
-        right: 20px;
+        top: 240px;
+        right: 40px;
         z-index: 999999;
         display: flex;
         flex-direction: column;
@@ -175,12 +175,12 @@ function createStreamIframe() {
 
     const handle = document.createElement("div");
     handle.id = "streamIframeResizeHandle";
-    handle.innerHTML = `<span class="material-icons">open_with</span>`;
+    handle.innerHTML = `<span class="material-icons" style="font-size:14px;">open_with</span>`;
     handle.style.position = "absolute";
-    handle.style.width = "24px";
-    handle.style.height = "24px";
-    handle.style.top = "1px";
-    handle.style.left = "1px";
+    handle.style.width = "16px";
+    handle.style.height = "16px";
+    handle.style.bottom = "-4px";
+    handle.style.left = "0px";
     handle.style.cursor = "nwse-resize";
     handle.style.zIndex = "10001";
     handle.style.color = "#aaa";
@@ -194,10 +194,10 @@ function createStreamIframe() {
     const wrapper = document.createElement("div");
     wrapper.id = streamPreviewId;
     wrapper.style.position = "fixed";
-    wrapper.style.bottom = "10px";
+    wrapper.style.top = "10px";
     wrapper.style.right = "10px";
-    wrapper.style.width = "320px";
-    wrapper.style.height = "240px";
+    wrapper.style.width = "160px";
+    wrapper.style.height = "120px";
     wrapper.style.zIndex = "9999";
     wrapper.appendChild(iframe);
     wrapper.appendChild(handle);
@@ -549,7 +549,7 @@ function findScrollables() {
 }
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-    if (msg.type === "OFFSCREEN_READY") {
+    if (msg.type === "MODEL_READY") {
         removeStatusPill();
     }
     if (msg.type === "START_STREAM") {

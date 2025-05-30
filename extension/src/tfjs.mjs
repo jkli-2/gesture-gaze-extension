@@ -1,3 +1,4 @@
+// extension/src/tfjs-standalone.mjs
 var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -27,8 +28,6 @@ var __toESM = (mod4, isNodeMode, target) => (target = mod4 != null ? __create(__
   isNodeMode || !mod4 || !mod4.__esModule ? __defProp(target, "default", { value: mod4, enumerable: true }) : target,
   mod4
 ));
-
-// node_modules/long/src/long.js
 var require_long = __commonJS({
   "node_modules/long/src/long.js"(exports, module) {
     module.exports = Long2;
@@ -890,30 +889,24 @@ var require_long = __commonJS({
     };
   }
 });
-
-// (disabled):node_modules/node-fetch/browser.js
 var require_browser = __commonJS({
   "(disabled):node_modules/node-fetch/browser.js"() {
   }
 });
-
-// (disabled):util
 var require_util = __commonJS({
   "(disabled):util"() {
   }
 });
-
-// node_modules/seedrandom/lib/alea.js
 var require_alea = __commonJS({
   "node_modules/seedrandom/lib/alea.js"(exports, module) {
     (function(global2, module2, define2) {
       function Alea(seed) {
         var me = this, mash = Mash();
         me.next = function() {
-          var t3 = 2091639 * me.s0 + me.c * 23283064365386963e-26;
+          var t = 2091639 * me.s0 + me.c * 23283064365386963e-26;
           me.s0 = me.s1;
           me.s1 = me.s2;
-          return me.s2 = t3 - (me.c = t3 | 0);
+          return me.s2 = t - (me.c = t | 0);
         };
         me.c = 1;
         me.s0 = mash(" ");
@@ -933,12 +926,12 @@ var require_alea = __commonJS({
         }
         mash = null;
       }
-      function copy(f, t3) {
-        t3.c = f.c;
-        t3.s0 = f.s0;
-        t3.s1 = f.s1;
-        t3.s2 = f.s2;
-        return t3;
+      function copy(f, t) {
+        t.c = f.c;
+        t.s0 = f.s0;
+        t.s1 = f.s1;
+        t.s2 = f.s2;
+        return t;
       }
       function impl(seed, opts) {
         var xg = new Alea(seed), state = opts && opts.state, prng = xg.next;
@@ -993,8 +986,6 @@ var require_alea = __commonJS({
     );
   }
 });
-
-// node_modules/seedrandom/lib/xor128.js
 var require_xor128 = __commonJS({
   "node_modules/seedrandom/lib/xor128.js"(exports, module) {
     (function(global2, module2, define2) {
@@ -1005,28 +996,28 @@ var require_xor128 = __commonJS({
         me.z = 0;
         me.w = 0;
         me.next = function() {
-          var t3 = me.x ^ me.x << 11;
+          var t = me.x ^ me.x << 11;
           me.x = me.y;
           me.y = me.z;
           me.z = me.w;
-          return me.w ^= me.w >>> 19 ^ t3 ^ t3 >>> 8;
+          return me.w ^= me.w >>> 19 ^ t ^ t >>> 8;
         };
         if (seed === (seed | 0)) {
           me.x = seed;
         } else {
           strseed += seed;
         }
-        for (var k4 = 0; k4 < strseed.length + 64; k4++) {
-          me.x ^= strseed.charCodeAt(k4) | 0;
+        for (var k = 0; k < strseed.length + 64; k++) {
+          me.x ^= strseed.charCodeAt(k) | 0;
           me.next();
         }
       }
-      function copy(f, t3) {
-        t3.x = f.x;
-        t3.y = f.y;
-        t3.z = f.z;
-        t3.w = f.w;
-        return t3;
+      function copy(f, t) {
+        t.x = f.x;
+        t.y = f.y;
+        t.z = f.z;
+        t.w = f.w;
+        return t;
       }
       function impl(seed, opts) {
         var xg = new XorGen(seed), state = opts && opts.state, prng = function() {
@@ -1066,20 +1057,18 @@ var require_xor128 = __commonJS({
     );
   }
 });
-
-// node_modules/seedrandom/lib/xorwow.js
 var require_xorwow = __commonJS({
   "node_modules/seedrandom/lib/xorwow.js"(exports, module) {
     (function(global2, module2, define2) {
       function XorGen(seed) {
         var me = this, strseed = "";
         me.next = function() {
-          var t3 = me.x ^ me.x >>> 2;
+          var t = me.x ^ me.x >>> 2;
           me.x = me.y;
           me.y = me.z;
           me.z = me.w;
           me.w = me.v;
-          return (me.d = me.d + 362437 | 0) + (me.v = me.v ^ me.v << 4 ^ (t3 ^ t3 << 1)) | 0;
+          return (me.d = me.d + 362437 | 0) + (me.v = me.v ^ me.v << 4 ^ (t ^ t << 1)) | 0;
         };
         me.x = 0;
         me.y = 0;
@@ -1091,22 +1080,22 @@ var require_xorwow = __commonJS({
         } else {
           strseed += seed;
         }
-        for (var k4 = 0; k4 < strseed.length + 64; k4++) {
-          me.x ^= strseed.charCodeAt(k4) | 0;
-          if (k4 == strseed.length) {
+        for (var k = 0; k < strseed.length + 64; k++) {
+          me.x ^= strseed.charCodeAt(k) | 0;
+          if (k == strseed.length) {
             me.d = me.x << 10 ^ me.x >>> 4;
           }
           me.next();
         }
       }
-      function copy(f, t3) {
-        t3.x = f.x;
-        t3.y = f.y;
-        t3.z = f.z;
-        t3.w = f.w;
-        t3.v = f.v;
-        t3.d = f.d;
-        return t3;
+      function copy(f, t) {
+        t.x = f.x;
+        t.y = f.y;
+        t.z = f.z;
+        t.w = f.w;
+        t.v = f.v;
+        t.d = f.d;
+        return t;
       }
       function impl(seed, opts) {
         var xg = new XorGen(seed), state = opts && opts.state, prng = function() {
@@ -1146,57 +1135,55 @@ var require_xorwow = __commonJS({
     );
   }
 });
-
-// node_modules/seedrandom/lib/xorshift7.js
 var require_xorshift7 = __commonJS({
   "node_modules/seedrandom/lib/xorshift7.js"(exports, module) {
     (function(global2, module2, define2) {
       function XorGen(seed) {
         var me = this;
         me.next = function() {
-          var X3 = me.x, i = me.i, t3, v, w;
-          t3 = X3[i];
-          t3 ^= t3 >>> 7;
-          v = t3 ^ t3 << 24;
-          t3 = X3[i + 1 & 7];
-          v ^= t3 ^ t3 >>> 10;
-          t3 = X3[i + 3 & 7];
-          v ^= t3 ^ t3 >>> 3;
-          t3 = X3[i + 4 & 7];
-          v ^= t3 ^ t3 << 7;
-          t3 = X3[i + 7 & 7];
-          t3 = t3 ^ t3 << 13;
-          v ^= t3 ^ t3 << 9;
-          X3[i] = v;
+          var X = me.x, i = me.i, t, v, w;
+          t = X[i];
+          t ^= t >>> 7;
+          v = t ^ t << 24;
+          t = X[i + 1 & 7];
+          v ^= t ^ t >>> 10;
+          t = X[i + 3 & 7];
+          v ^= t ^ t >>> 3;
+          t = X[i + 4 & 7];
+          v ^= t ^ t << 7;
+          t = X[i + 7 & 7];
+          t = t ^ t << 13;
+          v ^= t ^ t << 9;
+          X[i] = v;
           me.i = i + 1 & 7;
           return v;
         };
         function init(me2, seed2) {
-          var j3, w, X3 = [];
+          var j, w, X = [];
           if (seed2 === (seed2 | 0)) {
-            w = X3[0] = seed2;
+            w = X[0] = seed2;
           } else {
             seed2 = "" + seed2;
-            for (j3 = 0; j3 < seed2.length; ++j3) {
-              X3[j3 & 7] = X3[j3 & 7] << 15 ^ seed2.charCodeAt(j3) + X3[j3 + 1 & 7] << 13;
+            for (j = 0; j < seed2.length; ++j) {
+              X[j & 7] = X[j & 7] << 15 ^ seed2.charCodeAt(j) + X[j + 1 & 7] << 13;
             }
           }
-          while (X3.length < 8) X3.push(0);
-          for (j3 = 0; j3 < 8 && X3[j3] === 0; ++j3) ;
-          if (j3 == 8) w = X3[7] = -1;
-          else w = X3[j3];
-          me2.x = X3;
+          while (X.length < 8) X.push(0);
+          for (j = 0; j < 8 && X[j] === 0; ++j) ;
+          if (j == 8) w = X[7] = -1;
+          else w = X[j];
+          me2.x = X;
           me2.i = 0;
-          for (j3 = 256; j3 > 0; --j3) {
+          for (j = 256; j > 0; --j) {
             me2.next();
           }
         }
         init(me, seed);
       }
-      function copy(f, t3) {
-        t3.x = f.x.slice();
-        t3.i = f.i;
-        return t3;
+      function copy(f, t) {
+        t.x = f.x.slice();
+        t.i = f.i;
+        return t;
       }
       function impl(seed, opts) {
         if (seed == null) seed = +/* @__PURE__ */ new Date();
@@ -1237,28 +1224,26 @@ var require_xorshift7 = __commonJS({
     );
   }
 });
-
-// node_modules/seedrandom/lib/xor4096.js
 var require_xor4096 = __commonJS({
   "node_modules/seedrandom/lib/xor4096.js"(exports, module) {
     (function(global2, module2, define2) {
       function XorGen(seed) {
         var me = this;
         me.next = function() {
-          var w = me.w, X3 = me.X, i = me.i, t3, v;
+          var w = me.w, X = me.X, i = me.i, t, v;
           me.w = w = w + 1640531527 | 0;
-          v = X3[i + 34 & 127];
-          t3 = X3[i = i + 1 & 127];
+          v = X[i + 34 & 127];
+          t = X[i = i + 1 & 127];
           v ^= v << 13;
-          t3 ^= t3 << 17;
+          t ^= t << 17;
           v ^= v >>> 15;
-          t3 ^= t3 >>> 12;
-          v = X3[i] = v ^ t3;
+          t ^= t >>> 12;
+          v = X[i] = v ^ t;
           me.i = i;
           return v + (w ^ w >>> 16) | 0;
         };
         function init(me2, seed2) {
-          var t3, v, i, j3, w, X3 = [], limit = 128;
+          var t, v, i, j, w, X = [], limit = 128;
           if (seed2 === (seed2 | 0)) {
             v = seed2;
             seed2 = null;
@@ -1267,43 +1252,43 @@ var require_xor4096 = __commonJS({
             v = 0;
             limit = Math.max(limit, seed2.length);
           }
-          for (i = 0, j3 = -32; j3 < limit; ++j3) {
-            if (seed2) v ^= seed2.charCodeAt((j3 + 32) % seed2.length);
-            if (j3 === 0) w = v;
+          for (i = 0, j = -32; j < limit; ++j) {
+            if (seed2) v ^= seed2.charCodeAt((j + 32) % seed2.length);
+            if (j === 0) w = v;
             v ^= v << 10;
             v ^= v >>> 15;
             v ^= v << 4;
             v ^= v >>> 13;
-            if (j3 >= 0) {
+            if (j >= 0) {
               w = w + 1640531527 | 0;
-              t3 = X3[j3 & 127] ^= v + w;
-              i = 0 == t3 ? i + 1 : 0;
+              t = X[j & 127] ^= v + w;
+              i = 0 == t ? i + 1 : 0;
             }
           }
           if (i >= 128) {
-            X3[(seed2 && seed2.length || 0) & 127] = -1;
+            X[(seed2 && seed2.length || 0) & 127] = -1;
           }
           i = 127;
-          for (j3 = 4 * 128; j3 > 0; --j3) {
-            v = X3[i + 34 & 127];
-            t3 = X3[i = i + 1 & 127];
+          for (j = 4 * 128; j > 0; --j) {
+            v = X[i + 34 & 127];
+            t = X[i = i + 1 & 127];
             v ^= v << 13;
-            t3 ^= t3 << 17;
+            t ^= t << 17;
             v ^= v >>> 15;
-            t3 ^= t3 >>> 12;
-            X3[i] = v ^ t3;
+            t ^= t >>> 12;
+            X[i] = v ^ t;
           }
           me2.w = w;
-          me2.X = X3;
+          me2.X = X;
           me2.i = i;
         }
         init(me, seed);
       }
-      function copy(f, t3) {
-        t3.i = f.i;
-        t3.w = f.w;
-        t3.X = f.X.slice();
-        return t3;
+      function copy(f, t) {
+        t.i = f.i;
+        t.w = f.w;
+        t.X = f.X.slice();
+        return t;
       }
       ;
       function impl(seed, opts) {
@@ -1346,8 +1331,6 @@ var require_xor4096 = __commonJS({
     );
   }
 });
-
-// node_modules/seedrandom/lib/tychei.js
 var require_tychei = __commonJS({
   "node_modules/seedrandom/lib/tychei.js"(exports, module) {
     (function(global2, module2, define2) {
@@ -1374,17 +1357,17 @@ var require_tychei = __commonJS({
         } else {
           strseed += seed;
         }
-        for (var k4 = 0; k4 < strseed.length + 20; k4++) {
-          me.b ^= strseed.charCodeAt(k4) | 0;
+        for (var k = 0; k < strseed.length + 20; k++) {
+          me.b ^= strseed.charCodeAt(k) | 0;
           me.next();
         }
       }
-      function copy(f, t3) {
-        t3.a = f.a;
-        t3.b = f.b;
-        t3.c = f.c;
-        t3.d = f.d;
-        return t3;
+      function copy(f, t) {
+        t.a = f.a;
+        t.b = f.b;
+        t.c = f.c;
+        t.d = f.d;
+        return t;
       }
       ;
       function impl(seed, opts) {
@@ -1425,14 +1408,10 @@ var require_tychei = __commonJS({
     );
   }
 });
-
-// (disabled):crypto
 var require_crypto = __commonJS({
   "(disabled):crypto"() {
   }
 });
-
-// node_modules/seedrandom/seedrandom.js
 var require_seedrandom = __commonJS({
   "node_modules/seedrandom/seedrandom.js"(exports, module) {
     (function(global2, pool3, math) {
@@ -1488,7 +1467,7 @@ var require_seedrandom = __commonJS({
         );
       }
       function ARC4(key) {
-        var t3, keylen = key.length, me = this, i = 0, j3 = me.i = me.j = 0, s = me.S = [];
+        var t, keylen = key.length, me = this, i = 0, j = me.i = me.j = 0, s = me.S = [];
         if (!keylen) {
           key = [keylen++];
         }
@@ -1496,25 +1475,25 @@ var require_seedrandom = __commonJS({
           s[i] = i++;
         }
         for (i = 0; i < width; i++) {
-          s[i] = s[j3 = mask & j3 + key[i % keylen] + (t3 = s[i])];
-          s[j3] = t3;
+          s[i] = s[j = mask & j + key[i % keylen] + (t = s[i])];
+          s[j] = t;
         }
         (me.g = function(count2) {
-          var t4, r = 0, i2 = me.i, j4 = me.j, s2 = me.S;
+          var t2, r = 0, i2 = me.i, j2 = me.j, s2 = me.S;
           while (count2--) {
-            t4 = s2[i2 = mask & i2 + 1];
-            r = r * width + s2[mask & (s2[i2] = s2[j4 = mask & j4 + t4]) + (s2[j4] = t4)];
+            t2 = s2[i2 = mask & i2 + 1];
+            r = r * width + s2[mask & (s2[i2] = s2[j2 = mask & j2 + t2]) + (s2[j2] = t2)];
           }
           me.i = i2;
-          me.j = j4;
+          me.j = j2;
           return r;
         })(width);
       }
-      function copy(f, t3) {
-        t3.i = f.i;
-        t3.j = f.j;
-        t3.S = f.S.slice();
-        return t3;
+      function copy(f, t) {
+        t.i = f.i;
+        t.j = f.j;
+        t.S = f.S.slice();
+        return t;
       }
       ;
       function flatten4(obj, depth) {
@@ -1530,9 +1509,9 @@ var require_seedrandom = __commonJS({
         return result.length ? result : typ == "string" ? obj : obj + "\0";
       }
       function mixkey(seed, key) {
-        var stringseed = seed + "", smear, j3 = 0;
-        while (j3 < stringseed.length) {
-          key[mask & j3] = mask & (smear ^= key[mask & j3] * 19) + stringseed.charCodeAt(j3++);
+        var stringseed = seed + "", smear, j = 0;
+        while (j < stringseed.length) {
+          key[mask & j] = mask & (smear ^= key[mask & j] * 19) + stringseed.charCodeAt(j++);
         }
         return tostring(key);
       }
@@ -1579,8 +1558,6 @@ var require_seedrandom = __commonJS({
     );
   }
 });
-
-// node_modules/seedrandom/index.js
 var require_seedrandom2 = __commonJS({
   "node_modules/seedrandom/index.js"(exports, module) {
     var alea5 = require_alea();
@@ -1599,6975 +1576,14 @@ var require_seedrandom2 = __commonJS({
     module.exports = sr;
   }
 });
-
-// (disabled):node_modules/string_decoder/lib/string_decoder.js
 var require_string_decoder = __commonJS({
   "(disabled):node_modules/string_decoder/lib/string_decoder.js"() {
   }
 });
-
-// (disabled):fs
 var require_fs = __commonJS({
   "(disabled):fs"() {
   }
 });
-
-// node_modules/@mediapipe/hands/hands.js
-var require_hands = __commonJS({
-  "node_modules/@mediapipe/hands/hands.js"(exports) {
-    (function() {
-      "use strict";
-      var x;
-      function aa(a) {
-        var b = 0;
-        return function() {
-          return b < a.length ? { done: false, value: a[b++] } : { done: true };
-        };
-      }
-      var ba = "function" == typeof Object.defineProperties ? Object.defineProperty : function(a, b, c) {
-        if (a == Array.prototype || a == Object.prototype) return a;
-        a[b] = c.value;
-        return a;
-      };
-      function ca(a) {
-        a = ["object" == typeof globalThis && globalThis, a, "object" == typeof window && window, "object" == typeof self && self, "object" == typeof global && global];
-        for (var b = 0; b < a.length; ++b) {
-          var c = a[b];
-          if (c && c.Math == Math) return c;
-        }
-        throw Error("Cannot find global object");
-      }
-      var y = ca(this);
-      function z3(a, b) {
-        if (b) a: {
-          var c = y;
-          a = a.split(".");
-          for (var d = 0; d < a.length - 1; d++) {
-            var e = a[d];
-            if (!(e in c)) break a;
-            c = c[e];
-          }
-          a = a[a.length - 1];
-          d = c[a];
-          b = b(d);
-          b != d && null != b && ba(c, a, { configurable: true, writable: true, value: b });
-        }
-      }
-      z3("Symbol", function(a) {
-        function b(g) {
-          if (this instanceof b) throw new TypeError("Symbol is not a constructor");
-          return new c(d + (g || "") + "_" + e++, g);
-        }
-        function c(g, f) {
-          this.h = g;
-          ba(this, "description", { configurable: true, writable: true, value: f });
-        }
-        if (a) return a;
-        c.prototype.toString = function() {
-          return this.h;
-        };
-        var d = "jscomp_symbol_" + (1e9 * Math.random() >>> 0) + "_", e = 0;
-        return b;
-      });
-      z3("Symbol.iterator", function(a) {
-        if (a) return a;
-        a = Symbol("Symbol.iterator");
-        for (var b = "Array Int8Array Uint8Array Uint8ClampedArray Int16Array Uint16Array Int32Array Uint32Array Float32Array Float64Array".split(" "), c = 0; c < b.length; c++) {
-          var d = y[b[c]];
-          "function" === typeof d && "function" != typeof d.prototype[a] && ba(d.prototype, a, { configurable: true, writable: true, value: function() {
-            return da(aa(this));
-          } });
-        }
-        return a;
-      });
-      function da(a) {
-        a = { next: a };
-        a[Symbol.iterator] = function() {
-          return this;
-        };
-        return a;
-      }
-      function A2(a) {
-        var b = "undefined" != typeof Symbol && Symbol.iterator && a[Symbol.iterator];
-        return b ? b.call(a) : { next: aa(a) };
-      }
-      function ea(a) {
-        if (!(a instanceof Array)) {
-          a = A2(a);
-          for (var b, c = []; !(b = a.next()).done; ) c.push(b.value);
-          a = c;
-        }
-        return a;
-      }
-      var fa = "function" == typeof Object.assign ? Object.assign : function(a, b) {
-        for (var c = 1; c < arguments.length; c++) {
-          var d = arguments[c];
-          if (d) for (var e in d) Object.prototype.hasOwnProperty.call(d, e) && (a[e] = d[e]);
-        }
-        return a;
-      };
-      z3("Object.assign", function(a) {
-        return a || fa;
-      });
-      var ha = "function" == typeof Object.create ? Object.create : function(a) {
-        function b() {
-        }
-        b.prototype = a;
-        return new b();
-      }, ia;
-      if ("function" == typeof Object.setPrototypeOf) ia = Object.setPrototypeOf;
-      else {
-        var ja;
-        a: {
-          var ka = { a: true }, la = {};
-          try {
-            la.__proto__ = ka;
-            ja = la.a;
-            break a;
-          } catch (a) {
-          }
-          ja = false;
-        }
-        ia = ja ? function(a, b) {
-          a.__proto__ = b;
-          if (a.__proto__ !== b) throw new TypeError(a + " is not extensible");
-          return a;
-        } : null;
-      }
-      var ma = ia;
-      function na(a, b) {
-        a.prototype = ha(b.prototype);
-        a.prototype.constructor = a;
-        if (ma) ma(a, b);
-        else for (var c in b) if ("prototype" != c) if (Object.defineProperties) {
-          var d = Object.getOwnPropertyDescriptor(b, c);
-          d && Object.defineProperty(a, c, d);
-        } else a[c] = b[c];
-        a.ya = b.prototype;
-      }
-      function oa() {
-        this.m = false;
-        this.j = null;
-        this.i = void 0;
-        this.h = 1;
-        this.v = this.s = 0;
-        this.l = null;
-      }
-      function pa(a) {
-        if (a.m) throw new TypeError("Generator is already running");
-        a.m = true;
-      }
-      oa.prototype.u = function(a) {
-        this.i = a;
-      };
-      function qa(a, b) {
-        a.l = { ma: b, na: true };
-        a.h = a.s || a.v;
-      }
-      oa.prototype.return = function(a) {
-        this.l = { return: a };
-        this.h = this.v;
-      };
-      function D3(a, b, c) {
-        a.h = c;
-        return { value: b };
-      }
-      function ra(a) {
-        this.h = new oa();
-        this.i = a;
-      }
-      function sa(a, b) {
-        pa(a.h);
-        var c = a.h.j;
-        if (c) return ta(a, "return" in c ? c["return"] : function(d) {
-          return { value: d, done: true };
-        }, b, a.h.return);
-        a.h.return(b);
-        return ua(a);
-      }
-      function ta(a, b, c, d) {
-        try {
-          var e = b.call(a.h.j, c);
-          if (!(e instanceof Object)) throw new TypeError("Iterator result " + e + " is not an object");
-          if (!e.done) return a.h.m = false, e;
-          var g = e.value;
-        } catch (f) {
-          return a.h.j = null, qa(a.h, f), ua(a);
-        }
-        a.h.j = null;
-        d.call(a.h, g);
-        return ua(a);
-      }
-      function ua(a) {
-        for (; a.h.h; ) try {
-          var b = a.i(a.h);
-          if (b) return a.h.m = false, { value: b.value, done: false };
-        } catch (c) {
-          a.h.i = void 0, qa(a.h, c);
-        }
-        a.h.m = false;
-        if (a.h.l) {
-          b = a.h.l;
-          a.h.l = null;
-          if (b.na) throw b.ma;
-          return { value: b.return, done: true };
-        }
-        return { value: void 0, done: true };
-      }
-      function va(a) {
-        this.next = function(b) {
-          pa(a.h);
-          a.h.j ? b = ta(a, a.h.j.next, b, a.h.u) : (a.h.u(b), b = ua(a));
-          return b;
-        };
-        this.throw = function(b) {
-          pa(a.h);
-          a.h.j ? b = ta(a, a.h.j["throw"], b, a.h.u) : (qa(a.h, b), b = ua(a));
-          return b;
-        };
-        this.return = function(b) {
-          return sa(a, b);
-        };
-        this[Symbol.iterator] = function() {
-          return this;
-        };
-      }
-      function wa(a) {
-        function b(d) {
-          return a.next(d);
-        }
-        function c(d) {
-          return a.throw(d);
-        }
-        return new Promise(function(d, e) {
-          function g(f) {
-            f.done ? d(f.value) : Promise.resolve(f.value).then(b, c).then(g, e);
-          }
-          g(a.next());
-        });
-      }
-      function E3(a) {
-        return wa(new va(new ra(a)));
-      }
-      z3("Promise", function(a) {
-        function b(f) {
-          this.i = 0;
-          this.j = void 0;
-          this.h = [];
-          this.u = false;
-          var h = this.l();
-          try {
-            f(h.resolve, h.reject);
-          } catch (k4) {
-            h.reject(k4);
-          }
-        }
-        function c() {
-          this.h = null;
-        }
-        function d(f) {
-          return f instanceof b ? f : new b(function(h) {
-            h(f);
-          });
-        }
-        if (a) return a;
-        c.prototype.i = function(f) {
-          if (null == this.h) {
-            this.h = [];
-            var h = this;
-            this.j(function() {
-              h.m();
-            });
-          }
-          this.h.push(f);
-        };
-        var e = y.setTimeout;
-        c.prototype.j = function(f) {
-          e(f, 0);
-        };
-        c.prototype.m = function() {
-          for (; this.h && this.h.length; ) {
-            var f = this.h;
-            this.h = [];
-            for (var h = 0; h < f.length; ++h) {
-              var k4 = f[h];
-              f[h] = null;
-              try {
-                k4();
-              } catch (l) {
-                this.l(l);
-              }
-            }
-          }
-          this.h = null;
-        };
-        c.prototype.l = function(f) {
-          this.j(function() {
-            throw f;
-          });
-        };
-        b.prototype.l = function() {
-          function f(l) {
-            return function(m) {
-              k4 || (k4 = true, l.call(h, m));
-            };
-          }
-          var h = this, k4 = false;
-          return { resolve: f(this.I), reject: f(this.m) };
-        };
-        b.prototype.I = function(f) {
-          if (f === this) this.m(new TypeError("A Promise cannot resolve to itself"));
-          else if (f instanceof b) this.L(f);
-          else {
-            a: switch (typeof f) {
-              case "object":
-                var h = null != f;
-                break a;
-              case "function":
-                h = true;
-                break a;
-              default:
-                h = false;
-            }
-            h ? this.F(f) : this.s(f);
-          }
-        };
-        b.prototype.F = function(f) {
-          var h = void 0;
-          try {
-            h = f.then;
-          } catch (k4) {
-            this.m(k4);
-            return;
-          }
-          "function" == typeof h ? this.M(h, f) : this.s(f);
-        };
-        b.prototype.m = function(f) {
-          this.v(2, f);
-        };
-        b.prototype.s = function(f) {
-          this.v(1, f);
-        };
-        b.prototype.v = function(f, h) {
-          if (0 != this.i) throw Error("Cannot settle(" + f + ", " + h + "): Promise already settled in state" + this.i);
-          this.i = f;
-          this.j = h;
-          2 === this.i && this.K();
-          this.H();
-        };
-        b.prototype.K = function() {
-          var f = this;
-          e(function() {
-            if (f.D()) {
-              var h = y.console;
-              "undefined" !== typeof h && h.error(f.j);
-            }
-          }, 1);
-        };
-        b.prototype.D = function() {
-          if (this.u) return false;
-          var f = y.CustomEvent, h = y.Event, k4 = y.dispatchEvent;
-          if ("undefined" === typeof k4) return true;
-          "function" === typeof f ? f = new f("unhandledrejection", { cancelable: true }) : "function" === typeof h ? f = new h("unhandledrejection", { cancelable: true }) : (f = y.document.createEvent("CustomEvent"), f.initCustomEvent("unhandledrejection", false, true, f));
-          f.promise = this;
-          f.reason = this.j;
-          return k4(f);
-        };
-        b.prototype.H = function() {
-          if (null != this.h) {
-            for (var f = 0; f < this.h.length; ++f) g.i(this.h[f]);
-            this.h = null;
-          }
-        };
-        var g = new c();
-        b.prototype.L = function(f) {
-          var h = this.l();
-          f.T(h.resolve, h.reject);
-        };
-        b.prototype.M = function(f, h) {
-          var k4 = this.l();
-          try {
-            f.call(h, k4.resolve, k4.reject);
-          } catch (l) {
-            k4.reject(l);
-          }
-        };
-        b.prototype.then = function(f, h) {
-          function k4(p2, n) {
-            return "function" == typeof p2 ? function(q3) {
-              try {
-                l(p2(q3));
-              } catch (t3) {
-                m(t3);
-              }
-            } : n;
-          }
-          var l, m, r = new b(function(p2, n) {
-            l = p2;
-            m = n;
-          });
-          this.T(k4(f, l), k4(h, m));
-          return r;
-        };
-        b.prototype.catch = function(f) {
-          return this.then(void 0, f);
-        };
-        b.prototype.T = function(f, h) {
-          function k4() {
-            switch (l.i) {
-              case 1:
-                f(l.j);
-                break;
-              case 2:
-                h(l.j);
-                break;
-              default:
-                throw Error("Unexpected state: " + l.i);
-            }
-          }
-          var l = this;
-          null == this.h ? g.i(k4) : this.h.push(k4);
-          this.u = true;
-        };
-        b.resolve = d;
-        b.reject = function(f) {
-          return new b(function(h, k4) {
-            k4(f);
-          });
-        };
-        b.race = function(f) {
-          return new b(function(h, k4) {
-            for (var l = A2(f), m = l.next(); !m.done; m = l.next()) d(m.value).T(h, k4);
-          });
-        };
-        b.all = function(f) {
-          var h = A2(f), k4 = h.next();
-          return k4.done ? d([]) : new b(function(l, m) {
-            function r(q3) {
-              return function(t3) {
-                p2[q3] = t3;
-                n--;
-                0 == n && l(p2);
-              };
-            }
-            var p2 = [], n = 0;
-            do
-              p2.push(void 0), n++, d(k4.value).T(r(p2.length - 1), m), k4 = h.next();
-            while (!k4.done);
-          });
-        };
-        return b;
-      });
-      function xa(a, b) {
-        a instanceof String && (a += "");
-        var c = 0, d = false, e = { next: function() {
-          if (!d && c < a.length) {
-            var g = c++;
-            return { value: b(g, a[g]), done: false };
-          }
-          d = true;
-          return { done: true, value: void 0 };
-        } };
-        e[Symbol.iterator] = function() {
-          return e;
-        };
-        return e;
-      }
-      z3("Array.prototype.keys", function(a) {
-        return a ? a : function() {
-          return xa(this, function(b) {
-            return b;
-          });
-        };
-      });
-      z3("Array.prototype.fill", function(a) {
-        return a ? a : function(b, c, d) {
-          var e = this.length || 0;
-          0 > c && (c = Math.max(0, e + c));
-          if (null == d || d > e) d = e;
-          d = Number(d);
-          0 > d && (d = Math.max(0, e + d));
-          for (c = Number(c || 0); c < d; c++) this[c] = b;
-          return this;
-        };
-      });
-      function F3(a) {
-        return a ? a : Array.prototype.fill;
-      }
-      z3("Int8Array.prototype.fill", F3);
-      z3("Uint8Array.prototype.fill", F3);
-      z3("Uint8ClampedArray.prototype.fill", F3);
-      z3("Int16Array.prototype.fill", F3);
-      z3("Uint16Array.prototype.fill", F3);
-      z3("Int32Array.prototype.fill", F3);
-      z3("Uint32Array.prototype.fill", F3);
-      z3("Float32Array.prototype.fill", F3);
-      z3("Float64Array.prototype.fill", F3);
-      z3("Object.is", function(a) {
-        return a ? a : function(b, c) {
-          return b === c ? 0 !== b || 1 / b === 1 / c : b !== b && c !== c;
-        };
-      });
-      z3("Array.prototype.includes", function(a) {
-        return a ? a : function(b, c) {
-          var d = this;
-          d instanceof String && (d = String(d));
-          var e = d.length;
-          c = c || 0;
-          for (0 > c && (c = Math.max(c + e, 0)); c < e; c++) {
-            var g = d[c];
-            if (g === b || Object.is(g, b)) return true;
-          }
-          return false;
-        };
-      });
-      z3("String.prototype.includes", function(a) {
-        return a ? a : function(b, c) {
-          if (null == this) throw new TypeError("The 'this' value for String.prototype.includes must not be null or undefined");
-          if (b instanceof RegExp) throw new TypeError("First argument to String.prototype.includes must not be a regular expression");
-          return -1 !== this.indexOf(b, c || 0);
-        };
-      });
-      var ya = this || self;
-      function za(a, b) {
-        a = a.split(".");
-        var c = ya;
-        a[0] in c || "undefined" == typeof c.execScript || c.execScript("var " + a[0]);
-        for (var d; a.length && (d = a.shift()); ) a.length || void 0 === b ? c[d] && c[d] !== Object.prototype[d] ? c = c[d] : c = c[d] = {} : c[d] = b;
-      }
-      ;
-      function Ba(a) {
-        var b;
-        a: {
-          if (b = ya.navigator) {
-            if (b = b.userAgent) break a;
-          }
-          b = "";
-        }
-        return -1 != b.indexOf(a);
-      }
-      ;
-      var Ca = Array.prototype.map ? function(a, b) {
-        return Array.prototype.map.call(a, b, void 0);
-      } : function(a, b) {
-        for (var c = a.length, d = Array(c), e = "string" === typeof a ? a.split("") : a, g = 0; g < c; g++) g in e && (d[g] = b.call(void 0, e[g], g, a));
-        return d;
-      };
-      var Da = {}, Ea = null;
-      function Fa(a) {
-        var b = a.length, c = 3 * b / 4;
-        c % 3 ? c = Math.floor(c) : -1 != "=.".indexOf(a[b - 1]) && (c = -1 != "=.".indexOf(a[b - 2]) ? c - 2 : c - 1);
-        var d = new Uint8Array(c), e = 0;
-        Ga(a, function(g) {
-          d[e++] = g;
-        });
-        return e !== c ? d.subarray(0, e) : d;
-      }
-      function Ga(a, b) {
-        function c(k4) {
-          for (; d < a.length; ) {
-            var l = a.charAt(d++), m = Ea[l];
-            if (null != m) return m;
-            if (!/^[\s\xa0]*$/.test(l)) throw Error("Unknown base64 encoding at char: " + l);
-          }
-          return k4;
-        }
-        Ha();
-        for (var d = 0; ; ) {
-          var e = c(-1), g = c(0), f = c(64), h = c(64);
-          if (64 === h && -1 === e) break;
-          b(e << 2 | g >> 4);
-          64 != f && (b(g << 4 & 240 | f >> 2), 64 != h && b(f << 6 & 192 | h));
-        }
-      }
-      function Ha() {
-        if (!Ea) {
-          Ea = {};
-          for (var a = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".split(""), b = ["+/=", "+/", "-_=", "-_.", "-_"], c = 0; 5 > c; c++) {
-            var d = a.concat(b[c].split(""));
-            Da[c] = d;
-            for (var e = 0; e < d.length; e++) {
-              var g = d[e];
-              void 0 === Ea[g] && (Ea[g] = e);
-            }
-          }
-        }
-      }
-      ;
-      var Ia = "undefined" !== typeof Uint8Array, Ja = !(Ba("Trident") || Ba("MSIE")) && "function" === typeof ya.btoa;
-      function Ka(a) {
-        if (!Ja) {
-          var b;
-          void 0 === b && (b = 0);
-          Ha();
-          b = Da[b];
-          for (var c = Array(Math.floor(a.length / 3)), d = b[64] || "", e = 0, g = 0; e < a.length - 2; e += 3) {
-            var f = a[e], h = a[e + 1], k4 = a[e + 2], l = b[f >> 2];
-            f = b[(f & 3) << 4 | h >> 4];
-            h = b[(h & 15) << 2 | k4 >> 6];
-            k4 = b[k4 & 63];
-            c[g++] = l + f + h + k4;
-          }
-          l = 0;
-          k4 = d;
-          switch (a.length - e) {
-            case 2:
-              l = a[e + 1], k4 = b[(l & 15) << 2] || d;
-            case 1:
-              a = a[e], c[g] = b[a >> 2] + b[(a & 3) << 4 | l >> 4] + k4 + d;
-          }
-          return c.join("");
-        }
-        for (b = ""; 10240 < a.length; ) b += String.fromCharCode.apply(null, a.subarray(0, 10240)), a = a.subarray(10240);
-        b += String.fromCharCode.apply(
-          null,
-          a
-        );
-        return btoa(b);
-      }
-      var La = RegExp("[-_.]", "g");
-      function Ma(a) {
-        switch (a) {
-          case "-":
-            return "+";
-          case "_":
-            return "/";
-          case ".":
-            return "=";
-          default:
-            return "";
-        }
-      }
-      function Na(a) {
-        if (!Ja) return Fa(a);
-        La.test(a) && (a = a.replace(La, Ma));
-        a = atob(a);
-        for (var b = new Uint8Array(a.length), c = 0; c < a.length; c++) b[c] = a.charCodeAt(c);
-        return b;
-      }
-      var Oa;
-      function Pa() {
-        return Oa || (Oa = new Uint8Array(0));
-      }
-      var Qa = {};
-      var Ra = "function" === typeof Uint8Array.prototype.slice, G3 = 0, H3 = 0;
-      function Sa(a) {
-        var b = 0 > a;
-        a = Math.abs(a);
-        var c = a >>> 0;
-        a = Math.floor((a - c) / 4294967296);
-        b && (c = A2(Ta(c, a)), b = c.next().value, a = c.next().value, c = b);
-        G3 = c >>> 0;
-        H3 = a >>> 0;
-      }
-      var Ua = "function" === typeof BigInt;
-      function Ta(a, b) {
-        b = ~b;
-        a ? a = ~a + 1 : b += 1;
-        return [a, b];
-      }
-      ;
-      function Va(a, b) {
-        this.i = a >>> 0;
-        this.h = b >>> 0;
-      }
-      function Wa(a) {
-        if (!a) return Xa || (Xa = new Va(0, 0));
-        if (!/^-?\d+$/.test(a)) return null;
-        if (16 > a.length) Sa(Number(a));
-        else if (Ua) a = BigInt(a), G3 = Number(a & BigInt(4294967295)) >>> 0, H3 = Number(a >> BigInt(32) & BigInt(4294967295));
-        else {
-          var b = +("-" === a[0]);
-          H3 = G3 = 0;
-          for (var c = a.length, d = b, e = (c - b) % 6 + b; e <= c; d = e, e += 6) d = Number(a.slice(d, e)), H3 *= 1e6, G3 = 1e6 * G3 + d, 4294967296 <= G3 && (H3 += G3 / 4294967296 | 0, G3 %= 4294967296);
-          b && (b = A2(Ta(G3, H3)), a = b.next().value, b = b.next().value, G3 = a, H3 = b);
-        }
-        return new Va(G3, H3);
-      }
-      var Xa;
-      function Ya(a, b) {
-        return Error("Invalid wire type: " + a + " (at position " + b + ")");
-      }
-      function Za() {
-        return Error("Failed to read varint, encoding is invalid.");
-      }
-      function $a(a, b) {
-        return Error("Tried to read past the end of the data " + b + " > " + a);
-      }
-      ;
-      function K3() {
-        throw Error("Invalid UTF8");
-      }
-      function ab(a, b) {
-        b = String.fromCharCode.apply(null, b);
-        return null == a ? b : a + b;
-      }
-      var bb = void 0, cb, db = "undefined" !== typeof TextDecoder, eb, fb = "undefined" !== typeof TextEncoder;
-      var gb;
-      function hb(a) {
-        if (a !== Qa) throw Error("illegal external caller");
-      }
-      function ib(a, b) {
-        hb(b);
-        this.V = a;
-        if (null != a && 0 === a.length) throw Error("ByteString should be constructed with non-empty values");
-      }
-      function jb() {
-        return gb || (gb = new ib(null, Qa));
-      }
-      function kb(a) {
-        hb(Qa);
-        var b = a.V;
-        b = null == b || Ia && null != b && b instanceof Uint8Array ? b : "string" === typeof b ? Na(b) : null;
-        return null == b ? b : a.V = b;
-      }
-      ;
-      function lb(a) {
-        if ("string" === typeof a) return { buffer: Na(a), C: false };
-        if (Array.isArray(a)) return { buffer: new Uint8Array(a), C: false };
-        if (a.constructor === Uint8Array) return { buffer: a, C: false };
-        if (a.constructor === ArrayBuffer) return { buffer: new Uint8Array(a), C: false };
-        if (a.constructor === ib) return { buffer: kb(a) || Pa(), C: true };
-        if (a instanceof Uint8Array) return { buffer: new Uint8Array(a.buffer, a.byteOffset, a.byteLength), C: false };
-        throw Error("Type not convertible to a Uint8Array, expected a Uint8Array, an ArrayBuffer, a base64 encoded string, a ByteString or an Array of numbers");
-      }
-      ;
-      function mb(a, b) {
-        this.i = null;
-        this.m = false;
-        this.h = this.j = this.l = 0;
-        nb(this, a, b);
-      }
-      function nb(a, b, c) {
-        c = void 0 === c ? {} : c;
-        a.S = void 0 === c.S ? false : c.S;
-        b && (b = lb(b), a.i = b.buffer, a.m = b.C, a.l = 0, a.j = a.i.length, a.h = a.l);
-      }
-      mb.prototype.reset = function() {
-        this.h = this.l;
-      };
-      function L3(a, b) {
-        a.h = b;
-        if (b > a.j) throw $a(a.j, b);
-      }
-      function ob(a) {
-        var b = a.i, c = a.h, d = b[c++], e = d & 127;
-        if (d & 128 && (d = b[c++], e |= (d & 127) << 7, d & 128 && (d = b[c++], e |= (d & 127) << 14, d & 128 && (d = b[c++], e |= (d & 127) << 21, d & 128 && (d = b[c++], e |= d << 28, d & 128 && b[c++] & 128 && b[c++] & 128 && b[c++] & 128 && b[c++] & 128 && b[c++] & 128))))) throw Za();
-        L3(a, c);
-        return e;
-      }
-      function pb(a, b) {
-        if (0 > b) throw Error("Tried to read a negative byte length: " + b);
-        var c = a.h, d = c + b;
-        if (d > a.j) throw $a(b, a.j - c);
-        a.h = d;
-        return c;
-      }
-      var qb = [];
-      function rb() {
-        this.h = [];
-      }
-      rb.prototype.length = function() {
-        return this.h.length;
-      };
-      rb.prototype.end = function() {
-        var a = this.h;
-        this.h = [];
-        return a;
-      };
-      function sb(a, b, c) {
-        for (; 0 < c || 127 < b; ) a.h.push(b & 127 | 128), b = (b >>> 7 | c << 25) >>> 0, c >>>= 7;
-        a.h.push(b);
-      }
-      function M(a, b) {
-        for (; 127 < b; ) a.h.push(b & 127 | 128), b >>>= 7;
-        a.h.push(b);
-      }
-      ;
-      function tb(a, b) {
-        if (qb.length) {
-          var c = qb.pop();
-          nb(c, a, b);
-          a = c;
-        } else a = new mb(a, b);
-        this.h = a;
-        this.j = this.h.h;
-        this.i = this.l = -1;
-        this.setOptions(b);
-      }
-      tb.prototype.setOptions = function(a) {
-        a = void 0 === a ? {} : a;
-        this.ca = void 0 === a.ca ? false : a.ca;
-      };
-      tb.prototype.reset = function() {
-        this.h.reset();
-        this.j = this.h.h;
-        this.i = this.l = -1;
-      };
-      function ub(a) {
-        var b = a.h;
-        if (b.h == b.j) return false;
-        a.j = a.h.h;
-        var c = ob(a.h) >>> 0;
-        b = c >>> 3;
-        c &= 7;
-        if (!(0 <= c && 5 >= c)) throw Ya(c, a.j);
-        if (1 > b) throw Error("Invalid field number: " + b + " (at position " + a.j + ")");
-        a.l = b;
-        a.i = c;
-        return true;
-      }
-      function vb(a) {
-        switch (a.i) {
-          case 0:
-            if (0 != a.i) vb(a);
-            else a: {
-              a = a.h;
-              for (var b = a.h, c = b + 10, d = a.i; b < c; ) if (0 === (d[b++] & 128)) {
-                L3(a, b);
-                break a;
-              }
-              throw Za();
-            }
-            break;
-          case 1:
-            a = a.h;
-            L3(a, a.h + 8);
-            break;
-          case 2:
-            2 != a.i ? vb(a) : (b = ob(a.h) >>> 0, a = a.h, L3(a, a.h + b));
-            break;
-          case 5:
-            a = a.h;
-            L3(a, a.h + 4);
-            break;
-          case 3:
-            b = a.l;
-            do {
-              if (!ub(a)) throw Error("Unmatched start-group tag: stream EOF");
-              if (4 == a.i) {
-                if (a.l != b) throw Error("Unmatched end-group tag");
-                break;
-              }
-              vb(a);
-            } while (1);
-            break;
-          default:
-            throw Ya(a.i, a.j);
-        }
-      }
-      var wb = [];
-      function xb() {
-        this.j = [];
-        this.i = 0;
-        this.h = new rb();
-      }
-      function N3(a, b) {
-        0 !== b.length && (a.j.push(b), a.i += b.length);
-      }
-      function yb(a, b) {
-        if (b = b.R) {
-          N3(a, a.h.end());
-          for (var c = 0; c < b.length; c++) N3(a, kb(b[c]) || Pa());
-        }
-      }
-      ;
-      var O3 = "function" === typeof Symbol && "symbol" === typeof Symbol() ? Symbol() : void 0;
-      function P3(a, b) {
-        if (O3) return a[O3] |= b;
-        if (void 0 !== a.A) return a.A |= b;
-        Object.defineProperties(a, { A: { value: b, configurable: true, writable: true, enumerable: false } });
-        return b;
-      }
-      function zb(a, b) {
-        O3 ? a[O3] && (a[O3] &= ~b) : void 0 !== a.A && (a.A &= ~b);
-      }
-      function Q3(a) {
-        var b;
-        O3 ? b = a[O3] : b = a.A;
-        return null == b ? 0 : b;
-      }
-      function R3(a, b) {
-        O3 ? a[O3] = b : void 0 !== a.A ? a.A = b : Object.defineProperties(a, { A: { value: b, configurable: true, writable: true, enumerable: false } });
-      }
-      function Ab(a) {
-        P3(a, 1);
-        return a;
-      }
-      function Bb(a, b) {
-        R3(b, (a | 0) & -51);
-      }
-      function Cb(a, b) {
-        R3(b, (a | 18) & -41);
-      }
-      ;
-      var Db = {};
-      function Eb(a) {
-        return null !== a && "object" === typeof a && !Array.isArray(a) && a.constructor === Object;
-      }
-      var Fb, Gb = [];
-      R3(Gb, 23);
-      Fb = Object.freeze(Gb);
-      function Hb(a) {
-        if (Q3(a.o) & 2) throw Error("Cannot mutate an immutable Message");
-      }
-      function Ib(a) {
-        var b = a.length;
-        (b = b ? a[b - 1] : void 0) && Eb(b) ? b.g = 1 : (b = {}, a.push((b.g = 1, b)));
-      }
-      ;
-      function Jb(a) {
-        var b = a.i + a.G;
-        return a.B || (a.B = a.o[b] = {});
-      }
-      function S3(a, b) {
-        return -1 === b ? null : b >= a.i ? a.B ? a.B[b] : void 0 : a.o[b + a.G];
-      }
-      function U3(a, b, c, d) {
-        Hb(a);
-        Kb(a, b, c, d);
-      }
-      function Kb(a, b, c, d) {
-        a.j && (a.j = void 0);
-        b >= a.i || d ? Jb(a)[b] = c : (a.o[b + a.G] = c, (a = a.B) && b in a && delete a[b]);
-      }
-      function Lb(a, b, c, d) {
-        var e = S3(a, b);
-        Array.isArray(e) || (e = Fb);
-        var g = Q3(e);
-        g & 1 || Ab(e);
-        if (d) g & 2 || P3(e, 2), c & 1 || Object.freeze(e);
-        else {
-          d = !(c & 2);
-          var f = g & 2;
-          c & 1 || !f ? d && g & 16 && !f && zb(e, 16) : (e = Ab(Array.prototype.slice.call(e)), Kb(a, b, e));
-        }
-        return e;
-      }
-      function Mb(a, b) {
-        var c = S3(a, b);
-        var d = null == c ? c : "number" === typeof c || "NaN" === c || "Infinity" === c || "-Infinity" === c ? Number(c) : void 0;
-        null != d && d !== c && Kb(a, b, d);
-        return d;
-      }
-      function Nb(a, b, c, d, e) {
-        a.h || (a.h = {});
-        var g = a.h[c], f = Lb(a, c, 3, e);
-        if (!g) {
-          var h = f;
-          g = [];
-          var k4 = !!(Q3(a.o) & 16);
-          f = !!(Q3(h) & 2);
-          var l = h;
-          !e && f && (h = Array.prototype.slice.call(h));
-          for (var m = f, r = 0; r < h.length; r++) {
-            var p2 = h[r];
-            var n = b, q3 = false;
-            q3 = void 0 === q3 ? false : q3;
-            p2 = Array.isArray(p2) ? new n(p2) : q3 ? new n() : void 0;
-            if (void 0 !== p2) {
-              n = p2.o;
-              var t3 = q3 = Q3(n);
-              f && (t3 |= 2);
-              k4 && (t3 |= 16);
-              t3 != q3 && R3(n, t3);
-              n = t3;
-              m = m || !!(2 & n);
-              g.push(p2);
-            }
-          }
-          a.h[c] = g;
-          k4 = Q3(h);
-          b = k4 | 33;
-          b = m ? b & -9 : b | 8;
-          k4 != b && (m = h, Object.isFrozen(m) && (m = Array.prototype.slice.call(m)), R3(m, b), h = m);
-          l !== h && Kb(
-            a,
-            c,
-            h
-          );
-          (e || d && f) && P3(g, 2);
-          d && Object.freeze(g);
-          return g;
-        }
-        e || (e = Object.isFrozen(g), d && !e ? Object.freeze(g) : !d && e && (g = Array.prototype.slice.call(g), a.h[c] = g));
-        return g;
-      }
-      function Ob(a, b, c) {
-        var d = !!(Q3(a.o) & 2);
-        b = Nb(a, b, c, d, d);
-        a = Lb(a, c, 3, d);
-        if (!(d || Q3(a) & 8)) {
-          for (d = 0; d < b.length; d++) {
-            c = b[d];
-            if (Q3(c.o) & 2) {
-              var e = Pb(c, false);
-              e.j = c;
-            } else e = c;
-            c !== e && (b[d] = e, a[d] = e.o);
-          }
-          P3(a, 8);
-        }
-        return b;
-      }
-      function V3(a, b, c) {
-        if (null != c && "number" !== typeof c) throw Error("Value of float/double field must be a number|null|undefined, found " + typeof c + ": " + c);
-        U3(a, b, c);
-      }
-      function Qb(a, b, c, d, e) {
-        Hb(a);
-        var g = Nb(a, c, b, false, false);
-        c = null != d ? d : new c();
-        a = Lb(a, b, 2, false);
-        void 0 != e ? (g.splice(e, 0, c), a.splice(e, 0, c.o)) : (g.push(c), a.push(c.o));
-        c.C() && zb(a, 8);
-        return c;
-      }
-      function Rb(a, b) {
-        return null == a ? b : a;
-      }
-      function W3(a, b, c) {
-        c = void 0 === c ? 0 : c;
-        return Rb(Mb(a, b), c);
-      }
-      ;
-      var Sb;
-      function Tb(a) {
-        switch (typeof a) {
-          case "number":
-            return isFinite(a) ? a : String(a);
-          case "object":
-            if (a) if (Array.isArray(a)) {
-              if (0 !== (Q3(a) & 128)) return a = Array.prototype.slice.call(a), Ib(a), a;
-            } else {
-              if (Ia && null != a && a instanceof Uint8Array) return Ka(a);
-              if (a instanceof ib) {
-                var b = a.V;
-                return null == b ? "" : "string" === typeof b ? b : a.V = Ka(b);
-              }
-            }
-        }
-        return a;
-      }
-      ;
-      function Ub(a, b, c, d) {
-        if (null != a) {
-          if (Array.isArray(a)) a = Vb(a, b, c, void 0 !== d);
-          else if (Eb(a)) {
-            var e = {}, g;
-            for (g in a) e[g] = Ub(a[g], b, c, d);
-            a = e;
-          } else a = b(a, d);
-          return a;
-        }
-      }
-      function Vb(a, b, c, d) {
-        var e = Q3(a);
-        d = d ? !!(e & 16) : void 0;
-        a = Array.prototype.slice.call(a);
-        for (var g = 0; g < a.length; g++) a[g] = Ub(a[g], b, c, d);
-        c(e, a);
-        return a;
-      }
-      function Wb(a) {
-        return a.ja === Db ? a.toJSON() : Tb(a);
-      }
-      function Xb(a, b) {
-        a & 128 && Ib(b);
-      }
-      ;
-      function Yb(a, b, c) {
-        c = void 0 === c ? Cb : c;
-        if (null != a) {
-          if (Ia && a instanceof Uint8Array) return a.length ? new ib(new Uint8Array(a), Qa) : jb();
-          if (Array.isArray(a)) {
-            var d = Q3(a);
-            if (d & 2) return a;
-            if (b && !(d & 32) && (d & 16 || 0 === d)) return R3(a, d | 2), a;
-            a = Vb(a, Yb, d & 4 ? Cb : c, true);
-            b = Q3(a);
-            b & 4 && b & 2 && Object.freeze(a);
-            return a;
-          }
-          return a.ja === Db ? Zb(a) : a;
-        }
-      }
-      function $b(a, b, c, d, e, g, f) {
-        if (a = a.h && a.h[c]) {
-          d = Q3(a);
-          d & 2 ? d = a : (g = Ca(a, Zb), Cb(d, g), Object.freeze(g), d = g);
-          Hb(b);
-          f = null == d ? Fb : Ab([]);
-          if (null != d) {
-            g = !!d.length;
-            for (a = 0; a < d.length; a++) {
-              var h = d[a];
-              g = g && !(Q3(h.o) & 2);
-              f[a] = h.o;
-            }
-            g = (g ? 8 : 0) | 1;
-            a = Q3(f);
-            (a & g) !== g && (Object.isFrozen(f) && (f = Array.prototype.slice.call(f)), R3(f, a | g));
-            b.h || (b.h = {});
-            b.h[c] = d;
-          } else b.h && (b.h[c] = void 0);
-          Kb(b, c, f, e);
-        } else U3(b, c, Yb(d, g, f), e);
-      }
-      function Zb(a) {
-        if (Q3(a.o) & 2) return a;
-        a = Pb(a, true);
-        P3(a.o, 2);
-        return a;
-      }
-      function Pb(a, b) {
-        var c = a.o, d = [];
-        P3(d, 16);
-        var e = a.constructor.h;
-        e && d.push(e);
-        e = a.B;
-        if (e) {
-          d.length = c.length;
-          d.fill(void 0, d.length, c.length);
-          var g = {};
-          d[d.length - 1] = g;
-        }
-        0 !== (Q3(c) & 128) && Ib(d);
-        b = b || a.C() ? Cb : Bb;
-        g = a.constructor;
-        Sb = d;
-        d = new g(d);
-        Sb = void 0;
-        a.R && (d.R = a.R.slice());
-        g = !!(Q3(c) & 16);
-        for (var f = e ? c.length - 1 : c.length, h = 0; h < f; h++) $b(a, d, h - a.G, c[h], false, g, b);
-        if (e) for (var k4 in e) $b(a, d, +k4, e[k4], true, g, b);
-        return d;
-      }
-      ;
-      function X3(a, b, c) {
-        null == a && (a = Sb);
-        Sb = void 0;
-        var d = this.constructor.i || 0, e = 0 < d, g = this.constructor.h, f = false;
-        if (null == a) {
-          a = g ? [g] : [];
-          var h = 48;
-          var k4 = true;
-          e && (d = 0, h |= 128);
-          R3(a, h);
-        } else {
-          if (!Array.isArray(a)) throw Error();
-          if (g && g !== a[0]) throw Error();
-          var l = h = P3(a, 0);
-          if (k4 = 0 !== (16 & l)) (f = 0 !== (32 & l)) || (l |= 32);
-          if (e) if (128 & l) d = 0;
-          else {
-            if (0 < a.length) {
-              var m = a[a.length - 1];
-              if (Eb(m) && "g" in m) {
-                d = 0;
-                l |= 128;
-                delete m.g;
-                var r = true, p2;
-                for (p2 in m) {
-                  r = false;
-                  break;
-                }
-                r && a.pop();
-              }
-            }
-          }
-          else if (128 & l) throw Error();
-          h !== l && R3(a, l);
-        }
-        this.G = (g ? 0 : -1) - d;
-        this.h = void 0;
-        this.o = a;
-        a: {
-          g = this.o.length;
-          d = g - 1;
-          if (g && (g = this.o[d], Eb(g))) {
-            this.B = g;
-            this.i = d - this.G;
-            break a;
-          }
-          void 0 !== b && -1 < b ? (this.i = Math.max(b, d + 1 - this.G), this.B = void 0) : this.i = Number.MAX_VALUE;
-        }
-        if (!e && this.B && "g" in this.B) throw Error('Unexpected "g" flag in sparse object of message that is not a group type.');
-        if (c) {
-          b = k4 && !f && true;
-          e = this.i;
-          var n;
-          for (k4 = 0; k4 < c.length; k4++) f = c[k4], f < e ? (f += this.G, (d = a[f]) ? ac(d, b) : a[f] = Fb) : (n || (n = Jb(this)), (d = n[f]) ? ac(d, b) : n[f] = Fb);
-        }
-      }
-      X3.prototype.toJSON = function() {
-        return Vb(this.o, Wb, Xb);
-      };
-      X3.prototype.C = function() {
-        return !!(Q3(this.o) & 2);
-      };
-      function ac(a, b) {
-        if (Array.isArray(a)) {
-          var c = Q3(a), d = 1;
-          !b || c & 2 || (d |= 16);
-          (c & d) !== d && R3(a, c | d);
-        }
-      }
-      X3.prototype.ja = Db;
-      X3.prototype.toString = function() {
-        return this.o.toString();
-      };
-      function bc(a, b, c) {
-        if (c) {
-          var d = {}, e;
-          for (e in c) {
-            var g = c[e], f = g.qa;
-            f || (d.J = g.wa || g.oa.W, g.ia ? (d.aa = cc(g.ia), f = /* @__PURE__ */ function(h) {
-              return function(k4, l, m) {
-                return h.J(k4, l, m, h.aa);
-              };
-            }(d)) : g.ka ? (d.Z = dc(g.da.P, g.ka), f = /* @__PURE__ */ function(h) {
-              return function(k4, l, m) {
-                return h.J(k4, l, m, h.Z);
-              };
-            }(d)) : f = d.J, g.qa = f);
-            f(b, a, g.da);
-            d = { J: d.J, aa: d.aa, Z: d.Z };
-          }
-        }
-        yb(b, a);
-      }
-      var ec = Symbol();
-      function fc(a, b, c) {
-        return a[ec] || (a[ec] = function(d, e) {
-          return b(d, e, c);
-        });
-      }
-      function gc(a) {
-        var b = a[ec];
-        if (!b) {
-          var c = hc(a);
-          b = function(d, e) {
-            return ic(d, e, c);
-          };
-          a[ec] = b;
-        }
-        return b;
-      }
-      function jc(a) {
-        var b = a.ia;
-        if (b) return gc(b);
-        if (b = a.va) return fc(a.da.P, b, a.ka);
-      }
-      function kc(a) {
-        var b = jc(a), c = a.da, d = a.oa.U;
-        return b ? function(e, g) {
-          return d(e, g, c, b);
-        } : function(e, g) {
-          return d(e, g, c);
-        };
-      }
-      function lc(a, b) {
-        var c = a[b];
-        "function" == typeof c && 0 === c.length && (c = c(), a[b] = c);
-        return Array.isArray(c) && (mc in c || nc in c || 0 < c.length && "function" == typeof c[0]) ? c : void 0;
-      }
-      function oc(a, b, c, d, e, g) {
-        b.P = a[0];
-        var f = 1;
-        if (a.length > f && "number" !== typeof a[f]) {
-          var h = a[f++];
-          c(b, h);
-        }
-        for (; f < a.length; ) {
-          c = a[f++];
-          for (var k4 = f + 1; k4 < a.length && "number" !== typeof a[k4]; ) k4++;
-          h = a[f++];
-          k4 -= f;
-          switch (k4) {
-            case 0:
-              d(b, c, h);
-              break;
-            case 1:
-              (k4 = lc(a, f)) ? (f++, e(b, c, h, k4)) : d(b, c, h, a[f++]);
-              break;
-            case 2:
-              k4 = f++;
-              k4 = lc(a, k4);
-              e(b, c, h, k4, a[f++]);
-              break;
-            case 3:
-              g(b, c, h, a[f++], a[f++], a[f++]);
-              break;
-            case 4:
-              g(b, c, h, a[f++], a[f++], a[f++], a[f++]);
-              break;
-            default:
-              throw Error("unexpected number of binary field arguments: " + k4);
-          }
-        }
-        return b;
-      }
-      var pc = Symbol();
-      function cc(a) {
-        var b = a[pc];
-        if (!b) {
-          var c = qc(a);
-          b = function(d, e) {
-            return rc(d, e, c);
-          };
-          a[pc] = b;
-        }
-        return b;
-      }
-      function dc(a, b) {
-        var c = a[pc];
-        c || (c = function(d, e) {
-          return bc(d, e, b);
-        }, a[pc] = c);
-        return c;
-      }
-      var nc = Symbol();
-      function sc(a, b) {
-        a.push(b);
-      }
-      function tc(a, b, c) {
-        a.push(b, c.W);
-      }
-      function uc(a, b, c, d) {
-        var e = cc(d), g = qc(d).P, f = c.W;
-        a.push(b, function(h, k4, l) {
-          return f(h, k4, l, g, e);
-        });
-      }
-      function vc(a, b, c, d, e, g) {
-        var f = dc(d, g), h = c.W;
-        a.push(b, function(k4, l, m) {
-          return h(k4, l, m, d, f);
-        });
-      }
-      function qc(a) {
-        var b = a[nc];
-        if (b) return b;
-        b = oc(a, a[nc] = [], sc, tc, uc, vc);
-        mc in a && nc in a && (a.length = 0);
-        return b;
-      }
-      var mc = Symbol();
-      function wc(a, b) {
-        a[0] = b;
-      }
-      function xc(a, b, c, d) {
-        var e = c.U;
-        a[b] = d ? function(g, f, h) {
-          return e(g, f, h, d);
-        } : e;
-      }
-      function yc(a, b, c, d, e) {
-        var g = c.U, f = gc(d), h = hc(d).P;
-        a[b] = function(k4, l, m) {
-          return g(k4, l, m, h, f, e);
-        };
-      }
-      function zc(a, b, c, d, e, g, f) {
-        var h = c.U, k4 = fc(d, e, g);
-        a[b] = function(l, m, r) {
-          return h(l, m, r, d, k4, f);
-        };
-      }
-      function hc(a) {
-        var b = a[mc];
-        if (b) return b;
-        b = oc(a, a[mc] = {}, wc, xc, yc, zc);
-        mc in a && nc in a && (a.length = 0);
-        return b;
-      }
-      function ic(a, b, c) {
-        for (; ub(b) && 4 != b.i; ) {
-          var d = b.l, e = c[d];
-          if (!e) {
-            var g = c[0];
-            g && (g = g[d]) && (e = c[d] = kc(g));
-          }
-          if (!e || !e(b, a, d)) {
-            e = b;
-            d = a;
-            g = e.j;
-            vb(e);
-            var f = e;
-            if (!f.ca) {
-              e = f.h.h - g;
-              f.h.h = g;
-              f = f.h;
-              if (0 == e) e = jb();
-              else {
-                g = pb(f, e);
-                if (f.S && f.m) e = f.i.subarray(g, g + e);
-                else {
-                  f = f.i;
-                  var h = g;
-                  e = g + e;
-                  e = h === e ? Pa() : Ra ? f.slice(h, e) : new Uint8Array(f.subarray(h, e));
-                }
-                e = 0 == e.length ? jb() : new ib(e, Qa);
-              }
-              (g = d.R) ? g.push(e) : d.R = [e];
-            }
-          }
-        }
-        return a;
-      }
-      function rc(a, b, c) {
-        for (var d = c.length, e = 1 == d % 2, g = e ? 1 : 0; g < d; g += 2) (0, c[g + 1])(b, a, c[g]);
-        bc(a, b, e ? c[0] : void 0);
-      }
-      function Ac(a, b) {
-        return { U: a, W: b };
-      }
-      var Y3 = Ac(function(a, b, c) {
-        if (5 !== a.i) return false;
-        a = a.h;
-        var d = a.i, e = a.h, g = d[e];
-        var f = d[e + 1];
-        var h = d[e + 2];
-        d = d[e + 3];
-        L3(a, a.h + 4);
-        f = (g << 0 | f << 8 | h << 16 | d << 24) >>> 0;
-        a = 2 * (f >> 31) + 1;
-        g = f >>> 23 & 255;
-        f &= 8388607;
-        U3(b, c, 255 == g ? f ? NaN : Infinity * a : 0 == g ? a * Math.pow(2, -149) * f : a * Math.pow(2, g - 150) * (f + Math.pow(2, 23)));
-        return true;
-      }, function(a, b, c) {
-        b = Mb(b, c);
-        if (null != b) {
-          M(a.h, 8 * c + 5);
-          a = a.h;
-          var d = +b;
-          0 === d ? 0 < 1 / d ? G3 = H3 = 0 : (H3 = 0, G3 = 2147483648) : isNaN(d) ? (H3 = 0, G3 = 2147483647) : (d = (c = 0 > d ? -2147483648 : 0) ? -d : d, 34028234663852886e22 < d ? (H3 = 0, G3 = (c | 2139095040) >>> 0) : 11754943508222875e-54 > d ? (d = Math.round(d / Math.pow(2, -149)), H3 = 0, G3 = (c | d) >>> 0) : (b = Math.floor(Math.log(d) / Math.LN2), d *= Math.pow(2, -b), d = Math.round(8388608 * d), 16777216 <= d && ++b, H3 = 0, G3 = (c | b + 127 << 23 | d & 8388607) >>> 0));
-          c = G3;
-          a.h.push(c >>> 0 & 255);
-          a.h.push(c >>> 8 & 255);
-          a.h.push(c >>> 16 & 255);
-          a.h.push(c >>> 24 & 255);
-        }
-      }), Bc = Ac(function(a, b, c) {
-        if (0 !== a.i) return false;
-        var d = a.h, e = 0, g = a = 0, f = d.i, h = d.h;
-        do {
-          var k4 = f[h++];
-          e |= (k4 & 127) << g;
-          g += 7;
-        } while (32 > g && k4 & 128);
-        32 < g && (a |= (k4 & 127) >> 4);
-        for (g = 3; 32 > g && k4 & 128; g += 7) k4 = f[h++], a |= (k4 & 127) << g;
-        L3(
-          d,
-          h
-        );
-        if (128 > k4) {
-          d = e >>> 0;
-          k4 = a >>> 0;
-          if (a = k4 & 2147483648) d = ~d + 1 >>> 0, k4 = ~k4 >>> 0, 0 == d && (k4 = k4 + 1 >>> 0);
-          d = 4294967296 * k4 + (d >>> 0);
-        } else throw Za();
-        U3(b, c, a ? -d : d);
-        return true;
-      }, function(a, b, c) {
-        b = S3(b, c);
-        null != b && ("string" === typeof b && Wa(b), null != b && (M(a.h, 8 * c), "number" === typeof b ? (a = a.h, Sa(b), sb(a, G3, H3)) : (c = Wa(b), sb(a.h, c.i, c.h))));
-      }), Cc = Ac(function(a, b, c) {
-        if (0 !== a.i) return false;
-        U3(b, c, ob(a.h));
-        return true;
-      }, function(a, b, c) {
-        b = S3(b, c);
-        if (null != b && null != b) if (M(a.h, 8 * c), a = a.h, c = b, 0 <= c) M(a, c);
-        else {
-          for (b = 0; 9 > b; b++) a.h.push(c & 127 | 128), c >>= 7;
-          a.h.push(1);
-        }
-      }), Dc = Ac(function(a, b, c) {
-        if (2 !== a.i) return false;
-        var d = ob(a.h) >>> 0;
-        a = a.h;
-        var e = pb(a, d);
-        a = a.i;
-        if (db) {
-          var g = a, f;
-          (f = cb) || (f = cb = new TextDecoder("utf-8", { fatal: true }));
-          a = e + d;
-          g = 0 === e && a === g.length ? g : g.subarray(e, a);
-          try {
-            var h = f.decode(g);
-          } catch (r) {
-            if (void 0 === bb) {
-              try {
-                f.decode(new Uint8Array([128]));
-              } catch (p2) {
-              }
-              try {
-                f.decode(new Uint8Array([97])), bb = true;
-              } catch (p2) {
-                bb = false;
-              }
-            }
-            !bb && (cb = void 0);
-            throw r;
-          }
-        } else {
-          h = e;
-          d = h + d;
-          e = [];
-          for (var k4 = null, l, m; h < d; ) l = a[h++], 128 > l ? e.push(l) : 224 > l ? h >= d ? K3() : (m = a[h++], 194 > l || 128 !== (m & 192) ? (h--, K3()) : e.push((l & 31) << 6 | m & 63)) : 240 > l ? h >= d - 1 ? K3() : (m = a[h++], 128 !== (m & 192) || 224 === l && 160 > m || 237 === l && 160 <= m || 128 !== ((g = a[h++]) & 192) ? (h--, K3()) : e.push((l & 15) << 12 | (m & 63) << 6 | g & 63)) : 244 >= l ? h >= d - 2 ? K3() : (m = a[h++], 128 !== (m & 192) || 0 !== (l << 28) + (m - 144) >> 30 || 128 !== ((g = a[h++]) & 192) || 128 !== ((f = a[h++]) & 192) ? (h--, K3()) : (l = (l & 7) << 18 | (m & 63) << 12 | (g & 63) << 6 | f & 63, l -= 65536, e.push((l >> 10 & 1023) + 55296, (l & 1023) + 56320))) : K3(), 8192 <= e.length && (k4 = ab(k4, e), e.length = 0);
-          h = ab(k4, e);
-        }
-        U3(b, c, h);
-        return true;
-      }, function(a, b, c) {
-        b = S3(b, c);
-        if (null != b) {
-          var d = false;
-          d = void 0 === d ? false : d;
-          if (fb) {
-            if (d && /(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])/.test(b)) throw Error("Found an unpaired surrogate");
-            b = (eb || (eb = new TextEncoder())).encode(b);
-          } else {
-            for (var e = 0, g = new Uint8Array(3 * b.length), f = 0; f < b.length; f++) {
-              var h = b.charCodeAt(f);
-              if (128 > h) g[e++] = h;
-              else {
-                if (2048 > h) g[e++] = h >> 6 | 192;
-                else {
-                  if (55296 <= h && 57343 >= h) {
-                    if (56319 >= h && f < b.length) {
-                      var k4 = b.charCodeAt(++f);
-                      if (56320 <= k4 && 57343 >= k4) {
-                        h = 1024 * (h - 55296) + k4 - 56320 + 65536;
-                        g[e++] = h >> 18 | 240;
-                        g[e++] = h >> 12 & 63 | 128;
-                        g[e++] = h >> 6 & 63 | 128;
-                        g[e++] = h & 63 | 128;
-                        continue;
-                      } else f--;
-                    }
-                    if (d) throw Error("Found an unpaired surrogate");
-                    h = 65533;
-                  }
-                  g[e++] = h >> 12 | 224;
-                  g[e++] = h >> 6 & 63 | 128;
-                }
-                g[e++] = h & 63 | 128;
-              }
-            }
-            b = e === g.length ? g : g.subarray(0, e);
-          }
-          M(a.h, 8 * c + 2);
-          M(a.h, b.length);
-          N3(a, a.h.end());
-          N3(a, b);
-        }
-      }), Ec = Ac(function(a, b, c, d, e) {
-        if (2 !== a.i) return false;
-        b = Qb(b, c, d);
-        c = a.h.j;
-        d = ob(a.h) >>> 0;
-        var g = a.h.h + d, f = g - c;
-        0 >= f && (a.h.j = g, e(b, a, void 0, void 0, void 0), f = g - a.h.h);
-        if (f) throw Error("Message parsing ended unexpectedly. Expected to read " + (d + " bytes, instead read " + (d - f) + " bytes, either the data ended unexpectedly or the message misreported its own length"));
-        a.h.h = g;
-        a.h.j = c;
-        return true;
-      }, function(a, b, c, d, e) {
-        b = Ob(b, d, c);
-        if (null != b) for (d = 0; d < b.length; d++) {
-          var g = a;
-          M(g.h, 8 * c + 2);
-          var f = g.h.end();
-          N3(g, f);
-          f.push(g.i);
-          g = f;
-          e(b[d], a);
-          f = a;
-          var h = g.pop();
-          for (h = f.i + f.h.length() - h; 127 < h; ) g.push(h & 127 | 128), h >>>= 7, f.i++;
-          g.push(h);
-          f.i++;
-        }
-      });
-      function Fc(a) {
-        return function(b, c) {
-          a: {
-            if (wb.length) {
-              var d = wb.pop();
-              d.setOptions(c);
-              nb(d.h, b, c);
-              b = d;
-            } else b = new tb(b, c);
-            try {
-              var e = hc(a);
-              var g = ic(new e.P(), b, e);
-              break a;
-            } finally {
-              e = b.h, e.i = null, e.m = false, e.l = 0, e.j = 0, e.h = 0, e.S = false, b.l = -1, b.i = -1, 100 > wb.length && wb.push(b);
-            }
-            g = void 0;
-          }
-          return g;
-        };
-      }
-      function Gc(a) {
-        return function() {
-          var b = new xb();
-          rc(this, b, qc(a));
-          N3(b, b.h.end());
-          for (var c = new Uint8Array(b.i), d = b.j, e = d.length, g = 0, f = 0; f < e; f++) {
-            var h = d[f];
-            c.set(h, g);
-            g += h.length;
-          }
-          b.j = [c];
-          return c;
-        };
-      }
-      ;
-      function Z3(a) {
-        X3.call(this, a);
-      }
-      na(Z3, X3);
-      var Hc = [Z3, 1, Cc, 2, Y3, 3, Dc, 4, Dc];
-      Z3.prototype.l = Gc(Hc);
-      function Ic(a) {
-        X3.call(this, a, -1, Jc);
-      }
-      na(Ic, X3);
-      Ic.prototype.addClassification = function(a, b) {
-        Qb(this, 1, Z3, a, b);
-        return this;
-      };
-      var Jc = [1], Kc = Fc([Ic, 1, Ec, Hc]);
-      function Lc(a) {
-        X3.call(this, a);
-      }
-      na(Lc, X3);
-      var Mc = [Lc, 1, Y3, 2, Y3, 3, Y3, 4, Y3, 5, Y3];
-      Lc.prototype.l = Gc(Mc);
-      function Nc(a) {
-        X3.call(this, a, -1, Oc);
-      }
-      na(Nc, X3);
-      var Oc = [1], Pc = Fc([Nc, 1, Ec, Mc]);
-      function Qc(a) {
-        X3.call(this, a);
-      }
-      na(Qc, X3);
-      var Rc = [Qc, 1, Y3, 2, Y3, 3, Y3, 4, Y3, 5, Y3, 6, Bc], Sc = Fc(Rc);
-      Qc.prototype.l = Gc(Rc);
-      function Tc(a, b, c) {
-        c = a.createShader(0 === c ? a.VERTEX_SHADER : a.FRAGMENT_SHADER);
-        a.shaderSource(c, b);
-        a.compileShader(c);
-        if (!a.getShaderParameter(c, a.COMPILE_STATUS)) throw Error("Could not compile WebGL shader.\n\n" + a.getShaderInfoLog(c));
-        return c;
-      }
-      ;
-      function Uc(a) {
-        return Ob(a, Z3, 1).map(function(b) {
-          var c = S3(b, 1);
-          return { index: null == c ? 0 : c, score: W3(b, 2), label: null != S3(b, 3) ? Rb(S3(b, 3), "") : void 0, displayName: null != S3(b, 4) ? Rb(S3(b, 4), "") : void 0 };
-        });
-      }
-      ;
-      function Vc(a) {
-        return { x: W3(a, 1), y: W3(a, 2), z: W3(a, 3), visibility: null != Mb(a, 4) ? W3(a, 4) : void 0 };
-      }
-      function Wc(a) {
-        return a.map(function(b) {
-          return Ob(Pc(b), Lc, 1).map(Vc);
-        });
-      }
-      ;
-      function Xc(a, b) {
-        this.i = a;
-        this.h = b;
-        this.m = 0;
-      }
-      function Yc(a, b, c) {
-        Zc(a, b);
-        if ("function" === typeof a.h.canvas.transferToImageBitmap) return Promise.resolve(a.h.canvas.transferToImageBitmap());
-        if (c) return Promise.resolve(a.h.canvas);
-        if ("function" === typeof createImageBitmap) return createImageBitmap(a.h.canvas);
-        void 0 === a.j && (a.j = document.createElement("canvas"));
-        return new Promise(function(d) {
-          a.j.height = a.h.canvas.height;
-          a.j.width = a.h.canvas.width;
-          a.j.getContext("2d", {}).drawImage(a.h.canvas, 0, 0, a.h.canvas.width, a.h.canvas.height);
-          d(a.j);
-        });
-      }
-      function Zc(a, b) {
-        var c = a.h;
-        if (void 0 === a.s) {
-          var d = Tc(c, "\n  attribute vec2 aVertex;\n  attribute vec2 aTex;\n  varying vec2 vTex;\n  void main(void) {\n    gl_Position = vec4(aVertex, 0.0, 1.0);\n    vTex = aTex;\n  }", 0), e = Tc(c, "\n  precision mediump float;\n  varying vec2 vTex;\n  uniform sampler2D sampler0;\n  void main(){\n    gl_FragColor = texture2D(sampler0, vTex);\n  }", 1), g = c.createProgram();
-          c.attachShader(g, d);
-          c.attachShader(g, e);
-          c.linkProgram(g);
-          if (!c.getProgramParameter(g, c.LINK_STATUS)) throw Error("Could not compile WebGL program.\n\n" + c.getProgramInfoLog(g));
-          d = a.s = g;
-          c.useProgram(d);
-          e = c.getUniformLocation(d, "sampler0");
-          a.l = { O: c.getAttribLocation(d, "aVertex"), N: c.getAttribLocation(d, "aTex"), xa: e };
-          a.v = c.createBuffer();
-          c.bindBuffer(c.ARRAY_BUFFER, a.v);
-          c.enableVertexAttribArray(a.l.O);
-          c.vertexAttribPointer(a.l.O, 2, c.FLOAT, false, 0, 0);
-          c.bufferData(c.ARRAY_BUFFER, new Float32Array([-1, -1, -1, 1, 1, 1, 1, -1]), c.STATIC_DRAW);
-          c.bindBuffer(c.ARRAY_BUFFER, null);
-          a.u = c.createBuffer();
-          c.bindBuffer(c.ARRAY_BUFFER, a.u);
-          c.enableVertexAttribArray(a.l.N);
-          c.vertexAttribPointer(
-            a.l.N,
-            2,
-            c.FLOAT,
-            false,
-            0,
-            0
-          );
-          c.bufferData(c.ARRAY_BUFFER, new Float32Array([0, 1, 0, 0, 1, 0, 1, 1]), c.STATIC_DRAW);
-          c.bindBuffer(c.ARRAY_BUFFER, null);
-          c.uniform1i(e, 0);
-        }
-        d = a.l;
-        c.useProgram(a.s);
-        c.canvas.width = b.width;
-        c.canvas.height = b.height;
-        c.viewport(0, 0, b.width, b.height);
-        c.activeTexture(c.TEXTURE0);
-        a.i.bindTexture2d(b.glName);
-        c.enableVertexAttribArray(d.O);
-        c.bindBuffer(c.ARRAY_BUFFER, a.v);
-        c.vertexAttribPointer(d.O, 2, c.FLOAT, false, 0, 0);
-        c.enableVertexAttribArray(d.N);
-        c.bindBuffer(c.ARRAY_BUFFER, a.u);
-        c.vertexAttribPointer(
-          d.N,
-          2,
-          c.FLOAT,
-          false,
-          0,
-          0
-        );
-        c.bindFramebuffer(c.DRAW_FRAMEBUFFER ? c.DRAW_FRAMEBUFFER : c.FRAMEBUFFER, null);
-        c.clearColor(0, 0, 0, 0);
-        c.clear(c.COLOR_BUFFER_BIT);
-        c.colorMask(true, true, true, true);
-        c.drawArrays(c.TRIANGLE_FAN, 0, 4);
-        c.disableVertexAttribArray(d.O);
-        c.disableVertexAttribArray(d.N);
-        c.bindBuffer(c.ARRAY_BUFFER, null);
-        a.i.bindTexture2d(0);
-      }
-      function $c(a) {
-        this.h = a;
-      }
-      ;
-      var ad = new Uint8Array([0, 97, 115, 109, 1, 0, 0, 0, 1, 4, 1, 96, 0, 0, 3, 2, 1, 0, 10, 9, 1, 7, 0, 65, 0, 253, 15, 26, 11]);
-      function bd(a, b) {
-        return b + a;
-      }
-      function cd(a, b) {
-        window[a] = b;
-      }
-      function dd(a) {
-        var b = document.createElement("script");
-        b.setAttribute("src", a);
-        b.setAttribute("crossorigin", "anonymous");
-        return new Promise(function(c) {
-          b.addEventListener("load", function() {
-            c();
-          }, false);
-          b.addEventListener("error", function() {
-            c();
-          }, false);
-          document.body.appendChild(b);
-        });
-      }
-      function ed() {
-        return E3(function(a) {
-          switch (a.h) {
-            case 1:
-              return a.s = 2, D3(a, WebAssembly.instantiate(ad), 4);
-            case 4:
-              a.h = 3;
-              a.s = 0;
-              break;
-            case 2:
-              return a.s = 0, a.l = null, a.return(false);
-            case 3:
-              return a.return(true);
-          }
-        });
-      }
-      function fd(a) {
-        this.h = a;
-        this.listeners = {};
-        this.l = {};
-        this.L = {};
-        this.s = {};
-        this.v = {};
-        this.M = this.u = this.ga = true;
-        this.I = Promise.resolve();
-        this.fa = "";
-        this.D = {};
-        this.locateFile = a && a.locateFile || bd;
-        if ("object" === typeof window) var b = window.location.pathname.toString().substring(0, window.location.pathname.toString().lastIndexOf("/")) + "/";
-        else if ("undefined" !== typeof location) b = location.pathname.toString().substring(0, location.pathname.toString().lastIndexOf("/")) + "/";
-        else throw Error("solutions can only be loaded on a web page or in a web worker");
-        this.ha = b;
-        if (a.options) {
-          b = A2(Object.keys(a.options));
-          for (var c = b.next(); !c.done; c = b.next()) {
-            c = c.value;
-            var d = a.options[c].default;
-            void 0 !== d && (this.l[c] = "function" === typeof d ? d() : d);
-          }
-        }
-      }
-      x = fd.prototype;
-      x.close = function() {
-        this.j && this.j.delete();
-        return Promise.resolve();
-      };
-      function gd(a) {
-        var b, c, d, e, g, f, h, k4, l, m, r;
-        return E3(function(p2) {
-          switch (p2.h) {
-            case 1:
-              if (!a.ga) return p2.return();
-              b = void 0 === a.h.files ? [] : "function" === typeof a.h.files ? a.h.files(a.l) : a.h.files;
-              return D3(p2, ed(), 2);
-            case 2:
-              c = p2.i;
-              if ("object" === typeof window) return cd("createMediapipeSolutionsWasm", { locateFile: a.locateFile }), cd("createMediapipeSolutionsPackedAssets", { locateFile: a.locateFile }), f = b.filter(function(n) {
-                return void 0 !== n.data;
-              }), h = b.filter(function(n) {
-                return void 0 === n.data;
-              }), k4 = Promise.all(f.map(function(n) {
-                var q3 = hd(a, n.url);
-                if (void 0 !== n.path) {
-                  var t3 = n.path;
-                  q3 = q3.then(function(w) {
-                    a.overrideFile(t3, w);
-                    return Promise.resolve(w);
-                  });
-                }
-                return q3;
-              })), l = Promise.all(h.map(function(n) {
-                return void 0 === n.simd || n.simd && c || !n.simd && !c ? dd(a.locateFile(n.url, a.ha)) : Promise.resolve();
-              })).then(function() {
-                var n, q3, t3;
-                return E3(function(w) {
-                  if (1 == w.h) return n = window.createMediapipeSolutionsWasm, q3 = window.createMediapipeSolutionsPackedAssets, t3 = a, D3(w, n(q3), 2);
-                  t3.i = w.i;
-                  w.h = 0;
-                });
-              }), m = function() {
-                return E3(function(n) {
-                  a.h.graph && a.h.graph.url ? n = D3(
-                    n,
-                    hd(a, a.h.graph.url),
-                    0
-                  ) : (n.h = 0, n = void 0);
-                  return n;
-                });
-              }(), D3(p2, Promise.all([l, k4, m]), 7);
-              if ("function" !== typeof importScripts) throw Error("solutions can only be loaded on a web page or in a web worker");
-              d = b.filter(function(n) {
-                return void 0 === n.simd || n.simd && c || !n.simd && !c;
-              }).map(function(n) {
-                return a.locateFile(n.url, a.ha);
-              });
-              importScripts.apply(null, ea(d));
-              e = a;
-              return D3(p2, createMediapipeSolutionsWasm(Module), 6);
-            case 6:
-              e.i = p2.i;
-              a.m = new OffscreenCanvas(1, 1);
-              a.i.canvas = a.m;
-              g = a.i.GL.createContext(a.m, {
-                antialias: false,
-                alpha: false,
-                ua: "undefined" !== typeof WebGL2RenderingContext ? 2 : 1
-              });
-              a.i.GL.makeContextCurrent(g);
-              p2.h = 4;
-              break;
-            case 7:
-              a.m = document.createElement("canvas");
-              r = a.m.getContext("webgl2", {});
-              if (!r && (r = a.m.getContext("webgl", {}), !r)) return alert("Failed to create WebGL canvas context when passing video frame."), p2.return();
-              a.K = r;
-              a.i.canvas = a.m;
-              a.i.createContext(a.m, true, true, {});
-            case 4:
-              a.j = new a.i.SolutionWasm(), a.ga = false, p2.h = 0;
-          }
-        });
-      }
-      function id(a) {
-        var b, c, d, e, g, f, h, k4;
-        return E3(function(l) {
-          if (1 == l.h) {
-            if (a.h.graph && a.h.graph.url && a.fa === a.h.graph.url) return l.return();
-            a.u = true;
-            if (!a.h.graph || !a.h.graph.url) {
-              l.h = 2;
-              return;
-            }
-            a.fa = a.h.graph.url;
-            return D3(l, hd(a, a.h.graph.url), 3);
-          }
-          2 != l.h && (b = l.i, a.j.loadGraph(b));
-          c = A2(Object.keys(a.D));
-          for (d = c.next(); !d.done; d = c.next()) e = d.value, a.j.overrideFile(e, a.D[e]);
-          a.D = {};
-          if (a.h.listeners) for (g = A2(a.h.listeners), f = g.next(); !f.done; f = g.next()) h = f.value, jd(a, h);
-          k4 = a.l;
-          a.l = {};
-          a.setOptions(k4);
-          l.h = 0;
-        });
-      }
-      x.reset = function() {
-        var a = this;
-        return E3(function(b) {
-          a.j && (a.j.reset(), a.s = {}, a.v = {});
-          b.h = 0;
-        });
-      };
-      x.setOptions = function(a, b) {
-        var c = this;
-        if (b = b || this.h.options) {
-          for (var d = [], e = [], g = {}, f = A2(Object.keys(a)), h = f.next(); !h.done; g = { X: g.X, Y: g.Y }, h = f.next()) if (h = h.value, !(h in this.l && this.l[h] === a[h])) {
-            this.l[h] = a[h];
-            var k4 = b[h];
-            void 0 !== k4 && (k4.onChange && (g.X = k4.onChange, g.Y = a[h], d.push(/* @__PURE__ */ function(l) {
-              return function() {
-                var m;
-                return E3(function(r) {
-                  if (1 == r.h) return D3(r, l.X(l.Y), 2);
-                  m = r.i;
-                  true === m && (c.u = true);
-                  r.h = 0;
-                });
-              };
-            }(g))), k4.graphOptionXref && (h = Object.assign(
-              {},
-              { calculatorName: "", calculatorIndex: 0 },
-              k4.graphOptionXref,
-              { valueNumber: 1 === k4.type ? a[h] : 0, valueBoolean: 0 === k4.type ? a[h] : false, valueString: 2 === k4.type ? a[h] : "" }
-            ), e.push(h)));
-          }
-          if (0 !== d.length || 0 !== e.length) this.u = true, this.H = (void 0 === this.H ? [] : this.H).concat(e), this.F = (void 0 === this.F ? [] : this.F).concat(d);
-        }
-      };
-      function kd(a) {
-        var b, c, d, e, g, f, h;
-        return E3(function(k4) {
-          switch (k4.h) {
-            case 1:
-              if (!a.u) return k4.return();
-              if (!a.F) {
-                k4.h = 2;
-                break;
-              }
-              b = A2(a.F);
-              c = b.next();
-            case 3:
-              if (c.done) {
-                k4.h = 5;
-                break;
-              }
-              d = c.value;
-              return D3(k4, d(), 4);
-            case 4:
-              c = b.next();
-              k4.h = 3;
-              break;
-            case 5:
-              a.F = void 0;
-            case 2:
-              if (a.H) {
-                e = new a.i.GraphOptionChangeRequestList();
-                g = A2(a.H);
-                for (f = g.next(); !f.done; f = g.next()) h = f.value, e.push_back(h);
-                a.j.changeOptions(e);
-                e.delete();
-                a.H = void 0;
-              }
-              a.u = false;
-              k4.h = 0;
-          }
-        });
-      }
-      x.initialize = function() {
-        var a = this;
-        return E3(function(b) {
-          return 1 == b.h ? D3(b, gd(a), 2) : 3 != b.h ? D3(b, id(a), 3) : D3(b, kd(a), 0);
-        });
-      };
-      function hd(a, b) {
-        var c, d;
-        return E3(function(e) {
-          if (b in a.L) return e.return(a.L[b]);
-          c = a.locateFile(b, "");
-          d = fetch(c).then(function(g) {
-            return g.arrayBuffer();
-          });
-          a.L[b] = d;
-          return e.return(d);
-        });
-      }
-      x.overrideFile = function(a, b) {
-        this.j ? this.j.overrideFile(a, b) : this.D[a] = b;
-      };
-      x.clearOverriddenFiles = function() {
-        this.D = {};
-        this.j && this.j.clearOverriddenFiles();
-      };
-      x.send = function(a, b) {
-        var c = this, d, e, g, f, h, k4, l, m, r;
-        return E3(function(p2) {
-          switch (p2.h) {
-            case 1:
-              if (!c.h.inputs) return p2.return();
-              d = 1e3 * (void 0 === b || null === b ? performance.now() : b);
-              return D3(p2, c.I, 2);
-            case 2:
-              return D3(p2, c.initialize(), 3);
-            case 3:
-              e = new c.i.PacketDataList();
-              g = A2(Object.keys(a));
-              for (f = g.next(); !f.done; f = g.next()) if (h = f.value, k4 = c.h.inputs[h]) {
-                a: {
-                  var n = a[h];
-                  switch (k4.type) {
-                    case "video":
-                      var q3 = c.s[k4.stream];
-                      q3 || (q3 = new Xc(c.i, c.K), c.s[k4.stream] = q3);
-                      0 === q3.m && (q3.m = q3.i.createTexture());
-                      if ("undefined" !== typeof HTMLVideoElement && n instanceof HTMLVideoElement) {
-                        var t3 = n.videoWidth;
-                        var w = n.videoHeight;
-                      } else "undefined" !== typeof HTMLImageElement && n instanceof HTMLImageElement ? (t3 = n.naturalWidth, w = n.naturalHeight) : (t3 = n.width, w = n.height);
-                      w = { glName: q3.m, width: t3, height: w };
-                      t3 = q3.h;
-                      t3.canvas.width = w.width;
-                      t3.canvas.height = w.height;
-                      t3.activeTexture(t3.TEXTURE0);
-                      q3.i.bindTexture2d(q3.m);
-                      t3.texImage2D(t3.TEXTURE_2D, 0, t3.RGBA, t3.RGBA, t3.UNSIGNED_BYTE, n);
-                      q3.i.bindTexture2d(0);
-                      q3 = w;
-                      break a;
-                    case "detections":
-                      q3 = c.s[k4.stream];
-                      q3 || (q3 = new $c(c.i), c.s[k4.stream] = q3);
-                      q3.data || (q3.data = new q3.h.DetectionListData());
-                      q3.data.reset(n.length);
-                      for (w = 0; w < n.length; ++w) {
-                        t3 = n[w];
-                        var v = q3.data, B3 = v.setBoundingBox, J3 = w;
-                        var I3 = t3.la;
-                        var u = new Qc();
-                        V3(u, 1, I3.ra);
-                        V3(u, 2, I3.sa);
-                        V3(u, 3, I3.height);
-                        V3(u, 4, I3.width);
-                        V3(u, 5, I3.rotation);
-                        U3(u, 6, I3.pa);
-                        I3 = u.l();
-                        B3.call(v, J3, I3);
-                        if (t3.ea) for (v = 0; v < t3.ea.length; ++v) {
-                          u = t3.ea[v];
-                          B3 = q3.data;
-                          J3 = B3.addNormalizedLandmark;
-                          I3 = w;
-                          u = Object.assign({}, u, { visibility: u.visibility ? u.visibility : 0 });
-                          var C3 = new Lc();
-                          V3(C3, 1, u.x);
-                          V3(C3, 2, u.y);
-                          V3(C3, 3, u.z);
-                          u.visibility && V3(C3, 4, u.visibility);
-                          u = C3.l();
-                          J3.call(
-                            B3,
-                            I3,
-                            u
-                          );
-                        }
-                        if (t3.ba) for (v = 0; v < t3.ba.length; ++v) B3 = q3.data, J3 = B3.addClassification, I3 = w, u = t3.ba[v], C3 = new Z3(), V3(C3, 2, u.score), u.index && U3(C3, 1, u.index), u.label && U3(C3, 3, u.label), u.displayName && U3(C3, 4, u.displayName), u = C3.l(), J3.call(B3, I3, u);
-                      }
-                      q3 = q3.data;
-                      break a;
-                    default:
-                      q3 = {};
-                  }
-                }
-                l = q3;
-                m = k4.stream;
-                switch (k4.type) {
-                  case "video":
-                    e.pushTexture2d(Object.assign({}, l, { stream: m, timestamp: d }));
-                    break;
-                  case "detections":
-                    r = l;
-                    r.stream = m;
-                    r.timestamp = d;
-                    e.pushDetectionList(r);
-                    break;
-                  default:
-                    throw Error("Unknown input config type: '" + k4.type + "'");
-                }
-              }
-              c.j.send(e);
-              return D3(p2, c.I, 4);
-            case 4:
-              e.delete(), p2.h = 0;
-          }
-        });
-      };
-      function ld(a, b, c) {
-        var d, e, g, f, h, k4, l, m, r, p2, n, q3, t3, w;
-        return E3(function(v) {
-          switch (v.h) {
-            case 1:
-              if (!c) return v.return(b);
-              d = {};
-              e = 0;
-              g = A2(Object.keys(c));
-              for (f = g.next(); !f.done; f = g.next()) h = f.value, k4 = c[h], "string" !== typeof k4 && "texture" === k4.type && void 0 !== b[k4.stream] && ++e;
-              1 < e && (a.M = false);
-              l = A2(Object.keys(c));
-              f = l.next();
-            case 2:
-              if (f.done) {
-                v.h = 4;
-                break;
-              }
-              m = f.value;
-              r = c[m];
-              if ("string" === typeof r) return t3 = d, w = m, D3(v, md(a, m, b[r]), 14);
-              p2 = b[r.stream];
-              if ("detection_list" === r.type) {
-                if (p2) {
-                  var B3 = p2.getRectList();
-                  for (var J3 = p2.getLandmarksList(), I3 = p2.getClassificationsList(), u = [], C3 = 0; C3 < B3.size(); ++C3) {
-                    var T2 = Sc(B3.get(C3)), pd = W3(T2, 1), qd = W3(T2, 2), rd = W3(T2, 3), sd = W3(T2, 4), td = W3(T2, 5, 0), Aa = void 0;
-                    Aa = void 0 === Aa ? 0 : Aa;
-                    T2 = { la: { ra: pd, sa: qd, height: rd, width: sd, rotation: td, pa: Rb(S3(T2, 6), Aa) }, ea: Ob(Pc(J3.get(C3)), Lc, 1).map(Vc), ba: Uc(Kc(I3.get(C3))) };
-                    u.push(T2);
-                  }
-                  B3 = u;
-                } else B3 = [];
-                d[m] = B3;
-                v.h = 7;
-                break;
-              }
-              if ("proto_list" === r.type) {
-                if (p2) {
-                  B3 = Array(p2.size());
-                  for (J3 = 0; J3 < p2.size(); J3++) B3[J3] = p2.get(J3);
-                  p2.delete();
-                } else B3 = [];
-                d[m] = B3;
-                v.h = 7;
-                break;
-              }
-              if (void 0 === p2) {
-                v.h = 3;
-                break;
-              }
-              if ("float_list" === r.type) {
-                d[m] = p2;
-                v.h = 7;
-                break;
-              }
-              if ("proto" === r.type) {
-                d[m] = p2;
-                v.h = 7;
-                break;
-              }
-              if ("texture" !== r.type) throw Error("Unknown output config type: '" + r.type + "'");
-              n = a.v[m];
-              n || (n = new Xc(a.i, a.K), a.v[m] = n);
-              return D3(v, Yc(n, p2, a.M), 13);
-            case 13:
-              q3 = v.i, d[m] = q3;
-            case 7:
-              r.transform && d[m] && (d[m] = r.transform(d[m]));
-              v.h = 3;
-              break;
-            case 14:
-              t3[w] = v.i;
-            case 3:
-              f = l.next();
-              v.h = 2;
-              break;
-            case 4:
-              return v.return(d);
-          }
-        });
-      }
-      function md(a, b, c) {
-        var d;
-        return E3(function(e) {
-          return "number" === typeof c || c instanceof Uint8Array || c instanceof a.i.Uint8BlobList ? e.return(c) : c instanceof a.i.Texture2dDataOut ? (d = a.v[b], d || (d = new Xc(a.i, a.K), a.v[b] = d), e.return(Yc(d, c, a.M))) : e.return(void 0);
-        });
-      }
-      function jd(a, b) {
-        for (var c = b.name || "$", d = [].concat(ea(b.wants)), e = new a.i.StringList(), g = A2(b.wants), f = g.next(); !f.done; f = g.next()) e.push_back(f.value);
-        g = a.i.PacketListener.implement({ onResults: function(h) {
-          for (var k4 = {}, l = 0; l < b.wants.length; ++l) k4[d[l]] = h.get(l);
-          var m = a.listeners[c];
-          m && (a.I = ld(a, k4, b.outs).then(function(r) {
-            r = m(r);
-            for (var p2 = 0; p2 < b.wants.length; ++p2) {
-              var n = k4[d[p2]];
-              "object" === typeof n && n.hasOwnProperty && n.hasOwnProperty("delete") && n.delete();
-            }
-            r && (a.I = r);
-          }));
-        } });
-        a.j.attachMultiListener(e, g);
-        e.delete();
-      }
-      x.onResults = function(a, b) {
-        this.listeners[b || "$"] = a;
-      };
-      za("Solution", fd);
-      za("OptionType", { BOOL: 0, NUMBER: 1, ta: 2, 0: "BOOL", 1: "NUMBER", 2: "STRING" });
-      function nd(a) {
-        void 0 === a && (a = 0);
-        return 1 === a ? "hand_landmark_full.tflite" : "hand_landmark_lite.tflite";
-      }
-      function od(a) {
-        var b = this;
-        a = a || {};
-        this.h = new fd({ locateFile: a.locateFile, files: function(c) {
-          return [{ url: "hands_solution_packed_assets_loader.js" }, { simd: false, url: "hands_solution_wasm_bin.js" }, { simd: true, url: "hands_solution_simd_wasm_bin.js" }, { data: true, url: nd(c.modelComplexity) }];
-        }, graph: { url: "hands.binarypb" }, inputs: { image: { type: "video", stream: "input_frames_gpu" } }, listeners: [{ wants: ["multi_hand_landmarks", "multi_hand_world_landmarks", "image_transformed", "multi_handedness"], outs: {
-          image: "image_transformed",
-          multiHandLandmarks: { type: "proto_list", stream: "multi_hand_landmarks", transform: Wc },
-          multiHandWorldLandmarks: { type: "proto_list", stream: "multi_hand_world_landmarks", transform: Wc },
-          multiHandedness: { type: "proto_list", stream: "multi_handedness", transform: function(c) {
-            return c.map(function(d) {
-              return Uc(Kc(d))[0];
-            });
-          } }
-        } }], options: { useCpuInference: { type: 0, graphOptionXref: { calculatorType: "InferenceCalculator", fieldName: "use_cpu_inference" }, default: "object" !== typeof window || void 0 === window.navigator ? false : "iPad Simulator;iPhone Simulator;iPod Simulator;iPad;iPhone;iPod".split(";").includes(navigator.platform) || navigator.userAgent.includes("Mac") && "ontouchend" in document }, selfieMode: { type: 0, graphOptionXref: { calculatorType: "GlScalerCalculator", calculatorIndex: 1, fieldName: "flip_horizontal" } }, maxNumHands: { type: 1, graphOptionXref: { calculatorType: "ConstantSidePacketCalculator", calculatorName: "ConstantSidePacketCalculator", fieldName: "int_value" } }, modelComplexity: {
-          type: 1,
-          graphOptionXref: { calculatorType: "ConstantSidePacketCalculator", calculatorName: "ConstantSidePacketCalculatorModelComplexity", fieldName: "int_value" },
-          onChange: function(c) {
-            var d, e, g;
-            return E3(function(f) {
-              if (1 == f.h) return d = nd(c), e = "third_party/mediapipe/modules/hand_landmark/" + d, D3(f, hd(b.h, d), 2);
-              g = f.i;
-              b.h.overrideFile(e, g);
-              return f.return(true);
-            });
-          }
-        }, minDetectionConfidence: { type: 1, graphOptionXref: { calculatorType: "TensorsToDetectionsCalculator", calculatorName: "handlandmarktrackinggpu__palmdetectiongpu__TensorsToDetectionsCalculator", fieldName: "min_score_thresh" } }, minTrackingConfidence: { type: 1, graphOptionXref: {
-          calculatorType: "ThresholdingCalculator",
-          calculatorName: "handlandmarktrackinggpu__handlandmarkgpu__ThresholdingCalculator",
-          fieldName: "threshold"
-        } } } });
-      }
-      x = od.prototype;
-      x.close = function() {
-        this.h.close();
-        return Promise.resolve();
-      };
-      x.onResults = function(a) {
-        this.h.onResults(a);
-      };
-      x.initialize = function() {
-        var a = this;
-        return E3(function(b) {
-          return D3(b, a.h.initialize(), 0);
-        });
-      };
-      x.reset = function() {
-        this.h.reset();
-      };
-      x.send = function(a) {
-        var b = this;
-        return E3(function(c) {
-          return D3(c, b.h.send(a), 0);
-        });
-      };
-      x.setOptions = function(a) {
-        this.h.setOptions(a);
-      };
-      za("Hands", od);
-      za("HAND_CONNECTIONS", [[0, 1], [1, 2], [2, 3], [3, 4], [0, 5], [5, 6], [6, 7], [7, 8], [5, 9], [9, 10], [10, 11], [11, 12], [9, 13], [13, 14], [14, 15], [15, 16], [13, 17], [0, 17], [17, 18], [18, 19], [19, 20]]);
-      za("VERSION", "0.4.1675469240");
-    }).call(exports);
-  }
-});
-
-// node_modules/@mediapipe/face_mesh/face_mesh.js
-var require_face_mesh = __commonJS({
-  "node_modules/@mediapipe/face_mesh/face_mesh.js"(exports) {
-    (function() {
-      "use strict";
-      var v;
-      function aa(a) {
-        var b = 0;
-        return function() {
-          return b < a.length ? { done: false, value: a[b++] } : { done: true };
-        };
-      }
-      var ba = "function" == typeof Object.defineProperties ? Object.defineProperty : function(a, b, c) {
-        if (a == Array.prototype || a == Object.prototype) return a;
-        a[b] = c.value;
-        return a;
-      };
-      function ca(a) {
-        a = ["object" == typeof globalThis && globalThis, a, "object" == typeof window && window, "object" == typeof self && self, "object" == typeof global && global];
-        for (var b = 0; b < a.length; ++b) {
-          var c = a[b];
-          if (c && c.Math == Math) return c;
-        }
-        throw Error("Cannot find global object");
-      }
-      var G3 = ca(this);
-      function J3(a, b) {
-        if (b) a: {
-          var c = G3;
-          a = a.split(".");
-          for (var d = 0; d < a.length - 1; d++) {
-            var e = a[d];
-            if (!(e in c)) break a;
-            c = c[e];
-          }
-          a = a[a.length - 1];
-          d = c[a];
-          b = b(d);
-          b != d && null != b && ba(c, a, { configurable: true, writable: true, value: b });
-        }
-      }
-      J3("Symbol", function(a) {
-        function b(g) {
-          if (this instanceof b) throw new TypeError("Symbol is not a constructor");
-          return new c(d + (g || "") + "_" + e++, g);
-        }
-        function c(g, f) {
-          this.g = g;
-          ba(this, "description", { configurable: true, writable: true, value: f });
-        }
-        if (a) return a;
-        c.prototype.toString = function() {
-          return this.g;
-        };
-        var d = "jscomp_symbol_" + (1e9 * Math.random() >>> 0) + "_", e = 0;
-        return b;
-      });
-      J3("Symbol.iterator", function(a) {
-        if (a) return a;
-        a = Symbol("Symbol.iterator");
-        for (var b = "Array Int8Array Uint8Array Uint8ClampedArray Int16Array Uint16Array Int32Array Uint32Array Float32Array Float64Array".split(" "), c = 0; c < b.length; c++) {
-          var d = G3[b[c]];
-          "function" === typeof d && "function" != typeof d.prototype[a] && ba(d.prototype, a, { configurable: true, writable: true, value: function() {
-            return da(aa(this));
-          } });
-        }
-        return a;
-      });
-      function da(a) {
-        a = { next: a };
-        a[Symbol.iterator] = function() {
-          return this;
-        };
-        return a;
-      }
-      function K3(a) {
-        var b = "undefined" != typeof Symbol && Symbol.iterator && a[Symbol.iterator];
-        return b ? b.call(a) : { next: aa(a) };
-      }
-      function L3(a) {
-        if (!(a instanceof Array)) {
-          a = K3(a);
-          for (var b, c = []; !(b = a.next()).done; ) c.push(b.value);
-          a = c;
-        }
-        return a;
-      }
-      var ea = "function" == typeof Object.create ? Object.create : function(a) {
-        function b() {
-        }
-        b.prototype = a;
-        return new b();
-      }, fa;
-      if ("function" == typeof Object.setPrototypeOf) fa = Object.setPrototypeOf;
-      else {
-        var ha;
-        a: {
-          var ia = { a: true }, ja = {};
-          try {
-            ja.__proto__ = ia;
-            ha = ja.a;
-            break a;
-          } catch (a) {
-          }
-          ha = false;
-        }
-        fa = ha ? function(a, b) {
-          a.__proto__ = b;
-          if (a.__proto__ !== b) throw new TypeError(a + " is not extensible");
-          return a;
-        } : null;
-      }
-      var ka = fa;
-      function M(a, b) {
-        a.prototype = ea(b.prototype);
-        a.prototype.constructor = a;
-        if (ka) ka(a, b);
-        else for (var c in b) if ("prototype" != c) if (Object.defineProperties) {
-          var d = Object.getOwnPropertyDescriptor(b, c);
-          d && Object.defineProperty(a, c, d);
-        } else a[c] = b[c];
-        a.ea = b.prototype;
-      }
-      function ma() {
-        this.l = false;
-        this.i = null;
-        this.h = void 0;
-        this.g = 1;
-        this.s = this.m = 0;
-        this.j = null;
-      }
-      function na(a) {
-        if (a.l) throw new TypeError("Generator is already running");
-        a.l = true;
-      }
-      ma.prototype.o = function(a) {
-        this.h = a;
-      };
-      function oa(a, b) {
-        a.j = { U: b, V: true };
-        a.g = a.m || a.s;
-      }
-      ma.prototype.return = function(a) {
-        this.j = { return: a };
-        this.g = this.s;
-      };
-      function N3(a, b, c) {
-        a.g = c;
-        return { value: b };
-      }
-      function pa(a) {
-        this.g = new ma();
-        this.h = a;
-      }
-      function qa(a, b) {
-        na(a.g);
-        var c = a.g.i;
-        if (c) return ra(a, "return" in c ? c["return"] : function(d) {
-          return { value: d, done: true };
-        }, b, a.g.return);
-        a.g.return(b);
-        return sa(a);
-      }
-      function ra(a, b, c, d) {
-        try {
-          var e = b.call(a.g.i, c);
-          if (!(e instanceof Object)) throw new TypeError("Iterator result " + e + " is not an object");
-          if (!e.done) return a.g.l = false, e;
-          var g = e.value;
-        } catch (f) {
-          return a.g.i = null, oa(a.g, f), sa(a);
-        }
-        a.g.i = null;
-        d.call(a.g, g);
-        return sa(a);
-      }
-      function sa(a) {
-        for (; a.g.g; ) try {
-          var b = a.h(a.g);
-          if (b) return a.g.l = false, { value: b.value, done: false };
-        } catch (c) {
-          a.g.h = void 0, oa(a.g, c);
-        }
-        a.g.l = false;
-        if (a.g.j) {
-          b = a.g.j;
-          a.g.j = null;
-          if (b.V) throw b.U;
-          return { value: b.return, done: true };
-        }
-        return { value: void 0, done: true };
-      }
-      function ta(a) {
-        this.next = function(b) {
-          na(a.g);
-          a.g.i ? b = ra(a, a.g.i.next, b, a.g.o) : (a.g.o(b), b = sa(a));
-          return b;
-        };
-        this.throw = function(b) {
-          na(a.g);
-          a.g.i ? b = ra(a, a.g.i["throw"], b, a.g.o) : (oa(a.g, b), b = sa(a));
-          return b;
-        };
-        this.return = function(b) {
-          return qa(a, b);
-        };
-        this[Symbol.iterator] = function() {
-          return this;
-        };
-      }
-      function O3(a, b) {
-        b = new ta(new pa(b));
-        ka && a.prototype && ka(b, a.prototype);
-        return b;
-      }
-      function ua(a, b) {
-        a instanceof String && (a += "");
-        var c = 0, d = false, e = { next: function() {
-          if (!d && c < a.length) {
-            var g = c++;
-            return { value: b(g, a[g]), done: false };
-          }
-          d = true;
-          return { done: true, value: void 0 };
-        } };
-        e[Symbol.iterator] = function() {
-          return e;
-        };
-        return e;
-      }
-      var va = "function" == typeof Object.assign ? Object.assign : function(a, b) {
-        for (var c = 1; c < arguments.length; c++) {
-          var d = arguments[c];
-          if (d) for (var e in d) Object.prototype.hasOwnProperty.call(d, e) && (a[e] = d[e]);
-        }
-        return a;
-      };
-      J3("Object.assign", function(a) {
-        return a || va;
-      });
-      J3("Promise", function(a) {
-        function b(f) {
-          this.h = 0;
-          this.i = void 0;
-          this.g = [];
-          this.o = false;
-          var h = this.j();
-          try {
-            f(h.resolve, h.reject);
-          } catch (k4) {
-            h.reject(k4);
-          }
-        }
-        function c() {
-          this.g = null;
-        }
-        function d(f) {
-          return f instanceof b ? f : new b(function(h) {
-            h(f);
-          });
-        }
-        if (a) return a;
-        c.prototype.h = function(f) {
-          if (null == this.g) {
-            this.g = [];
-            var h = this;
-            this.i(function() {
-              h.l();
-            });
-          }
-          this.g.push(f);
-        };
-        var e = G3.setTimeout;
-        c.prototype.i = function(f) {
-          e(f, 0);
-        };
-        c.prototype.l = function() {
-          for (; this.g && this.g.length; ) {
-            var f = this.g;
-            this.g = [];
-            for (var h = 0; h < f.length; ++h) {
-              var k4 = f[h];
-              f[h] = null;
-              try {
-                k4();
-              } catch (l) {
-                this.j(l);
-              }
-            }
-          }
-          this.g = null;
-        };
-        c.prototype.j = function(f) {
-          this.i(function() {
-            throw f;
-          });
-        };
-        b.prototype.j = function() {
-          function f(l) {
-            return function(n) {
-              k4 || (k4 = true, l.call(h, n));
-            };
-          }
-          var h = this, k4 = false;
-          return { resolve: f(this.C), reject: f(this.l) };
-        };
-        b.prototype.C = function(f) {
-          if (f === this) this.l(new TypeError("A Promise cannot resolve to itself"));
-          else if (f instanceof b) this.F(f);
-          else {
-            a: switch (typeof f) {
-              case "object":
-                var h = null != f;
-                break a;
-              case "function":
-                h = true;
-                break a;
-              default:
-                h = false;
-            }
-            h ? this.u(f) : this.m(f);
-          }
-        };
-        b.prototype.u = function(f) {
-          var h = void 0;
-          try {
-            h = f.then;
-          } catch (k4) {
-            this.l(k4);
-            return;
-          }
-          "function" == typeof h ? this.G(h, f) : this.m(f);
-        };
-        b.prototype.l = function(f) {
-          this.s(2, f);
-        };
-        b.prototype.m = function(f) {
-          this.s(1, f);
-        };
-        b.prototype.s = function(f, h) {
-          if (0 != this.h) throw Error("Cannot settle(" + f + ", " + h + "): Promise already settled in state" + this.h);
-          this.h = f;
-          this.i = h;
-          2 === this.h && this.D();
-          this.A();
-        };
-        b.prototype.D = function() {
-          var f = this;
-          e(function() {
-            if (f.B()) {
-              var h = G3.console;
-              "undefined" !== typeof h && h.error(f.i);
-            }
-          }, 1);
-        };
-        b.prototype.B = function() {
-          if (this.o) return false;
-          var f = G3.CustomEvent, h = G3.Event, k4 = G3.dispatchEvent;
-          if ("undefined" === typeof k4) return true;
-          "function" === typeof f ? f = new f("unhandledrejection", { cancelable: true }) : "function" === typeof h ? f = new h("unhandledrejection", { cancelable: true }) : (f = G3.document.createEvent("CustomEvent"), f.initCustomEvent("unhandledrejection", false, true, f));
-          f.promise = this;
-          f.reason = this.i;
-          return k4(f);
-        };
-        b.prototype.A = function() {
-          if (null != this.g) {
-            for (var f = 0; f < this.g.length; ++f) g.h(this.g[f]);
-            this.g = null;
-          }
-        };
-        var g = new c();
-        b.prototype.F = function(f) {
-          var h = this.j();
-          f.J(h.resolve, h.reject);
-        };
-        b.prototype.G = function(f, h) {
-          var k4 = this.j();
-          try {
-            f.call(h, k4.resolve, k4.reject);
-          } catch (l) {
-            k4.reject(l);
-          }
-        };
-        b.prototype.then = function(f, h) {
-          function k4(w, r) {
-            return "function" == typeof w ? function(y) {
-              try {
-                l(w(y));
-              } catch (m) {
-                n(m);
-              }
-            } : r;
-          }
-          var l, n, u = new b(function(w, r) {
-            l = w;
-            n = r;
-          });
-          this.J(k4(f, l), k4(h, n));
-          return u;
-        };
-        b.prototype.catch = function(f) {
-          return this.then(void 0, f);
-        };
-        b.prototype.J = function(f, h) {
-          function k4() {
-            switch (l.h) {
-              case 1:
-                f(l.i);
-                break;
-              case 2:
-                h(l.i);
-                break;
-              default:
-                throw Error("Unexpected state: " + l.h);
-            }
-          }
-          var l = this;
-          null == this.g ? g.h(k4) : this.g.push(k4);
-          this.o = true;
-        };
-        b.resolve = d;
-        b.reject = function(f) {
-          return new b(function(h, k4) {
-            k4(f);
-          });
-        };
-        b.race = function(f) {
-          return new b(function(h, k4) {
-            for (var l = K3(f), n = l.next(); !n.done; n = l.next()) d(n.value).J(h, k4);
-          });
-        };
-        b.all = function(f) {
-          var h = K3(f), k4 = h.next();
-          return k4.done ? d([]) : new b(function(l, n) {
-            function u(y) {
-              return function(m) {
-                w[y] = m;
-                r--;
-                0 == r && l(w);
-              };
-            }
-            var w = [], r = 0;
-            do
-              w.push(void 0), r++, d(k4.value).J(u(w.length - 1), n), k4 = h.next();
-            while (!k4.done);
-          });
-        };
-        return b;
-      });
-      J3("Object.is", function(a) {
-        return a ? a : function(b, c) {
-          return b === c ? 0 !== b || 1 / b === 1 / c : b !== b && c !== c;
-        };
-      });
-      J3("Array.prototype.includes", function(a) {
-        return a ? a : function(b, c) {
-          var d = this;
-          d instanceof String && (d = String(d));
-          var e = d.length;
-          c = c || 0;
-          for (0 > c && (c = Math.max(c + e, 0)); c < e; c++) {
-            var g = d[c];
-            if (g === b || Object.is(g, b)) return true;
-          }
-          return false;
-        };
-      });
-      J3("String.prototype.includes", function(a) {
-        return a ? a : function(b, c) {
-          if (null == this) throw new TypeError("The 'this' value for String.prototype.includes must not be null or undefined");
-          if (b instanceof RegExp) throw new TypeError("First argument to String.prototype.includes must not be a regular expression");
-          return -1 !== this.indexOf(b, c || 0);
-        };
-      });
-      J3("Array.prototype.keys", function(a) {
-        return a ? a : function() {
-          return ua(this, function(b) {
-            return b;
-          });
-        };
-      });
-      var wa = this || self;
-      function P3(a, b) {
-        a = a.split(".");
-        var c = wa;
-        a[0] in c || "undefined" == typeof c.execScript || c.execScript("var " + a[0]);
-        for (var d; a.length && (d = a.shift()); ) a.length || void 0 === b ? c[d] && c[d] !== Object.prototype[d] ? c = c[d] : c = c[d] = {} : c[d] = b;
-      }
-      ;
-      function xa(a, b) {
-        b = String.fromCharCode.apply(null, b);
-        return null == a ? b : a + b;
-      }
-      var ya, za = "undefined" !== typeof TextDecoder, Aa, Ba = "undefined" !== typeof TextEncoder;
-      function Ca(a) {
-        if (Ba) a = (Aa || (Aa = new TextEncoder())).encode(a);
-        else {
-          var b = void 0;
-          b = void 0 === b ? false : b;
-          for (var c = 0, d = new Uint8Array(3 * a.length), e = 0; e < a.length; e++) {
-            var g = a.charCodeAt(e);
-            if (128 > g) d[c++] = g;
-            else {
-              if (2048 > g) d[c++] = g >> 6 | 192;
-              else {
-                if (55296 <= g && 57343 >= g) {
-                  if (56319 >= g && e < a.length) {
-                    var f = a.charCodeAt(++e);
-                    if (56320 <= f && 57343 >= f) {
-                      g = 1024 * (g - 55296) + f - 56320 + 65536;
-                      d[c++] = g >> 18 | 240;
-                      d[c++] = g >> 12 & 63 | 128;
-                      d[c++] = g >> 6 & 63 | 128;
-                      d[c++] = g & 63 | 128;
-                      continue;
-                    } else e--;
-                  }
-                  if (b) throw Error("Found an unpaired surrogate");
-                  g = 65533;
-                }
-                d[c++] = g >> 12 | 224;
-                d[c++] = g >> 6 & 63 | 128;
-              }
-              d[c++] = g & 63 | 128;
-            }
-          }
-          a = d.subarray(0, c);
-        }
-        return a;
-      }
-      ;
-      var Da = {}, Ea = null;
-      function Fa(a, b) {
-        void 0 === b && (b = 0);
-        Ga();
-        b = Da[b];
-        for (var c = Array(Math.floor(a.length / 3)), d = b[64] || "", e = 0, g = 0; e < a.length - 2; e += 3) {
-          var f = a[e], h = a[e + 1], k4 = a[e + 2], l = b[f >> 2];
-          f = b[(f & 3) << 4 | h >> 4];
-          h = b[(h & 15) << 2 | k4 >> 6];
-          k4 = b[k4 & 63];
-          c[g++] = l + f + h + k4;
-        }
-        l = 0;
-        k4 = d;
-        switch (a.length - e) {
-          case 2:
-            l = a[e + 1], k4 = b[(l & 15) << 2] || d;
-          case 1:
-            a = a[e], c[g] = b[a >> 2] + b[(a & 3) << 4 | l >> 4] + k4 + d;
-        }
-        return c.join("");
-      }
-      function Ha(a) {
-        var b = a.length, c = 3 * b / 4;
-        c % 3 ? c = Math.floor(c) : -1 != "=.".indexOf(a[b - 1]) && (c = -1 != "=.".indexOf(a[b - 2]) ? c - 2 : c - 1);
-        var d = new Uint8Array(c), e = 0;
-        Ia(a, function(g) {
-          d[e++] = g;
-        });
-        return d.subarray(0, e);
-      }
-      function Ia(a, b) {
-        function c(k4) {
-          for (; d < a.length; ) {
-            var l = a.charAt(d++), n = Ea[l];
-            if (null != n) return n;
-            if (!/^[\s\xa0]*$/.test(l)) throw Error("Unknown base64 encoding at char: " + l);
-          }
-          return k4;
-        }
-        Ga();
-        for (var d = 0; ; ) {
-          var e = c(-1), g = c(0), f = c(64), h = c(64);
-          if (64 === h && -1 === e) break;
-          b(e << 2 | g >> 4);
-          64 != f && (b(g << 4 & 240 | f >> 2), 64 != h && b(f << 6 & 192 | h));
-        }
-      }
-      function Ga() {
-        if (!Ea) {
-          Ea = {};
-          for (var a = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".split(""), b = ["+/=", "+/", "-_=", "-_.", "-_"], c = 0; 5 > c; c++) {
-            var d = a.concat(b[c].split(""));
-            Da[c] = d;
-            for (var e = 0; e < d.length; e++) {
-              var g = d[e];
-              void 0 === Ea[g] && (Ea[g] = e);
-            }
-          }
-        }
-      }
-      ;
-      var Ja = "function" === typeof Uint8Array.prototype.slice, Ka;
-      function La(a, b, c) {
-        return b === c ? Ka || (Ka = new Uint8Array(0)) : Ja ? a.slice(b, c) : new Uint8Array(a.subarray(b, c));
-      }
-      var Q3 = 0, R3 = 0;
-      function Ma(a, b) {
-        b = void 0 === b ? {} : b;
-        b = void 0 === b.v ? false : b.v;
-        this.h = null;
-        this.g = this.j = this.l = 0;
-        this.m = false;
-        this.v = b;
-        a && Na(this, a);
-      }
-      function Na(a, b) {
-        b = b.constructor === Uint8Array ? b : b.constructor === ArrayBuffer ? new Uint8Array(b) : b.constructor === Array ? new Uint8Array(b) : b.constructor === String ? Ha(b) : b instanceof Uint8Array ? new Uint8Array(b.buffer, b.byteOffset, b.byteLength) : new Uint8Array(0);
-        a.h = b;
-        a.l = 0;
-        a.j = a.h.length;
-        a.g = a.l;
-      }
-      Ma.prototype.reset = function() {
-        this.g = this.l;
-      };
-      function Oa(a) {
-        for (var b = 128, c = 0, d = 0, e = 0; 4 > e && 128 <= b; e++) b = a.h[a.g++], c |= (b & 127) << 7 * e;
-        128 <= b && (b = a.h[a.g++], c |= (b & 127) << 28, d |= (b & 127) >> 4);
-        if (128 <= b) for (e = 0; 5 > e && 128 <= b; e++) b = a.h[a.g++], d |= (b & 127) << 7 * e + 3;
-        if (128 > b) {
-          a = c >>> 0;
-          b = d >>> 0;
-          if (d = b & 2147483648) a = ~a + 1 >>> 0, b = ~b >>> 0, 0 == a && (b = b + 1 >>> 0);
-          a = 4294967296 * b + (a >>> 0);
-          return d ? -a : a;
-        }
-        a.m = true;
-      }
-      Ma.prototype.i = function() {
-        var a = this.h, b = a[this.g], c = b & 127;
-        if (128 > b) return this.g += 1, c;
-        b = a[this.g + 1];
-        c |= (b & 127) << 7;
-        if (128 > b) return this.g += 2, c;
-        b = a[this.g + 2];
-        c |= (b & 127) << 14;
-        if (128 > b) return this.g += 3, c;
-        b = a[this.g + 3];
-        c |= (b & 127) << 21;
-        if (128 > b) return this.g += 4, c;
-        b = a[this.g + 4];
-        c |= (b & 15) << 28;
-        if (128 > b) return this.g += 5, c >>> 0;
-        this.g += 5;
-        128 <= a[this.g++] && 128 <= a[this.g++] && 128 <= a[this.g++] && 128 <= a[this.g++] && this.g++;
-        return c;
-      };
-      Ma.prototype.o = function() {
-        var a = this.h[this.g], b = this.h[this.g + 1];
-        var c = this.h[this.g + 2];
-        var d = this.h[this.g + 3];
-        this.g += 4;
-        c = (a << 0 | b << 8 | c << 16 | d << 24) >>> 0;
-        a = 2 * (c >> 31) + 1;
-        b = c >>> 23 & 255;
-        c &= 8388607;
-        return 255 == b ? c ? NaN : Infinity * a : 0 == b ? a * Math.pow(2, -149) * c : a * Math.pow(2, b - 150) * (c + Math.pow(2, 23));
-      };
-      var Pa = [];
-      function Qa() {
-        this.g = new Uint8Array(64);
-        this.h = 0;
-      }
-      Qa.prototype.push = function(a) {
-        if (!(this.h + 1 < this.g.length)) {
-          var b = this.g;
-          this.g = new Uint8Array(Math.ceil(1 + 2 * this.g.length));
-          this.g.set(b);
-        }
-        this.g[this.h++] = a;
-      };
-      Qa.prototype.length = function() {
-        return this.h;
-      };
-      Qa.prototype.end = function() {
-        var a = this.g, b = this.h;
-        this.h = 0;
-        return La(a, 0, b);
-      };
-      function Ra(a, b) {
-        for (; 127 < b; ) a.push(b & 127 | 128), b >>>= 7;
-        a.push(b);
-      }
-      ;
-      function Sa(a) {
-        var b = {}, c = void 0 === b.N ? false : b.N;
-        this.o = { v: void 0 === b.v ? false : b.v };
-        this.N = c;
-        b = this.o;
-        Pa.length ? (c = Pa.pop(), b && (c.v = b.v), a && Na(c, a), a = c) : a = new Ma(a, b);
-        this.g = a;
-        this.m = this.g.g;
-        this.h = this.i = this.l = -1;
-        this.j = false;
-      }
-      Sa.prototype.reset = function() {
-        this.g.reset();
-        this.h = this.l = -1;
-      };
-      function S3(a) {
-        var b = a.g;
-        (b = b.g == b.j) || (b = a.j) || (b = a.g, b = b.m || 0 > b.g || b.g > b.j);
-        if (b) return false;
-        a.m = a.g.g;
-        b = a.g.i();
-        var c = b & 7;
-        if (0 != c && 5 != c && 1 != c && 2 != c && 3 != c && 4 != c) return a.j = true, false;
-        a.i = b;
-        a.l = b >>> 3;
-        a.h = c;
-        return true;
-      }
-      function Ta(a) {
-        switch (a.h) {
-          case 0:
-            if (0 != a.h) Ta(a);
-            else {
-              for (a = a.g; a.h[a.g] & 128; ) a.g++;
-              a.g++;
-            }
-            break;
-          case 1:
-            1 != a.h ? Ta(a) : (a = a.g, a.g += 8);
-            break;
-          case 2:
-            if (2 != a.h) Ta(a);
-            else {
-              var b = a.g.i();
-              a = a.g;
-              a.g += b;
-            }
-            break;
-          case 5:
-            5 != a.h ? Ta(a) : (a = a.g, a.g += 4);
-            break;
-          case 3:
-            b = a.l;
-            do {
-              if (!S3(a)) {
-                a.j = true;
-                break;
-              }
-              if (4 == a.h) {
-                a.l != b && (a.j = true);
-                break;
-              }
-              Ta(a);
-            } while (1);
-            break;
-          default:
-            a.j = true;
-        }
-      }
-      function Ua(a, b, c) {
-        var d = a.g.j, e = a.g.i(), g = a.g.g + e;
-        a.g.j = g;
-        c(b, a);
-        c = g - a.g.g;
-        if (0 !== c) throw Error("Message parsing ended unexpectedly. Expected to read " + e + " bytes, instead read " + (e - c) + " bytes, either the data ended unexpectedly or the message misreported its own length");
-        a.g.g = g;
-        a.g.j = d;
-        return b;
-      }
-      function T2(a) {
-        return a.g.o();
-      }
-      function Va(a) {
-        var b = a.g.i();
-        a = a.g;
-        var c = a.g;
-        a.g += b;
-        a = a.h;
-        var d;
-        if (za) (d = ya) || (d = ya = new TextDecoder("utf-8", { fatal: false })), d = d.decode(a.subarray(c, c + b));
-        else {
-          b = c + b;
-          for (var e = [], g = null, f, h, k4; c < b; ) f = a[c++], 128 > f ? e.push(f) : 224 > f ? c >= b ? e.push(65533) : (h = a[c++], 194 > f || 128 !== (h & 192) ? (c--, e.push(65533)) : e.push((f & 31) << 6 | h & 63)) : 240 > f ? c >= b - 1 ? e.push(65533) : (h = a[c++], 128 !== (h & 192) || 224 === f && 160 > h || 237 === f && 160 <= h || 128 !== ((d = a[c++]) & 192) ? (c--, e.push(65533)) : e.push((f & 15) << 12 | (h & 63) << 6 | d & 63)) : 244 >= f ? c >= b - 2 ? e.push(65533) : (h = a[c++], 128 !== (h & 192) || 0 !== (f << 28) + (h - 144) >> 30 || 128 !== ((d = a[c++]) & 192) || 128 !== ((k4 = a[c++]) & 192) ? (c--, e.push(65533)) : (f = (f & 7) << 18 | (h & 63) << 12 | (d & 63) << 6 | k4 & 63, f -= 65536, e.push((f >> 10 & 1023) + 55296, (f & 1023) + 56320))) : e.push(65533), 8192 <= e.length && (g = xa(g, e), e.length = 0);
-          d = xa(g, e);
-        }
-        return d;
-      }
-      function Wa(a, b, c) {
-        var d = a.g.i();
-        for (d = a.g.g + d; a.g.g < d; ) c.push(b.call(a.g));
-      }
-      function Xa(a, b) {
-        2 == a.h ? Wa(a, Ma.prototype.o, b) : b.push(T2(a));
-      }
-      ;
-      function Ya() {
-        this.h = [];
-        this.i = 0;
-        this.g = new Qa();
-      }
-      function Za(a, b) {
-        0 !== b.length && (a.h.push(b), a.i += b.length);
-      }
-      function $a(a) {
-        var b = a.i + a.g.length();
-        if (0 === b) return new Uint8Array(0);
-        b = new Uint8Array(b);
-        for (var c = a.h, d = c.length, e = 0, g = 0; g < d; g++) {
-          var f = c[g];
-          0 !== f.length && (b.set(f, e), e += f.length);
-        }
-        c = a.g;
-        d = c.h;
-        0 !== d && (b.set(c.g.subarray(0, d), e), c.h = 0);
-        a.h = [b];
-        return b;
-      }
-      function U3(a, b, c) {
-        if (null != c) {
-          Ra(a.g, 8 * b + 5);
-          a = a.g;
-          var d = c;
-          d = (c = 0 > d ? 1 : 0) ? -d : d;
-          0 === d ? 0 < 1 / d ? Q3 = R3 = 0 : (R3 = 0, Q3 = 2147483648) : isNaN(d) ? (R3 = 0, Q3 = 2147483647) : 34028234663852886e22 < d ? (R3 = 0, Q3 = (c << 31 | 2139095040) >>> 0) : 11754943508222875e-54 > d ? (d = Math.round(d / Math.pow(2, -149)), R3 = 0, Q3 = (c << 31 | d) >>> 0) : (b = Math.floor(Math.log(d) / Math.LN2), d *= Math.pow(2, -b), d = Math.round(8388608 * d), 16777216 <= d && ++b, R3 = 0, Q3 = (c << 31 | b + 127 << 23 | d & 8388607) >>> 0);
-          c = Q3;
-          a.push(c >>> 0 & 255);
-          a.push(c >>> 8 & 255);
-          a.push(c >>> 16 & 255);
-          a.push(c >>> 24 & 255);
-        }
-      }
-      ;
-      var ab = "function" === typeof Uint8Array;
-      function bb(a, b, c) {
-        if (null != a) return "object" === typeof a ? ab && a instanceof Uint8Array ? c(a) : cb(a, b, c) : b(a);
-      }
-      function cb(a, b, c) {
-        if (Array.isArray(a)) {
-          for (var d = Array(a.length), e = 0; e < a.length; e++) d[e] = bb(a[e], b, c);
-          Array.isArray(a) && a.W && db(d);
-          return d;
-        }
-        d = {};
-        for (e in a) d[e] = bb(a[e], b, c);
-        return d;
-      }
-      function eb(a) {
-        return "number" === typeof a ? isFinite(a) ? a : String(a) : a;
-      }
-      var fb = { W: { value: true, configurable: true } };
-      function db(a) {
-        Array.isArray(a) && !Object.isFrozen(a) && Object.defineProperties(a, fb);
-        return a;
-      }
-      ;
-      var gb;
-      function V3(a, b, c) {
-        var d = gb;
-        gb = null;
-        a || (a = d);
-        d = this.constructor.ca;
-        a || (a = d ? [d] : []);
-        this.j = d ? 0 : -1;
-        this.m = this.g = null;
-        this.h = a;
-        a: {
-          d = this.h.length;
-          a = d - 1;
-          if (d && (d = this.h[a], !(null === d || "object" != typeof d || Array.isArray(d) || ab && d instanceof Uint8Array))) {
-            this.l = a - this.j;
-            this.i = d;
-            break a;
-          }
-          void 0 !== b && -1 < b ? (this.l = Math.max(b, a + 1 - this.j), this.i = null) : this.l = Number.MAX_VALUE;
-        }
-        if (c) for (b = 0; b < c.length; b++) a = c[b], a < this.l ? (a += this.j, (d = this.h[a]) ? db(d) : this.h[a] = hb) : (ib(this), (d = this.i[a]) ? db(d) : this.i[a] = hb);
-      }
-      var hb = Object.freeze(db([]));
-      function ib(a) {
-        var b = a.l + a.j;
-        a.h[b] || (a.i = a.h[b] = {});
-      }
-      function W3(a, b, c) {
-        return -1 === b ? null : (void 0 === c ? 0 : c) || b >= a.l ? a.i ? a.i[b] : void 0 : a.h[b + a.j];
-      }
-      function jb(a, b) {
-        var c = void 0 === c ? false : c;
-        var d = W3(a, b, c);
-        null == d && (d = hb);
-        d === hb && (d = db([]), X3(a, b, d, c));
-        return d;
-      }
-      function kb(a) {
-        var b = jb(a, 3);
-        a.m || (a.m = {});
-        if (!a.m[3]) {
-          for (var c = 0; c < b.length; c++) b[c] = +b[c];
-          a.m[3] = true;
-        }
-        return b;
-      }
-      function lb(a, b, c) {
-        a = W3(a, b);
-        return null == a ? c : a;
-      }
-      function Y3(a, b, c) {
-        a = W3(a, b);
-        a = null == a ? a : +a;
-        return null == a ? void 0 === c ? 0 : c : a;
-      }
-      function X3(a, b, c, d) {
-        (void 0 === d ? 0 : d) || b >= a.l ? (ib(a), a.i[b] = c) : a.h[b + a.j] = c;
-      }
-      function mb(a, b, c) {
-        if (-1 === c) return null;
-        a.g || (a.g = {});
-        if (!a.g[c]) {
-          var d = W3(a, c, false);
-          d && (a.g[c] = new b(d));
-        }
-        return a.g[c];
-      }
-      function nb(a, b) {
-        a.g || (a.g = {});
-        var c = a.g[1];
-        if (!c) {
-          var d = jb(a, 1);
-          c = [];
-          for (var e = 0; e < d.length; e++) c[e] = new b(d[e]);
-          a.g[1] = c;
-        }
-        return c;
-      }
-      function ob(a, b, c) {
-        var d = void 0 === d ? false : d;
-        a.g || (a.g = {});
-        var e = c ? pb(c, false) : c;
-        a.g[b] = c;
-        X3(a, b, e, d);
-      }
-      function qb(a, b, c, d) {
-        var e = nb(a, c);
-        b = b ? b : new c();
-        a = jb(a, 1);
-        void 0 != d ? (e.splice(d, 0, b), a.splice(d, 0, pb(b, false))) : (e.push(b), a.push(pb(b, false)));
-      }
-      V3.prototype.toJSON = function() {
-        var a = pb(this, false);
-        return cb(a, eb, Fa);
-      };
-      function pb(a, b) {
-        if (a.g) for (var c in a.g) {
-          var d = a.g[c];
-          if (Array.isArray(d)) for (var e = 0; e < d.length; e++) d[e] && pb(d[e], b);
-          else d && pb(d, b);
-        }
-        return a.h;
-      }
-      V3.prototype.toString = function() {
-        return pb(this, false).toString();
-      };
-      function rb(a, b) {
-        if (a = a.o) {
-          Za(b, b.g.end());
-          for (var c = 0; c < a.length; c++) Za(b, a[c]);
-        }
-      }
-      function sb(a, b) {
-        if (4 == b.h) return false;
-        var c = b.m;
-        Ta(b);
-        b.N || (b = La(b.g.h, c, b.g.g), (c = a.o) ? c.push(b) : a.o = [b]);
-        return true;
-      }
-      ;
-      function tb(a) {
-        V3.call(this, a, -1, ub);
-      }
-      M(tb, V3);
-      tb.prototype.getRows = function() {
-        return W3(this, 1);
-      };
-      tb.prototype.getCols = function() {
-        return W3(this, 2);
-      };
-      tb.prototype.getPackedDataList = function() {
-        return kb(this);
-      };
-      tb.prototype.getLayout = function() {
-        return lb(this, 4, 0);
-      };
-      function vb(a, b) {
-        for (; S3(b); ) switch (b.i) {
-          case 8:
-            var c = b.g.i();
-            X3(a, 1, c);
-            break;
-          case 16:
-            c = b.g.i();
-            X3(a, 2, c);
-            break;
-          case 29:
-          case 26:
-            Xa(b, a.getPackedDataList());
-            break;
-          case 32:
-            c = Oa(b.g);
-            X3(a, 4, c);
-            break;
-          default:
-            if (!sb(a, b)) return a;
-        }
-        return a;
-      }
-      var ub = [3];
-      function Z3(a, b) {
-        var c = void 0;
-        return new (c || (c = Promise))(function(d, e) {
-          function g(k4) {
-            try {
-              h(b.next(k4));
-            } catch (l) {
-              e(l);
-            }
-          }
-          function f(k4) {
-            try {
-              h(b["throw"](k4));
-            } catch (l) {
-              e(l);
-            }
-          }
-          function h(k4) {
-            k4.done ? d(k4.value) : new c(function(l) {
-              l(k4.value);
-            }).then(g, f);
-          }
-          h((b = b.apply(a, void 0)).next());
-        });
-      }
-      ;
-      function wb(a) {
-        V3.call(this, a);
-      }
-      M(wb, V3);
-      function xb(a, b) {
-        for (; S3(b); ) switch (b.i) {
-          case 8:
-            var c = b.g.i();
-            X3(a, 1, c);
-            break;
-          case 21:
-            c = T2(b);
-            X3(a, 2, c);
-            break;
-          case 26:
-            c = Va(b);
-            X3(a, 3, c);
-            break;
-          case 34:
-            c = Va(b);
-            X3(a, 4, c);
-            break;
-          default:
-            if (!sb(a, b)) return a;
-        }
-        return a;
-      }
-      ;
-      function yb(a) {
-        V3.call(this, a, -1, zb);
-      }
-      M(yb, V3);
-      yb.prototype.addClassification = function(a, b) {
-        qb(this, a, wb, b);
-        return this;
-      };
-      var zb = [1];
-      function Ab(a) {
-        V3.call(this, a);
-      }
-      M(Ab, V3);
-      function Bb(a, b) {
-        for (; S3(b); ) switch (b.i) {
-          case 13:
-            var c = T2(b);
-            X3(a, 1, c);
-            break;
-          case 21:
-            c = T2(b);
-            X3(a, 2, c);
-            break;
-          case 29:
-            c = T2(b);
-            X3(a, 3, c);
-            break;
-          case 37:
-            c = T2(b);
-            X3(a, 4, c);
-            break;
-          case 45:
-            c = T2(b);
-            X3(a, 5, c);
-            break;
-          default:
-            if (!sb(a, b)) return a;
-        }
-        return a;
-      }
-      ;
-      function Cb(a) {
-        V3.call(this, a, -1, Db);
-      }
-      M(Cb, V3);
-      function Eb(a) {
-        a: {
-          var b = new Cb();
-          for (a = new Sa(a); S3(a); ) switch (a.i) {
-            case 10:
-              var c = Ua(a, new Ab(), Bb);
-              qb(b, c, Ab, void 0);
-              break;
-            default:
-              if (!sb(b, a)) break a;
-          }
-        }
-        return b;
-      }
-      var Db = [1];
-      function Fb(a) {
-        V3.call(this, a);
-      }
-      M(Fb, V3);
-      function Gb(a) {
-        V3.call(this, a, -1, Hb);
-      }
-      M(Gb, V3);
-      Gb.prototype.getVertexType = function() {
-        return lb(this, 1, 0);
-      };
-      Gb.prototype.getPrimitiveType = function() {
-        return lb(this, 2, 0);
-      };
-      Gb.prototype.getVertexBufferList = function() {
-        return kb(this);
-      };
-      Gb.prototype.getIndexBufferList = function() {
-        return jb(this, 4);
-      };
-      function Ib(a, b) {
-        for (; S3(b); ) switch (b.i) {
-          case 8:
-            var c = Oa(b.g);
-            X3(a, 1, c);
-            break;
-          case 16:
-            c = Oa(b.g);
-            X3(a, 2, c);
-            break;
-          case 29:
-          case 26:
-            Xa(b, a.getVertexBufferList());
-            break;
-          case 32:
-          case 34:
-            c = b;
-            var d = a.getIndexBufferList();
-            2 == c.h ? Wa(c, Ma.prototype.i, d) : d.push(c.g.i());
-            break;
-          default:
-            if (!sb(a, b)) return a;
-        }
-        return a;
-      }
-      var Hb = [3, 4];
-      function Jb(a) {
-        V3.call(this, a);
-      }
-      M(Jb, V3);
-      Jb.prototype.getMesh = function() {
-        return mb(this, Gb, 1);
-      };
-      Jb.prototype.getPoseTransformMatrix = function() {
-        return mb(this, tb, 2);
-      };
-      function Kb(a) {
-        a: {
-          var b = new Jb();
-          for (a = new Sa(a); S3(a); ) switch (a.i) {
-            case 10:
-              var c = Ua(a, new Gb(), Ib);
-              ob(b, 1, c);
-              break;
-            case 18:
-              c = Ua(a, new tb(), vb);
-              ob(b, 2, c);
-              break;
-            default:
-              if (!sb(b, a)) break a;
-          }
-        }
-        return b;
-      }
-      ;
-      function Lb(a, b, c) {
-        c = a.createShader(0 === c ? a.VERTEX_SHADER : a.FRAGMENT_SHADER);
-        a.shaderSource(c, b);
-        a.compileShader(c);
-        if (!a.getShaderParameter(c, a.COMPILE_STATUS)) throw Error("Could not compile WebGL shader.\n\n" + a.getShaderInfoLog(c));
-        return c;
-      }
-      ;
-      function Mb(a) {
-        return nb(a, wb).map(function(b) {
-          return { index: lb(b, 1, 0), Y: Y3(b, 2), label: null != W3(b, 3) ? lb(b, 3, "") : void 0, displayName: null != W3(b, 4) ? lb(b, 4, "") : void 0 };
-        });
-      }
-      ;
-      function Nb(a) {
-        return { x: Y3(a, 1), y: Y3(a, 2), z: Y3(a, 3), visibility: null != W3(a, 4) ? Y3(a, 4) : void 0 };
-      }
-      ;
-      function Ob(a, b) {
-        this.h = a;
-        this.g = b;
-        this.l = 0;
-      }
-      function Pb(a, b, c) {
-        Qb(a, b);
-        if ("function" === typeof a.g.canvas.transferToImageBitmap) return Promise.resolve(a.g.canvas.transferToImageBitmap());
-        if (c) return Promise.resolve(a.g.canvas);
-        if ("function" === typeof createImageBitmap) return createImageBitmap(a.g.canvas);
-        void 0 === a.i && (a.i = document.createElement("canvas"));
-        return new Promise(function(d) {
-          a.i.height = a.g.canvas.height;
-          a.i.width = a.g.canvas.width;
-          a.i.getContext("2d", {}).drawImage(a.g.canvas, 0, 0, a.g.canvas.width, a.g.canvas.height);
-          d(a.i);
-        });
-      }
-      function Qb(a, b) {
-        var c = a.g;
-        if (void 0 === a.m) {
-          var d = Lb(c, "\n  attribute vec2 aVertex;\n  attribute vec2 aTex;\n  varying vec2 vTex;\n  void main(void) {\n    gl_Position = vec4(aVertex, 0.0, 1.0);\n    vTex = aTex;\n  }", 0), e = Lb(c, "\n  precision mediump float;\n  varying vec2 vTex;\n  uniform sampler2D sampler0;\n  void main(){\n    gl_FragColor = texture2D(sampler0, vTex);\n  }", 1), g = c.createProgram();
-          c.attachShader(g, d);
-          c.attachShader(g, e);
-          c.linkProgram(g);
-          if (!c.getProgramParameter(g, c.LINK_STATUS)) throw Error("Could not compile WebGL program.\n\n" + c.getProgramInfoLog(g));
-          d = a.m = g;
-          c.useProgram(d);
-          e = c.getUniformLocation(d, "sampler0");
-          a.j = { I: c.getAttribLocation(d, "aVertex"), H: c.getAttribLocation(d, "aTex"), da: e };
-          a.s = c.createBuffer();
-          c.bindBuffer(c.ARRAY_BUFFER, a.s);
-          c.enableVertexAttribArray(a.j.I);
-          c.vertexAttribPointer(a.j.I, 2, c.FLOAT, false, 0, 0);
-          c.bufferData(c.ARRAY_BUFFER, new Float32Array([-1, -1, -1, 1, 1, 1, 1, -1]), c.STATIC_DRAW);
-          c.bindBuffer(c.ARRAY_BUFFER, null);
-          a.o = c.createBuffer();
-          c.bindBuffer(c.ARRAY_BUFFER, a.o);
-          c.enableVertexAttribArray(a.j.H);
-          c.vertexAttribPointer(
-            a.j.H,
-            2,
-            c.FLOAT,
-            false,
-            0,
-            0
-          );
-          c.bufferData(c.ARRAY_BUFFER, new Float32Array([0, 1, 0, 0, 1, 0, 1, 1]), c.STATIC_DRAW);
-          c.bindBuffer(c.ARRAY_BUFFER, null);
-          c.uniform1i(e, 0);
-        }
-        d = a.j;
-        c.useProgram(a.m);
-        c.canvas.width = b.width;
-        c.canvas.height = b.height;
-        c.viewport(0, 0, b.width, b.height);
-        c.activeTexture(c.TEXTURE0);
-        a.h.bindTexture2d(b.glName);
-        c.enableVertexAttribArray(d.I);
-        c.bindBuffer(c.ARRAY_BUFFER, a.s);
-        c.vertexAttribPointer(d.I, 2, c.FLOAT, false, 0, 0);
-        c.enableVertexAttribArray(d.H);
-        c.bindBuffer(c.ARRAY_BUFFER, a.o);
-        c.vertexAttribPointer(
-          d.H,
-          2,
-          c.FLOAT,
-          false,
-          0,
-          0
-        );
-        c.bindFramebuffer(c.DRAW_FRAMEBUFFER ? c.DRAW_FRAMEBUFFER : c.FRAMEBUFFER, null);
-        c.clearColor(0, 0, 0, 0);
-        c.clear(c.COLOR_BUFFER_BIT);
-        c.colorMask(true, true, true, true);
-        c.drawArrays(c.TRIANGLE_FAN, 0, 4);
-        c.disableVertexAttribArray(d.I);
-        c.disableVertexAttribArray(d.H);
-        c.bindBuffer(c.ARRAY_BUFFER, null);
-        a.h.bindTexture2d(0);
-      }
-      function Rb(a) {
-        this.g = a;
-      }
-      ;
-      var Sb = new Uint8Array([0, 97, 115, 109, 1, 0, 0, 0, 1, 4, 1, 96, 0, 0, 3, 2, 1, 0, 10, 9, 1, 7, 0, 65, 0, 253, 15, 26, 11]);
-      function Tb(a, b) {
-        return b + a;
-      }
-      function Ub(a, b) {
-        window[a] = b;
-      }
-      function Vb(a) {
-        var b = document.createElement("script");
-        b.setAttribute("src", a);
-        b.setAttribute("crossorigin", "anonymous");
-        return new Promise(function(c) {
-          b.addEventListener("load", function() {
-            c();
-          }, false);
-          b.addEventListener("error", function() {
-            c();
-          }, false);
-          document.body.appendChild(b);
-        });
-      }
-      function Wb() {
-        return Z3(this, function b() {
-          return O3(b, function(c) {
-            switch (c.g) {
-              case 1:
-                return c.m = 2, N3(c, WebAssembly.instantiate(Sb), 4);
-              case 4:
-                c.g = 3;
-                c.m = 0;
-                break;
-              case 2:
-                return c.m = 0, c.j = null, c.return(false);
-              case 3:
-                return c.return(true);
-            }
-          });
-        });
-      }
-      function Xb(a) {
-        this.g = a;
-        this.listeners = {};
-        this.j = {};
-        this.F = {};
-        this.m = {};
-        this.s = {};
-        this.G = this.o = this.R = true;
-        this.C = Promise.resolve();
-        this.P = "";
-        this.B = {};
-        this.locateFile = a && a.locateFile || Tb;
-        if ("object" === typeof window) var b = window.location.pathname.toString().substring(0, window.location.pathname.toString().lastIndexOf("/")) + "/";
-        else if ("undefined" !== typeof location) b = location.pathname.toString().substring(0, location.pathname.toString().lastIndexOf("/")) + "/";
-        else throw Error("solutions can only be loaded on a web page or in a web worker");
-        this.S = b;
-        if (a.options) {
-          b = K3(Object.keys(a.options));
-          for (var c = b.next(); !c.done; c = b.next()) {
-            c = c.value;
-            var d = a.options[c].default;
-            void 0 !== d && (this.j[c] = "function" === typeof d ? d() : d);
-          }
-        }
-      }
-      v = Xb.prototype;
-      v.close = function() {
-        this.i && this.i.delete();
-        return Promise.resolve();
-      };
-      function Yb(a, b) {
-        return void 0 === a.g.files ? [] : "function" === typeof a.g.files ? a.g.files(b) : a.g.files;
-      }
-      function Zb(a) {
-        return Z3(a, function c() {
-          var d = this, e, g, f, h, k4, l, n, u, w, r, y;
-          return O3(c, function(m) {
-            switch (m.g) {
-              case 1:
-                e = d;
-                if (!d.R) return m.return();
-                g = Yb(d, d.j);
-                return N3(m, Wb(), 2);
-              case 2:
-                f = m.h;
-                if ("object" === typeof window) return Ub("createMediapipeSolutionsWasm", { locateFile: d.locateFile }), Ub("createMediapipeSolutionsPackedAssets", { locateFile: d.locateFile }), l = g.filter(function(t3) {
-                  return void 0 !== t3.data;
-                }), n = g.filter(function(t3) {
-                  return void 0 === t3.data;
-                }), u = Promise.all(l.map(function(t3) {
-                  var x = $b(e, t3.url);
-                  if (void 0 !== t3.path) {
-                    var z3 = t3.path;
-                    x = x.then(function(E3) {
-                      e.overrideFile(z3, E3);
-                      return Promise.resolve(E3);
-                    });
-                  }
-                  return x;
-                })), w = Promise.all(n.map(function(t3) {
-                  return void 0 === t3.simd || t3.simd && f || !t3.simd && !f ? Vb(e.locateFile(t3.url, e.S)) : Promise.resolve();
-                })).then(function() {
-                  return Z3(e, function x() {
-                    var z3, E3, F3 = this;
-                    return O3(x, function(I3) {
-                      if (1 == I3.g) return z3 = window.createMediapipeSolutionsWasm, E3 = window.createMediapipeSolutionsPackedAssets, N3(I3, z3(E3), 2);
-                      F3.h = I3.h;
-                      I3.g = 0;
-                    });
-                  });
-                }), r = function() {
-                  return Z3(e, function x() {
-                    var z3 = this;
-                    return O3(x, function(E3) {
-                      z3.g.graph && z3.g.graph.url ? E3 = N3(E3, $b(z3, z3.g.graph.url), 0) : (E3.g = 0, E3 = void 0);
-                      return E3;
-                    });
-                  });
-                }(), N3(m, Promise.all([w, u, r]), 7);
-                if ("function" !== typeof importScripts) throw Error("solutions can only be loaded on a web page or in a web worker");
-                h = g.filter(function(t3) {
-                  return void 0 === t3.simd || t3.simd && f || !t3.simd && !f;
-                }).map(function(t3) {
-                  return e.locateFile(t3.url, e.S);
-                });
-                importScripts.apply(null, L3(h));
-                return N3(m, createMediapipeSolutionsWasm(Module), 6);
-              case 6:
-                d.h = m.h;
-                d.l = new OffscreenCanvas(1, 1);
-                d.h.canvas = d.l;
-                k4 = d.h.GL.createContext(
-                  d.l,
-                  { antialias: false, alpha: false, ba: "undefined" !== typeof WebGL2RenderingContext ? 2 : 1 }
-                );
-                d.h.GL.makeContextCurrent(k4);
-                m.g = 4;
-                break;
-              case 7:
-                d.l = document.createElement("canvas");
-                y = d.l.getContext("webgl2", {});
-                if (!y && (y = d.l.getContext("webgl", {}), !y)) return alert("Failed to create WebGL canvas context when passing video frame."), m.return();
-                d.D = y;
-                d.h.canvas = d.l;
-                d.h.createContext(d.l, true, true, {});
-              case 4:
-                d.i = new d.h.SolutionWasm(), d.R = false, m.g = 0;
-            }
-          });
-        });
-      }
-      function ac(a) {
-        return Z3(a, function c() {
-          var d = this, e, g, f, h, k4, l, n, u;
-          return O3(c, function(w) {
-            if (1 == w.g) {
-              if (d.g.graph && d.g.graph.url && d.P === d.g.graph.url) return w.return();
-              d.o = true;
-              if (!d.g.graph || !d.g.graph.url) {
-                w.g = 2;
-                return;
-              }
-              d.P = d.g.graph.url;
-              return N3(w, $b(d, d.g.graph.url), 3);
-            }
-            2 != w.g && (e = w.h, d.i.loadGraph(e));
-            g = K3(Object.keys(d.B));
-            for (f = g.next(); !f.done; f = g.next()) h = f.value, d.i.overrideFile(h, d.B[h]);
-            d.B = {};
-            if (d.g.listeners) for (k4 = K3(d.g.listeners), l = k4.next(); !l.done; l = k4.next()) n = l.value, bc(d, n);
-            u = d.j;
-            d.j = {};
-            d.setOptions(u);
-            w.g = 0;
-          });
-        });
-      }
-      v.reset = function() {
-        return Z3(this, function b() {
-          var c = this;
-          return O3(b, function(d) {
-            c.i && (c.i.reset(), c.m = {}, c.s = {});
-            d.g = 0;
-          });
-        });
-      };
-      v.setOptions = function(a, b) {
-        var c = this;
-        if (b = b || this.g.options) {
-          for (var d = [], e = [], g = {}, f = K3(Object.keys(a)), h = f.next(); !h.done; g = { K: g.K, L: g.L }, h = f.next()) {
-            var k4 = h.value;
-            k4 in this.j && this.j[k4] === a[k4] || (this.j[k4] = a[k4], h = b[k4], void 0 !== h && (h.onChange && (g.K = h.onChange, g.L = a[k4], d.push(/* @__PURE__ */ function(l) {
-              return function() {
-                return Z3(c, function u() {
-                  var w, r = this;
-                  return O3(u, function(y) {
-                    if (1 == y.g) return N3(y, l.K(l.L), 2);
-                    w = y.h;
-                    true === w && (r.o = true);
-                    y.g = 0;
-                  });
-                });
-              };
-            }(g))), h.graphOptionXref && (k4 = { valueNumber: 1 === h.type ? a[k4] : 0, valueBoolean: 0 === h.type ? a[k4] : false, valueString: 2 === h.type ? a[k4] : "" }, h = Object.assign(Object.assign(Object.assign({}, { calculatorName: "", calculatorIndex: 0 }), h.graphOptionXref), k4), e.push(h))));
-          }
-          if (0 !== d.length || 0 !== e.length) this.o = true, this.A = (void 0 === this.A ? [] : this.A).concat(e), this.u = (void 0 === this.u ? [] : this.u).concat(d);
-        }
-      };
-      function cc(a) {
-        return Z3(a, function c() {
-          var d = this, e, g, f, h, k4, l, n;
-          return O3(c, function(u) {
-            switch (u.g) {
-              case 1:
-                if (!d.o) return u.return();
-                if (!d.u) {
-                  u.g = 2;
-                  break;
-                }
-                e = K3(d.u);
-                g = e.next();
-              case 3:
-                if (g.done) {
-                  u.g = 5;
-                  break;
-                }
-                f = g.value;
-                return N3(u, f(), 4);
-              case 4:
-                g = e.next();
-                u.g = 3;
-                break;
-              case 5:
-                d.u = void 0;
-              case 2:
-                if (d.A) {
-                  h = new d.h.GraphOptionChangeRequestList();
-                  k4 = K3(d.A);
-                  for (l = k4.next(); !l.done; l = k4.next()) n = l.value, h.push_back(n);
-                  d.i.changeOptions(h);
-                  h.delete();
-                  d.A = void 0;
-                }
-                d.o = false;
-                u.g = 0;
-            }
-          });
-        });
-      }
-      v.initialize = function() {
-        return Z3(this, function b() {
-          var c = this;
-          return O3(b, function(d) {
-            return 1 == d.g ? N3(d, Zb(c), 2) : 3 != d.g ? N3(d, ac(c), 3) : N3(d, cc(c), 0);
-          });
-        });
-      };
-      function $b(a, b) {
-        return Z3(a, function d() {
-          var e = this, g, f;
-          return O3(d, function(h) {
-            if (b in e.F) return h.return(e.F[b]);
-            g = e.locateFile(b, "");
-            f = fetch(g).then(function(k4) {
-              return k4.arrayBuffer();
-            });
-            e.F[b] = f;
-            return h.return(f);
-          });
-        });
-      }
-      v.overrideFile = function(a, b) {
-        this.i ? this.i.overrideFile(a, b) : this.B[a] = b;
-      };
-      v.clearOverriddenFiles = function() {
-        this.B = {};
-        this.i && this.i.clearOverriddenFiles();
-      };
-      v.send = function(a, b) {
-        return Z3(this, function d() {
-          var e = this, g, f, h, k4, l, n, u, w, r;
-          return O3(d, function(y) {
-            switch (y.g) {
-              case 1:
-                if (!e.g.inputs) return y.return();
-                g = 1e3 * (void 0 === b || null === b ? performance.now() : b);
-                return N3(y, e.C, 2);
-              case 2:
-                return N3(y, e.initialize(), 3);
-              case 3:
-                f = new e.h.PacketDataList();
-                h = K3(Object.keys(a));
-                for (k4 = h.next(); !k4.done; k4 = h.next()) if (l = k4.value, n = e.g.inputs[l]) {
-                  a: {
-                    var m = e;
-                    var t3 = a[l];
-                    switch (n.type) {
-                      case "video":
-                        var x = m.m[n.stream];
-                        x || (x = new Ob(m.h, m.D), m.m[n.stream] = x);
-                        m = x;
-                        0 === m.l && (m.l = m.h.createTexture());
-                        if ("undefined" !== typeof HTMLVideoElement && t3 instanceof HTMLVideoElement) {
-                          var z3 = t3.videoWidth;
-                          x = t3.videoHeight;
-                        } else "undefined" !== typeof HTMLImageElement && t3 instanceof HTMLImageElement ? (z3 = t3.naturalWidth, x = t3.naturalHeight) : (z3 = t3.width, x = t3.height);
-                        x = { glName: m.l, width: z3, height: x };
-                        z3 = m.g;
-                        z3.canvas.width = x.width;
-                        z3.canvas.height = x.height;
-                        z3.activeTexture(z3.TEXTURE0);
-                        m.h.bindTexture2d(m.l);
-                        z3.texImage2D(z3.TEXTURE_2D, 0, z3.RGBA, z3.RGBA, z3.UNSIGNED_BYTE, t3);
-                        m.h.bindTexture2d(0);
-                        m = x;
-                        break a;
-                      case "detections":
-                        x = m.m[n.stream];
-                        x || (x = new Rb(m.h), m.m[n.stream] = x);
-                        m = x;
-                        m.data || (m.data = new m.g.DetectionListData());
-                        m.data.reset(t3.length);
-                        for (x = 0; x < t3.length; ++x) {
-                          z3 = t3[x];
-                          var E3 = m.data, F3 = E3.setBoundingBox, I3 = x;
-                          var H3 = z3.T;
-                          var p2 = new Fb();
-                          X3(p2, 1, H3.Z);
-                          X3(p2, 2, H3.$);
-                          X3(p2, 3, H3.height);
-                          X3(p2, 4, H3.width);
-                          X3(p2, 5, H3.rotation);
-                          X3(p2, 6, H3.X);
-                          var A2 = H3 = new Ya();
-                          U3(A2, 1, W3(p2, 1));
-                          U3(A2, 2, W3(p2, 2));
-                          U3(A2, 3, W3(p2, 3));
-                          U3(A2, 4, W3(p2, 4));
-                          U3(A2, 5, W3(p2, 5));
-                          var C3 = W3(p2, 6);
-                          if (null != C3 && null != C3) {
-                            Ra(A2.g, 48);
-                            var q3 = A2.g, B3 = C3;
-                            C3 = 0 > B3;
-                            B3 = Math.abs(B3);
-                            var D3 = B3 >>> 0;
-                            B3 = Math.floor((B3 - D3) / 4294967296);
-                            B3 >>>= 0;
-                            C3 && (B3 = ~B3 >>> 0, D3 = (~D3 >>> 0) + 1, 4294967295 < D3 && (D3 = 0, B3++, 4294967295 < B3 && (B3 = 0)));
-                            Q3 = D3;
-                            R3 = B3;
-                            C3 = Q3;
-                            for (D3 = R3; 0 < D3 || 127 < C3; ) q3.push(C3 & 127 | 128), C3 = (C3 >>> 7 | D3 << 25) >>> 0, D3 >>>= 7;
-                            q3.push(C3);
-                          }
-                          rb(p2, A2);
-                          H3 = $a(H3);
-                          F3.call(E3, I3, H3);
-                          if (z3.O) for (E3 = 0; E3 < z3.O.length; ++E3) p2 = z3.O[E3], A2 = p2.visibility ? true : false, F3 = m.data, I3 = F3.addNormalizedLandmark, H3 = x, p2 = Object.assign(Object.assign({}, p2), { visibility: A2 ? p2.visibility : 0 }), A2 = new Ab(), X3(A2, 1, p2.x), X3(A2, 2, p2.y), X3(A2, 3, p2.z), p2.visibility && X3(A2, 4, p2.visibility), q3 = p2 = new Ya(), U3(q3, 1, W3(A2, 1)), U3(q3, 2, W3(A2, 2)), U3(q3, 3, W3(A2, 3)), U3(q3, 4, W3(A2, 4)), U3(q3, 5, W3(A2, 5)), rb(A2, q3), p2 = $a(p2), I3.call(F3, H3, p2);
-                          if (z3.M) for (E3 = 0; E3 < z3.M.length; ++E3) {
-                            F3 = m.data;
-                            I3 = F3.addClassification;
-                            H3 = x;
-                            p2 = z3.M[E3];
-                            A2 = new wb();
-                            X3(A2, 2, p2.Y);
-                            p2.index && X3(A2, 1, p2.index);
-                            p2.label && X3(A2, 3, p2.label);
-                            p2.displayName && X3(A2, 4, p2.displayName);
-                            q3 = p2 = new Ya();
-                            D3 = W3(A2, 1);
-                            if (null != D3 && null != D3) if (Ra(q3.g, 8), C3 = q3.g, 0 <= D3) Ra(C3, D3);
-                            else {
-                              for (B3 = 0; 9 > B3; B3++) C3.push(D3 & 127 | 128), D3 >>= 7;
-                              C3.push(1);
-                            }
-                            U3(q3, 2, W3(A2, 2));
-                            C3 = W3(A2, 3);
-                            null != C3 && (C3 = Ca(C3), Ra(q3.g, 26), Ra(q3.g, C3.length), Za(q3, q3.g.end()), Za(q3, C3));
-                            C3 = W3(A2, 4);
-                            null != C3 && (C3 = Ca(C3), Ra(q3.g, 34), Ra(q3.g, C3.length), Za(q3, q3.g.end()), Za(q3, C3));
-                            rb(A2, q3);
-                            p2 = $a(p2);
-                            I3.call(F3, H3, p2);
-                          }
-                        }
-                        m = m.data;
-                        break a;
-                      default:
-                        m = {};
-                    }
-                  }
-                  u = m;
-                  w = n.stream;
-                  switch (n.type) {
-                    case "video":
-                      f.pushTexture2d(Object.assign(Object.assign({}, u), { stream: w, timestamp: g }));
-                      break;
-                    case "detections":
-                      r = u;
-                      r.stream = w;
-                      r.timestamp = g;
-                      f.pushDetectionList(r);
-                      break;
-                    default:
-                      throw Error("Unknown input config type: '" + n.type + "'");
-                  }
-                }
-                e.i.send(f);
-                return N3(y, e.C, 4);
-              case 4:
-                f.delete(), y.g = 0;
-            }
-          });
-        });
-      };
-      function dc(a, b, c) {
-        return Z3(a, function e() {
-          var g, f, h, k4, l, n, u = this, w, r, y, m, t3, x, z3, E3;
-          return O3(e, function(F3) {
-            switch (F3.g) {
-              case 1:
-                if (!c) return F3.return(b);
-                g = {};
-                f = 0;
-                h = K3(Object.keys(c));
-                for (k4 = h.next(); !k4.done; k4 = h.next()) l = k4.value, n = c[l], "string" !== typeof n && "texture" === n.type && void 0 !== b[n.stream] && ++f;
-                1 < f && (u.G = false);
-                w = K3(Object.keys(c));
-                k4 = w.next();
-              case 2:
-                if (k4.done) {
-                  F3.g = 4;
-                  break;
-                }
-                r = k4.value;
-                y = c[r];
-                if ("string" === typeof y) return z3 = g, E3 = r, N3(F3, ec(u, r, b[y]), 14);
-                m = b[y.stream];
-                if ("detection_list" === y.type) {
-                  if (m) {
-                    var I3 = m.getRectList();
-                    for (var H3 = m.getLandmarksList(), p2 = m.getClassificationsList(), A2 = [], C3 = 0; C3 < I3.size(); ++C3) {
-                      var q3 = I3.get(C3);
-                      a: {
-                        var B3 = new Fb();
-                        for (q3 = new Sa(q3); S3(q3); ) switch (q3.i) {
-                          case 13:
-                            var D3 = T2(q3);
-                            X3(B3, 1, D3);
-                            break;
-                          case 21:
-                            D3 = T2(q3);
-                            X3(B3, 2, D3);
-                            break;
-                          case 29:
-                            D3 = T2(q3);
-                            X3(B3, 3, D3);
-                            break;
-                          case 37:
-                            D3 = T2(q3);
-                            X3(B3, 4, D3);
-                            break;
-                          case 45:
-                            D3 = T2(q3);
-                            X3(B3, 5, D3);
-                            break;
-                          case 48:
-                            D3 = Oa(q3.g);
-                            X3(B3, 6, D3);
-                            break;
-                          default:
-                            if (!sb(B3, q3)) break a;
-                        }
-                      }
-                      B3 = { Z: Y3(B3, 1), $: Y3(B3, 2), height: Y3(B3, 3), width: Y3(B3, 4), rotation: Y3(B3, 5, 0), X: lb(B3, 6, 0) };
-                      q3 = nb(Eb(H3.get(C3)), Ab).map(Nb);
-                      var la = p2.get(C3);
-                      a: for (D3 = new yb(), la = new Sa(la); S3(la); ) switch (la.i) {
-                        case 10:
-                          D3.addClassification(Ua(la, new wb(), xb));
-                          break;
-                        default:
-                          if (!sb(D3, la)) break a;
-                      }
-                      B3 = { T: B3, O: q3, M: Mb(D3) };
-                      A2.push(B3);
-                    }
-                    I3 = A2;
-                  } else I3 = [];
-                  g[r] = I3;
-                  F3.g = 7;
-                  break;
-                }
-                if ("proto_list" === y.type) {
-                  if (m) {
-                    I3 = Array(m.size());
-                    for (H3 = 0; H3 < m.size(); H3++) I3[H3] = m.get(H3);
-                    m.delete();
-                  } else I3 = [];
-                  g[r] = I3;
-                  F3.g = 7;
-                  break;
-                }
-                if (void 0 === m) {
-                  F3.g = 3;
-                  break;
-                }
-                if ("float_list" === y.type) {
-                  g[r] = m;
-                  F3.g = 7;
-                  break;
-                }
-                if ("proto" === y.type) {
-                  g[r] = m;
-                  F3.g = 7;
-                  break;
-                }
-                if ("texture" !== y.type) throw Error("Unknown output config type: '" + y.type + "'");
-                t3 = u.s[r];
-                t3 || (t3 = new Ob(u.h, u.D), u.s[r] = t3);
-                return N3(F3, Pb(t3, m, u.G), 13);
-              case 13:
-                x = F3.h, g[r] = x;
-              case 7:
-                y.transform && g[r] && (g[r] = y.transform(g[r]));
-                F3.g = 3;
-                break;
-              case 14:
-                z3[E3] = F3.h;
-              case 3:
-                k4 = w.next();
-                F3.g = 2;
-                break;
-              case 4:
-                return F3.return(g);
-            }
-          });
-        });
-      }
-      function ec(a, b, c) {
-        return Z3(a, function e() {
-          var g = this, f;
-          return O3(e, function(h) {
-            return "number" === typeof c || c instanceof Uint8Array || c instanceof g.h.Uint8BlobList ? h.return(c) : c instanceof g.h.Texture2dDataOut ? (f = g.s[b], f || (f = new Ob(g.h, g.D), g.s[b] = f), h.return(Pb(f, c, g.G))) : h.return(void 0);
-          });
-        });
-      }
-      function bc(a, b) {
-        for (var c = b.name || "$", d = [].concat(L3(b.wants)), e = new a.h.StringList(), g = K3(b.wants), f = g.next(); !f.done; f = g.next()) e.push_back(f.value);
-        g = a.h.PacketListener.implement({ onResults: function(h) {
-          for (var k4 = {}, l = 0; l < b.wants.length; ++l) k4[d[l]] = h.get(l);
-          var n = a.listeners[c];
-          n && (a.C = dc(a, k4, b.outs).then(function(u) {
-            u = n(u);
-            for (var w = 0; w < b.wants.length; ++w) {
-              var r = k4[d[w]];
-              "object" === typeof r && r.hasOwnProperty && r.hasOwnProperty("delete") && r.delete();
-            }
-            u && (a.C = u);
-          }));
-        } });
-        a.i.attachMultiListener(e, g);
-        e.delete();
-      }
-      v.onResults = function(a, b) {
-        this.listeners[b || "$"] = a;
-      };
-      P3("Solution", Xb);
-      P3("OptionType", { BOOL: 0, NUMBER: 1, aa: 2, 0: "BOOL", 1: "NUMBER", 2: "STRING" });
-      function fc(a) {
-        a = Kb(a);
-        var b = a.getMesh();
-        if (!b) return a;
-        var c = new Float32Array(b.getVertexBufferList());
-        b.getVertexBufferList = function() {
-          return c;
-        };
-        var d = new Uint32Array(b.getIndexBufferList());
-        b.getIndexBufferList = function() {
-          return d;
-        };
-        return a;
-      }
-      ;
-      var gc = { files: [{ url: "face_mesh_solution_packed_assets_loader.js" }, { simd: true, url: "face_mesh_solution_simd_wasm_bin.js" }, { simd: false, url: "face_mesh_solution_wasm_bin.js" }], graph: { url: "face_mesh.binarypb" }, listeners: [{ wants: ["multi_face_geometry", "image_transformed", "multi_face_landmarks"], outs: { image: "image_transformed", multiFaceGeometry: { type: "proto_list", stream: "multi_face_geometry", transform: function(a) {
-        return a.map(fc);
-      } }, multiFaceLandmarks: { type: "proto_list", stream: "multi_face_landmarks", transform: function(a) {
-        return a.map(function(b) {
-          return nb(
-            Eb(b),
-            Ab
-          ).map(Nb);
-        });
-      } } } }], inputs: { image: { type: "video", stream: "input_frames_gpu" } }, options: { useCpuInference: { type: 0, graphOptionXref: { calculatorType: "InferenceCalculator", fieldName: "use_cpu_inference" }, default: "iPad Simulator;iPhone Simulator;iPod Simulator;iPad;iPhone;iPod".split(";").includes(navigator.platform) || navigator.userAgent.includes("Mac") && "ontouchend" in document }, enableFaceGeometry: { type: 0, graphOptionXref: {
-        calculatorName: "EnableFaceGeometryConstant",
-        calculatorType: "ConstantSidePacketCalculator",
-        fieldName: "bool_value"
-      } }, selfieMode: { type: 0, graphOptionXref: { calculatorType: "GlScalerCalculator", calculatorIndex: 1, fieldName: "flip_horizontal" } }, maxNumFaces: { type: 1, graphOptionXref: { calculatorType: "ConstantSidePacketCalculator", calculatorName: "ConstantSidePacketCalculatorNumFaces", fieldName: "int_value" } }, refineLandmarks: { type: 0, graphOptionXref: { calculatorType: "ConstantSidePacketCalculator", calculatorName: "ConstantSidePacketCalculatorRefineLandmarks", fieldName: "bool_value" } }, minDetectionConfidence: {
-        type: 1,
-        graphOptionXref: { calculatorType: "TensorsToDetectionsCalculator", calculatorName: "facelandmarkfrontgpu__facedetectionshortrangegpu__facedetectionshortrangecommon__TensorsToDetectionsCalculator", fieldName: "min_score_thresh" }
-      }, minTrackingConfidence: { type: 1, graphOptionXref: { calculatorType: "ThresholdingCalculator", calculatorName: "facelandmarkfrontgpu__facelandmarkgpu__ThresholdingCalculator", fieldName: "threshold" } }, cameraNear: { type: 1, graphOptionXref: {
-        calculatorType: "FaceGeometryEnvGeneratorCalculator",
-        fieldName: "near"
-      } }, cameraFar: { type: 1, graphOptionXref: { calculatorType: "FaceGeometryEnvGeneratorCalculator", fieldName: "far" } }, cameraVerticalFovDegrees: { type: 1, graphOptionXref: { calculatorType: "FaceGeometryEnvGeneratorCalculator", fieldName: "vertical_fov_degrees" } } } };
-      var hc = [[61, 146], [146, 91], [91, 181], [181, 84], [84, 17], [17, 314], [314, 405], [405, 321], [321, 375], [375, 291], [61, 185], [185, 40], [40, 39], [39, 37], [37, 0], [0, 267], [267, 269], [269, 270], [270, 409], [409, 291], [78, 95], [95, 88], [88, 178], [178, 87], [87, 14], [14, 317], [317, 402], [402, 318], [318, 324], [324, 308], [78, 191], [191, 80], [80, 81], [81, 82], [82, 13], [13, 312], [312, 311], [311, 310], [310, 415], [415, 308]], ic = [[263, 249], [249, 390], [390, 373], [373, 374], [374, 380], [380, 381], [381, 382], [382, 362], [263, 466], [466, 388], [388, 387], [387, 386], [
-        386,
-        385
-      ], [385, 384], [384, 398], [398, 362]], jc = [[276, 283], [283, 282], [282, 295], [295, 285], [300, 293], [293, 334], [334, 296], [296, 336]], kc = [[33, 7], [7, 163], [163, 144], [144, 145], [145, 153], [153, 154], [154, 155], [155, 133], [33, 246], [246, 161], [161, 160], [160, 159], [159, 158], [158, 157], [157, 173], [173, 133]], lc = [[46, 53], [53, 52], [52, 65], [65, 55], [70, 63], [63, 105], [105, 66], [66, 107]], mc = [
-        [10, 338],
-        [338, 297],
-        [297, 332],
-        [332, 284],
-        [284, 251],
-        [251, 389],
-        [389, 356],
-        [356, 454],
-        [454, 323],
-        [323, 361],
-        [361, 288],
-        [288, 397],
-        [397, 365],
-        [365, 379],
-        [379, 378],
-        [378, 400],
-        [400, 377],
-        [377, 152],
-        [152, 148],
-        [148, 176],
-        [176, 149],
-        [149, 150],
-        [150, 136],
-        [136, 172],
-        [172, 58],
-        [58, 132],
-        [132, 93],
-        [93, 234],
-        [234, 127],
-        [127, 162],
-        [162, 21],
-        [21, 54],
-        [54, 103],
-        [103, 67],
-        [67, 109],
-        [109, 10]
-      ], nc = [].concat(L3(hc), L3(ic), L3(jc), L3(kc), L3(lc), L3(mc));
-      function oc(a) {
-        a = a || {};
-        a = Object.assign(Object.assign({}, gc), a);
-        this.g = new Xb(a);
-      }
-      v = oc.prototype;
-      v.close = function() {
-        this.g.close();
-        return Promise.resolve();
-      };
-      v.onResults = function(a) {
-        this.g.onResults(a);
-      };
-      v.initialize = function() {
-        return Z3(this, function b() {
-          var c = this;
-          return O3(b, function(d) {
-            return N3(d, c.g.initialize(), 0);
-          });
-        });
-      };
-      v.reset = function() {
-        this.g.reset();
-      };
-      v.send = function(a) {
-        return Z3(this, function c() {
-          var d = this;
-          return O3(c, function(e) {
-            return N3(e, d.g.send(a), 0);
-          });
-        });
-      };
-      v.setOptions = function(a) {
-        this.g.setOptions(a);
-      };
-      P3("FACE_GEOMETRY", { Layout: { COLUMN_MAJOR: 0, ROW_MAJOR: 1, 0: "COLUMN_MAJOR", 1: "ROW_MAJOR" }, PrimitiveType: { TRIANGLE: 0, 0: "TRIANGLE" }, VertexType: { VERTEX_PT: 0, 0: "VERTEX_PT" }, DEFAULT_CAMERA_PARAMS: { verticalFovDegrees: 63, near: 1, far: 1e4 } });
-      P3("FaceMesh", oc);
-      P3("FACEMESH_LIPS", hc);
-      P3("FACEMESH_LEFT_EYE", ic);
-      P3("FACEMESH_LEFT_EYEBROW", jc);
-      P3("FACEMESH_LEFT_IRIS", [[474, 475], [475, 476], [476, 477], [477, 474]]);
-      P3("FACEMESH_RIGHT_EYE", kc);
-      P3("FACEMESH_RIGHT_EYEBROW", lc);
-      P3("FACEMESH_RIGHT_IRIS", [[469, 470], [470, 471], [471, 472], [472, 469]]);
-      P3("FACEMESH_FACE_OVAL", mc);
-      P3("FACEMESH_CONTOURS", nc);
-      P3("FACEMESH_TESSELATION", [
-        [127, 34],
-        [34, 139],
-        [139, 127],
-        [11, 0],
-        [0, 37],
-        [37, 11],
-        [232, 231],
-        [231, 120],
-        [120, 232],
-        [72, 37],
-        [37, 39],
-        [39, 72],
-        [128, 121],
-        [121, 47],
-        [47, 128],
-        [232, 121],
-        [121, 128],
-        [128, 232],
-        [104, 69],
-        [69, 67],
-        [67, 104],
-        [175, 171],
-        [171, 148],
-        [148, 175],
-        [118, 50],
-        [50, 101],
-        [101, 118],
-        [73, 39],
-        [39, 40],
-        [40, 73],
-        [9, 151],
-        [151, 108],
-        [108, 9],
-        [48, 115],
-        [115, 131],
-        [131, 48],
-        [194, 204],
-        [204, 211],
-        [211, 194],
-        [74, 40],
-        [40, 185],
-        [185, 74],
-        [80, 42],
-        [42, 183],
-        [183, 80],
-        [40, 92],
-        [92, 186],
-        [186, 40],
-        [230, 229],
-        [229, 118],
-        [118, 230],
-        [202, 212],
-        [
-          212,
-          214
-        ],
-        [214, 202],
-        [83, 18],
-        [18, 17],
-        [17, 83],
-        [76, 61],
-        [61, 146],
-        [146, 76],
-        [160, 29],
-        [29, 30],
-        [30, 160],
-        [56, 157],
-        [157, 173],
-        [173, 56],
-        [106, 204],
-        [204, 194],
-        [194, 106],
-        [135, 214],
-        [214, 192],
-        [192, 135],
-        [203, 165],
-        [165, 98],
-        [98, 203],
-        [21, 71],
-        [71, 68],
-        [68, 21],
-        [51, 45],
-        [45, 4],
-        [4, 51],
-        [144, 24],
-        [24, 23],
-        [23, 144],
-        [77, 146],
-        [146, 91],
-        [91, 77],
-        [205, 50],
-        [50, 187],
-        [187, 205],
-        [201, 200],
-        [200, 18],
-        [18, 201],
-        [91, 106],
-        [106, 182],
-        [182, 91],
-        [90, 91],
-        [91, 181],
-        [181, 90],
-        [85, 84],
-        [84, 17],
-        [17, 85],
-        [206, 203],
-        [203, 36],
-        [36, 206],
-        [148, 171],
-        [171, 140],
-        [140, 148],
-        [
-          92,
-          40
-        ],
-        [40, 39],
-        [39, 92],
-        [193, 189],
-        [189, 244],
-        [244, 193],
-        [159, 158],
-        [158, 28],
-        [28, 159],
-        [247, 246],
-        [246, 161],
-        [161, 247],
-        [236, 3],
-        [3, 196],
-        [196, 236],
-        [54, 68],
-        [68, 104],
-        [104, 54],
-        [193, 168],
-        [168, 8],
-        [8, 193],
-        [117, 228],
-        [228, 31],
-        [31, 117],
-        [189, 193],
-        [193, 55],
-        [55, 189],
-        [98, 97],
-        [97, 99],
-        [99, 98],
-        [126, 47],
-        [47, 100],
-        [100, 126],
-        [166, 79],
-        [79, 218],
-        [218, 166],
-        [155, 154],
-        [154, 26],
-        [26, 155],
-        [209, 49],
-        [49, 131],
-        [131, 209],
-        [135, 136],
-        [136, 150],
-        [150, 135],
-        [47, 126],
-        [126, 217],
-        [217, 47],
-        [223, 52],
-        [52, 53],
-        [53, 223],
-        [45, 51],
-        [51, 134],
-        [134, 45],
-        [211, 170],
-        [
-          170,
-          140
-        ],
-        [140, 211],
-        [67, 69],
-        [69, 108],
-        [108, 67],
-        [43, 106],
-        [106, 91],
-        [91, 43],
-        [230, 119],
-        [119, 120],
-        [120, 230],
-        [226, 130],
-        [130, 247],
-        [247, 226],
-        [63, 53],
-        [53, 52],
-        [52, 63],
-        [238, 20],
-        [20, 242],
-        [242, 238],
-        [46, 70],
-        [70, 156],
-        [156, 46],
-        [78, 62],
-        [62, 96],
-        [96, 78],
-        [46, 53],
-        [53, 63],
-        [63, 46],
-        [143, 34],
-        [34, 227],
-        [227, 143],
-        [123, 117],
-        [117, 111],
-        [111, 123],
-        [44, 125],
-        [125, 19],
-        [19, 44],
-        [236, 134],
-        [134, 51],
-        [51, 236],
-        [216, 206],
-        [206, 205],
-        [205, 216],
-        [154, 153],
-        [153, 22],
-        [22, 154],
-        [39, 37],
-        [37, 167],
-        [167, 39],
-        [200, 201],
-        [201, 208],
-        [208, 200],
-        [36, 142],
-        [142, 100],
-        [
-          100,
-          36
-        ],
-        [57, 212],
-        [212, 202],
-        [202, 57],
-        [20, 60],
-        [60, 99],
-        [99, 20],
-        [28, 158],
-        [158, 157],
-        [157, 28],
-        [35, 226],
-        [226, 113],
-        [113, 35],
-        [160, 159],
-        [159, 27],
-        [27, 160],
-        [204, 202],
-        [202, 210],
-        [210, 204],
-        [113, 225],
-        [225, 46],
-        [46, 113],
-        [43, 202],
-        [202, 204],
-        [204, 43],
-        [62, 76],
-        [76, 77],
-        [77, 62],
-        [137, 123],
-        [123, 116],
-        [116, 137],
-        [41, 38],
-        [38, 72],
-        [72, 41],
-        [203, 129],
-        [129, 142],
-        [142, 203],
-        [64, 98],
-        [98, 240],
-        [240, 64],
-        [49, 102],
-        [102, 64],
-        [64, 49],
-        [41, 73],
-        [73, 74],
-        [74, 41],
-        [212, 216],
-        [216, 207],
-        [207, 212],
-        [42, 74],
-        [74, 184],
-        [184, 42],
-        [169, 170],
-        [170, 211],
-        [211, 169],
-        [
-          170,
-          149
-        ],
-        [149, 176],
-        [176, 170],
-        [105, 66],
-        [66, 69],
-        [69, 105],
-        [122, 6],
-        [6, 168],
-        [168, 122],
-        [123, 147],
-        [147, 187],
-        [187, 123],
-        [96, 77],
-        [77, 90],
-        [90, 96],
-        [65, 55],
-        [55, 107],
-        [107, 65],
-        [89, 90],
-        [90, 180],
-        [180, 89],
-        [101, 100],
-        [100, 120],
-        [120, 101],
-        [63, 105],
-        [105, 104],
-        [104, 63],
-        [93, 137],
-        [137, 227],
-        [227, 93],
-        [15, 86],
-        [86, 85],
-        [85, 15],
-        [129, 102],
-        [102, 49],
-        [49, 129],
-        [14, 87],
-        [87, 86],
-        [86, 14],
-        [55, 8],
-        [8, 9],
-        [9, 55],
-        [100, 47],
-        [47, 121],
-        [121, 100],
-        [145, 23],
-        [23, 22],
-        [22, 145],
-        [88, 89],
-        [89, 179],
-        [179, 88],
-        [6, 122],
-        [122, 196],
-        [196, 6],
-        [88, 95],
-        [95, 96],
-        [96, 88],
-        [138, 172],
-        [172, 136],
-        [136, 138],
-        [215, 58],
-        [58, 172],
-        [172, 215],
-        [115, 48],
-        [48, 219],
-        [219, 115],
-        [42, 80],
-        [80, 81],
-        [81, 42],
-        [195, 3],
-        [3, 51],
-        [51, 195],
-        [43, 146],
-        [146, 61],
-        [61, 43],
-        [171, 175],
-        [175, 199],
-        [199, 171],
-        [81, 82],
-        [82, 38],
-        [38, 81],
-        [53, 46],
-        [46, 225],
-        [225, 53],
-        [144, 163],
-        [163, 110],
-        [110, 144],
-        [52, 65],
-        [65, 66],
-        [66, 52],
-        [229, 228],
-        [228, 117],
-        [117, 229],
-        [34, 127],
-        [127, 234],
-        [234, 34],
-        [107, 108],
-        [108, 69],
-        [69, 107],
-        [109, 108],
-        [108, 151],
-        [151, 109],
-        [48, 64],
-        [64, 235],
-        [235, 48],
-        [62, 78],
-        [78, 191],
-        [191, 62],
-        [129, 209],
-        [209, 126],
-        [126, 129],
-        [111, 35],
-        [35, 143],
-        [
-          143,
-          111
-        ],
-        [117, 123],
-        [123, 50],
-        [50, 117],
-        [222, 65],
-        [65, 52],
-        [52, 222],
-        [19, 125],
-        [125, 141],
-        [141, 19],
-        [221, 55],
-        [55, 65],
-        [65, 221],
-        [3, 195],
-        [195, 197],
-        [197, 3],
-        [25, 7],
-        [7, 33],
-        [33, 25],
-        [220, 237],
-        [237, 44],
-        [44, 220],
-        [70, 71],
-        [71, 139],
-        [139, 70],
-        [122, 193],
-        [193, 245],
-        [245, 122],
-        [247, 130],
-        [130, 33],
-        [33, 247],
-        [71, 21],
-        [21, 162],
-        [162, 71],
-        [170, 169],
-        [169, 150],
-        [150, 170],
-        [188, 174],
-        [174, 196],
-        [196, 188],
-        [216, 186],
-        [186, 92],
-        [92, 216],
-        [2, 97],
-        [97, 167],
-        [167, 2],
-        [141, 125],
-        [125, 241],
-        [241, 141],
-        [164, 167],
-        [167, 37],
-        [37, 164],
-        [72, 38],
-        [38, 12],
-        [12, 72],
-        [38, 82],
-        [82, 13],
-        [13, 38],
-        [63, 68],
-        [68, 71],
-        [71, 63],
-        [226, 35],
-        [35, 111],
-        [111, 226],
-        [101, 50],
-        [50, 205],
-        [205, 101],
-        [206, 92],
-        [92, 165],
-        [165, 206],
-        [209, 198],
-        [198, 217],
-        [217, 209],
-        [165, 167],
-        [167, 97],
-        [97, 165],
-        [220, 115],
-        [115, 218],
-        [218, 220],
-        [133, 112],
-        [112, 243],
-        [243, 133],
-        [239, 238],
-        [238, 241],
-        [241, 239],
-        [214, 135],
-        [135, 169],
-        [169, 214],
-        [190, 173],
-        [173, 133],
-        [133, 190],
-        [171, 208],
-        [208, 32],
-        [32, 171],
-        [125, 44],
-        [44, 237],
-        [237, 125],
-        [86, 87],
-        [87, 178],
-        [178, 86],
-        [85, 86],
-        [86, 179],
-        [179, 85],
-        [84, 85],
-        [85, 180],
-        [180, 84],
-        [83, 84],
-        [84, 181],
-        [181, 83],
-        [201, 83],
-        [83, 182],
-        [182, 201],
-        [137, 93],
-        [93, 132],
-        [132, 137],
-        [76, 62],
-        [62, 183],
-        [183, 76],
-        [61, 76],
-        [76, 184],
-        [184, 61],
-        [57, 61],
-        [61, 185],
-        [185, 57],
-        [212, 57],
-        [57, 186],
-        [186, 212],
-        [214, 207],
-        [207, 187],
-        [187, 214],
-        [34, 143],
-        [143, 156],
-        [156, 34],
-        [79, 239],
-        [239, 237],
-        [237, 79],
-        [123, 137],
-        [137, 177],
-        [177, 123],
-        [44, 1],
-        [1, 4],
-        [4, 44],
-        [201, 194],
-        [194, 32],
-        [32, 201],
-        [64, 102],
-        [102, 129],
-        [129, 64],
-        [213, 215],
-        [215, 138],
-        [138, 213],
-        [59, 166],
-        [166, 219],
-        [219, 59],
-        [242, 99],
-        [99, 97],
-        [97, 242],
-        [2, 94],
-        [94, 141],
-        [141, 2],
-        [75, 59],
-        [59, 235],
-        [235, 75],
-        [24, 110],
-        [110, 228],
-        [
-          228,
-          24
-        ],
-        [25, 130],
-        [130, 226],
-        [226, 25],
-        [23, 24],
-        [24, 229],
-        [229, 23],
-        [22, 23],
-        [23, 230],
-        [230, 22],
-        [26, 22],
-        [22, 231],
-        [231, 26],
-        [112, 26],
-        [26, 232],
-        [232, 112],
-        [189, 190],
-        [190, 243],
-        [243, 189],
-        [221, 56],
-        [56, 190],
-        [190, 221],
-        [28, 56],
-        [56, 221],
-        [221, 28],
-        [27, 28],
-        [28, 222],
-        [222, 27],
-        [29, 27],
-        [27, 223],
-        [223, 29],
-        [30, 29],
-        [29, 224],
-        [224, 30],
-        [247, 30],
-        [30, 225],
-        [225, 247],
-        [238, 79],
-        [79, 20],
-        [20, 238],
-        [166, 59],
-        [59, 75],
-        [75, 166],
-        [60, 75],
-        [75, 240],
-        [240, 60],
-        [147, 177],
-        [177, 215],
-        [215, 147],
-        [20, 79],
-        [79, 166],
-        [166, 20],
-        [187, 147],
-        [147, 213],
-        [213, 187],
-        [112, 233],
-        [233, 244],
-        [244, 112],
-        [233, 128],
-        [128, 245],
-        [245, 233],
-        [128, 114],
-        [114, 188],
-        [188, 128],
-        [114, 217],
-        [217, 174],
-        [174, 114],
-        [131, 115],
-        [115, 220],
-        [220, 131],
-        [217, 198],
-        [198, 236],
-        [236, 217],
-        [198, 131],
-        [131, 134],
-        [134, 198],
-        [177, 132],
-        [132, 58],
-        [58, 177],
-        [143, 35],
-        [35, 124],
-        [124, 143],
-        [110, 163],
-        [163, 7],
-        [7, 110],
-        [228, 110],
-        [110, 25],
-        [25, 228],
-        [356, 389],
-        [389, 368],
-        [368, 356],
-        [11, 302],
-        [302, 267],
-        [267, 11],
-        [452, 350],
-        [350, 349],
-        [349, 452],
-        [302, 303],
-        [303, 269],
-        [269, 302],
-        [357, 343],
-        [343, 277],
-        [277, 357],
-        [452, 453],
-        [453, 357],
-        [357, 452],
-        [333, 332],
-        [
-          332,
-          297
-        ],
-        [297, 333],
-        [175, 152],
-        [152, 377],
-        [377, 175],
-        [347, 348],
-        [348, 330],
-        [330, 347],
-        [303, 304],
-        [304, 270],
-        [270, 303],
-        [9, 336],
-        [336, 337],
-        [337, 9],
-        [278, 279],
-        [279, 360],
-        [360, 278],
-        [418, 262],
-        [262, 431],
-        [431, 418],
-        [304, 408],
-        [408, 409],
-        [409, 304],
-        [310, 415],
-        [415, 407],
-        [407, 310],
-        [270, 409],
-        [409, 410],
-        [410, 270],
-        [450, 348],
-        [348, 347],
-        [347, 450],
-        [422, 430],
-        [430, 434],
-        [434, 422],
-        [313, 314],
-        [314, 17],
-        [17, 313],
-        [306, 307],
-        [307, 375],
-        [375, 306],
-        [387, 388],
-        [388, 260],
-        [260, 387],
-        [286, 414],
-        [414, 398],
-        [398, 286],
-        [335, 406],
-        [406, 418],
-        [418, 335],
-        [364, 367],
-        [
-          367,
-          416
-        ],
-        [416, 364],
-        [423, 358],
-        [358, 327],
-        [327, 423],
-        [251, 284],
-        [284, 298],
-        [298, 251],
-        [281, 5],
-        [5, 4],
-        [4, 281],
-        [373, 374],
-        [374, 253],
-        [253, 373],
-        [307, 320],
-        [320, 321],
-        [321, 307],
-        [425, 427],
-        [427, 411],
-        [411, 425],
-        [421, 313],
-        [313, 18],
-        [18, 421],
-        [321, 405],
-        [405, 406],
-        [406, 321],
-        [320, 404],
-        [404, 405],
-        [405, 320],
-        [315, 16],
-        [16, 17],
-        [17, 315],
-        [426, 425],
-        [425, 266],
-        [266, 426],
-        [377, 400],
-        [400, 369],
-        [369, 377],
-        [322, 391],
-        [391, 269],
-        [269, 322],
-        [417, 465],
-        [465, 464],
-        [464, 417],
-        [386, 257],
-        [257, 258],
-        [258, 386],
-        [466, 260],
-        [260, 388],
-        [388, 466],
-        [456, 399],
-        [399, 419],
-        [419, 456],
-        [284, 332],
-        [332, 333],
-        [333, 284],
-        [417, 285],
-        [285, 8],
-        [8, 417],
-        [346, 340],
-        [340, 261],
-        [261, 346],
-        [413, 441],
-        [441, 285],
-        [285, 413],
-        [327, 460],
-        [460, 328],
-        [328, 327],
-        [355, 371],
-        [371, 329],
-        [329, 355],
-        [392, 439],
-        [439, 438],
-        [438, 392],
-        [382, 341],
-        [341, 256],
-        [256, 382],
-        [429, 420],
-        [420, 360],
-        [360, 429],
-        [364, 394],
-        [394, 379],
-        [379, 364],
-        [277, 343],
-        [343, 437],
-        [437, 277],
-        [443, 444],
-        [444, 283],
-        [283, 443],
-        [275, 440],
-        [440, 363],
-        [363, 275],
-        [431, 262],
-        [262, 369],
-        [369, 431],
-        [297, 338],
-        [338, 337],
-        [337, 297],
-        [273, 375],
-        [375, 321],
-        [321, 273],
-        [450, 451],
-        [
-          451,
-          349
-        ],
-        [349, 450],
-        [446, 342],
-        [342, 467],
-        [467, 446],
-        [293, 334],
-        [334, 282],
-        [282, 293],
-        [458, 461],
-        [461, 462],
-        [462, 458],
-        [276, 353],
-        [353, 383],
-        [383, 276],
-        [308, 324],
-        [324, 325],
-        [325, 308],
-        [276, 300],
-        [300, 293],
-        [293, 276],
-        [372, 345],
-        [345, 447],
-        [447, 372],
-        [352, 345],
-        [345, 340],
-        [340, 352],
-        [274, 1],
-        [1, 19],
-        [19, 274],
-        [456, 248],
-        [248, 281],
-        [281, 456],
-        [436, 427],
-        [427, 425],
-        [425, 436],
-        [381, 256],
-        [256, 252],
-        [252, 381],
-        [269, 391],
-        [391, 393],
-        [393, 269],
-        [200, 199],
-        [199, 428],
-        [428, 200],
-        [266, 330],
-        [330, 329],
-        [329, 266],
-        [287, 273],
-        [273, 422],
-        [422, 287],
-        [250, 462],
-        [
-          462,
-          328
-        ],
-        [328, 250],
-        [258, 286],
-        [286, 384],
-        [384, 258],
-        [265, 353],
-        [353, 342],
-        [342, 265],
-        [387, 259],
-        [259, 257],
-        [257, 387],
-        [424, 431],
-        [431, 430],
-        [430, 424],
-        [342, 353],
-        [353, 276],
-        [276, 342],
-        [273, 335],
-        [335, 424],
-        [424, 273],
-        [292, 325],
-        [325, 307],
-        [307, 292],
-        [366, 447],
-        [447, 345],
-        [345, 366],
-        [271, 303],
-        [303, 302],
-        [302, 271],
-        [423, 266],
-        [266, 371],
-        [371, 423],
-        [294, 455],
-        [455, 460],
-        [460, 294],
-        [279, 278],
-        [278, 294],
-        [294, 279],
-        [271, 272],
-        [272, 304],
-        [304, 271],
-        [432, 434],
-        [434, 427],
-        [427, 432],
-        [272, 407],
-        [407, 408],
-        [408, 272],
-        [394, 430],
-        [430, 431],
-        [431, 394],
-        [395, 369],
-        [369, 400],
-        [400, 395],
-        [334, 333],
-        [333, 299],
-        [299, 334],
-        [351, 417],
-        [417, 168],
-        [168, 351],
-        [352, 280],
-        [280, 411],
-        [411, 352],
-        [325, 319],
-        [319, 320],
-        [320, 325],
-        [295, 296],
-        [296, 336],
-        [336, 295],
-        [319, 403],
-        [403, 404],
-        [404, 319],
-        [330, 348],
-        [348, 349],
-        [349, 330],
-        [293, 298],
-        [298, 333],
-        [333, 293],
-        [323, 454],
-        [454, 447],
-        [447, 323],
-        [15, 16],
-        [16, 315],
-        [315, 15],
-        [358, 429],
-        [429, 279],
-        [279, 358],
-        [14, 15],
-        [15, 316],
-        [316, 14],
-        [285, 336],
-        [336, 9],
-        [9, 285],
-        [329, 349],
-        [349, 350],
-        [350, 329],
-        [374, 380],
-        [380, 252],
-        [252, 374],
-        [318, 402],
-        [402, 403],
-        [403, 318],
-        [6, 197],
-        [
-          197,
-          419
-        ],
-        [419, 6],
-        [318, 319],
-        [319, 325],
-        [325, 318],
-        [367, 364],
-        [364, 365],
-        [365, 367],
-        [435, 367],
-        [367, 397],
-        [397, 435],
-        [344, 438],
-        [438, 439],
-        [439, 344],
-        [272, 271],
-        [271, 311],
-        [311, 272],
-        [195, 5],
-        [5, 281],
-        [281, 195],
-        [273, 287],
-        [287, 291],
-        [291, 273],
-        [396, 428],
-        [428, 199],
-        [199, 396],
-        [311, 271],
-        [271, 268],
-        [268, 311],
-        [283, 444],
-        [444, 445],
-        [445, 283],
-        [373, 254],
-        [254, 339],
-        [339, 373],
-        [282, 334],
-        [334, 296],
-        [296, 282],
-        [449, 347],
-        [347, 346],
-        [346, 449],
-        [264, 447],
-        [447, 454],
-        [454, 264],
-        [336, 296],
-        [296, 299],
-        [299, 336],
-        [338, 10],
-        [10, 151],
-        [151, 338],
-        [278, 439],
-        [
-          439,
-          455
-        ],
-        [455, 278],
-        [292, 407],
-        [407, 415],
-        [415, 292],
-        [358, 371],
-        [371, 355],
-        [355, 358],
-        [340, 345],
-        [345, 372],
-        [372, 340],
-        [346, 347],
-        [347, 280],
-        [280, 346],
-        [442, 443],
-        [443, 282],
-        [282, 442],
-        [19, 94],
-        [94, 370],
-        [370, 19],
-        [441, 442],
-        [442, 295],
-        [295, 441],
-        [248, 419],
-        [419, 197],
-        [197, 248],
-        [263, 255],
-        [255, 359],
-        [359, 263],
-        [440, 275],
-        [275, 274],
-        [274, 440],
-        [300, 383],
-        [383, 368],
-        [368, 300],
-        [351, 412],
-        [412, 465],
-        [465, 351],
-        [263, 467],
-        [467, 466],
-        [466, 263],
-        [301, 368],
-        [368, 389],
-        [389, 301],
-        [395, 378],
-        [378, 379],
-        [379, 395],
-        [412, 351],
-        [351, 419],
-        [419, 412],
-        [436, 426],
-        [426, 322],
-        [322, 436],
-        [2, 164],
-        [164, 393],
-        [393, 2],
-        [370, 462],
-        [462, 461],
-        [461, 370],
-        [164, 0],
-        [0, 267],
-        [267, 164],
-        [302, 11],
-        [11, 12],
-        [12, 302],
-        [268, 12],
-        [12, 13],
-        [13, 268],
-        [293, 300],
-        [300, 301],
-        [301, 293],
-        [446, 261],
-        [261, 340],
-        [340, 446],
-        [330, 266],
-        [266, 425],
-        [425, 330],
-        [426, 423],
-        [423, 391],
-        [391, 426],
-        [429, 355],
-        [355, 437],
-        [437, 429],
-        [391, 327],
-        [327, 326],
-        [326, 391],
-        [440, 457],
-        [457, 438],
-        [438, 440],
-        [341, 382],
-        [382, 362],
-        [362, 341],
-        [459, 457],
-        [457, 461],
-        [461, 459],
-        [434, 430],
-        [430, 394],
-        [394, 434],
-        [414, 463],
-        [463, 362],
-        [362, 414],
-        [396, 369],
-        [369, 262],
-        [262, 396],
-        [354, 461],
-        [461, 457],
-        [457, 354],
-        [316, 403],
-        [403, 402],
-        [402, 316],
-        [315, 404],
-        [404, 403],
-        [403, 315],
-        [314, 405],
-        [405, 404],
-        [404, 314],
-        [313, 406],
-        [406, 405],
-        [405, 313],
-        [421, 418],
-        [418, 406],
-        [406, 421],
-        [366, 401],
-        [401, 361],
-        [361, 366],
-        [306, 408],
-        [408, 407],
-        [407, 306],
-        [291, 409],
-        [409, 408],
-        [408, 291],
-        [287, 410],
-        [410, 409],
-        [409, 287],
-        [432, 436],
-        [436, 410],
-        [410, 432],
-        [434, 416],
-        [416, 411],
-        [411, 434],
-        [264, 368],
-        [368, 383],
-        [383, 264],
-        [309, 438],
-        [438, 457],
-        [457, 309],
-        [352, 376],
-        [376, 401],
-        [401, 352],
-        [274, 275],
-        [275, 4],
-        [4, 274],
-        [421, 428],
-        [
-          428,
-          262
-        ],
-        [262, 421],
-        [294, 327],
-        [327, 358],
-        [358, 294],
-        [433, 416],
-        [416, 367],
-        [367, 433],
-        [289, 455],
-        [455, 439],
-        [439, 289],
-        [462, 370],
-        [370, 326],
-        [326, 462],
-        [2, 326],
-        [326, 370],
-        [370, 2],
-        [305, 460],
-        [460, 455],
-        [455, 305],
-        [254, 449],
-        [449, 448],
-        [448, 254],
-        [255, 261],
-        [261, 446],
-        [446, 255],
-        [253, 450],
-        [450, 449],
-        [449, 253],
-        [252, 451],
-        [451, 450],
-        [450, 252],
-        [256, 452],
-        [452, 451],
-        [451, 256],
-        [341, 453],
-        [453, 452],
-        [452, 341],
-        [413, 464],
-        [464, 463],
-        [463, 413],
-        [441, 413],
-        [413, 414],
-        [414, 441],
-        [258, 442],
-        [442, 441],
-        [441, 258],
-        [257, 443],
-        [443, 442],
-        [442, 257],
-        [259, 444],
-        [444, 443],
-        [443, 259],
-        [260, 445],
-        [445, 444],
-        [444, 260],
-        [467, 342],
-        [342, 445],
-        [445, 467],
-        [459, 458],
-        [458, 250],
-        [250, 459],
-        [289, 392],
-        [392, 290],
-        [290, 289],
-        [290, 328],
-        [328, 460],
-        [460, 290],
-        [376, 433],
-        [433, 435],
-        [435, 376],
-        [250, 290],
-        [290, 392],
-        [392, 250],
-        [411, 416],
-        [416, 433],
-        [433, 411],
-        [341, 463],
-        [463, 464],
-        [464, 341],
-        [453, 464],
-        [464, 465],
-        [465, 453],
-        [357, 465],
-        [465, 412],
-        [412, 357],
-        [343, 412],
-        [412, 399],
-        [399, 343],
-        [360, 363],
-        [363, 440],
-        [440, 360],
-        [437, 399],
-        [399, 456],
-        [456, 437],
-        [420, 456],
-        [456, 363],
-        [363, 420],
-        [401, 435],
-        [435, 288],
-        [288, 401],
-        [
-          372,
-          383
-        ],
-        [383, 353],
-        [353, 372],
-        [339, 255],
-        [255, 249],
-        [249, 339],
-        [448, 261],
-        [261, 255],
-        [255, 448],
-        [133, 243],
-        [243, 190],
-        [190, 133],
-        [133, 155],
-        [155, 112],
-        [112, 133],
-        [33, 246],
-        [246, 247],
-        [247, 33],
-        [33, 130],
-        [130, 25],
-        [25, 33],
-        [398, 384],
-        [384, 286],
-        [286, 398],
-        [362, 398],
-        [398, 414],
-        [414, 362],
-        [362, 463],
-        [463, 341],
-        [341, 362],
-        [263, 359],
-        [359, 467],
-        [467, 263],
-        [263, 249],
-        [249, 255],
-        [255, 263],
-        [466, 467],
-        [467, 260],
-        [260, 466],
-        [75, 60],
-        [60, 166],
-        [166, 75],
-        [238, 239],
-        [239, 79],
-        [79, 238],
-        [162, 127],
-        [127, 139],
-        [139, 162],
-        [72, 11],
-        [11, 37],
-        [37, 72],
-        [121, 232],
-        [
-          232,
-          120
-        ],
-        [120, 121],
-        [73, 72],
-        [72, 39],
-        [39, 73],
-        [114, 128],
-        [128, 47],
-        [47, 114],
-        [233, 232],
-        [232, 128],
-        [128, 233],
-        [103, 104],
-        [104, 67],
-        [67, 103],
-        [152, 175],
-        [175, 148],
-        [148, 152],
-        [119, 118],
-        [118, 101],
-        [101, 119],
-        [74, 73],
-        [73, 40],
-        [40, 74],
-        [107, 9],
-        [9, 108],
-        [108, 107],
-        [49, 48],
-        [48, 131],
-        [131, 49],
-        [32, 194],
-        [194, 211],
-        [211, 32],
-        [184, 74],
-        [74, 185],
-        [185, 184],
-        [191, 80],
-        [80, 183],
-        [183, 191],
-        [185, 40],
-        [40, 186],
-        [186, 185],
-        [119, 230],
-        [230, 118],
-        [118, 119],
-        [210, 202],
-        [202, 214],
-        [214, 210],
-        [84, 83],
-        [83, 17],
-        [17, 84],
-        [77, 76],
-        [76, 146],
-        [146, 77],
-        [161, 160],
-        [160, 30],
-        [30, 161],
-        [190, 56],
-        [56, 173],
-        [173, 190],
-        [182, 106],
-        [106, 194],
-        [194, 182],
-        [138, 135],
-        [135, 192],
-        [192, 138],
-        [129, 203],
-        [203, 98],
-        [98, 129],
-        [54, 21],
-        [21, 68],
-        [68, 54],
-        [5, 51],
-        [51, 4],
-        [4, 5],
-        [145, 144],
-        [144, 23],
-        [23, 145],
-        [90, 77],
-        [77, 91],
-        [91, 90],
-        [207, 205],
-        [205, 187],
-        [187, 207],
-        [83, 201],
-        [201, 18],
-        [18, 83],
-        [181, 91],
-        [91, 182],
-        [182, 181],
-        [180, 90],
-        [90, 181],
-        [181, 180],
-        [16, 85],
-        [85, 17],
-        [17, 16],
-        [205, 206],
-        [206, 36],
-        [36, 205],
-        [176, 148],
-        [148, 140],
-        [140, 176],
-        [165, 92],
-        [92, 39],
-        [39, 165],
-        [245, 193],
-        [193, 244],
-        [244, 245],
-        [27, 159],
-        [159, 28],
-        [28, 27],
-        [
-          30,
-          247
-        ],
-        [247, 161],
-        [161, 30],
-        [174, 236],
-        [236, 196],
-        [196, 174],
-        [103, 54],
-        [54, 104],
-        [104, 103],
-        [55, 193],
-        [193, 8],
-        [8, 55],
-        [111, 117],
-        [117, 31],
-        [31, 111],
-        [221, 189],
-        [189, 55],
-        [55, 221],
-        [240, 98],
-        [98, 99],
-        [99, 240],
-        [142, 126],
-        [126, 100],
-        [100, 142],
-        [219, 166],
-        [166, 218],
-        [218, 219],
-        [112, 155],
-        [155, 26],
-        [26, 112],
-        [198, 209],
-        [209, 131],
-        [131, 198],
-        [169, 135],
-        [135, 150],
-        [150, 169],
-        [114, 47],
-        [47, 217],
-        [217, 114],
-        [224, 223],
-        [223, 53],
-        [53, 224],
-        [220, 45],
-        [45, 134],
-        [134, 220],
-        [32, 211],
-        [211, 140],
-        [140, 32],
-        [109, 67],
-        [67, 108],
-        [108, 109],
-        [146, 43],
-        [43, 91],
-        [91, 146],
-        [231, 230],
-        [230, 120],
-        [120, 231],
-        [113, 226],
-        [226, 247],
-        [247, 113],
-        [105, 63],
-        [63, 52],
-        [52, 105],
-        [241, 238],
-        [238, 242],
-        [242, 241],
-        [124, 46],
-        [46, 156],
-        [156, 124],
-        [95, 78],
-        [78, 96],
-        [96, 95],
-        [70, 46],
-        [46, 63],
-        [63, 70],
-        [116, 143],
-        [143, 227],
-        [227, 116],
-        [116, 123],
-        [123, 111],
-        [111, 116],
-        [1, 44],
-        [44, 19],
-        [19, 1],
-        [3, 236],
-        [236, 51],
-        [51, 3],
-        [207, 216],
-        [216, 205],
-        [205, 207],
-        [26, 154],
-        [154, 22],
-        [22, 26],
-        [165, 39],
-        [39, 167],
-        [167, 165],
-        [199, 200],
-        [200, 208],
-        [208, 199],
-        [101, 36],
-        [36, 100],
-        [100, 101],
-        [43, 57],
-        [57, 202],
-        [202, 43],
-        [242, 20],
-        [20, 99],
-        [99, 242],
-        [56, 28],
-        [
-          28,
-          157
-        ],
-        [157, 56],
-        [124, 35],
-        [35, 113],
-        [113, 124],
-        [29, 160],
-        [160, 27],
-        [27, 29],
-        [211, 204],
-        [204, 210],
-        [210, 211],
-        [124, 113],
-        [113, 46],
-        [46, 124],
-        [106, 43],
-        [43, 204],
-        [204, 106],
-        [96, 62],
-        [62, 77],
-        [77, 96],
-        [227, 137],
-        [137, 116],
-        [116, 227],
-        [73, 41],
-        [41, 72],
-        [72, 73],
-        [36, 203],
-        [203, 142],
-        [142, 36],
-        [235, 64],
-        [64, 240],
-        [240, 235],
-        [48, 49],
-        [49, 64],
-        [64, 48],
-        [42, 41],
-        [41, 74],
-        [74, 42],
-        [214, 212],
-        [212, 207],
-        [207, 214],
-        [183, 42],
-        [42, 184],
-        [184, 183],
-        [210, 169],
-        [169, 211],
-        [211, 210],
-        [140, 170],
-        [170, 176],
-        [176, 140],
-        [104, 105],
-        [105, 69],
-        [69, 104],
-        [193, 122],
-        [122, 168],
-        [168, 193],
-        [50, 123],
-        [123, 187],
-        [187, 50],
-        [89, 96],
-        [96, 90],
-        [90, 89],
-        [66, 65],
-        [65, 107],
-        [107, 66],
-        [179, 89],
-        [89, 180],
-        [180, 179],
-        [119, 101],
-        [101, 120],
-        [120, 119],
-        [68, 63],
-        [63, 104],
-        [104, 68],
-        [234, 93],
-        [93, 227],
-        [227, 234],
-        [16, 15],
-        [15, 85],
-        [85, 16],
-        [209, 129],
-        [129, 49],
-        [49, 209],
-        [15, 14],
-        [14, 86],
-        [86, 15],
-        [107, 55],
-        [55, 9],
-        [9, 107],
-        [120, 100],
-        [100, 121],
-        [121, 120],
-        [153, 145],
-        [145, 22],
-        [22, 153],
-        [178, 88],
-        [88, 179],
-        [179, 178],
-        [197, 6],
-        [6, 196],
-        [196, 197],
-        [89, 88],
-        [88, 96],
-        [96, 89],
-        [135, 138],
-        [138, 136],
-        [136, 135],
-        [138, 215],
-        [215, 172],
-        [172, 138],
-        [
-          218,
-          115
-        ],
-        [115, 219],
-        [219, 218],
-        [41, 42],
-        [42, 81],
-        [81, 41],
-        [5, 195],
-        [195, 51],
-        [51, 5],
-        [57, 43],
-        [43, 61],
-        [61, 57],
-        [208, 171],
-        [171, 199],
-        [199, 208],
-        [41, 81],
-        [81, 38],
-        [38, 41],
-        [224, 53],
-        [53, 225],
-        [225, 224],
-        [24, 144],
-        [144, 110],
-        [110, 24],
-        [105, 52],
-        [52, 66],
-        [66, 105],
-        [118, 229],
-        [229, 117],
-        [117, 118],
-        [227, 34],
-        [34, 234],
-        [234, 227],
-        [66, 107],
-        [107, 69],
-        [69, 66],
-        [10, 109],
-        [109, 151],
-        [151, 10],
-        [219, 48],
-        [48, 235],
-        [235, 219],
-        [183, 62],
-        [62, 191],
-        [191, 183],
-        [142, 129],
-        [129, 126],
-        [126, 142],
-        [116, 111],
-        [111, 143],
-        [143, 116],
-        [118, 117],
-        [117, 50],
-        [50, 118],
-        [223, 222],
-        [
-          222,
-          52
-        ],
-        [52, 223],
-        [94, 19],
-        [19, 141],
-        [141, 94],
-        [222, 221],
-        [221, 65],
-        [65, 222],
-        [196, 3],
-        [3, 197],
-        [197, 196],
-        [45, 220],
-        [220, 44],
-        [44, 45],
-        [156, 70],
-        [70, 139],
-        [139, 156],
-        [188, 122],
-        [122, 245],
-        [245, 188],
-        [139, 71],
-        [71, 162],
-        [162, 139],
-        [149, 170],
-        [170, 150],
-        [150, 149],
-        [122, 188],
-        [188, 196],
-        [196, 122],
-        [206, 216],
-        [216, 92],
-        [92, 206],
-        [164, 2],
-        [2, 167],
-        [167, 164],
-        [242, 141],
-        [141, 241],
-        [241, 242],
-        [0, 164],
-        [164, 37],
-        [37, 0],
-        [11, 72],
-        [72, 12],
-        [12, 11],
-        [12, 38],
-        [38, 13],
-        [13, 12],
-        [70, 63],
-        [63, 71],
-        [71, 70],
-        [31, 226],
-        [226, 111],
-        [111, 31],
-        [36, 101],
-        [101, 205],
-        [205, 36],
-        [203, 206],
-        [206, 165],
-        [165, 203],
-        [126, 209],
-        [209, 217],
-        [217, 126],
-        [98, 165],
-        [165, 97],
-        [97, 98],
-        [237, 220],
-        [220, 218],
-        [218, 237],
-        [237, 239],
-        [239, 241],
-        [241, 237],
-        [210, 214],
-        [214, 169],
-        [169, 210],
-        [140, 171],
-        [171, 32],
-        [32, 140],
-        [241, 125],
-        [125, 237],
-        [237, 241],
-        [179, 86],
-        [86, 178],
-        [178, 179],
-        [180, 85],
-        [85, 179],
-        [179, 180],
-        [181, 84],
-        [84, 180],
-        [180, 181],
-        [182, 83],
-        [83, 181],
-        [181, 182],
-        [194, 201],
-        [201, 182],
-        [182, 194],
-        [177, 137],
-        [137, 132],
-        [132, 177],
-        [184, 76],
-        [76, 183],
-        [183, 184],
-        [185, 61],
-        [61, 184],
-        [184, 185],
-        [186, 57],
-        [57, 185],
-        [185, 186],
-        [216, 212],
-        [
-          212,
-          186
-        ],
-        [186, 216],
-        [192, 214],
-        [214, 187],
-        [187, 192],
-        [139, 34],
-        [34, 156],
-        [156, 139],
-        [218, 79],
-        [79, 237],
-        [237, 218],
-        [147, 123],
-        [123, 177],
-        [177, 147],
-        [45, 44],
-        [44, 4],
-        [4, 45],
-        [208, 201],
-        [201, 32],
-        [32, 208],
-        [98, 64],
-        [64, 129],
-        [129, 98],
-        [192, 213],
-        [213, 138],
-        [138, 192],
-        [235, 59],
-        [59, 219],
-        [219, 235],
-        [141, 242],
-        [242, 97],
-        [97, 141],
-        [97, 2],
-        [2, 141],
-        [141, 97],
-        [240, 75],
-        [75, 235],
-        [235, 240],
-        [229, 24],
-        [24, 228],
-        [228, 229],
-        [31, 25],
-        [25, 226],
-        [226, 31],
-        [230, 23],
-        [23, 229],
-        [229, 230],
-        [231, 22],
-        [22, 230],
-        [230, 231],
-        [232, 26],
-        [26, 231],
-        [231, 232],
-        [233, 112],
-        [112, 232],
-        [232, 233],
-        [244, 189],
-        [189, 243],
-        [243, 244],
-        [189, 221],
-        [221, 190],
-        [190, 189],
-        [222, 28],
-        [28, 221],
-        [221, 222],
-        [223, 27],
-        [27, 222],
-        [222, 223],
-        [224, 29],
-        [29, 223],
-        [223, 224],
-        [225, 30],
-        [30, 224],
-        [224, 225],
-        [113, 247],
-        [247, 225],
-        [225, 113],
-        [99, 60],
-        [60, 240],
-        [240, 99],
-        [213, 147],
-        [147, 215],
-        [215, 213],
-        [60, 20],
-        [20, 166],
-        [166, 60],
-        [192, 187],
-        [187, 213],
-        [213, 192],
-        [243, 112],
-        [112, 244],
-        [244, 243],
-        [244, 233],
-        [233, 245],
-        [245, 244],
-        [245, 128],
-        [128, 188],
-        [188, 245],
-        [188, 114],
-        [114, 174],
-        [174, 188],
-        [134, 131],
-        [131, 220],
-        [220, 134],
-        [174, 217],
-        [217, 236],
-        [236, 174],
-        [236, 198],
-        [198, 134],
-        [134, 236],
-        [215, 177],
-        [177, 58],
-        [58, 215],
-        [156, 143],
-        [143, 124],
-        [124, 156],
-        [25, 110],
-        [110, 7],
-        [7, 25],
-        [31, 228],
-        [228, 25],
-        [25, 31],
-        [264, 356],
-        [356, 368],
-        [368, 264],
-        [0, 11],
-        [11, 267],
-        [267, 0],
-        [451, 452],
-        [452, 349],
-        [349, 451],
-        [267, 302],
-        [302, 269],
-        [269, 267],
-        [350, 357],
-        [357, 277],
-        [277, 350],
-        [350, 452],
-        [452, 357],
-        [357, 350],
-        [299, 333],
-        [333, 297],
-        [297, 299],
-        [396, 175],
-        [175, 377],
-        [377, 396],
-        [280, 347],
-        [347, 330],
-        [330, 280],
-        [269, 303],
-        [303, 270],
-        [270, 269],
-        [151, 9],
-        [9, 337],
-        [337, 151],
-        [344, 278],
-        [278, 360],
-        [360, 344],
-        [424, 418],
-        [
-          418,
-          431
-        ],
-        [431, 424],
-        [270, 304],
-        [304, 409],
-        [409, 270],
-        [272, 310],
-        [310, 407],
-        [407, 272],
-        [322, 270],
-        [270, 410],
-        [410, 322],
-        [449, 450],
-        [450, 347],
-        [347, 449],
-        [432, 422],
-        [422, 434],
-        [434, 432],
-        [18, 313],
-        [313, 17],
-        [17, 18],
-        [291, 306],
-        [306, 375],
-        [375, 291],
-        [259, 387],
-        [387, 260],
-        [260, 259],
-        [424, 335],
-        [335, 418],
-        [418, 424],
-        [434, 364],
-        [364, 416],
-        [416, 434],
-        [391, 423],
-        [423, 327],
-        [327, 391],
-        [301, 251],
-        [251, 298],
-        [298, 301],
-        [275, 281],
-        [281, 4],
-        [4, 275],
-        [254, 373],
-        [373, 253],
-        [253, 254],
-        [375, 307],
-        [307, 321],
-        [321, 375],
-        [280, 425],
-        [425, 411],
-        [411, 280],
-        [200, 421],
-        [
-          421,
-          18
-        ],
-        [18, 200],
-        [335, 321],
-        [321, 406],
-        [406, 335],
-        [321, 320],
-        [320, 405],
-        [405, 321],
-        [314, 315],
-        [315, 17],
-        [17, 314],
-        [423, 426],
-        [426, 266],
-        [266, 423],
-        [396, 377],
-        [377, 369],
-        [369, 396],
-        [270, 322],
-        [322, 269],
-        [269, 270],
-        [413, 417],
-        [417, 464],
-        [464, 413],
-        [385, 386],
-        [386, 258],
-        [258, 385],
-        [248, 456],
-        [456, 419],
-        [419, 248],
-        [298, 284],
-        [284, 333],
-        [333, 298],
-        [168, 417],
-        [417, 8],
-        [8, 168],
-        [448, 346],
-        [346, 261],
-        [261, 448],
-        [417, 413],
-        [413, 285],
-        [285, 417],
-        [326, 327],
-        [327, 328],
-        [328, 326],
-        [277, 355],
-        [355, 329],
-        [329, 277],
-        [309, 392],
-        [392, 438],
-        [438, 309],
-        [381, 382],
-        [
-          382,
-          256
-        ],
-        [256, 381],
-        [279, 429],
-        [429, 360],
-        [360, 279],
-        [365, 364],
-        [364, 379],
-        [379, 365],
-        [355, 277],
-        [277, 437],
-        [437, 355],
-        [282, 443],
-        [443, 283],
-        [283, 282],
-        [281, 275],
-        [275, 363],
-        [363, 281],
-        [395, 431],
-        [431, 369],
-        [369, 395],
-        [299, 297],
-        [297, 337],
-        [337, 299],
-        [335, 273],
-        [273, 321],
-        [321, 335],
-        [348, 450],
-        [450, 349],
-        [349, 348],
-        [359, 446],
-        [446, 467],
-        [467, 359],
-        [283, 293],
-        [293, 282],
-        [282, 283],
-        [250, 458],
-        [458, 462],
-        [462, 250],
-        [300, 276],
-        [276, 383],
-        [383, 300],
-        [292, 308],
-        [308, 325],
-        [325, 292],
-        [283, 276],
-        [276, 293],
-        [293, 283],
-        [264, 372],
-        [372, 447],
-        [447, 264],
-        [346, 352],
-        [352, 340],
-        [340, 346],
-        [354, 274],
-        [274, 19],
-        [19, 354],
-        [363, 456],
-        [456, 281],
-        [281, 363],
-        [426, 436],
-        [436, 425],
-        [425, 426],
-        [380, 381],
-        [381, 252],
-        [252, 380],
-        [267, 269],
-        [269, 393],
-        [393, 267],
-        [421, 200],
-        [200, 428],
-        [428, 421],
-        [371, 266],
-        [266, 329],
-        [329, 371],
-        [432, 287],
-        [287, 422],
-        [422, 432],
-        [290, 250],
-        [250, 328],
-        [328, 290],
-        [385, 258],
-        [258, 384],
-        [384, 385],
-        [446, 265],
-        [265, 342],
-        [342, 446],
-        [386, 387],
-        [387, 257],
-        [257, 386],
-        [422, 424],
-        [424, 430],
-        [430, 422],
-        [445, 342],
-        [342, 276],
-        [276, 445],
-        [422, 273],
-        [273, 424],
-        [424, 422],
-        [306, 292],
-        [292, 307],
-        [307, 306],
-        [
-          352,
-          366
-        ],
-        [366, 345],
-        [345, 352],
-        [268, 271],
-        [271, 302],
-        [302, 268],
-        [358, 423],
-        [423, 371],
-        [371, 358],
-        [327, 294],
-        [294, 460],
-        [460, 327],
-        [331, 279],
-        [279, 294],
-        [294, 331],
-        [303, 271],
-        [271, 304],
-        [304, 303],
-        [436, 432],
-        [432, 427],
-        [427, 436],
-        [304, 272],
-        [272, 408],
-        [408, 304],
-        [395, 394],
-        [394, 431],
-        [431, 395],
-        [378, 395],
-        [395, 400],
-        [400, 378],
-        [296, 334],
-        [334, 299],
-        [299, 296],
-        [6, 351],
-        [351, 168],
-        [168, 6],
-        [376, 352],
-        [352, 411],
-        [411, 376],
-        [307, 325],
-        [325, 320],
-        [320, 307],
-        [285, 295],
-        [295, 336],
-        [336, 285],
-        [320, 319],
-        [319, 404],
-        [404, 320],
-        [329, 330],
-        [330, 349],
-        [349, 329],
-        [334, 293],
-        [293, 333],
-        [333, 334],
-        [366, 323],
-        [323, 447],
-        [447, 366],
-        [316, 15],
-        [15, 315],
-        [315, 316],
-        [331, 358],
-        [358, 279],
-        [279, 331],
-        [317, 14],
-        [14, 316],
-        [316, 317],
-        [8, 285],
-        [285, 9],
-        [9, 8],
-        [277, 329],
-        [329, 350],
-        [350, 277],
-        [253, 374],
-        [374, 252],
-        [252, 253],
-        [319, 318],
-        [318, 403],
-        [403, 319],
-        [351, 6],
-        [6, 419],
-        [419, 351],
-        [324, 318],
-        [318, 325],
-        [325, 324],
-        [397, 367],
-        [367, 365],
-        [365, 397],
-        [288, 435],
-        [435, 397],
-        [397, 288],
-        [278, 344],
-        [344, 439],
-        [439, 278],
-        [310, 272],
-        [272, 311],
-        [311, 310],
-        [248, 195],
-        [195, 281],
-        [281, 248],
-        [375, 273],
-        [273, 291],
-        [291, 375],
-        [175, 396],
-        [396, 199],
-        [199, 175],
-        [312, 311],
-        [311, 268],
-        [268, 312],
-        [276, 283],
-        [283, 445],
-        [445, 276],
-        [390, 373],
-        [373, 339],
-        [339, 390],
-        [295, 282],
-        [282, 296],
-        [296, 295],
-        [448, 449],
-        [449, 346],
-        [346, 448],
-        [356, 264],
-        [264, 454],
-        [454, 356],
-        [337, 336],
-        [336, 299],
-        [299, 337],
-        [337, 338],
-        [338, 151],
-        [151, 337],
-        [294, 278],
-        [278, 455],
-        [455, 294],
-        [308, 292],
-        [292, 415],
-        [415, 308],
-        [429, 358],
-        [358, 355],
-        [355, 429],
-        [265, 340],
-        [340, 372],
-        [372, 265],
-        [352, 346],
-        [346, 280],
-        [280, 352],
-        [295, 442],
-        [442, 282],
-        [282, 295],
-        [354, 19],
-        [19, 370],
-        [370, 354],
-        [285, 441],
-        [441, 295],
-        [295, 285],
-        [
-          195,
-          248
-        ],
-        [248, 197],
-        [197, 195],
-        [457, 440],
-        [440, 274],
-        [274, 457],
-        [301, 300],
-        [300, 368],
-        [368, 301],
-        [417, 351],
-        [351, 465],
-        [465, 417],
-        [251, 301],
-        [301, 389],
-        [389, 251],
-        [394, 395],
-        [395, 379],
-        [379, 394],
-        [399, 412],
-        [412, 419],
-        [419, 399],
-        [410, 436],
-        [436, 322],
-        [322, 410],
-        [326, 2],
-        [2, 393],
-        [393, 326],
-        [354, 370],
-        [370, 461],
-        [461, 354],
-        [393, 164],
-        [164, 267],
-        [267, 393],
-        [268, 302],
-        [302, 12],
-        [12, 268],
-        [312, 268],
-        [268, 13],
-        [13, 312],
-        [298, 293],
-        [293, 301],
-        [301, 298],
-        [265, 446],
-        [446, 340],
-        [340, 265],
-        [280, 330],
-        [330, 425],
-        [425, 280],
-        [322, 426],
-        [426, 391],
-        [391, 322],
-        [
-          420,
-          429
-        ],
-        [429, 437],
-        [437, 420],
-        [393, 391],
-        [391, 326],
-        [326, 393],
-        [344, 440],
-        [440, 438],
-        [438, 344],
-        [458, 459],
-        [459, 461],
-        [461, 458],
-        [364, 434],
-        [434, 394],
-        [394, 364],
-        [428, 396],
-        [396, 262],
-        [262, 428],
-        [274, 354],
-        [354, 457],
-        [457, 274],
-        [317, 316],
-        [316, 402],
-        [402, 317],
-        [316, 315],
-        [315, 403],
-        [403, 316],
-        [315, 314],
-        [314, 404],
-        [404, 315],
-        [314, 313],
-        [313, 405],
-        [405, 314],
-        [313, 421],
-        [421, 406],
-        [406, 313],
-        [323, 366],
-        [366, 361],
-        [361, 323],
-        [292, 306],
-        [306, 407],
-        [407, 292],
-        [306, 291],
-        [291, 408],
-        [408, 306],
-        [291, 287],
-        [287, 409],
-        [409, 291],
-        [287, 432],
-        [432, 410],
-        [410, 287],
-        [427, 434],
-        [434, 411],
-        [411, 427],
-        [372, 264],
-        [264, 383],
-        [383, 372],
-        [459, 309],
-        [309, 457],
-        [457, 459],
-        [366, 352],
-        [352, 401],
-        [401, 366],
-        [1, 274],
-        [274, 4],
-        [4, 1],
-        [418, 421],
-        [421, 262],
-        [262, 418],
-        [331, 294],
-        [294, 358],
-        [358, 331],
-        [435, 433],
-        [433, 367],
-        [367, 435],
-        [392, 289],
-        [289, 439],
-        [439, 392],
-        [328, 462],
-        [462, 326],
-        [326, 328],
-        [94, 2],
-        [2, 370],
-        [370, 94],
-        [289, 305],
-        [305, 455],
-        [455, 289],
-        [339, 254],
-        [254, 448],
-        [448, 339],
-        [359, 255],
-        [255, 446],
-        [446, 359],
-        [254, 253],
-        [253, 449],
-        [449, 254],
-        [253, 252],
-        [252, 450],
-        [450, 253],
-        [252, 256],
-        [256, 451],
-        [451, 252],
-        [
-          256,
-          341
-        ],
-        [341, 452],
-        [452, 256],
-        [414, 413],
-        [413, 463],
-        [463, 414],
-        [286, 441],
-        [441, 414],
-        [414, 286],
-        [286, 258],
-        [258, 441],
-        [441, 286],
-        [258, 257],
-        [257, 442],
-        [442, 258],
-        [257, 259],
-        [259, 443],
-        [443, 257],
-        [259, 260],
-        [260, 444],
-        [444, 259],
-        [260, 467],
-        [467, 445],
-        [445, 260],
-        [309, 459],
-        [459, 250],
-        [250, 309],
-        [305, 289],
-        [289, 290],
-        [290, 305],
-        [305, 290],
-        [290, 460],
-        [460, 305],
-        [401, 376],
-        [376, 435],
-        [435, 401],
-        [309, 250],
-        [250, 392],
-        [392, 309],
-        [376, 411],
-        [411, 433],
-        [433, 376],
-        [453, 341],
-        [341, 464],
-        [464, 453],
-        [357, 453],
-        [453, 465],
-        [465, 357],
-        [343, 357],
-        [357, 412],
-        [412, 343],
-        [437, 343],
-        [343, 399],
-        [399, 437],
-        [344, 360],
-        [360, 440],
-        [440, 344],
-        [420, 437],
-        [437, 456],
-        [456, 420],
-        [360, 420],
-        [420, 363],
-        [363, 360],
-        [361, 401],
-        [401, 288],
-        [288, 361],
-        [265, 372],
-        [372, 353],
-        [353, 265],
-        [390, 339],
-        [339, 249],
-        [249, 390],
-        [339, 448],
-        [448, 255],
-        [255, 339]
-      ]);
-      P3("matrixDataToMatrix", function(a) {
-        for (var b = a.getCols(), c = a.getRows(), d = a.getPackedDataList(), e = [], g = 0; g < c; g++) e.push(Array(b));
-        for (g = 0; g < c; g++) for (var f = 0; f < b; f++) {
-          var h = 1 === a.getLayout() ? g * b + f : f * c + g;
-          e[g][f] = d[h];
-        }
-        return e;
-      });
-      P3("VERSION", "0.4.1633559619");
-    }).call(exports);
-  }
-});
-
-// node_modules/@tensorflow/tfjs/dist/index.js
 var dist_exports3 = {};
 __export(dist_exports3, {
   Abs: () => Abs,
@@ -9084,8 +2100,6 @@ __export(dist_exports3, {
   zeros: () => zeros,
   zerosLike: () => zerosLike
 });
-
-// node_modules/@tensorflow/tfjs-core/dist/backends/backend.js
 var EPSILON_FLOAT32 = 1e-7;
 var EPSILON_FLOAT16 = 1e-4;
 var DataStorage = class {
@@ -9171,8 +2185,6 @@ var KernelBackend = class {
 function notYetImplemented(kernelName) {
   throw new Error(`'${kernelName}' not yet implemented or not found in the registry. This kernel may not be supported by the tfjs backend you have chosen`);
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/util_base.js
 function shuffle(array2) {
   let counter = array2.length;
   let index = 0;
@@ -9383,18 +2395,18 @@ function squeezeShape(shape, axis) {
   const keptDims = [];
   const isEmptyArray = axis != null && Array.isArray(axis) && axis.length === 0;
   const axes = axis == null || isEmptyArray ? null : parseAxisParam(axis, shape).sort();
-  let j3 = 0;
+  let j = 0;
   for (let i = 0; i < shape.length; ++i) {
     if (axes != null) {
-      if (axes[j3] === i && shape[i] !== 1) {
+      if (axes[j] === i && shape[i] !== 1) {
         throw new Error(`Can't squeeze axis ${i} since its dim '${shape[i]}' is not 1`);
       }
-      if ((axes[j3] == null || axes[j3] > i) && shape[i] === 1) {
+      if ((axes[j] == null || axes[j] > i) && shape[i] === 1) {
         newShape.push(shape[i]);
         keptDims.push(i);
       }
-      if (axes[j3] <= i) {
-        j3++;
+      if (axes[j] <= i) {
+        j++;
       }
     }
     if (shape[i] !== 1) {
@@ -9624,8 +2636,6 @@ function indexToLoc(index, rank, strides) {
 function isPromise(object) {
   return object && object.then && typeof object.then === "function";
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/environment.js
 var TENSORFLOWJS_FLAGS_PREFIX = "tfjsflags";
 var Environment = class {
   // tslint:disable-next-line: no-any
@@ -9729,9 +2739,9 @@ var Environment = class {
 };
 function getQueryParams(queryString) {
   const params = {};
-  queryString.replace(/[?&]([^=?&]+)(?:=([^&]*))?/g, (s, ...t3) => {
-    decodeParam(params, t3[0], t3[1]);
-    return t3.join("=");
+  queryString.replace(/[?&]([^=?&]+)(?:=([^&]*))?/g, (s, ...t) => {
+    decodeParam(params, t[0], t[1]);
+    return t.join("=");
   });
   return params;
 }
@@ -9755,8 +2765,6 @@ var ENV = null;
 function setEnvironmentGlobal(environment) {
   ENV = environment;
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/global_util.js
 var globalNameSpace;
 function getGlobalNamespace() {
   if (globalNameSpace == null) {
@@ -9793,8 +2801,6 @@ function getGlobal(key, init) {
     return globalMap.get(key);
   }
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/kernel_names.js
 var Abs = "Abs";
 var Acos = "Acos";
 var Acosh = "Acosh";
@@ -9975,8 +2981,6 @@ var RotateWithOffset = "RotateWithOffset";
 var _FusedMatMul = "_FusedMatMul";
 var FusedConv2D = "FusedConv2D";
 var FusedDepthwiseConv2D = "FusedDepthwiseConv2D";
-
-// node_modules/@tensorflow/tfjs-core/dist/log.js
 function warn(...msg) {
   if (!(env().getBool("IS_TEST") || env().getBool("PROD"))) {
     console.warn(...msg);
@@ -9987,8 +2991,6 @@ function log(...msg) {
     console.log(...msg);
   }
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/kernel_registry.js
 var kernelRegistry = getGlobal("kernelRegistry", () => /* @__PURE__ */ new Map());
 var gradRegistry = getGlobal("gradRegistry", () => /* @__PURE__ */ new Map());
 function getKernel(kernelName, backendName) {
@@ -9999,10 +3001,10 @@ function getGradient(kernelName) {
   return gradRegistry.get(kernelName);
 }
 function getKernelsForBackend(backendName) {
-  const it3 = kernelRegistry.entries();
+  const it = kernelRegistry.entries();
   const result = [];
   while (true) {
-    const { done, value } = it3.next();
+    const { done, value } = it.next();
     if (done) {
       break;
     }
@@ -10054,8 +3056,6 @@ function copyRegisteredKernels(registeredBackendName, newBackendName) {
 function makeKey(kernelName, backendName) {
   return `${backendName}_${kernelName}`;
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/util.js
 var util_exports = {};
 __export(util_exports, {
   arraysEqual: () => arraysEqual,
@@ -10116,13 +3116,9 @@ __export(util_exports, {
   toNestedArray: () => toNestedArray,
   toTypedArray: () => toTypedArray
 });
-
-// node_modules/@tensorflow/tfjs-core/dist/platforms/is_typed_array_browser.js
 function isTypedArrayBrowser(a) {
   return a instanceof Float32Array || a instanceof Int32Array || a instanceof Uint8Array || a instanceof Uint8ClampedArray;
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/hash_util.js
 var LongExports = __toESM(require_long());
 var Long = (
   // tslint:disable-next-line
@@ -10158,14 +3154,14 @@ function hashLen16(u, v, mul2 = hexToLong("9ddfea08eb382d69")) {
   b = b.mul(mul2);
   return b;
 }
-function weakHashLen32WithSeeds(w, x, y, z3, a, b) {
+function weakHashLen32WithSeeds(w, x, y, z, a, b) {
   a = a.add(w);
-  b = rotate64(b.add(a).add(z3), 21);
+  b = rotate64(b.add(a).add(z), 21);
   const c = a;
   a = a.add(x);
   a = a.add(y);
   b = b.add(rotate64(a, 44));
-  return [a.add(z3), b.add(c)];
+  return [a.add(z), b.add(c)];
 }
 function weakHashLen32WithSeedsStr(s, offset, a, b) {
   return weakHashLen32WithSeeds(fetch64(s, offset), fetch64(s, offset + 8), fetch64(s, offset + 16), fetch64(s, offset + 24), a, b);
@@ -10189,8 +3185,8 @@ function hashLen0to16(s, len = s.length) {
     const b = s[len >> 1];
     const c = s[len - 1];
     const y = a + (b << 8);
-    const z3 = len + (c << 2);
-    return shiftMix(k2.mul(y).xor(k0.mul(z3))).mul(k2);
+    const z = len + (c << 2);
+    return shiftMix(k2.mul(y).xor(k0.mul(z))).mul(k2);
   }
   return k2;
 }
@@ -10209,11 +3205,11 @@ function hashLen33to64(s, len = s.length) {
   const c = fetch64(s, len - 8).mul(mul2);
   const d = fetch64(s, len - 16).mul(k2);
   const y = rotate64(a.add(b), 43).add(rotate64(c, 30)).add(d);
-  const z3 = hashLen16(y, a.add(rotate64(b.add(k2), 18)).add(c), mul2);
+  const z = hashLen16(y, a.add(rotate64(b.add(k2), 18)).add(c), mul2);
   const e = fetch64(s, 16).mul(mul2);
   const f = fetch64(s, 24);
   const g = y.add(fetch64(s, len - 32)).mul(mul2);
-  const h = z3.add(fetch64(s, len - 24)).mul(mul2);
+  const h = z.add(fetch64(s, len - 24)).mul(mul2);
   return hashLen16(rotate64(e.add(f), 43).add(rotate64(g, 30)).add(h), e.add(rotate64(f.add(a), 18)).add(g), mul2);
 }
 function fingerPrint64(s, len = s.length) {
@@ -10229,7 +3225,7 @@ function fingerPrint64(s, len = s.length) {
   }
   let x = seed;
   let y = seed.mul(k1).add(113);
-  let z3 = shiftMix(y.mul(k2).add(113)).mul(k2);
+  let z = shiftMix(y.mul(k2).add(113)).mul(k2);
   let v = [Long.UZERO, Long.UZERO];
   let w = [Long.UZERO, Long.UZERO];
   x = x.mul(k2).add(fetch64(s, 0));
@@ -10241,13 +3237,13 @@ function fingerPrint64(s, len = s.length) {
     y = rotate64(y.add(v[1]).add(fetch64(s, offset + 48)), 42).mul(k1);
     x = x.xor(w[1]);
     y = y.add(v[0]).add(fetch64(s, offset + 40));
-    z3 = rotate64(z3.add(w[0]), 33).mul(k1);
+    z = rotate64(z.add(w[0]), 33).mul(k1);
     v = weakHashLen32WithSeedsStr(s, offset, v[1].mul(k1), x.add(w[0]));
-    w = weakHashLen32WithSeedsStr(s, offset + 32, z3.add(w[1]), y.add(fetch64(s, offset + 16)));
-    [z3, x] = [x, z3];
+    w = weakHashLen32WithSeedsStr(s, offset + 32, z.add(w[1]), y.add(fetch64(s, offset + 16)));
+    [z, x] = [x, z];
     offset += 64;
   } while (offset !== end);
-  const mul2 = k1.add(z3.and(255).shl(1));
+  const mul2 = k1.add(z.and(255).shl(1));
   offset = last64;
   w[0] = w[0].add(len - 1 & 63);
   v[0] = v[0].add(w[0]);
@@ -10256,14 +3252,12 @@ function fingerPrint64(s, len = s.length) {
   y = rotate64(y.add(v[1]).add(fetch64(s, offset + 48)), 42).mul(mul2);
   x = x.xor(w[1].mul(9));
   y = y.add(v[0].mul(9).add(fetch64(s, offset + 40)));
-  z3 = rotate64(z3.add(w[0]), 33).mul(mul2);
+  z = rotate64(z.add(w[0]), 33).mul(mul2);
   v = weakHashLen32WithSeedsStr(s, offset, v[1].mul(mul2), x.add(w[0]));
-  w = weakHashLen32WithSeedsStr(s, offset + 32, z3.add(w[1]), y.add(fetch64(s, offset + 16)));
-  [z3, x] = [x, z3];
-  return hashLen16(hashLen16(v[0], w[0], mul2).add(shiftMix(y).mul(k0)).add(z3), hashLen16(v[1], w[1], mul2).add(x), mul2);
+  w = weakHashLen32WithSeedsStr(s, offset + 32, z.add(w[1]), y.add(fetch64(s, offset + 16)));
+  [z, x] = [x, z];
+  return hashLen16(hashLen16(v[0], w[0], mul2).add(shiftMix(y).mul(k0)).add(z), hashLen16(v[1], w[1], mul2).add(x), mul2);
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/util.js
 function createScalarValue(value, dtype) {
   if (dtype === "string") {
     return encodeString(value);
@@ -10346,8 +3340,6 @@ function flatten(arr, result = [], skipTypedArray = false) {
   }
   return result;
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/profiler.js
 var Profiler = class {
   constructor(backendTimer, logger) {
     this.backendTimer = backendTimer;
@@ -10430,8 +3422,6 @@ var Logger = class {
     console.log(`%c${paddedName}	%c${time2}	%c${rank}D ${shape}	%c${size}	%c${inputShapesDescription}	%c${extraInfo}`, "font-weight:bold", "color:red", "color:blue", "color: orange", "color: green", "color: steelblue");
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/tape.js
 function getFilteredNodesXToY(tape, xs, y) {
   const tensorsFromX = {};
   const nodesFromX = {};
@@ -10444,7 +3434,7 @@ function getFilteredNodesXToY(tape, xs, y) {
     for (const inputName in nodeInputs) {
       const input2 = nodeInputs[inputName];
       let anyInputFromX = false;
-      for (let j3 = 0; j3 < xs.length; j3++) {
+      for (let j = 0; j < xs.length; j++) {
         if (tensorsFromX[input2.id]) {
           node.outputs.forEach((output) => tensorsFromX[output.id] = true);
           anyInputFromX = true;
@@ -10463,8 +3453,8 @@ function getFilteredNodesXToY(tape, xs, y) {
   for (let i = tape.length - 1; i >= 0; i--) {
     const node = tape[i];
     const nodeInputs = node.inputs;
-    for (let j3 = 0; j3 < node.outputs.length; j3++) {
-      if (tensorsLeadToY[node.outputs[j3].id]) {
+    for (let j = 0; j < node.outputs.length; j++) {
+      if (tensorsLeadToY[node.outputs[j].id]) {
         for (const inputName in nodeInputs) {
           tensorsLeadToY[nodeInputs[inputName].id] = true;
           nodesToY[node.id] = true;
@@ -10530,8 +3520,6 @@ function backpropagateGradients(tensorAccumulatedGradientMap, filteredTape, tidy
     }
   }
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/tensor_format.js
 var FORMAT_LIMIT_NUM_VALS = 20;
 var FORMAT_NUM_FIRST_LAST_VALS = 3;
 var FORMAT_NUM_SIG_DIGITS = 7;
@@ -10559,8 +3547,8 @@ function computeMaxSizePerColumn(vals, shape, dtype, strides) {
   if (rank > 1) {
     for (let row = 0; row < n / numCols; row++) {
       const offset = row * numCols;
-      for (let j3 = 0; j3 < numCols; j3++) {
-        padPerCol[j3] = Math.max(padPerCol[j3], valToString(valuesOrTuples[offset + j3], 0, dtype).length);
+      for (let j = 0; j < numCols; j++) {
+        padPerCol[j] = Math.max(padPerCol[j], valToString(valuesOrTuples[offset + j], 0, dtype).length);
       }
     }
   }
@@ -10680,8 +3668,6 @@ function createComplexTuples(vals) {
   }
   return complexTuples;
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/tensor.js
 var TensorBuffer = class {
   constructor(shape, dtype, values) {
     this.dtype = dtype;
@@ -11033,8 +4019,6 @@ Object.defineProperty(Variable, Symbol.hasInstance, {
     return instance instanceof Tensor && instance.assign != null && instance.assign instanceof Function;
   }
 });
-
-// node_modules/@tensorflow/tfjs-core/dist/tensor_util.js
 var tensor_util_exports = {};
 __export(tensor_util_exports, {
   assertTypesMatch: () => assertTypesMatch,
@@ -11042,8 +4026,6 @@ __export(tensor_util_exports, {
   isTensorInList: () => isTensorInList,
   makeTypesMatch: () => makeTypesMatch
 });
-
-// node_modules/@tensorflow/tfjs-core/dist/types.js
 var Rank;
 (function(Rank2) {
   Rank2["R0"] = "R0";
@@ -11106,8 +4088,6 @@ function isWebGLData(values) {
 function isWebGPUData(values) {
   return typeof GPUBuffer !== "undefined" && values != null && typeof values === "object" && "buffer" in values && values.buffer instanceof GPUBuffer;
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/tensor_util.js
 function makeTypesMatch(a, b) {
   if (a.dtype === b.dtype) {
     return [a, b];
@@ -11139,8 +4119,8 @@ function walkTensorContainer(container, list, seen) {
     return;
   }
   const iterable = container;
-  for (const k4 in iterable) {
-    const val = iterable[k4];
+  for (const k in iterable) {
+    const val = iterable[k];
     if (!seen.has(val)) {
       seen.add(val);
       walkTensorContainer(val, list, seen);
@@ -11150,8 +4130,6 @@ function walkTensorContainer(container, list, seen) {
 function isIterable(obj) {
   return Array.isArray(obj) || typeof obj === "object";
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/engine.js
 function isRegisteredKernelInvocation(kernelInvocation) {
   return kernelInvocation.kernelName != null;
 }
@@ -11177,7 +4155,7 @@ var EngineState = class {
       kernels: [],
       result: null,
       get kernelNames() {
-        return Array.from(new Set(this.kernels.map((k4) => k4.name)));
+        return Array.from(new Set(this.kernels.map((k) => k.name)));
       }
     };
   }
@@ -11619,7 +4597,7 @@ var Engine = class _Engine {
       } else {
         inputTensorsToSave = inputsToSave.map((inputName) => inputs[inputName]);
       }
-      const outputTensorsToSave = outputs.filter((_3, i) => outputsToSave[i]);
+      const outputTensorsToSave = outputs.filter((_, i) => outputsToSave[i]);
       return inputTensorsToSave.concat(outputTensorsToSave);
     }
     return [];
@@ -11640,15 +4618,15 @@ var Engine = class _Engine {
       backendVals = values.map((d) => encodeString(d));
     }
     const dataId = backend2.write(backendVals, shape, dtype);
-    const t3 = new Tensor(shape, dtype, dataId, this.nextTensorId());
-    this.trackTensor(t3, backend2);
+    const t = new Tensor(shape, dtype, dataId, this.nextTensorId());
+    this.trackTensor(t, backend2);
     if (dtype === "string") {
       const info = this.state.tensorInfo.get(dataId);
       const newBytes = bytesFromStringArray(backendVals);
       this.state.numBytes += newBytes - info.bytes;
       info.bytes = newBytes;
     }
-    return t3;
+    return t;
   }
   /**
    * Internal method used by backends. Makes a new tensor
@@ -11668,9 +4646,9 @@ var Engine = class _Engine {
    */
   makeTensorFromTensorInfo(tensorInfo, backend2) {
     const { dataId, shape, dtype } = tensorInfo;
-    const t3 = new Tensor(shape, dtype, dataId, this.nextTensorId());
-    this.trackTensor(t3, backend2);
-    return t3;
+    const t = new Tensor(shape, dtype, dataId, this.nextTensorId());
+    this.trackTensor(t, backend2);
+    return t;
   }
   makeVariable(initialValue, trainable = true, name, dtype) {
     name = name || this.nextVariableId().toString();
@@ -11842,7 +4820,7 @@ var Engine = class _Engine {
    */
   endScope(result) {
     const tensorsToTrackInParent = getTensorsInContainer(result);
-    const tensorsToTrackInParentSet = new Set(tensorsToTrackInParent.map((t3) => t3.id));
+    const tensorsToTrackInParentSet = new Set(tensorsToTrackInParent.map((t) => t.id));
     for (let i = 0; i < this.state.activeScope.track.length; i++) {
       const tensor2 = this.state.activeScope.track[i];
       if (!tensor2.kept && !tensorsToTrackInParentSet.has(tensor2.id)) {
@@ -11900,13 +4878,13 @@ var Engine = class _Engine {
   customGrad(f) {
     assert(isFunction(f), () => "The f passed in customGrad(f) must be a function.");
     return (...inputs) => {
-      assert(inputs.every((t3) => t3 instanceof Tensor), () => "The args passed in customGrad(f)(x1, x2,...) must all be tensors");
+      assert(inputs.every((t) => t instanceof Tensor), () => "The args passed in customGrad(f)(x1, x2,...) must all be tensors");
       let res;
       const inputMap = {};
       inputs.forEach((input2, i) => {
         inputMap[i] = input2;
       });
-      const forwardFunc = (_3, save) => {
+      const forwardFunc = (_, save) => {
         res = f(...[...inputs, save]);
         assert(res.value instanceof Tensor, () => "The function f passed in customGrad(f) must return an object where `obj.value` is a tensor");
         assert(isFunction(res.gradFunc), () => "The function f passed in customGrad(f) must return an object where `obj.gradFunc` is a function.");
@@ -11916,7 +4894,7 @@ var Engine = class _Engine {
         const gradRes = res.gradFunc(dy, saved);
         const grads2 = Array.isArray(gradRes) ? gradRes : [gradRes];
         assert(grads2.length === inputs.length, () => "The function f passed in customGrad(f) must return an object where `obj.gradFunc` is a function that returns the same number of tensors as inputs passed to f(...).");
-        assert(grads2.every((t3) => t3 instanceof Tensor), () => "The function f passed in customGrad(f) must return an object where `obj.gradFunc` is a function that returns a list of only tensors.");
+        assert(grads2.every((t) => t instanceof Tensor), () => "The function f passed in customGrad(f) must return an object where `obj.gradFunc` is a function that returns a list of only tensors.");
         const gradMap = {};
         grads2.forEach((grad2, i) => {
           gradMap[i] = () => grad2;
@@ -12004,8 +4982,6 @@ function add(a, b) {
   const inputs = { a, b };
   return ENGINE.runKernel(Add, inputs);
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/device_util.js
 var device_util_exports = {};
 __export(device_util_exports, {
   isBrowser: () => isBrowser,
@@ -12045,8 +5021,6 @@ function isBrowser() {
   return typeof window !== "undefined" && window.document != null || //@ts-ignore
   typeof WorkerGlobalScope !== "undefined";
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/flags.js
 var ENV2 = env();
 ENV2.registerFlag("DEBUG", () => false, (debugValue) => {
   if (debugValue) {
@@ -12065,8 +5039,6 @@ ENV2.registerFlag("CHECK_COMPUTATION_FOR_ERRORS", () => ENV2.getBool("DEBUG"));
 ENV2.registerFlag("WRAP_TO_IMAGEBITMAP", () => false);
 ENV2.registerFlag("CANVAS2D_WILL_READ_FREQUENTLY_FOR_GPU", () => false);
 ENV2.registerFlag("USE_SETTIMEOUTCUSTOM", () => false);
-
-// node_modules/@tensorflow/tfjs-core/dist/tensor_util_env.js
 function inferShape(val, dtype) {
   let firstElem = val;
   if (isTypedArray(val)) {
@@ -12142,10 +5114,8 @@ function convertToTensorArray(arg, argName, functionName, parseAsDtype = "numeri
     throw new Error(`Argument ${argName} passed to ${functionName} must be a \`Tensor[]\` or \`TensorLike[]\``);
   }
   const tensors = arg;
-  return tensors.map((t3, i) => convertToTensor(t3, `${argName}[${i}]`, functionName, parseAsDtype));
+  return tensors.map((t, i) => convertToTensor(t, `${argName}[${i}]`, functionName, parseAsDtype));
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/operation.js
 var OP_SCOPE_SUFFIX = "__op";
 function op(f) {
   const keys = Object.keys(f);
@@ -12175,8 +5145,6 @@ function op(f) {
   Object.defineProperty(f2, "name", { value: opName, configurable: true });
   return f2;
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/complex.js
 function complex_(real4, imag4) {
   const $real = convertToTensor(real4, "real", "complex");
   const $imag = convertToTensor(imag4, "imag", "complex");
@@ -12185,8 +5153,6 @@ function complex_(real4, imag4) {
   return ENGINE.runKernel(Complex, inputs);
 }
 var complex = /* @__PURE__ */ op({ complex_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/tensor_ops_util.js
 function makeTensor(values, shape, inferredShape, dtype) {
   if (dtype == null) {
     dtype = inferDtype(values);
@@ -12220,14 +5186,10 @@ function makeTensor(values, shape, inferredShape, dtype) {
   values = dtype !== "string" ? toTypedArray(values, dtype) : flatten(values, [], true);
   return ENGINE.makeTensor(values, shape, dtype);
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/tensor.js
 function tensor(values, shape, dtype) {
   const inferredShape = inferShape(values, dtype);
   return makeTensor(values, shape, inferredShape, dtype);
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/io/types.js
 var DTYPE_VALUE_SIZE_MAP = {
   "float32": 4,
   "float16": 2,
@@ -12237,8 +5199,6 @@ var DTYPE_VALUE_SIZE_MAP = {
   "bool": 1,
   "complex64": 8
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/io/composite_array_buffer.js
 var CompositeArrayBuffer = class _CompositeArrayBuffer {
   /**
    * Concatenate a number of ArrayBuffers into one.
@@ -12366,8 +5326,6 @@ function search(sortedArray, compare) {
   }
   return -1;
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/globals.js
 function enableProdMode() {
   env().set("PROD", true);
 }
@@ -12436,8 +5394,6 @@ function backend() {
 function setPlatform(platformName, platform) {
   env().setPlatform(platformName, platform);
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/io/io_utils.js
 var NUM_BYTES_STRING_LENGTH = 4;
 async function encodeWeights(tensors, group) {
   const specs = [];
@@ -12445,14 +5401,14 @@ async function encodeWeights(tensors, group) {
   const names = Array.isArray(tensors) ? tensors.map((tensor2) => tensor2.name) : Object.keys(tensors);
   for (let i = 0; i < names.length; ++i) {
     const name = names[i];
-    const t3 = Array.isArray(tensors) ? tensors[i].tensor : tensors[name];
-    if (t3.dtype !== "float32" && t3.dtype !== "int32" && t3.dtype !== "bool" && t3.dtype !== "string" && t3.dtype !== "complex64") {
-      throw new Error(`Unsupported dtype in weight '${name}': ${t3.dtype}`);
+    const t = Array.isArray(tensors) ? tensors[i].tensor : tensors[name];
+    if (t.dtype !== "float32" && t.dtype !== "int32" && t.dtype !== "bool" && t.dtype !== "string" && t.dtype !== "complex64") {
+      throw new Error(`Unsupported dtype in weight '${name}': ${t.dtype}`);
     }
-    const spec = { name, shape: t3.shape, dtype: t3.dtype };
-    if (t3.dtype === "string") {
+    const spec = { name, shape: t.shape, dtype: t.dtype };
+    if (t.dtype === "string") {
       const utf8bytes = new Promise(async (resolve) => {
-        const vals = await t3.bytes();
+        const vals = await t.bytes();
         const totalNumBytes = vals.reduce((p2, c) => p2 + c.length, 0) + NUM_BYTES_STRING_LENGTH * vals.length;
         const bytes = new Uint8Array(totalNumBytes);
         let offset = 0;
@@ -12468,7 +5424,7 @@ async function encodeWeights(tensors, group) {
       });
       dataPromises.push(utf8bytes);
     } else {
-      dataPromises.push(t3.data());
+      dataPromises.push(t.data());
     }
     if (group != null) {
       spec.group = group;
@@ -12858,8 +5814,6 @@ function getFloat16Decoder() {
     return new Float32Array(buffer2);
   };
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/io/router_registry.js
 var IORouterRegistry = class _IORouterRegistry {
   constructor() {
     this.saveRouters = [];
@@ -12927,8 +5881,6 @@ var registerSaveRouter = (loudRouter) => IORouterRegistry.registerSaveRouter(lou
 var registerLoadRouter = (loudRouter) => IORouterRegistry.registerLoadRouter(loudRouter);
 var getSaveHandlers = (url) => IORouterRegistry.getSaveHandlers(url);
 var getLoadHandlers = (url, loadOptions) => IORouterRegistry.getLoadHandlers(url, loadOptions);
-
-// node_modules/@tensorflow/tfjs-core/dist/io/indexed_db.js
 var DATABASE_NAME = "tensorflowjs";
 var DATABASE_VERSION = 1;
 var MODEL_STORE_NAME = "models_store";
@@ -13156,8 +6108,6 @@ var BrowserIndexedDBManager = class {
     });
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/io/local_storage.js
 var PATH_SEPARATOR = "/";
 var PATH_PREFIX = "tensorflowjs_models";
 var INFO_SUFFIX = "info";
@@ -13345,8 +6295,6 @@ var BrowserLocalStorageManager = class {
     return info;
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/io/model_management.js
 var URL_SCHEME_SUFFIX = "://";
 var ModelStoreManagerRegistry = class _ModelStoreManagerRegistry {
   constructor() {
@@ -13442,8 +6390,6 @@ async function moveModel(sourceURL, destURL) {
   const deleteSource = true;
   return cloneModelInternal(sourceURL, destURL, deleteSource);
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/platforms/platform_browser.js
 var PlatformBrowser = class {
   constructor() {
     this.messageName = "setTimeoutCustom";
@@ -13513,8 +6459,6 @@ if (env().get("IS_BROWSER")) {
   } catch (err) {
   }
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/platforms/platform_node.js
 var getNodeFetch = {
   // tslint:disable-next-line:no-require-imports
   importFetch: () => require_browser()
@@ -13557,15 +6501,11 @@ var PlatformNode = class {
 if (env().get("IS_NODE") && !env().get("IS_BROWSER")) {
   env().setPlatform("node", new PlatformNode());
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/buffer.js
 function buffer(shape, dtype = "float32", values) {
   dtype = dtype || "float32";
   assertNonNegativeIntegerDimensions(shape);
   return new TensorBuffer(shape, dtype, values);
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/cast.js
 function cast_(x, dtype) {
   const $x = convertToTensor(x, "x", "cast");
   if (!isValidDtype(dtype)) {
@@ -13579,21 +6519,15 @@ function cast_(x, dtype) {
   return ENGINE.runKernel(Cast, inputs, attrs);
 }
 var cast = /* @__PURE__ */ op({ cast_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/clone.js
 function clone_(x) {
   const $x = convertToTensor(x, "x", "clone", "string_or_numeric");
   const inputs = { x: $x };
   return ENGINE.runKernel(Identity, inputs);
 }
 var clone = /* @__PURE__ */ op({ clone_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/print.js
 function print(x, verbose = false) {
   console.log(x.toString(verbose));
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/base_side_effects.js
 getOrMakeEngine();
 var opHandler2 = {
   buffer,
@@ -13602,8 +6536,6 @@ var opHandler2 = {
   print
 };
 setOpHandler(opHandler2);
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/add.js
 function add_(a, b) {
   let $a = convertToTensor(a, "a", "add");
   let $b = convertToTensor(b, "b", "add");
@@ -13612,8 +6544,6 @@ function add_(a, b) {
   return ENGINE.runKernel(Add, inputs);
 }
 var add2 = /* @__PURE__ */ op({ add_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/floorDiv.js
 function floorDiv_(a, b) {
   let $a = convertToTensor(a, "a", "floorDiv");
   let $b = convertToTensor(b, "b", "floorDiv");
@@ -13622,8 +6552,6 @@ function floorDiv_(a, b) {
   return ENGINE.runKernel(FloorDiv, inputs);
 }
 var floorDiv = /* @__PURE__ */ op({ floorDiv_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/div.js
 function div_(a, b) {
   let $a = convertToTensor(a, "a", "div");
   let $b = convertToTensor(b, "b", "div");
@@ -13636,8 +6564,6 @@ function div_(a, b) {
   return ENGINE.runKernel(RealDiv, inputs, attrs);
 }
 var div = /* @__PURE__ */ op({ div_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/mul.js
 function mul_(a, b) {
   let $a = convertToTensor(a, "a", "mul");
   let $b = convertToTensor(b, "b", "mul");
@@ -13646,8 +6572,6 @@ function mul_(a, b) {
   return ENGINE.runKernel(Multiply, inputs);
 }
 var mul = /* @__PURE__ */ op({ mul_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/abs.js
 function abs_(x) {
   const $x = convertToTensor(x, "x", "abs");
   if ($x.dtype === "complex64") {
@@ -13659,36 +6583,30 @@ function abs_(x) {
   }
 }
 var abs = /* @__PURE__ */ op({ abs_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/acos.js
 function acos_(x) {
   const $x = convertToTensor(x, "x", "acos");
   const inputs = { x: $x };
   return ENGINE.runKernel(Acos, inputs);
 }
 var acos = /* @__PURE__ */ op({ acos_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/acosh.js
 function acosh_(x) {
   const $x = convertToTensor(x, "x", "acosh");
   const inputs = { x: $x };
   return ENGINE.runKernel(Acosh, inputs);
 }
 var acosh = /* @__PURE__ */ op({ acosh_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/add_n.js
 function addN_(tensors) {
   assert(Array.isArray(tensors), () => "The argument passed to tf.addN() must be a list of tensors");
   assert(tensors.length >= 1, () => `Must pass at least one tensor to tf.addN(), but got ${tensors.length}`);
-  const $tensors = tensors.map((t3, i) => convertToTensor(t3, `tensors${i}`, "addN"));
+  const $tensors = tensors.map((t, i) => convertToTensor(t, `tensors${i}`, "addN"));
   const firstTensor = $tensors[0];
-  $tensors.forEach((t3) => {
-    if (t3.dtype !== firstTensor.dtype) {
+  $tensors.forEach((t) => {
+    if (t.dtype !== firstTensor.dtype) {
       throw new Error("All tensors passed to tf.addN() must have the same dtype");
     }
   });
-  $tensors.forEach((t3) => {
-    if (!arraysEqual(t3.shape, firstTensor.shape)) {
+  $tensors.forEach((t) => {
+    if (!arraysEqual(t.shape, firstTensor.shape)) {
       throw new Error("All tensors passed to tf.addN() must have the same shape");
     }
   });
@@ -13696,8 +6614,6 @@ function addN_(tensors) {
   return ENGINE.runKernel(AddN, inputs);
 }
 var addN = /* @__PURE__ */ op({ addN_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/all.js
 function all_(x, axis = null, keepDims = false) {
   const $x = convertToTensor(x, "x", "all", "bool");
   const inputs = { x: $x };
@@ -13705,8 +6621,6 @@ function all_(x, axis = null, keepDims = false) {
   return ENGINE.runKernel(All, inputs, attrs);
 }
 var all = /* @__PURE__ */ op({ all_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/any.js
 function any_(x, axis = null, keepDims = false) {
   const $x = convertToTensor(x, "x", "any", "bool");
   const inputs = { x: $x };
@@ -13714,8 +6628,6 @@ function any_(x, axis = null, keepDims = false) {
   return ENGINE.runKernel(Any, inputs, attrs);
 }
 var any = /* @__PURE__ */ op({ any_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/arg_max.js
 function argMax_(x, axis = 0) {
   const $x = convertToTensor(x, "x", "argMax");
   const inputs = { x: $x };
@@ -13723,8 +6635,6 @@ function argMax_(x, axis = 0) {
   return ENGINE.runKernel(ArgMax, inputs, attrs);
 }
 var argMax = /* @__PURE__ */ op({ argMax_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/arg_min.js
 function argMin_(x, axis = 0) {
   const $x = convertToTensor(x, "x", "argMin");
   const inputs = { x: $x };
@@ -13732,32 +6642,24 @@ function argMin_(x, axis = 0) {
   return ENGINE.runKernel(ArgMin, inputs, attrs);
 }
 var argMin = /* @__PURE__ */ op({ argMin_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/asin.js
 function asin_(x) {
   const $x = convertToTensor(x, "x", "asin");
   const inputs = { x: $x };
   return ENGINE.runKernel(Asin, inputs);
 }
 var asin = /* @__PURE__ */ op({ asin_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/asinh.js
 function asinh_(x) {
   const $x = convertToTensor(x, "x", "asinh");
   const inputs = { x: $x };
   return ENGINE.runKernel(Asinh, inputs);
 }
 var asinh = /* @__PURE__ */ op({ asinh_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/atan.js
 function atan_(x) {
   const $x = convertToTensor(x, "x", "atan");
   const inputs = { x: $x };
   return ENGINE.runKernel(Atan, inputs);
 }
 var atan = /* @__PURE__ */ op({ atan_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/atan2.js
 function atan2_(a, b) {
   let $a = convertToTensor(a, "a", "atan2");
   let $b = convertToTensor(b, "b", "atan2");
@@ -13766,16 +6668,12 @@ function atan2_(a, b) {
   return ENGINE.runKernel(Atan2, inputs);
 }
 var atan2 = /* @__PURE__ */ op({ atan2_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/atanh.js
 function atanh_(x) {
   const $x = convertToTensor(x, "x", "atanh");
   const inputs = { x: $x };
   return ENGINE.runKernel(Atanh, inputs);
 }
 var atanh = /* @__PURE__ */ op({ atanh_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/conv_util.js
 function computeDilation2DInfo(inputShape, filterShape, strides, pad2, dataFormat = "NHWC", dilations) {
   const inputChannels = inputShape[3];
   const $filterShape = [...filterShape, inputChannels];
@@ -14081,8 +6979,6 @@ function checkPadOnDimRoundingMode(opDesc, pad2, dimRoundingMode) {
     }
   }
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/reshape.js
 function reshape_(x, shape) {
   const $x = convertToTensor(x, "x", "reshape", "string_or_numeric");
   const inputs = { x: $x };
@@ -14090,8 +6986,6 @@ function reshape_(x, shape) {
   return ENGINE.runKernel(Reshape, inputs, attrs);
 }
 var reshape = /* @__PURE__ */ op({ reshape_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/avg_pool.js
 function avgPool_(x, filterSize, strides, pad2, dimRoundingMode) {
   const $x = convertToTensor(x, "x", "avgPool", "float32");
   const dilations = 1;
@@ -14114,8 +7008,6 @@ function avgPool_(x, filterSize, strides, pad2, dimRoundingMode) {
   return res;
 }
 var avgPool = /* @__PURE__ */ op({ avgPool_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/avg_pool_3d.js
 function avgPool3d_(x, filterSize, strides, pad2, dimRoundingMode, dataFormat = "NDHWC") {
   const $x = convertToTensor(x, "x", "avgPool3d", "float32");
   let x5D = $x;
@@ -14138,8 +7030,6 @@ function avgPool3d_(x, filterSize, strides, pad2, dimRoundingMode, dataFormat = 
   return res;
 }
 var avgPool3d = /* @__PURE__ */ op({ avgPool3d_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/concat.js
 function concat_(tensors, axis = 0) {
   assert(tensors.length >= 1, () => "Pass at least one tensor to concat");
   const $tensors = convertToTensorArray(tensors, "tensors", "concat", "string_or_numeric");
@@ -14159,8 +7049,6 @@ function concat_(tensors, axis = 0) {
   return ENGINE.runKernel(Concat, inputs, attr);
 }
 var concat = /* @__PURE__ */ op({ concat_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/mat_mul.js
 function matMul_(a, b, transposeA = false, transposeB = false) {
   let $a = convertToTensor(a, "a", "matMul");
   let $b = convertToTensor(b, "b", "matMul");
@@ -14170,16 +7058,12 @@ function matMul_(a, b, transposeA = false, transposeB = false) {
   return ENGINE.runKernel(BatchMatMul, inputs, attrs);
 }
 var matMul = /* @__PURE__ */ op({ matMul_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/sigmoid.js
 function sigmoid_(x) {
   const $x = convertToTensor(x, "x", "sigmoid", "float32");
   const inputs = { x: $x };
   return ENGINE.runKernel(Sigmoid, inputs);
 }
 var sigmoid = /* @__PURE__ */ op({ sigmoid_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/slice.js
 function slice_(x, begin, size) {
   const $x = convertToTensor(x, "x", "slice", "string_or_numeric");
   if ($x.rank === 0) {
@@ -14190,16 +7074,12 @@ function slice_(x, begin, size) {
   return ENGINE.runKernel(Slice, inputs, attrs);
 }
 var slice = /* @__PURE__ */ op({ slice_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/tanh.js
 function tanh_(x) {
   const $x = convertToTensor(x, "x", "tanh", "float32");
   const inputs = { x: $x };
   return ENGINE.runKernel(Tanh, inputs);
 }
 var tanh2 = /* @__PURE__ */ op({ tanh_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/basic_lstm_cell.js
 function basicLSTMCell_(forgetBias, lstmKernel, lstmBias, data, c, h) {
   const $forgetBias = convertToTensor(forgetBias, "forgetBias", "basicLSTMCell");
   const $lstmKernel = convertToTensor(lstmKernel, "lstmKernel", "basicLSTMCell");
@@ -14214,16 +7094,14 @@ function basicLSTMCell_(forgetBias, lstmKernel, lstmBias, data, c, h) {
   const sliceCols = res.shape[1] / 4;
   const sliceSize = [batchSize, sliceCols];
   const i = slice(res, [0, 0], sliceSize);
-  const j3 = slice(res, [0, sliceCols], sliceSize);
+  const j = slice(res, [0, sliceCols], sliceSize);
   const f = slice(res, [0, sliceCols * 2], sliceSize);
   const o = slice(res, [0, sliceCols * 3], sliceSize);
-  const newC = add2(mul(sigmoid(i), tanh2(j3)), mul($c, sigmoid(add2($forgetBias, f))));
+  const newC = add2(mul(sigmoid(i), tanh2(j)), mul($c, sigmoid(add2($forgetBias, f))));
   const newH = mul(tanh2(newC), sigmoid(o));
   return [newC, newH];
 }
 var basicLSTMCell = /* @__PURE__ */ op({ basicLSTMCell_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/batch_to_space_nd.js
 function batchToSpaceND_(x, blockShape, crops) {
   const $x = convertToTensor(x, "x", "batchToSpaceND");
   const prod4 = blockShape.reduce((a, b) => a * b);
@@ -14235,8 +7113,6 @@ function batchToSpaceND_(x, blockShape, crops) {
   return ENGINE.runKernel(BatchToSpaceND, inputs, attrs);
 }
 var batchToSpaceND = /* @__PURE__ */ op({ batchToSpaceND_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/batchnorm_util.js
 function xAs4D(x) {
   let x4D;
   if (x.rank === 0 || x.rank === 1) {
@@ -14250,8 +7126,6 @@ function xAs4D(x) {
   }
   return x4D;
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/batchnorm.js
 function batchNorm_(x, mean3, variance, offset, scale2, varianceEpsilon) {
   if (varianceEpsilon == null) {
     varianceEpsilon = 1e-3;
@@ -14283,8 +7157,6 @@ function batchNorm_(x, mean3, variance, offset, scale2, varianceEpsilon) {
   return reshape(res, $x.shape);
 }
 var batchNorm = /* @__PURE__ */ op({ batchNorm_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/batchnorm2d.js
 function batchNorm2d_(x, mean3, variance, offset, scale2, varianceEpsilon) {
   const $x = convertToTensor(x, "x", "batchNorm");
   const $mean = convertToTensor(mean3, "mean", "batchNorm");
@@ -14309,8 +7181,6 @@ function batchNorm2d_(x, mean3, variance, offset, scale2, varianceEpsilon) {
   return batchNorm($x, $mean, $variance, $offset, $scale, varianceEpsilon);
 }
 var batchNorm2d = /* @__PURE__ */ op({ batchNorm2d_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/batchnorm3d.js
 function batchNorm3d_(x, mean3, variance, offset, scale2, varianceEpsilon) {
   const $x = convertToTensor(x, "x", "batchNorm");
   const $mean = convertToTensor(mean3, "mean", "batchNorm");
@@ -14335,8 +7205,6 @@ function batchNorm3d_(x, mean3, variance, offset, scale2, varianceEpsilon) {
   return batchNorm($x, $mean, $variance, $offset, $scale, varianceEpsilon);
 }
 var batchNorm3d = /* @__PURE__ */ op({ batchNorm3d_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/batchnorm4d.js
 function batchNorm4d_(x, mean3, variance, offset, scale2, varianceEpsilon) {
   const $x = convertToTensor(x, "x", "batchNorm");
   const $mean = convertToTensor(mean3, "mean", "batchNorm");
@@ -14361,8 +7229,6 @@ function batchNorm4d_(x, mean3, variance, offset, scale2, varianceEpsilon) {
   return batchNorm($x, $mean, $variance, $offset, $scale, varianceEpsilon);
 }
 var batchNorm4d = /* @__PURE__ */ op({ batchNorm4d_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/bincount.js
 function bincount_(x, weights, size) {
   const $x = convertToTensor(x, "x", "bincount");
   const $weights = convertToTensor(weights, "weights", "bincount");
@@ -14374,8 +7240,6 @@ function bincount_(x, weights, size) {
   return ENGINE.runKernel(Bincount, inputs, attrs);
 }
 var bincount = /* @__PURE__ */ op({ bincount_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/bitwise_and.js
 function bitwiseAnd_(x, y) {
   const $x = convertToTensor(x, "x", "bitwiseAnd");
   const $y = convertToTensor(y, "y", "bitwiseAnd");
@@ -14389,8 +7253,6 @@ function bitwiseAnd_(x, y) {
   return ENGINE.runKernel(BitwiseAnd, inputs);
 }
 var bitwiseAnd = /* @__PURE__ */ op({ bitwiseAnd_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/broadcast_args.js
 function broadcastArgs_(s0, s1) {
   const shape1Input = convertToTensor(s0, "s0", "broadcastArgs", "int32");
   const shape2Input = convertToTensor(s1, "s1", "broadcastArgs", "int32");
@@ -14404,8 +7266,6 @@ function broadcastArgs_(s0, s1) {
   return ENGINE.runKernel(BroadcastArgs, inputs);
 }
 var broadcastArgs = /* @__PURE__ */ op({ broadcastArgs_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/broadcast_to.js
 function broadcastTo_(x, shape) {
   let input2 = convertToTensor(x, "broadcastTo", "x");
   const xShape = input2.shape;
@@ -14438,24 +7298,18 @@ function broadcastTo_(x, shape) {
   return ENGINE.runKernel(Tile, inputs, attrs);
 }
 var broadcastTo = /* @__PURE__ */ op({ broadcastTo_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/ceil.js
 function ceil_(x) {
   const $x = convertToTensor(x, "x", "ceil", "float32");
   const inputs = { x: $x };
   return ENGINE.runKernel(Ceil, inputs);
 }
 var ceil = /* @__PURE__ */ op({ ceil_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/fill.js
 function fill(shape, value, dtype) {
   assertNonNegativeIntegerDimensions(shape);
   dtype = dtype || inferDtype(value);
   const attrs = { shape, value, dtype };
   return ENGINE.runKernel(Fill, {}, attrs);
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/clip_by_value.js
 function clipByValue_(x, clipValueMin, clipValueMax) {
   const $x = convertToTensor(x, "x", "clipByValue");
   assert(clipValueMin <= clipValueMax, () => `Error in clip: min (${clipValueMin}) must be less than or equal to max (${clipValueMax}).`);
@@ -14467,8 +7321,6 @@ function clipByValue_(x, clipValueMin, clipValueMax) {
   return ENGINE.runKernel(ClipByValue, inputs, attrs);
 }
 var clipByValue = /* @__PURE__ */ op({ clipByValue_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/concat_1d.js
 function concat1d_(tensors) {
   return concat(
     tensors,
@@ -14477,26 +7329,18 @@ function concat1d_(tensors) {
   );
 }
 var concat1d = /* @__PURE__ */ op({ concat1d_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/concat_2d.js
 function concat2d_(tensors, axis) {
   return concat(tensors, axis);
 }
 var concat2d = /* @__PURE__ */ op({ concat2d_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/concat_3d.js
 function concat3d_(tensors, axis) {
   return concat(tensors, axis);
 }
 var concat3d = /* @__PURE__ */ op({ concat3d_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/concat_4d.js
 function concat4d_(tensors, axis) {
   return concat(tensors, axis);
 }
 var concat4d = /* @__PURE__ */ op({ concat4d_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/conv2d.js
 function conv2d_(x, filter, strides, pad2, dataFormat = "NHWC", dilations = [1, 1], dimRoundingMode) {
   const $x = convertToTensor(x, "x", "conv2d", "float32");
   const $filter = convertToTensor(filter, "filter", "conv2d", "float32");
@@ -14523,8 +7367,6 @@ function conv2d_(x, filter, strides, pad2, dataFormat = "NHWC", dilations = [1, 
   return res;
 }
 var conv2d = /* @__PURE__ */ op({ conv2d_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/conv1d.js
 function conv1d_(x, filter, stride, pad2, dataFormat = "NWC", dilation = 1, dimRoundingMode) {
   const $x = convertToTensor(x, "x", "conv1d");
   const $filter = convertToTensor(filter, "filter", "conv1d");
@@ -14554,8 +7396,6 @@ function conv1d_(x, filter, stride, pad2, dataFormat = "NWC", dilation = 1, dimR
   return reshape(res, [res.shape[0], res.shape[2], res.shape[3]]);
 }
 var conv1d = /* @__PURE__ */ op({ conv1d_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/conv2d_backprop_input.js
 function conv2DBackpropInput_(xShape, dy, filter, strides, pad2, dataFormat = "NHWC", dimRoundingMode) {
   assert(xShape.length === dy.rank, () => `Length of inShape (${xShape.length}) and rank of dy (${dy.rank}) must match`);
   let xShape4D = xShape;
@@ -14583,16 +7423,12 @@ function conv2DBackpropInput_(xShape, dy, filter, strides, pad2, dataFormat = "N
   return res;
 }
 var conv2DBackpropInput = /* @__PURE__ */ op({ conv2DBackpropInput_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/conv2d_transpose.js
 function conv2dTranspose_(x, filter, outputShape, strides, pad2, dimRoundingMode) {
   const $x = convertToTensor(x, "x", "conv2dTranspose");
   const $filter = convertToTensor(filter, "filter", "conv2dTranspose");
   return conv2DBackpropInput(outputShape, $x, $filter, strides, pad2, "NHWC", dimRoundingMode);
 }
 var conv2dTranspose = /* @__PURE__ */ op({ conv2dTranspose_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/conv3d.js
 function conv3d_(x, filter, strides, pad2, dataFormat = "NDHWC", dilations = [1, 1, 1]) {
   const $x = convertToTensor(x, "x", "conv3d");
   const $filter = convertToTensor(filter, "filter", "conv3d");
@@ -14618,8 +7454,6 @@ function conv3d_(x, filter, strides, pad2, dataFormat = "NDHWC", dilations = [1,
   return res;
 }
 var conv3d = /* @__PURE__ */ op({ conv3d_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/conv3d_backprop_input.js
 function conv3DBackpropInput_(xShape, dy, filter, strides, pad2) {
   assert(xShape.length === dy.rank, () => `Length of inShape (${xShape.length}) and rank of dy (${dy.rank}) must match`);
   let xShape5D = xShape;
@@ -14646,32 +7480,24 @@ function conv3DBackpropInput_(xShape, dy, filter, strides, pad2) {
   return res;
 }
 var conv3DBackpropInput = /* @__PURE__ */ op({ conv3DBackpropInput_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/conv3d_transpose.js
 function conv3dTranspose_(x, filter, outputShape, strides, pad2) {
   const $x = convertToTensor(x, "x", "conv3dTranspose");
   const $filter = convertToTensor(filter, "filter", "conv3dTranspose");
   return conv3DBackpropInput(outputShape, $x, $filter, strides, pad2);
 }
 var conv3dTranspose = /* @__PURE__ */ op({ conv3dTranspose_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/cos.js
 function cos_(x) {
   const $x = convertToTensor(x, "x", "cos", "float32");
   const inputs = { x: $x };
   return ENGINE.runKernel(Cos, inputs);
 }
 var cos = /* @__PURE__ */ op({ cos_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/cosh.js
 function cosh_(x) {
   const $x = convertToTensor(x, "x", "cosh", "float32");
   const inputs = { x: $x };
   return ENGINE.runKernel(Cosh, inputs);
 }
 var cosh = /* @__PURE__ */ op({ cosh_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/cumprod.js
 function cumprod_(x, axis = 0, exclusive = false, reverse4 = false) {
   const $x = convertToTensor(x, "x", "cumprod");
   const inputs = { x: $x };
@@ -14679,8 +7505,6 @@ function cumprod_(x, axis = 0, exclusive = false, reverse4 = false) {
   return ENGINE.runKernel(Cumprod, inputs, attrs);
 }
 var cumprod = /* @__PURE__ */ op({ cumprod_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/cumsum.js
 function cumsum_(x, axis = 0, exclusive = false, reverse4 = false) {
   const $x = convertToTensor(x, "x", "cumsum");
   const inputs = { x: $x };
@@ -14688,8 +7512,6 @@ function cumsum_(x, axis = 0, exclusive = false, reverse4 = false) {
   return ENGINE.runKernel(Cumsum, inputs, attrs);
 }
 var cumsum = /* @__PURE__ */ op({ cumsum_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/dense_bincount.js
 function denseBincount_(x, weights, size, binaryOutput = false) {
   const $x = convertToTensor(x, "x", "denseBincount");
   const $weights = convertToTensor(weights, "weights", "denseBincount");
@@ -14702,8 +7524,6 @@ function denseBincount_(x, weights, size, binaryOutput = false) {
   return ENGINE.runKernel(DenseBincount, inputs, attrs);
 }
 var denseBincount = /* @__PURE__ */ op({ denseBincount_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/depth_to_space.js
 function depthToSpace_(x, blockSize, dataFormat = "NHWC") {
   const $x = convertToTensor(x, "x", "depthToSpace", "float32");
   const inputHeight = dataFormat === "NHWC" ? $x.shape[1] : $x.shape[2];
@@ -14722,8 +7542,6 @@ function depthToSpace_(x, blockSize, dataFormat = "NHWC") {
   return ENGINE.runKernel(DepthToSpace, inputs, attrs);
 }
 var depthToSpace = /* @__PURE__ */ op({ depthToSpace_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/depthwise_conv2d.js
 function depthwiseConv2d_(x, filter, strides, pad2, dataFormat = "NHWC", dilations = [1, 1], dimRoundingMode) {
   const $x = convertToTensor(x, "x", "depthwiseConv2d", "float32");
   const $filter = convertToTensor(filter, "filter", "depthwiseConv2d", "float32");
@@ -14747,16 +7565,12 @@ function depthwiseConv2d_(x, filter, strides, pad2, dataFormat = "NHWC", dilatio
   return res;
 }
 var depthwiseConv2d = /* @__PURE__ */ op({ depthwiseConv2d_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/diag.js
 function diag_(x) {
   const $x = convertToTensor(x, "x", "diag");
   const inputs = { x: $x };
   return ENGINE.runKernel(Diag, inputs);
 }
 var diag = /* @__PURE__ */ op({ diag_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/dilation2d.js
 function dilation2d_(x, filter, strides, pad2, dilations = [1, 1], dataFormat = "NHWC") {
   const $x = convertToTensor(x, "x", "dilation2d");
   const $filter = convertToTensor(filter, "filter", "dilation2d");
@@ -14779,8 +7593,6 @@ function dilation2d_(x, filter, strides, pad2, dilations = [1, 1], dataFormat = 
   return res;
 }
 var dilation2d = /* @__PURE__ */ op({ dilation2d_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/broadcast_util.js
 var broadcast_util_exports = {};
 __export(broadcast_util_exports, {
   assertAndGetBroadcastShape: () => assertAndGetBroadcastShape,
@@ -14837,8 +7649,6 @@ function assertAndGetBroadcastShape(shapeA, shapeB) {
   }
   return result;
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/equal.js
 function equal_(a, b) {
   let $a = convertToTensor(a, "a", "equal", "string_or_numeric");
   let $b = convertToTensor(b, "b", "equal", "string_or_numeric");
@@ -14848,8 +7658,6 @@ function equal_(a, b) {
   return ENGINE.runKernel(Equal, inputs);
 }
 var equal = /* @__PURE__ */ op({ equal_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/where.js
 function where_(condition, a, b) {
   const $a = convertToTensor(a, "a", "where");
   const $b = convertToTensor(b, "b", "where");
@@ -14866,16 +7674,12 @@ function where_(condition, a, b) {
   return ENGINE.runKernel(Select, inputs);
 }
 var where = /* @__PURE__ */ op({ where_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/zeros_like.js
 function zerosLike_(x) {
   const $x = convertToTensor(x, "x", "zerosLike");
   const inputs = { x: $x };
   return ENGINE.runKernel(ZerosLike, inputs);
 }
 var zerosLike = /* @__PURE__ */ op({ zerosLike_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/div_no_nan.js
 function divNoNan_(a, b) {
   let $a = convertToTensor(a, "a", "div");
   let $b = convertToTensor(b, "b", "div");
@@ -14886,11 +7690,9 @@ function divNoNan_(a, b) {
   return where(bEqualsZero, zeros4, divResult);
 }
 var divNoNan = /* @__PURE__ */ op({ divNoNan_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/dot.js
-function dot_(t1, t22) {
+function dot_(t1, t2) {
   const $t1 = convertToTensor(t1, "t1", "dot");
-  const $t2 = convertToTensor(t22, "t2", "dot");
+  const $t2 = convertToTensor(t2, "t2", "dot");
   assert(($t1.rank === 1 || $t1.rank === 2) && ($t2.rank === 1 || $t2.rank === 2), () => `Error in dot: inputs must all be rank 1 or 2, but got ranks ${$t1.rank} and ${$t2.rank}.`);
   const t1Inner = $t1.rank === 1 ? $t1.size : $t1.shape[1];
   const t2Inner = $t2.rank === 1 ? $t2.size : $t2.shape[0];
@@ -14916,24 +7718,18 @@ function dot_(t1, t22) {
   }
 }
 var dot = /* @__PURE__ */ op({ dot_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/einsum.js
 function einsum_(equation, ...tensors) {
-  const $tensors = tensors.map((t3, i) => convertToTensor(t3, `tensors${i}`, "einsum"));
+  const $tensors = tensors.map((t, i) => convertToTensor(t, `tensors${i}`, "einsum"));
   const attrs = { equation };
   return ENGINE.runKernel(Einsum, $tensors, attrs);
 }
 var einsum = /* @__PURE__ */ op({ einsum_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/elu.js
 function elu_(x) {
   const $x = convertToTensor(x, "x", "elu", "float32");
   const inputs = { x: $x };
   return ENGINE.runKernel(Elu, inputs);
 }
 var elu = /* @__PURE__ */ op({ elu_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/ensure_shape.js
 function ensureShape_(x, shape) {
   const $x = convertToTensor(x, "x", "ensureShape", "string_or_numeric");
   if (!arraysEqualWithNull($x.shape, shape)) {
@@ -14942,8 +7738,6 @@ function ensureShape_(x, shape) {
   return x;
 }
 var ensureShape = /* @__PURE__ */ op({ ensureShape_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/erf.js
 function erf_(x) {
   let $x = convertToTensor(x, "x", "erf");
   assert($x.dtype === "int32" || $x.dtype === "float32", () => "Input dtype must be `int32` or `float32`.");
@@ -14954,8 +7748,6 @@ function erf_(x) {
   return ENGINE.runKernel(Erf, inputs);
 }
 var erf = /* @__PURE__ */ op({ erf_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/axis_util.js
 function axesAreInnerMostDims(axes, rank) {
   for (let i = 0; i < axes.length; ++i) {
     if (axes[axes.length - i - 1] !== rank - 1 - i) {
@@ -15019,8 +7811,6 @@ function getInnerMostAxes(numAxes, rank) {
   }
   return res;
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/max.js
 function max_(x, axis = null, keepDims = false) {
   const $x = convertToTensor(x, "x", "max");
   const inputs = { x: $x };
@@ -15028,8 +7818,6 @@ function max_(x, axis = null, keepDims = false) {
   return ENGINE.runKernel(Max, inputs, attrs);
 }
 var max = /* @__PURE__ */ op({ max_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/min.js
 function min_(x, axis = null, keepDims = false) {
   const $x = convertToTensor(x, "x", "min");
   const inputs = { x: $x };
@@ -15037,8 +7825,6 @@ function min_(x, axis = null, keepDims = false) {
   return ENGINE.runKernel(Min, inputs, attrs);
 }
 var min = /* @__PURE__ */ op({ min_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/pow.js
 function pow_(base, exp4) {
   let $base = convertToTensor(base, "base", "pow");
   let $exp = convertToTensor(exp4, "exp", "pow");
@@ -15047,8 +7833,6 @@ function pow_(base, exp4) {
   return ENGINE.runKernel(Pow, inputs);
 }
 var pow = /* @__PURE__ */ op({ pow_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/scalar.js
 function scalar(value, dtype) {
   if ((isTypedArray(value) && dtype !== "string" || Array.isArray(value)) && dtype !== "complex64") {
     throw new Error("Error creating a new Scalar: value must be a primitive (number|boolean|string)");
@@ -15060,24 +7844,18 @@ function scalar(value, dtype) {
   const inferredShape = [];
   return makeTensor(value, shape, inferredShape, dtype);
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/sqrt.js
 function sqrt_(x) {
   const $x = convertToTensor(x, "x", "sqrt", "float32");
   const inputs = { x: $x };
   return ENGINE.runKernel(Sqrt, inputs);
 }
 var sqrt = /* @__PURE__ */ op({ sqrt_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/square.js
 function square_(x) {
   const $x = convertToTensor(x, "x", "square");
   const attrs = {};
   return ENGINE.runKernel("Square", { x: $x }, attrs);
 }
 var square = /* @__PURE__ */ op({ square_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/sum.js
 function sum_(x, axis = null, keepDims = false) {
   let $x = convertToTensor(x, "x", "sum");
   if ($x.dtype === "bool") {
@@ -15088,8 +7866,6 @@ function sum_(x, axis = null, keepDims = false) {
   return ENGINE.runKernel(Sum, inputs, attrs);
 }
 var sum2 = /* @__PURE__ */ op({ sum_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/norm.js
 function norm_(x, ord = "euclidean", axis = null, keepDims = false) {
   x = convertToTensor(x, "x", "norm");
   const norm2 = normImpl(x, ord, axis);
@@ -15140,22 +7916,16 @@ function normImpl(x, p2, axis = null) {
   throw new Error(`Error in norm: invalid axis: ${axis}`);
 }
 var norm = /* @__PURE__ */ op({ norm_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/euclidean_norm.js
 function euclideanNorm_(x, axis = null, keepDims = false) {
   return norm(x, "euclidean", axis, keepDims);
 }
 var euclideanNorm = /* @__PURE__ */ op({ euclideanNorm_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/exp.js
 function exp_(x) {
   const $x = convertToTensor(x, "x", "exp");
   const inputs = { x: $x };
   return ENGINE.runKernel(Exp, inputs);
 }
 var exp = /* @__PURE__ */ op({ exp_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/expand_dims.js
 function expandDims_(x, axis = 0) {
   const $x = convertToTensor(x, "x", "expandDims", "string_or_numeric");
   assert(axis <= $x.rank, () => "Axis must be <= rank of the tensor");
@@ -15164,16 +7934,12 @@ function expandDims_(x, axis = 0) {
   return ENGINE.runKernel(ExpandDims, inputs, attrs);
 }
 var expandDims = /* @__PURE__ */ op({ expandDims_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/expm1.js
 function expm1_(x) {
   const $x = convertToTensor(x, "x", "expm1");
   const inputs = { x: $x };
   return ENGINE.runKernel(Expm1, inputs);
 }
 var expm1 = /* @__PURE__ */ op({ expm1_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/tile.js
 function tile_(x, reps) {
   const $x = convertToTensor(x, "x", "tile", "string_or_numeric");
   assert($x.rank === reps.length, () => `Error in transpose: rank of input ${$x.rank} must match length of reps ${reps}.`);
@@ -15182,8 +7948,6 @@ function tile_(x, reps) {
   return ENGINE.runKernel(Tile, inputs, attrs);
 }
 var tile = /* @__PURE__ */ op({ tile_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/eye.js
 function eye_(numRows, numColumns, batchShape, dtype = "float32") {
   if (numColumns == null) {
     numColumns = numRows;
@@ -15215,16 +7979,12 @@ function eye_(numRows, numColumns, batchShape, dtype = "float32") {
   }
 }
 var eye = /* @__PURE__ */ op({ eye_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/floor.js
 function floor_(x) {
   const $x = convertToTensor(x, "x", "floor", "float32");
   const inputs = { x: $x };
   return ENGINE.runKernel(Floor, inputs);
 }
 var floor = /* @__PURE__ */ op({ floor_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/gather.js
 function gather_(x, indices, axis = 0, batchDims = 0) {
   const $x = convertToTensor(x, "x", "gather");
   const $indices = convertToTensor(indices, "indices", "gather", "int32");
@@ -15233,8 +7993,6 @@ function gather_(x, indices, axis = 0, batchDims = 0) {
   return ENGINE.runKernel(GatherV2, inputs, attrs);
 }
 var gather = /* @__PURE__ */ op({ gather_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/greater.js
 function greater_(a, b) {
   let $a = convertToTensor(a, "a", "greater", "string_or_numeric");
   let $b = convertToTensor(b, "b", "greater", "string_or_numeric");
@@ -15244,8 +8002,6 @@ function greater_(a, b) {
   return ENGINE.runKernel(Greater, inputs);
 }
 var greater = /* @__PURE__ */ op({ greater_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/greater_equal.js
 function greaterEqual_(a, b) {
   let $a = convertToTensor(a, "a", "greaterEqual", "string_or_numeric");
   let $b = convertToTensor(b, "b", "greaterEqual", "string_or_numeric");
@@ -15255,40 +8011,30 @@ function greaterEqual_(a, b) {
   return ENGINE.runKernel(GreaterEqual, inputs);
 }
 var greaterEqual = /* @__PURE__ */ op({ greaterEqual_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/imag.js
 function imag_(input2) {
   const $input = convertToTensor(input2, "input", "imag");
   const inputs = { input: $input };
   return ENGINE.runKernel(Imag, inputs);
 }
 var imag = /* @__PURE__ */ op({ imag_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/is_finite.js
 function isFinite_(x) {
   const $x = convertToTensor(x, "x", "isFinite");
   const inputs = { x: $x };
   return ENGINE.runKernel(IsFinite, inputs);
 }
 var isFinite2 = /* @__PURE__ */ op({ isFinite_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/is_inf.js
 function isInf_(x) {
   const $x = convertToTensor(x, "x", "isInf");
   const inputs = { x: $x };
   return ENGINE.runKernel(IsInf, inputs);
 }
 var isInf = /* @__PURE__ */ op({ isInf_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/is_nan.js
 function isNaN_(x) {
   const $x = convertToTensor(x, "x", "isNaN");
   const inputs = { x: $x };
   return ENGINE.runKernel(IsNan, inputs);
 }
 var isNaN2 = /* @__PURE__ */ op({ isNaN_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/leaky_relu.js
 function leakyRelu_(x, alpha = 0.2) {
   const $x = convertToTensor(x, "x", "leakyRelu");
   const inputs = { x: $x };
@@ -15296,8 +8042,6 @@ function leakyRelu_(x, alpha = 0.2) {
   return ENGINE.runKernel(LeakyRelu, inputs, attrs);
 }
 var leakyRelu = /* @__PURE__ */ op({ leakyRelu_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/less.js
 function less_(a, b) {
   let $a = convertToTensor(a, "a", "less", "string_or_numeric");
   let $b = convertToTensor(b, "b", "less", "string_or_numeric");
@@ -15307,8 +8051,6 @@ function less_(a, b) {
   return ENGINE.runKernel(Less, inputs);
 }
 var less = /* @__PURE__ */ op({ less_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/less_equal.js
 function lessEqual_(a, b) {
   let $a = convertToTensor(a, "a", "lessEqual", "string_or_numeric");
   let $b = convertToTensor(b, "b", "lessEqual", "string_or_numeric");
@@ -15318,8 +8060,6 @@ function lessEqual_(a, b) {
   return ENGINE.runKernel(LessEqual, inputs);
 }
 var lessEqual = /* @__PURE__ */ op({ lessEqual_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/linspace.js
 function linspace(start, stop, num) {
   if (num <= 0) {
     throw new Error("The number of values should be positive.");
@@ -15327,8 +8067,6 @@ function linspace(start, stop, num) {
   const attrs = { start, stop, num };
   return ENGINE.runKernel(LinSpace, {}, attrs);
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/local_response_normalization.js
 function localResponseNormalization_(x, depthRadius = 5, bias = 1, alpha = 1, beta = 0.5) {
   const $x = convertToTensor(x, "x", "localResponseNormalization");
   assert($x.rank === 4 || $x.rank === 3, () => `Error in localResponseNormalization: x must be rank 3 or 4 but got
@@ -15350,24 +8088,18 @@ function localResponseNormalization_(x, depthRadius = 5, bias = 1, alpha = 1, be
   }
 }
 var localResponseNormalization = /* @__PURE__ */ op({ localResponseNormalization_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/log.js
 function log_(x) {
   const $x = convertToTensor(x, "x", "log", "float32");
   const inputs = { x: $x };
   return ENGINE.runKernel(Log, inputs);
 }
 var log2 = /* @__PURE__ */ op({ log_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/log1p.js
 function log1p_(x) {
   const $x = convertToTensor(x, "x", "log1p");
   const inputs = { x: $x };
   return ENGINE.runKernel(Log1p, inputs);
 }
 var log1p = /* @__PURE__ */ op({ log1p_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients.js
 function grad(f) {
   assert(isFunction(f), () => "The f passed in grad(f) must be a function");
   return (x, dy) => {
@@ -15461,24 +8193,18 @@ function checkGrads(grads2) {
     the f you passed encloses all operations that lead from x to y.`);
   }
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/neg.js
 function neg_(x) {
   const $x = convertToTensor(x, "x", "neg");
   const inputs = { x: $x };
   return ENGINE.runKernel(Neg, inputs);
 }
 var neg = /* @__PURE__ */ op({ neg_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/softplus.js
 function softplus_(x) {
   const $x = convertToTensor(x, "x", "softplus");
   const inputs = { x: $x };
   return ENGINE.runKernel(Softplus, inputs);
 }
 var softplus = /* @__PURE__ */ op({ softplus_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/log_sigmoid.js
 function logSigmoid_(x) {
   const $x = convertToTensor(x, "x", "logSigmoid");
   const customOp = customGrad((x2) => {
@@ -15492,8 +8218,6 @@ function logSigmoid_(x) {
   return customOp($x);
 }
 var logSigmoid = /* @__PURE__ */ op({ logSigmoid_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/sub.js
 function sub_(a, b) {
   let $a = convertToTensor(a, "a", "sub");
   let $b = convertToTensor(b, "b", "sub");
@@ -15502,8 +8226,6 @@ function sub_(a, b) {
   return ENGINE.runKernel(Sub, inputs);
 }
 var sub = /* @__PURE__ */ op({ sub_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/log_softmax.js
 function logSoftmax_(logits, axis = -1) {
   const $logits = convertToTensor(logits, "logits", "logSoftmax");
   if (axis === -1) {
@@ -15529,8 +8251,6 @@ function logSoftmax_(logits, axis = -1) {
   return customOp($logits);
 }
 var logSoftmax = /* @__PURE__ */ op({ logSoftmax_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/log_sum_exp.js
 function logSumExp_(x, axis = null, keepDims = false) {
   const $x = convertToTensor(x, "x", "logSumExp");
   const axes = parseAxisParam(axis, $x.shape);
@@ -15552,8 +8272,6 @@ function logSumExp_(x, axis = null, keepDims = false) {
   return res;
 }
 var logSumExp = /* @__PURE__ */ op({ logSumExp_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/logical_and.js
 function logicalAnd_(a, b) {
   const $a = convertToTensor(a, "a", "logicalAnd", "bool");
   const $b = convertToTensor(b, "b", "logicalAnd", "bool");
@@ -15562,16 +8280,12 @@ function logicalAnd_(a, b) {
   return ENGINE.runKernel(LogicalAnd, inputs);
 }
 var logicalAnd = /* @__PURE__ */ op({ logicalAnd_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/logical_not.js
 function logicalNot_(x) {
   const $x = convertToTensor(x, "x", "logicalNot", "bool");
   const inputs = { x: $x };
   return ENGINE.runKernel(LogicalNot, inputs);
 }
 var logicalNot = /* @__PURE__ */ op({ logicalNot_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/logical_or.js
 function logicalOr_(a, b) {
   const $a = convertToTensor(a, "a", "logicalOr", "bool");
   const $b = convertToTensor(b, "b", "logicalOr", "bool");
@@ -15580,8 +8294,6 @@ function logicalOr_(a, b) {
   return ENGINE.runKernel(LogicalOr, inputs);
 }
 var logicalOr = /* @__PURE__ */ op({ logicalOr_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/logical_xor.js
 function logicalXor_(a, b) {
   const $a = convertToTensor(a, "a", "logicalXor", "bool");
   const $b = convertToTensor(b, "b", "logicalXor", "bool");
@@ -15589,8 +8301,6 @@ function logicalXor_(a, b) {
   return logicalAnd(logicalOr(a, b), logicalNot(logicalAnd(a, b)));
 }
 var logicalXor = /* @__PURE__ */ op({ logicalXor_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/search_sorted.js
 var INT32_MAX = 2147483648;
 function searchSorted_(sortedSequence, values, side = "left") {
   const $sortedSequence = convertToTensor(sortedSequence, "sortedSequence", "searchSorted");
@@ -15619,13 +8329,9 @@ function searchSorted_(sortedSequence, values, side = "left") {
   return ENGINE.runKernel(SearchSorted, inputs, attrs);
 }
 var searchSorted = /* @__PURE__ */ op({ searchSorted_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/lower_bound.js
 function lowerBound(sortedSequence, values) {
   return searchSorted(sortedSequence, values, "left");
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/max_pool.js
 function maxPool_(x, filterSize, strides, pad2, dimRoundingMode) {
   const $x = convertToTensor(x, "x", "maxPool");
   const dilations = 1;
@@ -15647,8 +8353,6 @@ function maxPool_(x, filterSize, strides, pad2, dimRoundingMode) {
   return res;
 }
 var maxPool = /* @__PURE__ */ op({ maxPool_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/max_pool_3d.js
 function maxPool3d_(x, filterSize = [1, 1, 1], strides, pad2, dimRoundingMode, dataFormat = "NDHWC") {
   const $x = convertToTensor(x, "x", "maxPool3d");
   let x5D = $x;
@@ -15669,8 +8373,6 @@ function maxPool3d_(x, filterSize = [1, 1, 1], strides, pad2, dimRoundingMode, d
   return res;
 }
 var maxPool3d = /* @__PURE__ */ op({ maxPool3d_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/max_pool_with_argmax.js
 function maxPoolWithArgmax_(x, filterSize, strides, pad2, includeBatchInIndex = false) {
   const $x = convertToTensor(x, "x", "maxPoolWithArgmax");
   const inputs = { x: $x };
@@ -15679,8 +8381,6 @@ function maxPoolWithArgmax_(x, filterSize, strides, pad2, includeBatchInIndex = 
   return { result: result[0], indexes: result[1] };
 }
 var maxPoolWithArgmax = /* @__PURE__ */ op({ maxPoolWithArgmax_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/maximum.js
 function maximum_(a, b) {
   let $a = convertToTensor(a, "a", "maximum");
   let $b = convertToTensor(b, "b", "maximum");
@@ -15694,8 +8394,6 @@ function maximum_(a, b) {
   return ENGINE.runKernel(Maximum, inputs);
 }
 var maximum = /* @__PURE__ */ op({ maximum_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/mean.js
 function mean_(x, axis = null, keepDims = false) {
   const $x = convertToTensor(x, "x", "mean");
   const inputs = { x: $x };
@@ -15703,8 +8401,6 @@ function mean_(x, axis = null, keepDims = false) {
   return ENGINE.runKernel(Mean, inputs, attrs);
 }
 var mean = /* @__PURE__ */ op({ mean_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/zeros.js
 function zeros(shape, dtype = "float32") {
   assertNonNegativeIntegerDimensions(shape);
   if (dtype === "complex64") {
@@ -15715,8 +8411,6 @@ function zeros(shape, dtype = "float32") {
   const values = makeZerosTypedArray(sizeFromShape(shape), dtype);
   return ENGINE.makeTensor(values, shape, dtype);
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/ones.js
 function ones2(shape, dtype = "float32") {
   assertNonNegativeIntegerDimensions(shape);
   if (dtype === "complex64") {
@@ -15727,8 +8421,6 @@ function ones2(shape, dtype = "float32") {
   const values = makeOnesTypedArray(sizeFromShape(shape), dtype);
   return ENGINE.makeTensor(values, shape, dtype);
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/meshgrid.js
 function meshgrid(x, y, { indexing = "xy" } = {}) {
   if (indexing !== "xy" && indexing !== "ij") {
     throw new TypeError(`${indexing} is not a valid third argument to meshgrid`);
@@ -15758,8 +8450,6 @@ function meshgrid(x, y, { indexing = "xy" } = {}) {
     matMul(ones2([w, 1], $y.dtype), $y)
   ];
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/minimum.js
 function minimum_(a, b) {
   let $a = convertToTensor(a, "a", "minimum");
   let $b = convertToTensor(b, "b", "minimum");
@@ -15773,8 +8463,6 @@ function minimum_(a, b) {
   return ENGINE.runKernel(Minimum, inputs);
 }
 var minimum = /* @__PURE__ */ op({ minimum_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/mirror_pad.js
 function mirrorPad_(x, paddings, mode) {
   assert(mode === "reflect" || mode === "symmetric", () => `Invalid mode. Mode must be either reflect or symmetric. Got ${mode}.`);
   const $x = convertToTensor(x, "x", "mirrorPad");
@@ -15792,8 +8480,6 @@ function mirrorPad_(x, paddings, mode) {
   return ENGINE.runKernel(MirrorPad, inputs, attrs);
 }
 var mirrorPad = /* @__PURE__ */ op({ mirrorPad_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/mod.js
 function mod_(a, b) {
   let $a = convertToTensor(a, "a", "mod");
   let $b = convertToTensor(b, "b", "mod");
@@ -15802,8 +8488,6 @@ function mod_(a, b) {
   return ENGINE.runKernel(Mod, inputs);
 }
 var mod = /* @__PURE__ */ op({ mod_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/moments.js
 function moments_(x, axis = null, keepDims = false) {
   x = convertToTensor(x, "x", "moments");
   const axes = parseAxisParam(axis, x.shape);
@@ -15817,8 +8501,6 @@ function moments_(x, axis = null, keepDims = false) {
   return { mean: xMean, variance };
 }
 var moments = /* @__PURE__ */ op({ moments_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/multi_rnn_cell.js
 function multiRNNCell_(lstmCells, data, c, h) {
   const $data = convertToTensor(data, "data", "multiRNNCell");
   const $c = convertToTensorArray(c, "c", "multiRNNCell");
@@ -15840,8 +8522,6 @@ function multiRNNCell_(lstmCells, data, c, h) {
   return [newC, newH];
 }
 var multiRNNCell = /* @__PURE__ */ op({ multiRNNCell_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/multinomial.js
 function multinomial_(logits, numSamples, seed, normalized = false) {
   const $logits = convertToTensor(logits, "logits", "multinomial");
   const numOutcomes = $logits.size;
@@ -15860,8 +8540,6 @@ function multinomial_(logits, numSamples, seed, normalized = false) {
   return origRank === 1 ? reshape(res, [res.size]) : res;
 }
 var multinomial = /* @__PURE__ */ op({ multinomial_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/not_equal.js
 function notEqual_(a, b) {
   let $a = convertToTensor(a, "a", "notEqual", "string_or_numeric");
   let $b = convertToTensor(b, "b", "notEqual", "string_or_numeric");
@@ -15871,8 +8549,6 @@ function notEqual_(a, b) {
   return ENGINE.runKernel(NotEqual, inputs);
 }
 var notEqual = /* @__PURE__ */ op({ notEqual_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/one_hot.js
 function oneHot_(indices, depth, onValue = 1, offValue = 0, dtype = "int32") {
   if (depth < 2) {
     throw new Error(`Error in oneHot: depth must be >=2, but it is ${depth}`);
@@ -15883,16 +8559,12 @@ function oneHot_(indices, depth, onValue = 1, offValue = 0, dtype = "int32") {
   return ENGINE.runKernel(OneHot, inputs, attrs);
 }
 var oneHot = /* @__PURE__ */ op({ oneHot_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/ones_like.js
 function onesLike_(x) {
   const $x = convertToTensor(x, "x", "onesLike");
   const inputs = { x: $x };
   return ENGINE.runKernel(OnesLike, inputs);
 }
 var onesLike = /* @__PURE__ */ op({ onesLike_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/outer_product.js
 function outerProduct_(v1, v2) {
   const $v1 = convertToTensor(v1, "v1", "outerProduct");
   const $v2 = convertToTensor(v2, "v2", "outerProduct");
@@ -15902,8 +8574,6 @@ function outerProduct_(v1, v2) {
   return matMul(v12D, v22D);
 }
 var outerProduct = /* @__PURE__ */ op({ outerProduct_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/pad.js
 function pad_(x, paddings, constantValue = 0) {
   const $x = convertToTensor(x, "x", "pad");
   if ($x.rank === 0) {
@@ -15914,36 +8584,26 @@ function pad_(x, paddings, constantValue = 0) {
   return ENGINE.runKernel(PadV2, inputs, attrs);
 }
 var pad = /* @__PURE__ */ op({ pad_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/pad1d.js
 function pad1d_(x, paddings, constantValue = 0) {
   assert(paddings.length === 2, () => "Invalid number of paddings. Must be length of 2.");
   return pad(x, [paddings], constantValue);
 }
 var pad1d = /* @__PURE__ */ op({ pad1d_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/pad2d.js
 function pad2d_(x, paddings, constantValue = 0) {
   assert(paddings.length === 2 && paddings[0].length === 2 && paddings[1].length === 2, () => "Invalid number of paddings. Must be length of 2 each.");
   return pad(x, paddings, constantValue);
 }
 var pad2d = /* @__PURE__ */ op({ pad2d_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/pad3d.js
 function pad3d_(x, paddings, constantValue = 0) {
   assert(paddings.length === 3 && paddings[0].length === 2 && paddings[1].length === 2 && paddings[2].length === 2, () => "Invalid number of paddings. Must be length of 2 each.");
   return pad(x, paddings, constantValue);
 }
 var pad3d = /* @__PURE__ */ op({ pad3d_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/pad4d.js
 function pad4d_(x, paddings, constantValue = 0) {
   assert(paddings.length === 4 && paddings[0].length === 2 && paddings[1].length === 2 && paddings[2].length === 2 && paddings[3].length === 2, () => "Invalid number of paddings. Must be length of 2 each.");
   return pad(x, paddings, constantValue);
 }
 var pad4d = /* @__PURE__ */ op({ pad4d_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/space_to_batch_nd.js
 function spaceToBatchND_(x, blockShape, paddings) {
   const $x = convertToTensor(x, "x", "spaceToBatchND");
   assert($x.rank >= 1 + blockShape.length, () => `input rank ${$x.rank} should be > than [blockShape] ${blockShape.length}`);
@@ -15959,8 +8619,6 @@ function spaceToBatchND_(x, blockShape, paddings) {
   return ENGINE.runKernel(SpaceToBatchND, inputs, attrs);
 }
 var spaceToBatchND = /* @__PURE__ */ op({ spaceToBatchND_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/pool.js
 function pool_(input2, windowShape, poolingType, pad2, dilations, strides, dimRoundingMode) {
   if (dilations == null) {
     dilations = [1, 1];
@@ -16005,8 +8663,8 @@ function requiredSpaceToBatchPaddings(inputShape, blockShape, basePadding) {
   const fullInputShape = inputShape.concat(padStart, origPadEnd);
   const padEndExtra = blockShape.map((b, i) => (b - fullInputShape[i] % b) % b);
   const padEnd = origPadEnd.map((s, i) => s + padEndExtra[i]);
-  const paddings = blockShape.map((_3, i) => [padStart[i], padEnd[i]]);
-  const crops = blockShape.map((_3, i) => [0, padEndExtra[i]]);
+  const paddings = blockShape.map((_, i) => [padStart[i], padEnd[i]]);
+  const crops = blockShape.map((_, i) => [0, padEndExtra[i]]);
   return [paddings, crops];
 }
 function withSpaceToBatchBasePaddings(filterShape, dilation) {
@@ -16016,13 +8674,11 @@ function withSpaceToBatchBasePaddings(filterShape, dilation) {
   const padExtraShape = dilatedFilterShape.map((s) => s - 1);
   const padExtraStart = padExtraShape.map((s) => Math.floor(s / 2));
   const padExtraEnd = padExtraShape.map((s, i) => s - padExtraStart[i]);
-  return padExtraShape.map((_3, i) => {
+  return padExtraShape.map((_, i) => {
     return [padExtraStart[i], padExtraEnd[i]];
   });
 }
 var pool = /* @__PURE__ */ op({ pool_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/prelu.js
 function prelu_(x, alpha) {
   const $x = convertToTensor(x, "x", "prelu");
   const $alpha = convertToTensor(alpha, "alpha", "prelu");
@@ -16030,8 +8686,6 @@ function prelu_(x, alpha) {
   return ENGINE.runKernel(Prelu, inputs);
 }
 var prelu = /* @__PURE__ */ op({ prelu_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/prod.js
 function prod_(x, axis = null, keepDims = false) {
   let $x = convertToTensor(x, "x", "prod");
   if ($x.dtype === "bool") {
@@ -16042,10 +8696,8 @@ function prod_(x, axis = null, keepDims = false) {
   return ENGINE.runKernel(Prod, inputs, attrs);
 }
 var prod = /* @__PURE__ */ op({ prod_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/ragged_gather.js
 function raggedGather_(paramsNestedSplits, paramsDenseValues, indices, outputRaggedRank) {
-  const $paramsNestedSplits = paramsNestedSplits.map((t3, i) => convertToTensor(t3, `tensors${i}`, "raggedGather", "int32"));
+  const $paramsNestedSplits = paramsNestedSplits.map((t, i) => convertToTensor(t, `tensors${i}`, "raggedGather", "int32"));
   const $paramsDenseValues = convertToTensor(paramsDenseValues, "paramsDenseValues", "raggedGather");
   const $indices = convertToTensor(indices, "indices", "raggedGather", "int32");
   const inputs = {
@@ -16061,8 +8713,6 @@ function raggedGather_(paramsNestedSplits, paramsDenseValues, indices, outputRag
   };
 }
 var raggedGather = /* @__PURE__ */ op({ raggedGather_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/ragged_range.js
 function raggedRange_(starts, limits, deltas) {
   const $starts = convertToTensor(starts, "starts", "raggedRange");
   const $limits = convertToTensor(limits, "limits", "raggedRange", $starts.dtype);
@@ -16079,13 +8729,11 @@ function raggedRange_(starts, limits, deltas) {
   };
 }
 var raggedRange = /* @__PURE__ */ op({ raggedRange_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/ragged_tensor_to_tensor.js
 function raggedTensorToTensor_(shape, values, defaultValue, rowPartitionTensors, rowPartitionTypes) {
   const $shape = convertToTensor(shape, "shape", "raggedTensorToTensor", "int32");
   const $values = convertToTensor(values, "values", "raggedTensorToTensor");
   const $defaultValue = convertToTensor(defaultValue, "defaultValue", "raggedTensorToTensor", $values.dtype);
-  const $rowPartitionTensors = rowPartitionTensors.map((t3, i) => convertToTensor(t3, `tensors${i}`, "raggedTensorToTensor", "int32"));
+  const $rowPartitionTensors = rowPartitionTensors.map((t, i) => convertToTensor(t, `tensors${i}`, "raggedTensorToTensor", "int32"));
   const inputs = {
     shape: $shape,
     values: $values,
@@ -16096,8 +8744,6 @@ function raggedTensorToTensor_(shape, values, defaultValue, rowPartitionTensors,
   return ENGINE.runKernel(RaggedTensorToTensor, inputs, attrs);
 }
 var raggedTensorToTensor = /* @__PURE__ */ op({ raggedTensorToTensor_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/rand.js
 function rand_(shape, randFunction, dtype) {
   assertNonNegativeIntegerDimensions(shape);
   const size = sizeFromShape(shape);
@@ -16117,11 +8763,7 @@ function rand_(shape, randFunction, dtype) {
   return ENGINE.makeTensor(values, shape, dtype);
 }
 var rand = /* @__PURE__ */ op({ rand_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/rand_util.js
 var seedrandom = __toESM(require_seedrandom2());
-
-// node_modules/@tensorflow/tfjs-core/dist/test_util.js
 var test_util_exports = {};
 __export(test_util_exports, {
   TEST_EPSILON_FLOAT16: () => TEST_EPSILON_FLOAT16,
@@ -16265,7 +8907,7 @@ function createVideoElement(source) {
   video.preload = "auto";
   video.appendChild(source);
   return new Promise((resolve) => {
-    video.addEventListener("loadeddata", (_3) => resolve(video));
+    video.addEventListener("loadeddata", (_) => resolve(video));
     video.load();
   });
 }
@@ -16277,8 +8919,6 @@ async function play(video) {
     });
   }
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/rand_util.js
 var MPRandGauss = class {
   constructor(mean3, stdDeviation, dtype, truncated, seed) {
     this.mean = mean3;
@@ -16406,8 +9046,6 @@ var UniformRandom = class {
     return this.convertValue(this.min + this.range * this.random());
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/random_gamma.js
 function randomGamma_(shape, alpha, beta = 1, dtype = "float32", seed) {
   assertNonNegativeIntegerDimensions(shape);
   if (beta == null) {
@@ -16427,8 +9065,6 @@ function randomGamma_(shape, alpha, beta = 1, dtype = "float32", seed) {
   return res.toTensor();
 }
 var randomGamma = /* @__PURE__ */ op({ randomGamma_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/random_normal.js
 function randomNormal_(shape, mean3 = 0, stdDev = 1, dtype, seed) {
   assertNonNegativeIntegerDimensions(shape);
   if (dtype != null && dtype === "bool") {
@@ -16442,8 +9078,6 @@ function randomNormal_(shape, mean3 = 0, stdDev = 1, dtype, seed) {
   return res.toTensor();
 }
 var randomNormal = /* @__PURE__ */ op({ randomNormal_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/random_standard_normal.js
 function randomStandardNormal_(shape, dtype, seed) {
   if (dtype != null && dtype === "bool") {
     throw new Error(`Unsupported data type ${dtype}`);
@@ -16451,8 +9085,6 @@ function randomStandardNormal_(shape, dtype, seed) {
   return randomNormal(shape, 0, 1, dtype, seed);
 }
 var randomStandardNormal = /* @__PURE__ */ op({ randomStandardNormal_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/random_uniform.js
 function randomUniform_(shape, minval = 0, maxval = 1, dtype = "float32", seed) {
   assertNonNegativeIntegerDimensions(shape);
   const res = buffer(shape, dtype);
@@ -16463,14 +9095,10 @@ function randomUniform_(shape, minval = 0, maxval = 1, dtype = "float32", seed) 
   return res.toTensor();
 }
 var randomUniform = /* @__PURE__ */ op({ randomUniform_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/random_uniform_int.js
 function randomUniformInt_(shape, minval, maxval, seed) {
   return randomUniform(shape, minval, maxval, "int32", seed);
 }
 var randomUniformInt = /* @__PURE__ */ op({ randomUniformInt_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/range.js
 function range(start, stop, step4 = 1, dtype = "float32") {
   if (step4 === 0) {
     throw new Error("Cannot have a step of zero");
@@ -16478,40 +9106,30 @@ function range(start, stop, step4 = 1, dtype = "float32") {
   const attrs = { start, stop, step: step4, dtype };
   return ENGINE.runKernel(Range, {}, attrs);
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/real.js
 function real_(input2) {
   const $input = convertToTensor(input2, "input", "real");
   const inputs = { input: $input };
   return ENGINE.runKernel(Real, inputs);
 }
 var real = /* @__PURE__ */ op({ real_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/reciprocal.js
 function reciprocal_(x) {
   const $x = convertToTensor(x, "x", "reciprocal");
   const inputs = { x: $x };
   return ENGINE.runKernel(Reciprocal, inputs);
 }
 var reciprocal = /* @__PURE__ */ op({ reciprocal_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/relu.js
 function relu_(x) {
   const $x = convertToTensor(x, "x", "relu");
   const inputs = { x: $x };
   return ENGINE.runKernel(Relu, inputs);
 }
 var relu = /* @__PURE__ */ op({ relu_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/relu6.js
 function relu6_(x) {
   const $x = convertToTensor(x, "x", "relu6");
   const inputs = { x: $x };
   return ENGINE.runKernel(Relu6, inputs);
 }
 var relu6 = /* @__PURE__ */ op({ relu6_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/reverse.js
 function reverse_(x, axis) {
   const $x = convertToTensor(x, "x", "reverse");
   const inputs = { x: $x };
@@ -16519,64 +9137,48 @@ function reverse_(x, axis) {
   return ENGINE.runKernel(Reverse, inputs, attrs);
 }
 var reverse = /* @__PURE__ */ op({ reverse_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/reverse_1d.js
 function reverse1d_(x) {
   const $x = convertToTensor(x, "x", "reverse");
   assert($x.rank === 1, () => `Error in reverse1D: x must be rank 1 but got rank ${$x.rank}.`);
   return reverse($x, 0);
 }
 var reverse1d = /* @__PURE__ */ op({ reverse1d_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/reverse_2d.js
 function reverse2d_(x, axis) {
   const $x = convertToTensor(x, "x", "reverse");
   assert($x.rank === 2, () => `Error in reverse2D: x must be rank 2 but got rank ${$x.rank}.`);
   return reverse($x, axis);
 }
 var reverse2d = /* @__PURE__ */ op({ reverse2d_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/reverse_3d.js
 function reverse3d_(x, axis) {
   const $x = convertToTensor(x, "x", "reverse");
   assert($x.rank === 3, () => `Error in reverse3D: x must be rank 3 but got rank ${$x.rank}.`);
   return reverse($x, axis);
 }
 var reverse3d = /* @__PURE__ */ op({ reverse3d_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/reverse_4d.js
 function reverse4d_(x, axis) {
   const $x = convertToTensor(x, "x", "reverse");
   assert($x.rank === 4, () => `Error in reverse4D: x must be rank 4 but got rank ${$x.rank}.`);
   return reverse($x, axis);
 }
 var reverse4d = /* @__PURE__ */ op({ reverse4d_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/round.js
 function round_(x) {
   const $x = convertToTensor(x, "x", "round");
   const inputs = { x: $x };
   return ENGINE.runKernel(Round, inputs);
 }
 var round2 = /* @__PURE__ */ op({ round_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/rsqrt.js
 function rsqrt_(x) {
   const $x = convertToTensor(x, "x", "rsqrt", "float32");
   const inputs = { x: $x };
   return ENGINE.runKernel(Rsqrt, inputs);
 }
 var rsqrt = /* @__PURE__ */ op({ rsqrt_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/selu.js
 function selu_(x) {
   const $x = convertToTensor(x, "x", "selu");
   const inputs = { x: $x };
   return ENGINE.runKernel(Selu, inputs);
 }
 var selu = /* @__PURE__ */ op({ selu_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/separable_conv2d.js
 function separableConv2d_(x, depthwiseFilter, pointwiseFilter, strides, pad2, dilation = [1, 1], dataFormat = "NHWC") {
   const $x = convertToTensor(x, "x", "separableConv2d");
   const $depthwiseFilter = convertToTensor(depthwiseFilter, "depthwiseFilter", "separableConv2d");
@@ -16607,8 +9209,6 @@ function separableConv2d_(x, depthwiseFilter, pointwiseFilter, strides, pad2, di
   return res;
 }
 var separableConv2d = /* @__PURE__ */ op({ separableConv2d_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/setdiff1d_async.js
 async function setdiff1dAsync_(x, y) {
   const $x = convertToTensor(x, "x", "setdiff1d");
   const $y = convertToTensor(y, "y", "setdiff1d");
@@ -16636,64 +9236,48 @@ async function setdiff1dAsync_(x, y) {
   return [buffer2.toTensor(), indices.toTensor()];
 }
 var setdiff1dAsync = setdiff1dAsync_;
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/sign.js
 function sign_(x) {
   const $x = convertToTensor(x, "x", "sign");
   const inputs = { x: $x };
   return ENGINE.runKernel(Sign, inputs);
 }
 var sign = /* @__PURE__ */ op({ sign_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/sin.js
 function sin_(x) {
   const $x = convertToTensor(x, "x", "sin", "float32");
   const inputs = { x: $x };
   return ENGINE.runKernel(Sin, inputs);
 }
 var sin = /* @__PURE__ */ op({ sin_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/sinh.js
 function sinh_(x) {
   const $x = convertToTensor(x, "x", "sinh");
   const inputs = { x: $x };
   return ENGINE.runKernel(Sinh, inputs);
 }
 var sinh = /* @__PURE__ */ op({ sinh_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/slice1d.js
 function slice1d_(x, begin, size) {
   const $x = convertToTensor(x, "x", "slice1d");
   assert($x.rank === 1, () => `slice1d expects a rank-1 tensor, but got a rank-${$x.rank} tensor`);
   return slice($x, [begin], [size]);
 }
 var slice1d = /* @__PURE__ */ op({ slice1d_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/slice2d.js
 function slice2d_(x, begin, size) {
   const $x = convertToTensor(x, "x", "slice2d");
   assert($x.rank === 2, () => `slice2d expects a rank-2 tensor, but got a rank-${$x.rank} tensor`);
   return slice($x, begin, size);
 }
 var slice2d = /* @__PURE__ */ op({ slice2d_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/slice3d.js
 function slice3d_(x, begin, size) {
   const $x = convertToTensor(x, "x", "slice3d");
   assert($x.rank === 3, () => `slice3d expects a rank-3 tensor, but got a rank-${$x.rank} tensor`);
   return slice($x, begin, size);
 }
 var slice3d = /* @__PURE__ */ op({ slice3d_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/slice4d.js
 function slice4d_(x, begin, size) {
   const $x = convertToTensor(x, "x", "slice4d");
   assert($x.rank === 4, () => `slice4d expects a rank-4 tensor, but got a rank-${$x.rank} tensor`);
   return slice($x, begin, size);
 }
 var slice4d = /* @__PURE__ */ op({ slice4d_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/softmax.js
 function softmax_(logits, dim = -1) {
   const $logits = convertToTensor(logits, "logits", "softmax", "float32");
   if (dim === -1) {
@@ -16707,24 +9291,18 @@ function softmax_(logits, dim = -1) {
   return ENGINE.runKernel(Softmax, inputs, attrs);
 }
 var softmax = /* @__PURE__ */ op({ softmax_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/spectral/fft.js
 function fft_(input2) {
   assert(input2.dtype === "complex64", () => `The dtype for tf.spectral.fft() must be complex64 but got ${input2.dtype}.`);
   const inputs = { input: input2 };
   return ENGINE.runKernel(FFT, inputs);
 }
 var fft = /* @__PURE__ */ op({ fft_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/spectral/ifft.js
 function ifft_(input2) {
   assert(input2.dtype === "complex64", () => `The dtype for tf.spectral.ifft() must be complex64 but got ${input2.dtype}.`);
   const inputs = { input: input2 };
   return ENGINE.runKernel(IFFT, inputs);
 }
 var ifft = /* @__PURE__ */ op({ ifft_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/spectral/irfft.js
 function irfft_(input2) {
   const innerDimensionSize = input2.shape[input2.shape.length - 1];
   const batch = input2.size / innerDimensionSize;
@@ -16753,8 +9331,6 @@ function irfft_(input2) {
   return ret;
 }
 var irfft = /* @__PURE__ */ op({ irfft_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/split.js
 function split_(x, numOrSizeSplits, axis = 0) {
   const $x = convertToTensor(x, "x", "split");
   const inputs = { x: $x };
@@ -16762,8 +9338,6 @@ function split_(x, numOrSizeSplits, axis = 0) {
   return ENGINE.runKernel(SplitV, inputs, attr);
 }
 var split = /* @__PURE__ */ op({ split_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/spectral/rfft.js
 function rfft_(input2, fftLength) {
   assert(input2.dtype === "float32", () => `The dtype for rfft() must be real value but got ${input2.dtype}`);
   let innerDimensionSize = input2.shape[input2.shape.length - 1];
@@ -16796,8 +9370,6 @@ function rfft_(input2, fftLength) {
   return reshape(complex(realComplexConjugate[0], imagComplexConjugate[0]), outputShape);
 }
 var rfft = /* @__PURE__ */ op({ rfft_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/squared_difference.js
 function squaredDifference_(a, b) {
   let $a = convertToTensor(a, "a", "squaredDifference");
   let $b = convertToTensor(b, "b", "squaredDifference");
@@ -16808,15 +9380,11 @@ function squaredDifference_(a, b) {
   return ENGINE.runKernel(SquaredDifference, inputs, attrs);
 }
 var squaredDifference = /* @__PURE__ */ op({ squaredDifference_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/squeeze.js
 function squeeze_(x, axis) {
   const $x = convertToTensor(x, "x", "squeeze", "string_or_numeric");
   return reshape($x, squeezeShape($x.shape, axis).newShape);
 }
 var squeeze = /* @__PURE__ */ op({ squeeze_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/stack.js
 function stack_(tensors, axis = 0) {
   const $tensors = convertToTensorArray(tensors, "tensors", "stack", "string_or_numeric");
   assert($tensors.length >= 1, () => "Pass at least one tensor to tf.stack");
@@ -16828,8 +9396,6 @@ function stack_(tensors, axis = 0) {
   return ENGINE.runKernel(Pack, inputs, attrs);
 }
 var stack = /* @__PURE__ */ op({ stack_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/step.js
 function step_(x, alpha = 0) {
   const $x = convertToTensor(x, "x", "step");
   const inputs = { x: $x };
@@ -16837,8 +9403,6 @@ function step_(x, alpha = 0) {
   return ENGINE.runKernel(Step, inputs, attrs);
 }
 var step = /* @__PURE__ */ op({ step_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/strided_slice.js
 function stridedSlice_(x, begin, end, strides, beginMask = 0, endMask = 0, ellipsisMask = 0, newAxisMask = 0, shrinkAxisMask = 0) {
   const $x = convertToTensor(x, "x", "stridedSlice", "string_or_numeric");
   const inputs = { x: $x };
@@ -16855,16 +9419,12 @@ function stridedSlice_(x, begin, end, strides, beginMask = 0, endMask = 0, ellip
   return ENGINE.runKernel(StridedSlice, inputs, attrs);
 }
 var stridedSlice = /* @__PURE__ */ op({ stridedSlice_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/tan.js
 function tan_(x) {
   const $x = convertToTensor(x, "x", "tan", "float32");
   const inputs = { x: $x };
   return ENGINE.runKernel(Tan, inputs);
 }
 var tan = /* @__PURE__ */ op({ tan_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/tensor1d.js
 function tensor1d(values, dtype) {
   assertNonNull(values);
   const inferredShape = inferShape(values, dtype);
@@ -16874,8 +9434,6 @@ function tensor1d(values, dtype) {
   const shape = null;
   return makeTensor(values, shape, inferredShape, dtype);
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/tensor2d.js
 function tensor2d(values, shape, dtype) {
   assertNonNull(values);
   if (shape != null && shape.length !== 2) {
@@ -16890,8 +9448,6 @@ function tensor2d(values, shape, dtype) {
   }
   return makeTensor(values, shape, inferredShape, dtype);
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/tensor3d.js
 function tensor3d(values, shape, dtype) {
   assertNonNull(values);
   if (shape != null && shape.length !== 3) {
@@ -16906,8 +9462,6 @@ function tensor3d(values, shape, dtype) {
   }
   return makeTensor(values, shape, inferredShape, dtype);
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/tensor4d.js
 function tensor4d(values, shape, dtype) {
   assertNonNull(values);
   if (shape != null && shape.length !== 4) {
@@ -16922,8 +9476,6 @@ function tensor4d(values, shape, dtype) {
   }
   return makeTensor(values, shape, inferredShape, dtype);
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/tensor5d.js
 function tensor5d(values, shape, dtype) {
   assertNonNull(values);
   if (shape != null && shape.length !== 5) {
@@ -16938,8 +9490,6 @@ function tensor5d(values, shape, dtype) {
   }
   return makeTensor(values, shape, inferredShape, dtype);
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/tensor6d.js
 function tensor6d(values, shape, dtype) {
   assertNonNull(values);
   if (shape != null && shape.length !== 6) {
@@ -16955,8 +9505,6 @@ function tensor6d(values, shape, dtype) {
   shape = shape || inferredShape;
   return makeTensor(values, shape, inferredShape, dtype);
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/scatter_nd_util.js
 var scatter_nd_util_exports = {};
 __export(scatter_nd_util_exports, {
   calculateShapes: () => calculateShapes,
@@ -17024,8 +9572,6 @@ function calculateShapes(updates, indices, shape) {
   const outputSize = sizeFromShape(shape);
   return { sliceRank, numUpdates, sliceSize, strides, outputSize };
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/tensor_scatter_update.js
 function tensorScatterUpdate_(tensor2, indices, updates) {
   const $tensor = convertToTensor(tensor2, "tensor", "tensorScatterupdate");
   const $indices = convertToTensor(indices, "indices", "tensorScatterupdate", "int32");
@@ -17043,28 +9589,24 @@ function tensorScatterUpdate_(tensor2, indices, updates) {
   return ENGINE.runKernel(TensorScatterUpdate, inputs, attrs);
 }
 var tensorScatterUpdate = op({ tensorScatterUpdate_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/topk.js
-function topk_(x, k4 = 1, sorted = true) {
+function topk_(x, k = 1, sorted = true) {
   const $x = convertToTensor(x, "x", "topk");
   if ($x.rank === 0) {
     throw new Error("topk() expects the input to be of rank 1 or higher");
   }
   const lastDim = $x.shape[$x.shape.length - 1];
-  if (k4 < 0) {
-    throw new Error(`'k' passed to topk() must be >= 0 but got ${k4}`);
+  if (k < 0) {
+    throw new Error(`'k' passed to topk() must be >= 0 but got ${k}`);
   }
-  if (k4 > lastDim) {
-    throw new Error(`'k' passed to topk() must be <= the last dimension (${lastDim}) but got ${k4}`);
+  if (k > lastDim) {
+    throw new Error(`'k' passed to topk() must be <= the last dimension (${lastDim}) but got ${k}`);
   }
   const inputs = { x: $x };
-  const attrs = { k: k4, sorted };
+  const attrs = { k, sorted };
   const [values, indices] = ENGINE.runKernel(TopK, inputs, attrs);
   return { values, indices };
 }
 var topk = /* @__PURE__ */ op({ topk_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/truncated_normal.js
 function truncatedNormal_(shape, mean3 = 0, stdDev = 1, dtype, seed) {
   assertNonNegativeIntegerDimensions(shape);
   if (dtype != null && dtype === "bool") {
@@ -17078,8 +9620,6 @@ function truncatedNormal_(shape, mean3 = 0, stdDev = 1, dtype, seed) {
   return res.toTensor();
 }
 var truncatedNormal = /* @__PURE__ */ op({ truncatedNormal_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/unique.js
 function unique_(x, axis = 0) {
   const $x = convertToTensor(x, "x", "unique", "string_or_numeric");
   assert($x.rank > 0, () => "The input tensor must be at least 1D");
@@ -17089,8 +9629,6 @@ function unique_(x, axis = 0) {
   return { values, indices };
 }
 var unique = /* @__PURE__ */ op({ unique_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/unsorted_segment_sum.js
 function unsortedSegmentSum_(x, segmentIds, numSegments) {
   const $x = convertToTensor(x, "x", "unsortedSegmentSum");
   const $segmentIds = convertToTensor(segmentIds, "segmentIds", "unsortedSegmentSum", "int32");
@@ -17100,8 +9638,6 @@ function unsortedSegmentSum_(x, segmentIds, numSegments) {
   return ENGINE.runKernel(UnsortedSegmentSum, inputs, attrs);
 }
 var unsortedSegmentSum = /* @__PURE__ */ op({ unsortedSegmentSum_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/unstack.js
 function unstack_(x, axis = 0) {
   const $x = convertToTensor(x, "x", "unstack", "string_or_numeric");
   assert(axis >= -$x.shape.length && axis < $x.shape.length, () => `Axis = ${axis} is not in [-${$x.shape.length}, ${$x.shape.length})`);
@@ -17110,18 +9646,12 @@ function unstack_(x, axis = 0) {
   return ENGINE.runKernel(Unpack, inputs, attrs);
 }
 var unstack = /* @__PURE__ */ op({ unstack_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/upper_bound.js
 function upperBound(sortedSequence, values) {
   return searchSorted(sortedSequence, values, "right");
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/variable.js
 function variable(initialValue, trainable = true, name, dtype) {
   return ENGINE.makeVariable(initialValue, trainable, name, dtype);
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/backends/where_impl.js
 function whereImpl(condShape, condVals) {
   const indices = [];
   for (let i = 0; i < condVals.length; i++) {
@@ -17138,8 +9668,6 @@ function whereImpl(condShape, condVals) {
   }
   return out.toTensor();
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/where_async.js
 async function whereAsync_(condition) {
   const $condition = convertToTensor(condition, "condition", "whereAsync", "bool");
   const vals = await $condition.data();
@@ -17150,8 +9678,6 @@ async function whereAsync_(condition) {
   return res;
 }
 var whereAsync = whereAsync_;
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/boolean_mask.js
 async function booleanMaskAsync_(tensor2, mask, axis) {
   const $tensor = convertToTensor(tensor2, "tensor", "boolMask");
   const $mask = convertToTensor(mask, "mask", "boolMask", "bool");
@@ -17183,8 +9709,6 @@ async function booleanMaskAsync_(tensor2, mask, axis) {
   return res;
 }
 var booleanMaskAsync = booleanMaskAsync_;
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/transpose.js
 function transpose_(x, perm, conjugate) {
   const $x = convertToTensor(x, "x", "transpose");
   if (perm == null) {
@@ -17214,8 +9738,6 @@ function transpose_(x, perm, conjugate) {
   return ENGINE.runKernel(Transpose, inputs, attrs);
 }
 var transpose = /* @__PURE__ */ op({ transpose_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/moving_average.js
 function movingAverage_(v, x, decay, step4, zeroDebias = true) {
   const $v = convertToTensor(v, "v", "movingAverage");
   const $x = convertToTensor(x, "x", "movingAverage");
@@ -17233,8 +9755,6 @@ function movingAverage_(v, x, decay, step4, zeroDebias = true) {
   return add2($v, update);
 }
 var movingAverage = /* @__PURE__ */ op({ movingAverage_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/scatter_nd.js
 function scatterND_(indices, updates, shape) {
   assertNonNegativeIntegerDimensions(shape);
   const $indices = convertToTensor(indices, "indices", "scatterND", "int32");
@@ -17245,8 +9765,6 @@ function scatterND_(indices, updates, shape) {
   return ENGINE.runKernel(ScatterNd, inputs, attrs);
 }
 var scatterND = /* @__PURE__ */ op({ scatterND_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/sparse_to_dense_util.js
 function validateInput2(sparseIndices, sparseValues, outputShape, defaultValues) {
   if (sparseIndices.dtype !== "int32") {
     throw new Error(`tf.sparseToDense() expects the indices to be int32 type, but the dtype was ${sparseIndices.dtype}.`);
@@ -17267,8 +9785,6 @@ function validateInput2(sparseIndices, sparseValues, outputShape, defaultValues)
     throw new Error("sparseValues.dtype must match defaultValues.dtype");
   }
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/sparse_to_dense.js
 function sparseToDense_(sparseIndices, sparseValues, outputShape, defaultValue = 0) {
   assertNonNegativeIntegerDimensions(outputShape);
   const $sparseIndices = convertToTensor(sparseIndices, "sparseIndices", "sparseToDense", "int32");
@@ -17284,8 +9800,6 @@ function sparseToDense_(sparseIndices, sparseValues, outputShape, defaultValue =
   return ENGINE.runKernel(SparseToDense, inputs, attrs);
 }
 var sparseToDense = /* @__PURE__ */ op({ sparseToDense_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/gather_nd.js
 function gatherND_(x, indices) {
   const $indices = convertToTensor(indices, "indices", "gatherND", "int32");
   const $x = convertToTensor(x, "x", "gatherND", "string_or_numeric");
@@ -17293,8 +9807,6 @@ function gatherND_(x, indices) {
   return ENGINE.runKernel(GatherNd, inputs);
 }
 var gatherND = /* @__PURE__ */ op({ gatherND_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/dropout_util.js
 function getNoiseShape(x, noiseShape) {
   if (noiseShape == null) {
     return x.shape.slice();
@@ -17315,8 +9827,6 @@ function getNoiseShape(x, noiseShape) {
   }
   return noiseShape;
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/dropout.js
 function dropout_(x, rate, noiseShape, seed) {
   const $x = convertToTensor(x, "x", "dropout");
   assert($x.dtype === "float32", () => `x has to be a floating point tensor since it's going to be scaled, but got a ${$x.dtype} tensor instead.`);
@@ -17330,8 +9840,6 @@ function dropout_(x, rate, noiseShape, seed) {
   return mul($x, multiplier);
 }
 var dropout = /* @__PURE__ */ op({ dropout_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/signal_ops_util.js
 function enclosingPowerOfTwo(value) {
   return Math.floor(Math.pow(2, Math.ceil(Math.log(value) / Math.log(2))));
 }
@@ -17344,16 +9852,14 @@ function cosineWindow(windowLength, a, b) {
   }
   return tensor1d(newValues, "float32");
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/in_top_k.js
-async function inTopKAsync_(predictions, targets, k4 = 1) {
+async function inTopKAsync_(predictions, targets, k = 1) {
   const $predictions = convertToTensor(predictions, "predictions", "inTopK");
   const $targets = convertToTensor(targets, "targets", "inTopK");
   assert($predictions.rank > 1, () => `inTopK() expects the predictions to be of rank 2 or higher, but got ${$predictions.rank}`);
   assert($predictions.rank - 1 === $targets.rank, () => `predictions rank should be 1 larger than targets rank, but got predictions rank ${$predictions.rank} and targets rank ${$targets.rank}`);
   assertShapesMatch($predictions.shape.slice(0, $predictions.shape.length - 1), $targets.shape, `predictions's shape should be align with the targets' shape, except the last dimension.`);
   const lastDim = $predictions.shape[$predictions.shape.length - 1];
-  assert(k4 > 0 && k4 <= lastDim, () => `'k' passed to inTopK() must be > 0 && <= the predictions last dimension (${lastDim}), but got ${k4}`);
+  assert(k > 0 && k <= lastDim, () => `'k' passed to inTopK() must be > 0 && <= the predictions last dimension (${lastDim}), but got ${k}`);
   const predictionsVals = await $predictions.data();
   const targetsVals = await $targets.data();
   const [batch, size] = [predictionsVals.length / lastDim, lastDim];
@@ -17367,7 +9873,7 @@ async function inTopKAsync_(predictions, targets, k4 = 1) {
     }
     valAndInd.sort((a, b2) => b2.value - a.value);
     precision3[b] = 0;
-    for (let i = 0; i < k4; i++) {
+    for (let i = 0; i < k; i++) {
       if (valAndInd[i].index === targetsVals[b]) {
         precision3[b] = 1;
         break;
@@ -17383,16 +9889,12 @@ async function inTopKAsync_(predictions, targets, k4 = 1) {
   return tensor(precision3, $targets.shape, "bool");
 }
 var inTopKAsync = inTopKAsync_;
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/fused_ops.js
 var fused_ops_exports = {};
 __export(fused_ops_exports, {
   conv2d: () => conv2d2,
   depthwiseConv2d: () => depthwiseConv2d2,
   matMul: () => matMul2
 });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/conv2d_backprop_filter.js
 function conv2DBackpropFilter_(x, dy, filterShape, strides, pad2, dataFormat = "NHWC", dimRoundingMode) {
   let x4D = x;
   if (x.rank === 3) {
@@ -17415,8 +9917,6 @@ function conv2DBackpropFilter_(x, dy, filterShape, strides, pad2, dataFormat = "
   return ENGINE.runKernel(Conv2DBackpropFilter, inputs, attrs);
 }
 var conv2DBackpropFilter = /* @__PURE__ */ op({ conv2DBackpropFilter_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/fused_util.js
 function getFusedDyActivation(dy, y, activation2) {
   if (activation2 == null || activation2 === "linear") {
     return dy;
@@ -17456,8 +9956,6 @@ var shouldFuse = (gradientDepth, activation2) => {
   const gradientMode = gradientDepth > 0;
   return !gradientMode || activation2 === "linear";
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/fused/conv2d.js
 function fusedConv2d_({ x, filter, strides, pad: pad2, dataFormat = "NHWC", dilations = [1, 1], dimRoundingMode, bias, activation: activation2 = "linear", preluActivationWeights, leakyreluAlpha }) {
   activation2 = activation2 || "linear";
   if (shouldFuse(ENGINE.state.gradientDepth, activation2) === false) {
@@ -17565,8 +10063,6 @@ function fusedConv2d_({ x, filter, strides, pad: pad2, dataFormat = "NHWC", dila
   }
 }
 var conv2d2 = /* @__PURE__ */ op({ fusedConv2d_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/depthwise_conv2d_native_backprop_filter.js
 function depthwiseConv2dNativeBackpropFilter_(x, dy, filterShape, strides, pad2, dilations = [1, 1], dimRoundingMode) {
   let x4D = x;
   if (x.rank === 3) {
@@ -17581,8 +10077,6 @@ function depthwiseConv2dNativeBackpropFilter_(x, dy, filterShape, strides, pad2,
   return ENGINE.runKernel(DepthwiseConv2dNativeBackpropFilter, inputs, attrs);
 }
 var depthwiseConv2dNativeBackpropFilter = op({ depthwiseConv2dNativeBackpropFilter_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/depthwise_conv2d_native_backprop_input.js
 function depthwiseConv2dNativeBackpropInput_(xShape, dy, filter, strides, pad2, dilations = [1, 1], dimRoundingMode) {
   let dy4D = dy;
   let reshapedTo4D = false;
@@ -17602,8 +10096,6 @@ function depthwiseConv2dNativeBackpropInput_(xShape, dy, filter, strides, pad2, 
   return res;
 }
 var depthwiseConv2dNativeBackpropInput = op({ depthwiseConv2dNativeBackpropInput_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/fused/depthwise_conv2d.js
 function fusedDepthwiseConv2d_({ x, filter, strides, pad: pad2, dataFormat = "NHWC", dilations = [1, 1], dimRoundingMode, bias, activation: activation2 = "linear", preluActivationWeights, leakyreluAlpha }) {
   if (shouldFuse(ENGINE.state.gradientDepth, activation2) === false) {
     let result = depthwiseConv2d(x, filter, strides, pad2, dataFormat, dilations, dimRoundingMode);
@@ -17698,8 +10190,6 @@ function fusedDepthwiseConv2d_({ x, filter, strides, pad: pad2, dataFormat = "NH
   }
 }
 var depthwiseConv2d2 = /* @__PURE__ */ op({ fusedDepthwiseConv2d_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/fused/mat_mul.js
 function fusedMatMul_({ a, b, transposeA = false, transposeB = false, bias, activation: activation2 = "linear", preluActivationWeights, leakyreluAlpha = 0.2 }) {
   if (shouldFuse(ENGINE.state.gradientDepth, activation2) === false) {
     let result = matMul(a, b, transposeA, transposeB);
@@ -17789,20 +10279,14 @@ function fusedMatMul_({ a, b, transposeA = false, transposeB = false, bias, acti
   }
 }
 var matMul2 = /* @__PURE__ */ op({ fusedMatMul_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/signal/hamming_window.js
 function hammingWindow_(windowLength) {
   return cosineWindow(windowLength, 0.54, 0.46);
 }
 var hammingWindow = /* @__PURE__ */ op({ hammingWindow_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/signal/hann_window.js
 function hannWindow_(windowLength) {
   return cosineWindow(windowLength, 0.5, 0.5);
 }
 var hannWindow = /* @__PURE__ */ op({ hannWindow_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/signal/frame.js
 function frame_(signal2, frameLength, frameStep, padEnd = false, padValue = 0) {
   let start = 0;
   const output = [];
@@ -17827,8 +10311,6 @@ function frame_(signal2, frameLength, frameStep, padEnd = false, padValue = 0) {
   return reshape(concat(output), [output.length, frameLength]);
 }
 var frame = /* @__PURE__ */ op({ frame_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/signal/stft.js
 function stft_(signal2, frameLength, frameStep, fftLength, windowFn = hannWindow) {
   if (fftLength == null) {
     fftLength = enclosingPowerOfTwo(frameLength);
@@ -17838,8 +10320,6 @@ function stft_(signal2, frameLength, frameStep, fftLength, windowFn = hannWindow
   return rfft(windowedSignal, fftLength);
 }
 var stft = /* @__PURE__ */ op({ stft_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/image/crop_and_resize.js
 function cropAndResize_(image2, boxes, boxInd, cropSize, method = "bilinear", extrapolationValue = 0) {
   const $image = convertToTensor(image2, "image", "cropAndResize");
   const $boxes = convertToTensor(boxes, "boxes", "cropAndResize", "float32");
@@ -17857,8 +10337,6 @@ function cropAndResize_(image2, boxes, boxInd, cropSize, method = "bilinear", ex
   return res;
 }
 var cropAndResize = /* @__PURE__ */ op({ cropAndResize_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/image/flip_left_right.js
 function flipLeftRight_(image2) {
   const $image = convertToTensor(image2, "image", "flipLeftRight", "float32");
   assert($image.rank === 4, () => `Error in flipLeftRight: image must be rank 4,but got rank ${$image.rank}.`);
@@ -17867,8 +10345,6 @@ function flipLeftRight_(image2) {
   return res;
 }
 var flipLeftRight = /* @__PURE__ */ op({ flipLeftRight_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/image/grayscale_to_rgb.js
 function grayscaleToRGB_(image2) {
   const $image = convertToTensor(image2, "image", "grayscaleToRGB");
   const lastDimsIdx = $image.rank - 1;
@@ -17881,8 +10357,6 @@ function grayscaleToRGB_(image2) {
   return tile($image, reps);
 }
 var grayscaleToRGB = /* @__PURE__ */ op({ grayscaleToRGB_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/image/rgb_to_grayscale.js
 function rgbToGrayscale_(image2) {
   const $image = convertToTensor(image2, "image", "RGBToGrayscale");
   const lastDimsIdx = $image.rank - 1;
@@ -17916,8 +10390,6 @@ function rgbToGrayscale_(image2) {
   return cast(grayFloat, origDtype);
 }
 var rgbToGrayscale = /* @__PURE__ */ op({ rgbToGrayscale_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/image/rotate_with_offset.js
 function rotateWithOffset_(image2, radians, fillValue = 0, center = 0.5) {
   const $image = convertToTensor(image2, "image", "rotateWithOffset", "float32");
   assert($image.rank === 4, () => `Error in rotateWithOffset: image must be rank 4,but got rank ${$image.rank}.`);
@@ -17927,8 +10399,6 @@ function rotateWithOffset_(image2, radians, fillValue = 0, center = 0.5) {
   return res;
 }
 var rotateWithOffset = /* @__PURE__ */ op({ rotateWithOffset_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/nonmax_util.js
 function nonMaxSuppSanityCheck(boxes, scores, maxOutputSize, iouThreshold, scoreThreshold, softNmsSigma) {
   if (iouThreshold == null) {
     iouThreshold = 0.5;
@@ -17949,8 +10419,6 @@ function nonMaxSuppSanityCheck(boxes, scores, maxOutputSize, iouThreshold, score
   assert(0 <= softNmsSigma && softNmsSigma <= 1, () => `softNmsSigma must be in [0, 1], but was '${softNmsSigma}'`);
   return { maxOutputSize, iouThreshold, scoreThreshold, softNmsSigma };
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/image/non_max_suppression.js
 function nonMaxSuppression_(boxes, scores, maxOutputSize, iouThreshold = 0.5, scoreThreshold = Number.NEGATIVE_INFINITY) {
   const $boxes = convertToTensor(boxes, "boxes", "nonMaxSuppression", "float32");
   const $scores = convertToTensor(scores, "scores", "nonMaxSuppression", "float32");
@@ -17962,8 +10430,6 @@ function nonMaxSuppression_(boxes, scores, maxOutputSize, iouThreshold = 0.5, sc
   return ENGINE.runKernel(NonMaxSuppressionV3, { boxes: $boxes, scores: $scores }, attrs);
 }
 var nonMaxSuppression = /* @__PURE__ */ op({ nonMaxSuppression_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/backends/non_max_suppression_util.js
 function binaryInsert(arr, element, comparator) {
   const index = binarySearch(arr, element, comparator);
   const insertionPoint = index < 0 ? -(index + 1) : index;
@@ -17992,8 +10458,6 @@ function binarySearch_(arr, target, comparator) {
   }
   return found ? left : -left - 1;
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/backends/non_max_suppression_impl.js
 function nonMaxSuppressionV3Impl(boxes, scores, maxOutputSize, iouThreshold, scoreThreshold) {
   return nonMaxSuppressionImpl_(
     boxes,
@@ -18049,8 +10513,8 @@ function nonMaxSuppressionImpl_(boxes, scores, maxOutputSize, iouThreshold, scor
       break;
     }
     let ignoreCandidate = false;
-    for (let j3 = selectedIndices.length - 1; j3 >= suppressBeginIndex; --j3) {
-      const iou = intersectionOverUnion(boxes, boxIndex, selectedIndices[j3]);
+    for (let j = selectedIndices.length - 1; j >= suppressBeginIndex; --j) {
+      const iou = intersectionOverUnion(boxes, boxIndex, selectedIndices[j]);
       if (iou >= iouThreshold) {
         ignoreCandidate = true;
         break;
@@ -18085,9 +10549,9 @@ function nonMaxSuppressionImpl_(boxes, scores, maxOutputSize, iouThreshold, scor
   }
   return result;
 }
-function intersectionOverUnion(boxes, i, j3) {
+function intersectionOverUnion(boxes, i, j) {
   const iCoord = boxes.subarray(i * 4, i * 4 + 4);
-  const jCoord = boxes.subarray(j3 * 4, j3 * 4 + 4);
+  const jCoord = boxes.subarray(j * 4, j * 4 + 4);
   const yminI = Math.min(iCoord[0], iCoord[2]);
   const xminI = Math.min(iCoord[1], iCoord[3]);
   const ymaxI = Math.max(iCoord[0], iCoord[2]);
@@ -18115,8 +10579,6 @@ function suppressWeight(iouThreshold, scale2, iou) {
 function ascendingComparator(c1, c2) {
   return c1.score - c2.score || c1.score === c2.score && c2.boxIndex - c1.boxIndex;
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/image/non_max_suppression_async.js
 async function nonMaxSuppressionAsync_(boxes, scores, maxOutputSize, iouThreshold = 0.5, scoreThreshold = Number.NEGATIVE_INFINITY) {
   const $boxes = convertToTensor(boxes, "boxes", "nonMaxSuppressionAsync");
   const $scores = convertToTensor(scores, "scores", "nonMaxSuppressionAsync");
@@ -18137,8 +10599,6 @@ async function nonMaxSuppressionAsync_(boxes, scores, maxOutputSize, iouThreshol
   return tensor1d(selectedIndices, "int32");
 }
 var nonMaxSuppressionAsync = nonMaxSuppressionAsync_;
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/image/non_max_suppression_with_score.js
 function nonMaxSuppressionWithScore_(boxes, scores, maxOutputSize, iouThreshold = 0.5, scoreThreshold = Number.NEGATIVE_INFINITY, softNmsSigma = 0) {
   const $boxes = convertToTensor(boxes, "boxes", "nonMaxSuppression");
   const $scores = convertToTensor(scores, "scores", "nonMaxSuppression");
@@ -18153,8 +10613,6 @@ function nonMaxSuppressionWithScore_(boxes, scores, maxOutputSize, iouThreshold 
   return { selectedIndices: result[0], selectedScores: result[1] };
 }
 var nonMaxSuppressionWithScore = /* @__PURE__ */ op({ nonMaxSuppressionWithScore_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/image/non_max_suppression_with_score_async.js
 async function nonMaxSuppressionWithScoreAsync_(boxes, scores, maxOutputSize, iouThreshold = 0.5, scoreThreshold = Number.NEGATIVE_INFINITY, softNmsSigma = 0) {
   const $boxes = convertToTensor(boxes, "boxes", "nonMaxSuppressionAsync");
   const $scores = convertToTensor(scores, "scores", "nonMaxSuppressionAsync");
@@ -18179,8 +10637,6 @@ async function nonMaxSuppressionWithScoreAsync_(boxes, scores, maxOutputSize, io
   };
 }
 var nonMaxSuppressionWithScoreAsync = nonMaxSuppressionWithScoreAsync_;
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/image/non_max_suppression_padded.js
 function nonMaxSuppressionPadded_(boxes, scores, maxOutputSize, iouThreshold = 0.5, scoreThreshold = Number.NEGATIVE_INFINITY, padToMaxOutputSize = false) {
   const $boxes = convertToTensor(boxes, "boxes", "nonMaxSuppression");
   const $scores = convertToTensor(scores, "scores", "nonMaxSuppression");
@@ -18207,8 +10663,6 @@ function nonMaxSuppressionPadded_(boxes, scores, maxOutputSize, iouThreshold = 0
   return { selectedIndices: result[0], validOutputs: result[1] };
 }
 var nonMaxSuppressionPadded = /* @__PURE__ */ op({ nonMaxSuppressionPadded_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/image/non_max_suppression_padded_async.js
 async function nonMaxSuppressionPaddedAsync_(boxes, scores, maxOutputSize, iouThreshold = 0.5, scoreThreshold = Number.NEGATIVE_INFINITY, padToMaxOutputSize = false) {
   const $boxes = convertToTensor(boxes, "boxes", "nonMaxSuppressionAsync");
   const $scores = convertToTensor(scores, "scores", "nonMaxSuppressionAsync");
@@ -18238,8 +10692,6 @@ async function nonMaxSuppressionPaddedAsync_(boxes, scores, maxOutputSize, iouTh
   };
 }
 var nonMaxSuppressionPaddedAsync = nonMaxSuppressionPaddedAsync_;
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/image/resize_bilinear.js
 function resizeBilinear_(images, size, alignCorners = false, halfPixelCenters = false) {
   const $images = convertToTensor(images, "images", "resizeBilinear");
   assert($images.rank === 3 || $images.rank === 4, () => `Error in resizeBilinear: x must be rank 3 or 4, but got rank ${$images.rank}.`);
@@ -18261,8 +10713,6 @@ function resizeBilinear_(images, size, alignCorners = false, halfPixelCenters = 
   return res;
 }
 var resizeBilinear = /* @__PURE__ */ op({ resizeBilinear_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/image/resize_nearest_neighbor.js
 function resizeNearestNeighbor_(images, size, alignCorners = false, halfPixelCenters = false) {
   const $images = convertToTensor(images, "images", "resizeNearestNeighbor");
   assert($images.rank === 3 || $images.rank === 4, () => `Error in resizeNearestNeighbor: x must be rank 3 or 4, but got rank ${$images.rank}.`);
@@ -18285,8 +10735,6 @@ function resizeNearestNeighbor_(images, size, alignCorners = false, halfPixelCen
   return res;
 }
 var resizeNearestNeighbor = /* @__PURE__ */ op({ resizeNearestNeighbor_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/image/threshold.js
 function threshold_(image2, method = "binary", inverted = false, threshValue = 0.5) {
   const $image = convertToTensor(image2, "image", "threshold");
   const RED_INTENCITY_COEF = 0.2989;
@@ -18343,8 +10791,6 @@ function otsu(histogram, total) {
   return bestThresh;
 }
 var threshold = /* @__PURE__ */ op({ threshold_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/image/transform.js
 function transform_(image2, transforms, interpolation = "nearest", fillMode = "constant", fillValue = 0, outputShape) {
   const $image = convertToTensor(image2, "image", "transform", "float32");
   const $transforms = convertToTensor(transforms, "transforms", "transform", "float32");
@@ -18356,13 +10802,11 @@ function transform_(image2, transforms, interpolation = "nearest", fillMode = "c
   return ENGINE.runKernel(Transform, inputs, attrs);
 }
 var transform = /* @__PURE__ */ op({ transform_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/linalg/band_part.js
 function bandPart_(a, numLower, numUpper) {
   const $a = convertToTensor(a, "a", "bandPart");
   assert($a.rank >= 2, () => `bandPart(): Rank must be at least 2, got ${$a.rank}.`);
   const shape = $a.shape;
-  const [M, N3] = $a.shape.slice(-2);
+  const [M, N] = $a.shape.slice(-2);
   let $numLower;
   let $numUpper;
   if (typeof numLower === "number") {
@@ -18375,22 +10819,20 @@ function bandPart_(a, numLower, numUpper) {
   }
   if (typeof numUpper === "number") {
     assert(numUpper % 1 === 0, () => `bandPart(): numUpper must be an integer, got ${numUpper}.`);
-    assert(numUpper <= N3, () => `bandPart(): numUpper (${numUpper}) must not be greater than the number of columns (${N3}).`);
-    $numUpper = convertToTensor(numUpper < 0 ? N3 : numUpper, "numUpper", "bandPart");
+    assert(numUpper <= N, () => `bandPart(): numUpper (${numUpper}) must not be greater than the number of columns (${N}).`);
+    $numUpper = convertToTensor(numUpper < 0 ? N : numUpper, "numUpper", "bandPart");
   } else {
     assert(numUpper.dtype === "int32", () => `bandPart(): numUpper's dtype must be an int32.`);
-    $numUpper = where(less(numUpper, 0), N3, minimum(numUpper, N3));
+    $numUpper = where(less(numUpper, 0), N, minimum(numUpper, N));
   }
   const i = reshape(range(0, M, 1, "int32"), [-1, 1]);
-  const j3 = range(0, N3, 1, "int32");
-  const ij = sub(i, j3);
+  const j = range(0, N, 1, "int32");
+  const ij = sub(i, j);
   const inBand = logicalAnd(lessEqual(ij, $numLower), greaterEqual(ij, neg($numUpper)));
-  const zero = zeros([M, N3], $a.dtype);
-  return reshape(stack(unstack(reshape($a, [-1, M, N3])).map((mat) => where(inBand, mat, zero))), shape);
+  const zero = zeros([M, N], $a.dtype);
+  return reshape(stack(unstack(reshape($a, [-1, M, N])).map((mat) => where(inBand, mat, zero))), shape);
 }
 var bandPart = /* @__PURE__ */ op({ bandPart_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/linalg/gram_schmidt.js
 function gramSchmidt_(xs) {
   let inputIsTensor2D;
   if (Array.isArray(xs)) {
@@ -18411,8 +10853,8 @@ function gramSchmidt_(xs) {
     ys.push(ENGINE.tidy(() => {
       let x = xs1d[i];
       if (i > 0) {
-        for (let j3 = 0; j3 < i; ++j3) {
-          const proj = mul(sum2(mul(ys[j3], x)), ys[j3]);
+        for (let j = 0; j < i; ++j) {
+          const proj = mul(sum2(mul(ys[j], x)), ys[j]);
           x = sub(x, proj);
         }
       }
@@ -18426,8 +10868,6 @@ function gramSchmidt_(xs) {
   }
 }
 var gramSchmidt = /* @__PURE__ */ op({ gramSchmidt_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/linalg/qr.js
 function qr_(x, fullMatrices = false) {
   assert(x.rank >= 2, () => `qr() requires input tensor to have a rank >= 2, but got rank ${x.rank}`);
   if (x.rank === 2) {
@@ -18446,9 +10886,9 @@ function qr_(x, fullMatrices = false) {
       q2ds.push(q2d);
       r2ds.push(r2d);
     });
-    const q3 = reshape(stack(q2ds, 0), x.shape);
+    const q = reshape(stack(q2ds, 0), x.shape);
     const r = reshape(stack(r2ds, 0), x.shape);
-    return [q3, r];
+    return [q, r];
   }
 }
 function qr2d(x, fullMatrices = false) {
@@ -18456,19 +10896,19 @@ function qr2d(x, fullMatrices = false) {
     assert(x.shape.length === 2, () => `qr2d() requires a 2D Tensor, but got a ${x.shape.length}D Tensor.`);
     const m = x.shape[0];
     const n = x.shape[1];
-    let q3 = eye(m);
+    let q = eye(m);
     let r = clone(x);
     const one2D = tensor2d([[1]], [1, 1]);
     let w = clone(one2D);
     const iters = m >= n ? n : m;
-    for (let j3 = 0; j3 < iters; ++j3) {
+    for (let j = 0; j < iters; ++j) {
       const rTemp = r;
       const wTemp = w;
-      const qTemp = q3;
-      [w, r, q3] = ENGINE.tidy(() => {
-        const rjEnd1 = slice(r, [j3, j3], [m - j3, 1]);
+      const qTemp = q;
+      [w, r, q] = ENGINE.tidy(() => {
+        const rjEnd1 = slice(r, [j, j], [m - j, 1]);
         const normX = norm(rjEnd1);
-        const rjj = slice(r, [j3, j3], [1, 1]);
+        const rjj = slice(r, [j, j], [1, 1]);
         const s = where(greater(rjj, 0), tensor2d([[-1]]), tensor2d([[1]]));
         const u1 = sub(rjj, mul(s, normX));
         const wPre = div(rjEnd1, u1);
@@ -18481,37 +10921,35 @@ function qr2d(x, fullMatrices = false) {
           ], 0);
         }
         const tau = neg(div(matMul(s, u1), normX));
-        const rjEndAll = slice(r, [j3, 0], [m - j3, n]);
+        const rjEndAll = slice(r, [j, 0], [m - j, n]);
         const tauTimesW = mul(tau, w);
         const wT = transpose(w);
-        if (j3 === 0) {
+        if (j === 0) {
           r = sub(rjEndAll, matMul(tauTimesW, matMul(wT, rjEndAll)));
         } else {
           const rTimesTau = sub(rjEndAll, matMul(tauTimesW, matMul(wT, rjEndAll)));
-          r = concat([slice(r, [0, 0], [j3, n]), rTimesTau], 0);
+          r = concat([slice(r, [0, 0], [j, n]), rTimesTau], 0);
         }
         const tawTimesWT = transpose(tauTimesW);
-        const qAllJEnd = slice(q3, [0, j3], [m, q3.shape[1] - j3]);
-        if (j3 === 0) {
-          q3 = sub(qAllJEnd, matMul(matMul(qAllJEnd, w), tawTimesWT));
+        const qAllJEnd = slice(q, [0, j], [m, q.shape[1] - j]);
+        if (j === 0) {
+          q = sub(qAllJEnd, matMul(matMul(qAllJEnd, w), tawTimesWT));
         } else {
           const qTimesTau = sub(qAllJEnd, matMul(matMul(qAllJEnd, w), tawTimesWT));
-          q3 = concat([slice(q3, [0, 0], [m, j3]), qTimesTau], 1);
+          q = concat([slice(q, [0, 0], [m, j]), qTimesTau], 1);
         }
-        return [w, r, q3];
+        return [w, r, q];
       });
       dispose([rTemp, wTemp, qTemp]);
     }
     if (!fullMatrices && m > n) {
-      q3 = slice(q3, [0, 0], [m, n]);
+      q = slice(q, [0, 0], [m, n]);
       r = slice(r, [0, 0], [n, n]);
     }
-    return [q3, r];
+    return [q, r];
   });
 }
 var qr = /* @__PURE__ */ op({ qr_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/loss_ops_utils.js
 var Reduction;
 (function(Reduction2) {
   Reduction2[Reduction2["NONE"] = 0] = "NONE";
@@ -18519,8 +10957,6 @@ var Reduction;
   Reduction2[Reduction2["SUM"] = 2] = "SUM";
   Reduction2[Reduction2["SUM_BY_NONZERO_WEIGHTS"] = 3] = "SUM_BY_NONZERO_WEIGHTS";
 })(Reduction || (Reduction = {}));
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/losses/compute_weighted_loss.js
 function computeWeightedLoss_(losses2, weights, reduction = Reduction.SUM_BY_NONZERO_WEIGHTS) {
   const $losses = convertToTensor(losses2, "losses", "computeWeightedLoss");
   let $weights = null;
@@ -18555,8 +10991,6 @@ function computeWeightedLoss_(losses2, weights, reduction = Reduction.SUM_BY_NON
   throw Error(`Unknown reduction: ${reduction}`);
 }
 var computeWeightedLoss = /* @__PURE__ */ op({ computeWeightedLoss_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/losses/absolute_difference.js
 function absoluteDifference_(labels, predictions, weights, reduction = Reduction.SUM_BY_NONZERO_WEIGHTS) {
   const $labels = convertToTensor(labels, "labels", "absoluteDifference");
   const $predictions = convertToTensor(predictions, "predictions", "absoluteDifference");
@@ -18569,8 +11003,6 @@ function absoluteDifference_(labels, predictions, weights, reduction = Reduction
   return computeWeightedLoss(losses2, $weights, reduction);
 }
 var absoluteDifference = /* @__PURE__ */ op({ absoluteDifference_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/losses/cosine_distance.js
 function cosineDistance_(labels, predictions, axis, weights, reduction = Reduction.SUM_BY_NONZERO_WEIGHTS) {
   const $labels = convertToTensor(labels, "labels", "cosineDistance");
   const $predictions = convertToTensor(predictions, "predictions", "cosineDistance");
@@ -18584,8 +11016,6 @@ function cosineDistance_(labels, predictions, axis, weights, reduction = Reducti
   return computeWeightedLoss(losses2, $weights, reduction);
 }
 var cosineDistance = /* @__PURE__ */ op({ cosineDistance_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/losses/hinge_loss.js
 function hingeLoss_(labels, predictions, weights, reduction = Reduction.SUM_BY_NONZERO_WEIGHTS) {
   let $labels = convertToTensor(labels, "labels", "hingeLoss");
   const $predictions = convertToTensor(predictions, "predictions", "hingeLoss");
@@ -18600,8 +11030,6 @@ function hingeLoss_(labels, predictions, weights, reduction = Reduction.SUM_BY_N
   return computeWeightedLoss(losses2, $weights, reduction);
 }
 var hingeLoss = /* @__PURE__ */ op({ hingeLoss_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/losses/huber_loss.js
 function huberLoss_(labels, predictions, weights, delta = 1, reduction = Reduction.SUM_BY_NONZERO_WEIGHTS) {
   const $labels = convertToTensor(labels, "labels", "huberLoss");
   const $predictions = convertToTensor(predictions, "predictions", "huberLoss");
@@ -18618,8 +11046,6 @@ function huberLoss_(labels, predictions, weights, delta = 1, reduction = Reducti
   return computeWeightedLoss(losses2, $weights, reduction);
 }
 var huberLoss = /* @__PURE__ */ op({ huberLoss_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/losses/log_loss.js
 function logLoss_(labels, predictions, weights, epsilon3 = 1e-7, reduction = Reduction.SUM_BY_NONZERO_WEIGHTS) {
   const $labels = convertToTensor(labels, "labels", "logLoss");
   const $predictions = convertToTensor(predictions, "predictions", "logLoss");
@@ -18636,8 +11062,6 @@ function logLoss_(labels, predictions, weights, epsilon3 = 1e-7, reduction = Red
   return computeWeightedLoss(losses2, $weights, reduction);
 }
 var logLoss = /* @__PURE__ */ op({ logLoss_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/losses/mean_squared_error.js
 function meanSquaredError_(labels, predictions, weights, reduction = Reduction.SUM_BY_NONZERO_WEIGHTS) {
   const $labels = convertToTensor(labels, "labels", "meanSquaredError");
   const $predictions = convertToTensor(predictions, "predictions", "meanSquaredError");
@@ -18650,8 +11074,6 @@ function meanSquaredError_(labels, predictions, weights, reduction = Reduction.S
   return computeWeightedLoss(losses2, $weights, reduction);
 }
 var meanSquaredError = /* @__PURE__ */ op({ meanSquaredError_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/losses/sigmoid_cross_entropy.js
 function sigmoidCrossEntropyWithLogits_(labels, logits) {
   const $labels = convertToTensor(labels, "labels", "sigmoidCrossEntropyWithLogits");
   const $logits = convertToTensor(logits, "logits", "sigmoidCrossEntropyWithLogits");
@@ -18679,8 +11101,6 @@ function sigmoidCrossEntropy_(multiClassLabels, logits, weights, labelSmoothing 
   return computeWeightedLoss(losses2, $weights, reduction);
 }
 var sigmoidCrossEntropy = /* @__PURE__ */ op({ sigmoidCrossEntropy_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/losses/softmax_cross_entropy.js
 function softmaxCrossEntropyWithLogits_(labels, logits, dim = -1) {
   if (dim === -1) {
     dim = logits.rank - 1;
@@ -18725,8 +11145,6 @@ function softmaxCrossEntropy_(onehotLabels, logits, weights, labelSmoothing = 0,
   return computeWeightedLoss(losses2, $weights, reduction);
 }
 var softmaxCrossEntropy = /* @__PURE__ */ op({ softmaxCrossEntropy_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/sparse/sparse_fill_empty_rows.js
 function sparseFillEmptyRows_(indices, values, denseShape, defaultValue) {
   const $indices = convertToTensor(indices, "indices", "sparseFillEmptyRows", "int32");
   const $values = convertToTensor(values, "values", "sparseFillEmptyRows");
@@ -18760,8 +11178,6 @@ function sparseFillEmptyRows_(indices, values, denseShape, defaultValue) {
   };
 }
 var sparseFillEmptyRows = /* @__PURE__ */ op({ sparseFillEmptyRows_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/sparse/sparse_reshape.js
 function sparseReshape_(inputIndices, inputShape, newShape) {
   const $inputIndices = convertToTensor(inputIndices, "inputIndices", "sparseReshape", "int32");
   const $inputShape = convertToTensor(inputShape, "inputShape", "sparseReshape", "int32");
@@ -18785,8 +11201,6 @@ function sparseReshape_(inputIndices, inputShape, newShape) {
   return { outputIndices: result[0], outputShape: result[1] };
 }
 var sparseReshape = /* @__PURE__ */ op({ sparseReshape_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/sparse/sparse_segment_mean.js
 function sparseSegmentMean_(data, indices, segmentIds) {
   const $data = convertToTensor(data, "data", "sparseSegmentMean");
   const $indices = convertToTensor(indices, "indices", "sparseSegmentMean", "int32");
@@ -18810,8 +11224,6 @@ function sparseSegmentMean_(data, indices, segmentIds) {
   return ENGINE.runKernel(SparseSegmentMean, inputs);
 }
 var sparseSegmentMean = /* @__PURE__ */ op({ sparseSegmentMean_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/sparse/sparse_segment_sum.js
 function sparseSegmentSum_(data, indices, segmentIds) {
   const $data = convertToTensor(data, "data", "sparseSegmentSum");
   const $indices = convertToTensor(indices, "indices", "sparseSegmentSum", "int32");
@@ -18835,8 +11247,6 @@ function sparseSegmentSum_(data, indices, segmentIds) {
   return ENGINE.runKernel(SparseSegmentSum, inputs);
 }
 var sparseSegmentSum = /* @__PURE__ */ op({ sparseSegmentSum_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/string/string_n_grams.js
 function stringNGrams_(data, dataSplits, separator, nGramWidths, leftPad, rightPad2, padWidth, preserveShortSequences) {
   const $data = convertToTensor(data, "data", "stringNGrams", "string");
   if ($data.dtype !== "string") {
@@ -18862,8 +11272,6 @@ function stringNGrams_(data, dataSplits, separator, nGramWidths, leftPad, rightP
   return { nGrams: result[0], nGramsSplits: result[1] };
 }
 var stringNGrams = /* @__PURE__ */ op({ stringNGrams_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/string/string_split.js
 function stringSplit_(input2, delimiter, skipEmpty = true) {
   const $input = convertToTensor(input2, "input", "stringSplit", "string");
   const $delimiter = convertToTensor(delimiter, "delimiter", "stringSplit", "string");
@@ -18879,8 +11287,6 @@ function stringSplit_(input2, delimiter, skipEmpty = true) {
   return { indices: result[0], values: result[1], shape: result[2] };
 }
 var stringSplit = /* @__PURE__ */ op({ stringSplit_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/string/string_to_hash_bucket_fast.js
 function stringToHashBucketFast_(input2, numBuckets) {
   const $input = convertToTensor(input2, "input", "stringToHashBucketFast", "string");
   const attrs = { numBuckets };
@@ -18891,16 +11297,12 @@ function stringToHashBucketFast_(input2, numBuckets) {
   return ENGINE.runKernel(StringToHashBucketFast, inputs, attrs);
 }
 var stringToHashBucketFast = /* @__PURE__ */ op({ stringToHashBucketFast_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/string/static_regex_replace.js
 function staticRegexReplace_(input2, pattern, rewrite, replaceGlobal = true) {
   const $input = convertToTensor(input2, "input", "staticRegexReplace", "string");
   const attrs = { pattern, rewrite, replaceGlobal };
   return ENGINE.runKernel(StaticRegexReplace, { x: $input }, attrs);
 }
 var staticRegexReplace = /* @__PURE__ */ op({ staticRegexReplace_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/ops.js
 var spectral = {
   fft,
   ifft,
@@ -18958,8 +11360,6 @@ var string = {
   stringToHashBucketFast,
   staticRegexReplace
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/serialization.js
 var serialization_exports = {};
 __export(serialization_exports, {
   Serializable: () => Serializable,
@@ -19041,8 +11441,6 @@ function getRegisteredName(cls) {
     return cls.className;
   }
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/optimizers/optimizer.js
 var Optimizer = class extends Serializable {
   /**
    * Executes `f()` and minimizes the scalar output of `f()` by computing
@@ -19143,8 +11541,6 @@ Object.defineProperty(Optimizer, Symbol.hasInstance, {
     return instance.minimize != null && instance.computeGradients != null && instance.applyGradients != null;
   }
 });
-
-// node_modules/@tensorflow/tfjs-core/dist/optimizers/adadelta_optimizer.js
 var AdadeltaOptimizer = class extends Optimizer {
   /** @nocollapse */
   static get className() {
@@ -19231,8 +11627,6 @@ var AdadeltaOptimizer = class extends Optimizer {
     return new cls(config["learningRate"], config["rho"], config["epsilon"]);
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/optimizers/adagrad_optimizer.js
 var AdagradOptimizer = class extends Optimizer {
   /** @nocollapse */
   static get className() {
@@ -19293,8 +11687,6 @@ var AdagradOptimizer = class extends Optimizer {
     return new cls(config["learningRate"], config["initialAccumulatorValue"]);
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/optimizers/adam_optimizer.js
 var AdamOptimizer = class extends Optimizer {
   /** @nocollapse */
   static get className() {
@@ -19400,8 +11792,6 @@ var AdamOptimizer = class extends Optimizer {
     return new cls(config["learningRate"], config["beta1"], config["beta2"], config["epsilon"]);
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/optimizers/adamax_optimizer.js
 var AdamaxOptimizer = class extends Optimizer {
   /** @nocollapse */
   static get className() {
@@ -19494,8 +11884,6 @@ var AdamaxOptimizer = class extends Optimizer {
     return new cls(config["learningRate"], config["beta1"], config["beta2"], config["epsilon"], config["decay"]);
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/optimizers/sgd_optimizer.js
 var SGDOptimizer = class extends Optimizer {
   /** @nocollapse */
   static get className() {
@@ -19551,8 +11939,6 @@ var SGDOptimizer = class extends Optimizer {
     return new cls(config["learningRate"]);
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/optimizers/momentum_optimizer.js
 var MomentumOptimizer = class extends SGDOptimizer {
   /** @nocollapse */
   // Name matters for Python compatibility.
@@ -19631,8 +12017,6 @@ var MomentumOptimizer = class extends SGDOptimizer {
     return new cls(config["learningRate"], config["momentum"], config["useNesterov"]);
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/optimizers/rmsprop_optimizer.js
 var RMSPropOptimizer = class extends Optimizer {
   /** @nocollapse */
   static get className() {
@@ -19759,8 +12143,6 @@ var RMSPropOptimizer = class extends Optimizer {
     return new cls(config["learningRate"], config["decay"], config["momentum"], config["epsilon"], config["centered"]);
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/optimizers/register_optimizers.js
 var OPTIMIZERS = [
   AdadeltaOptimizer,
   AdagradOptimizer,
@@ -19775,8 +12157,6 @@ function registerOptimizers() {
     registerClass(optimizer);
   }
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/io/io.js
 var io_exports = {};
 __export(io_exports, {
   CompositeArrayBuffer: () => CompositeArrayBuffer,
@@ -19807,8 +12187,6 @@ __export(io_exports, {
   withSaveHandler: () => withSaveHandler,
   withSaveHandlerSync: () => withSaveHandlerSync
 });
-
-// node_modules/@tensorflow/tfjs-core/dist/io/browser_files.js
 var DEFAULT_FILE_NAME_PREFIX = "model";
 var DEFAULT_JSON_EXTENSION_NAME = ".json";
 var DEFAULT_WEIGHT_DATA_EXTENSION_NAME = ".weights.bin";
@@ -19960,8 +12338,6 @@ function browserDownloads(fileNamePrefix = "model") {
 function browserFiles(files) {
   return new BrowserFiles(files);
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/io/progress.js
 function monitorPromisesProgress(promises, onProgress, startFraction, endFraction) {
   checkPromises(promises);
   startFraction = startFraction == null ? 0 : startFraction;
@@ -19986,8 +12362,6 @@ function monitorPromisesProgress(promises, onProgress, startFraction, endFractio
   }
   return Promise.all(promises.map(registerMonitor));
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/io/weights_loader.js
 async function loadWeightsAsArrayBuffer(fetchURLs, loadOptions) {
   if (loadOptions == null) {
     loadOptions = {};
@@ -20073,7 +12447,7 @@ function weightsLoaderFactory(fetchWeightsFunction) {
       });
     });
     if (!weightsFound.every((found) => found)) {
-      const weightsNotFound = weightNames.filter((_3, i) => !weightsFound[i]);
+      const weightsNotFound = weightNames.filter((_, i) => !weightsFound[i]);
       throw new Error(`Could not find weights in manifest with names: ${weightsNotFound.join(", ")}. 
 Manifest JSON has weights with names: ${allManifestWeightNames.join(", ")}.`);
     }
@@ -20109,8 +12483,6 @@ Manifest JSON has weights with names: ${allManifestWeightNames.join(", ")}.`);
     return weightsTensorMap;
   };
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/io/http.js
 var OCTET_STREAM_MIME_TYPE = "application/octet-stream";
 var JSON_TYPE = "application/json";
 var HTTPRequest = class {
@@ -20272,8 +12644,6 @@ function http(path, loadOptions) {
 function browserHTTPRequest(path, loadOptions) {
   return http(path, loadOptions);
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/io/passthrough.js
 var PassthroughLoader = class {
   constructor(modelArtifacts) {
     this.modelArtifacts = modelArtifacts;
@@ -20329,14 +12699,10 @@ function withSaveHandler(saveHandler) {
 function withSaveHandlerSync(saveHandler) {
   return new PassthroughSaver(saveHandler);
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/math.js
 var math_exports = {};
 __export(math_exports, {
   confusionMatrix: () => confusionMatrix
 });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/confusion_matrix.js
 function confusionMatrix_(labels, predictions, numClasses) {
   const $labels = convertToTensor(labels, "labels", "confusionMatrix");
   const $predictions = convertToTensor(predictions, "predictions", "confusionMatrix");
@@ -20352,8 +12718,6 @@ function confusionMatrix_(labels, predictions, numClasses) {
   return cast(product, "int32");
 }
 var confusionMatrix = /* @__PURE__ */ op({ confusionMatrix_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/browser.js
 var browser_exports = {};
 __export(browser_exports, {
   draw: () => draw,
@@ -20522,11 +12886,11 @@ async function toPixels(img, canvas) {
         rgba[d] = value * multiplier;
       }
     }
-    const j3 = i * 4;
-    bytes[j3 + 0] = Math.round(rgba[0]);
-    bytes[j3 + 1] = Math.round(rgba[1]);
-    bytes[j3 + 2] = Math.round(rgba[2]);
-    bytes[j3 + 3] = Math.round(rgba[3]);
+    const j = i * 4;
+    bytes[j + 0] = Math.round(rgba[0]);
+    bytes[j + 1] = Math.round(rgba[1]);
+    bytes[j + 2] = Math.round(rgba[2]);
+    bytes[j + 3] = Math.round(rgba[3]);
   }
   if (canvas != null) {
     if (!hasToPixelsWarned) {
@@ -20561,8 +12925,6 @@ function draw(image2, canvas, options) {
   ENGINE.runKernel(Draw, inputs, attrs);
 }
 var fromPixels = /* @__PURE__ */ op({ fromPixels_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/gather_nd_util.js
 var gather_nd_util_exports = {};
 __export(gather_nd_util_exports, {
   prepareAndValidate: () => prepareAndValidate
@@ -20605,8 +12967,6 @@ function prepareAndValidate(tensor2, indices) {
   ].slice(0, sliceRank);
   return [resultShape, nResult, sliceSize, strides];
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/slice_util.js
 var slice_util_exports = {};
 __export(slice_util_exports, {
   assertParamsValid: () => assertParamsValid,
@@ -21054,11 +13414,7 @@ function canonical(x, c, strideI, dimI, masks, validRange) {
     return xFwd < validRange[0] ? validRange[0] : xFwd > validRange[1] ? validRange[1] : xFwd;
   }
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/version.js
 var version = "4.22.0";
-
-// node_modules/@tensorflow/tfjs-core/dist/optimizers/optimizer_constructors.js
 var OptimizerConstructors = class {
   /**
    * Constructs a `tf.SGDOptimizer` that uses stochastic gradient descent.
@@ -21207,11 +13563,7 @@ var OptimizerConstructors = class {
     return new AdagradOptimizer(learningRate, initialAccumulatorValue);
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/train.js
 var train = OptimizerConstructors;
-
-// node_modules/@tensorflow/tfjs-core/dist/browser_util.js
 var delayCallback = (() => {
   if (typeof requestAnimationFrame !== "undefined") {
     return requestAnimationFrame;
@@ -21223,8 +13575,6 @@ var delayCallback = (() => {
 function nextFrame() {
   return new Promise((resolve) => delayCallback(() => resolve()));
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/backends/backend_util.js
 var backend_util_exports = {};
 __export(backend_util_exports, {
   ERF_A1: () => ERF_A1,
@@ -21314,8 +13664,6 @@ __export(backend_util_exports, {
   validateUpdateShape: () => validateUpdateShape,
   warn: () => warn
 });
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/concat_util.js
 function assertParamsConsistent(shapes, axis) {
   const rank = shapes[0].length;
   shapes.forEach((shape, i) => {
@@ -21336,8 +13684,6 @@ function computeOutShape2(shapes, axis) {
   }
   return outputShape;
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/ragged_to_dense_util.js
 var RowPartitionType;
 (function(RowPartitionType3) {
   RowPartitionType3[RowPartitionType3["FIRST_DIM_SIZE"] = 0] = "FIRST_DIM_SIZE";
@@ -21426,8 +13772,6 @@ function validateDefaultValueShape(defaultValueShape, valueShape) {
     }
   }
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/reduce_util.js
 var PARALLELIZE_THRESHOLD = 30;
 function computeOptimalWindowSize(inSize) {
   if (inSize <= PARALLELIZE_THRESHOLD) {
@@ -21435,15 +13779,11 @@ function computeOptimalWindowSize(inSize) {
   }
   return nearestDivisor(inSize, Math.floor(Math.sqrt(inSize)));
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/rotate_util.js
 function getImageCenter(center, imageHeight, imageWidth) {
   const centerX = imageWidth * (typeof center === "number" ? center : center[0]);
   const centerY = imageHeight * (typeof center === "number" ? center : center[1]);
   return [centerX, centerY];
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/array_ops_util.js
 function getReshaped(inputShape, blockShape, prod4, batchToSpace = true) {
   let reshaped = [];
   if (batchToSpace) {
@@ -21522,20 +13862,14 @@ function getSliceSize(uncroppedShape, crops, blockShape) {
   }
   return sliceSize;
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/selu_util.js
 var SELU_SCALEALPHA = 1.7580993408473768;
 var SELU_SCALE = 1.0507009873554805;
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/erf_util.js
 var ERF_P = 0.3275911;
 var ERF_A1 = 0.254829592;
 var ERF_A2 = -0.284496736;
 var ERF_A3 = 1.421413741;
 var ERF_A4 = -1.453152027;
 var ERF_A5 = 1.061405429;
-
-// node_modules/@tensorflow/tfjs-core/dist/backends/complex_util.js
 function mergeRealAndImagArrays(real4, imag4) {
   if (real4.length !== imag4.length) {
     throw new Error(`Cannot merge real and imag arrays of different lengths. real:${real4.length}, imag: ${imag4.length}.`);
@@ -21595,14 +13929,12 @@ function exponents(n, inverse) {
   }
   return { real: real4, imag: imag4 };
 }
-function exponent(k4, n, inverse) {
-  const x = (inverse ? 2 : -2) * Math.PI * (k4 / n);
+function exponent(k, n, inverse) {
+  const x = (inverse ? 2 : -2) * Math.PI * (k / n);
   const real4 = Math.cos(x);
   const imag4 = Math.sin(x);
   return { real: real4, imag: imag4 };
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/backends/einsum_util.js
 var ARROW = "->";
 var ARROW_REGEX = /->/g;
 var COMMA = ",";
@@ -21647,8 +13979,8 @@ function decodeEinsumEquation(equation, numTensors) {
       throw new Error(`Found duplicate axes in input component ${inputTerms[i]}. Support for duplicate axes in input is not implemented yet.`);
     }
     idDims[i] = [];
-    for (let j3 = 0; j3 < inputTerms[i].length; ++j3) {
-      idDims[i].push(allDims.indexOf(inputTerms[i][j3]));
+    for (let j = 0; j < inputTerms[i].length; ++j) {
+      idDims[i].push(allDims.indexOf(inputTerms[i][j]));
     }
   }
   const numDims = allDims.length;
@@ -21678,11 +14010,11 @@ function checkEinsumDimSizes(nDims, idDims, tensors) {
   const dimSizes = new Array(nDims);
   for (let i = 0; i < tensors.length; ++i) {
     const shape = tensors[i].shape;
-    for (let j3 = 0; j3 < idDims[i].length; ++j3) {
-      if (dimSizes[idDims[i][j3]] === void 0) {
-        dimSizes[idDims[i][j3]] = shape[j3];
+    for (let j = 0; j < idDims[i].length; ++j) {
+      if (dimSizes[idDims[i][j]] === void 0) {
+        dimSizes[idDims[i][j]] = shape[j];
       } else {
-        assert(dimSizes[idDims[i][j3]] === shape[j3], () => `Expected dimension ${dimSizes[idDims[i][j3]]} at axis ${j3} of input shaped ${JSON.stringify(shape)}, but got dimension ${shape[j3]}`);
+        assert(dimSizes[idDims[i][j]] === shape[j], () => `Expected dimension ${dimSizes[idDims[i][j]]} at axis ${j} of input shaped ${JSON.stringify(shape)}, but got dimension ${shape[j]}`);
       }
     }
   }
@@ -21723,8 +14055,6 @@ function findTermsWithDim(idDims, dim) {
   }
   return termIndices;
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/split_util.js
 function prepareSplitSize(x, numOrSizeSplits, axis = 0) {
   let splitSizes = [];
   if (typeof numOrSizeSplits === "number") {
@@ -21748,8 +14078,6 @@ function prepareSplitSize(x, numOrSizeSplits, axis = 0) {
   }
   return splitSizes;
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/sparse/sparse_fill_empty_rows_util.js
 function getSparseFillEmptyRowsIndicesDenseShapeMismatch(indicesLength) {
   return `Received SparseTensor with denseShape[0] = 0 but
   indices.shape[0] = ${indicesLength}`;
@@ -21760,8 +14088,6 @@ function getSparseFillEmptyRowsNegativeIndexErrorMessage(index, value) {
 function getSparseFillEmptyRowsOutOfRangeIndexErrorMessage(index, value, limit) {
   return `indices(${index}, 0) is invalid: ${value} >= ${limit}`;
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/sparse/sparse_reshape_util.js
 function getSparseReshapeMultipleNegativeOneOutputDimErrorMessage(dim1, dim2) {
   return `only one output dimension may be -1, not both ${dim1} and ${dim2}`;
 }
@@ -21782,8 +14108,6 @@ function getSparseReshapeInputOutputMismatchErrorMessage(inputShape, outputShape
   const outputSize = sizeFromShape(outputShape);
   return `Input to reshape is a tensor with ${inputSize} dense values, but the requested shape has ${outputSize}. inputShape=${inputShape} outputShape=${outputShape}`;
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/sparse/sparse_segment_reduction_util.js
 function getSparseSegmentReductionNegativeSegmentIdsErrorMessage() {
   return `segment ids must be >= 0`;
 }
@@ -21796,8 +14120,6 @@ function getSparseSegmentReductionSegmentIdOutOfRangeErrorMessage(segmentId, out
 function getSparseSegmentReductionIndicesOutOfRangeErrorMessage(index, indexValue, inputRows) {
   return `Bad: indices[${index}] == ${indexValue} out of range [0, ${inputRows})`;
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/segment_util.js
 var segment_util_exports = {};
 __export(segment_util_exports, {
   collectGatherOpShapeInfo: () => collectGatherOpShapeInfo,
@@ -21879,8 +14201,6 @@ function collectGatherOpShapeInfo(x, indices, axis, batchDims) {
   }
   return { batchSize, sliceSize, outerSize, dimSize, outputShape };
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/backends/backend_util.js
 function fromUint8ToStringArray(vals) {
   try {
     return vals.map((val) => decodeString(val));
@@ -21891,8 +14211,6 @@ function fromUint8ToStringArray(vals) {
 function fromStringArrayToUint8(strings) {
   return strings.map((s) => encodeString(s));
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/backends/kernel_impls.js
 var kernel_impls_exports = {};
 __export(kernel_impls_exports, {
   nonMaxSuppressionV3Impl: () => nonMaxSuppressionV3Impl,
@@ -21900,11 +14218,7 @@ __export(kernel_impls_exports, {
   nonMaxSuppressionV5Impl: () => nonMaxSuppressionV5Impl,
   whereImpl: () => whereImpl
 });
-
-// node_modules/@tensorflow/tfjs-core/dist/index.js
 registerOptimizers();
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Abs_grad.js
 var absGradConfig = {
   kernelName: Abs,
   inputsToSave: ["x"],
@@ -21913,8 +14227,6 @@ var absGradConfig = {
     return { x: () => mul(dy, step(cast(x, "float32"), -1)) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Acos_grad.js
 var acosGradConfig = {
   kernelName: Acos,
   inputsToSave: ["x"],
@@ -21929,8 +14241,6 @@ var acosGradConfig = {
     };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Acosh_grad.js
 var acoshGradConfig = {
   kernelName: Acosh,
   inputsToSave: ["x"],
@@ -21944,8 +14254,6 @@ var acoshGradConfig = {
     };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Add_grad.js
 var addGradConfig = {
   kernelName: Add,
   inputsToSave: ["a", "b"],
@@ -21971,21 +14279,17 @@ var addGradConfig = {
     return { a: derA, b: derB };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/AddN_grad.js
 var addNGradConfig = {
   kernelName: AddN,
   saveAllInputs: true,
   gradFunc: (dy, saved) => {
     const ders = {};
-    saved.forEach((_3, i) => {
+    saved.forEach((_, i) => {
       ders[i] = () => dy.clone();
     });
     return ders;
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/ArgMax_grad.js
 var argMaxGradConfig = {
   kernelName: ArgMax,
   inputsToSave: ["x"],
@@ -21994,8 +14298,6 @@ var argMaxGradConfig = {
     return { x: () => zerosLike(x) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/ArgMin_grad.js
 var argMinGradConfig = {
   kernelName: ArgMin,
   inputsToSave: ["x"],
@@ -22004,8 +14306,6 @@ var argMinGradConfig = {
     return { x: () => zerosLike(x) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Asin_grad.js
 var asinGradConfig = {
   kernelName: Asin,
   inputsToSave: ["x"],
@@ -22014,8 +14314,6 @@ var asinGradConfig = {
     return { x: () => div(dy, sqrt(sub(scalar(1), square(cast(x, "float32"))))) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Asinh_grad.js
 var asinhGradConfig = {
   kernelName: Asinh,
   inputsToSave: ["x"],
@@ -22029,8 +14327,6 @@ var asinhGradConfig = {
     };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Atan2_grad.js
 var atan2GradConfig = {
   kernelName: Atan2,
   inputsToSave: ["a", "b"],
@@ -22058,8 +14354,6 @@ var atan2GradConfig = {
     return { a: derA, b: derB };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Atan_grad.js
 var atanGradConfig = {
   kernelName: Atan,
   inputsToSave: ["x"],
@@ -22068,8 +14362,6 @@ var atanGradConfig = {
     return { x: () => div(dy, add2(square(cast(x, "float32")), 1)) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Atanh_grad.js
 var atanhGradConfig = {
   kernelName: Atanh,
   inputsToSave: ["x"],
@@ -22078,8 +14370,6 @@ var atanhGradConfig = {
     return { x: () => div(dy, sub(scalar(1), square(cast(x, "float32")))) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/avg_pool_3d_grad.js
 function avgPool3dGrad_(dy, input2, filterSize, strides, pad2, dimRoundingMode) {
   const $dy = convertToTensor(dy, "dy", "avgPool3dGrad");
   const $input = convertToTensor(input2, "input", "avgPool3dGrad");
@@ -22109,8 +14399,6 @@ function avgPool3dGrad_(dy, input2, filterSize, strides, pad2, dimRoundingMode) 
   return res;
 }
 var avgPool3dGrad = /* @__PURE__ */ op({ avgPool3dGrad_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/AvgPool3D_grad.js
 var avgPool3DGradConfig = {
   kernelName: AvgPool3D,
   inputsToSave: ["x"],
@@ -22122,8 +14410,6 @@ var avgPool3DGradConfig = {
     };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/avg_pool_grad.js
 function avgPoolGrad_(dy, input2, filterSize, strides, pad2) {
   const $dy = convertToTensor(dy, "dy", "avgPoolGrad");
   const $input = convertToTensor(input2, "input", "avgPoolGrad");
@@ -22147,8 +14433,6 @@ function avgPoolGrad_(dy, input2, filterSize, strides, pad2) {
   return res;
 }
 var avgPoolGrad = /* @__PURE__ */ op({ avgPoolGrad_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/AvgPool_grad.js
 var avgPoolGradConfig = {
   kernelName: AvgPool,
   inputsToSave: ["x"],
@@ -22158,8 +14442,6 @@ var avgPoolGradConfig = {
     return { x: () => avgPoolGrad(dy, x, filterSize, strides, pad2) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/BatchMatMul_grad.js
 var batchMatMulGradConfig = {
   kernelName: BatchMatMul,
   inputsToSave: ["a", "b"],
@@ -22189,8 +14471,6 @@ var batchMatMulGradConfig = {
     }
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/BatchToSpaceND_grad.js
 var batchToSpaceNDGradConfig = {
   kernelName: BatchToSpaceND,
   gradFunc: (dy, saved, attrs) => {
@@ -22198,8 +14478,6 @@ var batchToSpaceNDGradConfig = {
     return { x: () => spaceToBatchND(dy, blockShape, crops) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/BroadcastTo_grad.js
 var broadcastToGradConfig = {
   kernelName: BroadcastTo,
   gradFunc: (dy, saved, attrs) => {
@@ -22228,24 +14506,18 @@ var broadcastToGradConfig = {
     ) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Cast_grad.js
 var castGradConfig = {
   kernelName: Cast,
   gradFunc: (dy) => {
     return { x: () => dy.clone() };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Ceil_grad.js
 var ceilGradConfig = {
   kernelName: Ceil,
   gradFunc: (dy) => {
     return { x: () => zerosLike(dy) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/ClipByValue_grad.js
 var clipByValueGradConfig = {
   kernelName: ClipByValue,
   inputsToSave: ["x"],
@@ -22257,29 +14529,23 @@ var clipByValueGradConfig = {
     };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/ComplexAbs_grad.js
 var complexAbsGradConfig = {
   kernelName: ComplexAbs,
   inputsToSave: ["x"],
   gradFunc: absGradConfig.gradFunc
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Concat_grad.js
 var concatGradConfig = {
   kernelName: Concat,
   saveAllInputs: true,
   gradFunc: (dy, saved, attrs) => {
-    const shapes = saved.map((t3) => t3.shape);
+    const shapes = saved.map((t) => t.shape);
     const { axis } = attrs;
     const $axis = parseAxisParam(axis, saved[0].shape)[0];
     const sizeSplits = shapes.map((s) => s[$axis]);
     const derTensors = split(dy, sizeSplits, $axis);
-    return derTensors.map((t3) => () => t3);
+    return derTensors.map((t) => () => t);
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Conv2D_grad.js
 var conv2DGradConfig = {
   kernelName: Conv2D,
   inputsToSave: ["x", "filter"],
@@ -22293,8 +14559,6 @@ var conv2DGradConfig = {
     };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Conv2DBackpropInput_grad.js
 var conv2DBackpropInputGradConfig = {
   kernelName: Conv2DBackpropInput,
   inputsToSave: ["dy", "filter"],
@@ -22307,8 +14571,6 @@ var conv2DBackpropInputGradConfig = {
     };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/conv3d_backprop_filter.js
 function conv3DBackpropFilter_(x, dy, filterShape, strides, pad2) {
   let x5D = x;
   if (x.rank === 4) {
@@ -22328,8 +14590,6 @@ function conv3DBackpropFilter_(x, dy, filterShape, strides, pad2) {
   return ENGINE.runKernel(Conv3DBackpropFilterV2, inputs, attrs);
 }
 var conv3DBackpropFilter = /* @__PURE__ */ op({ conv3DBackpropFilter_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Conv3D_grad.js
 var conv3DGradConfig = {
   kernelName: Conv3D,
   inputsToSave: ["x", "filter"],
@@ -22343,8 +14603,6 @@ var conv3DGradConfig = {
     };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Cos_grad.js
 var cosGradConfig = {
   kernelName: Cos,
   inputsToSave: ["x"],
@@ -22353,8 +14611,6 @@ var cosGradConfig = {
     return { x: () => mul(neg(sin(cast(x, "float32"))), dy) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Cosh_grad.js
 var coshGradConfig = {
   kernelName: Cosh,
   inputsToSave: ["x"],
@@ -22363,8 +14619,6 @@ var coshGradConfig = {
     return { x: () => mul(sinh(cast(x, "float32")), dy) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Cumsum_grad.js
 var cumsumGradConfig = {
   kernelName: Cumsum,
   inputsToSave: ["x"],
@@ -22383,8 +14637,6 @@ var cumsumGradConfig = {
     };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/DepthwiseConv2dNative_grad.js
 var depthwiseConv2dNativeGradConfig = {
   kernelName: DepthwiseConv2dNative,
   inputsToSave: ["x", "filter"],
@@ -22404,8 +14656,6 @@ var depthwiseConv2dNativeGradConfig = {
     };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Dilation2D_grad.js
 var dilation2dGradConfig = {
   kernelName: Dilation2D,
   inputsToSave: ["x", "filter"],
@@ -22419,8 +14669,6 @@ var dilation2dGradConfig = {
     };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Elu_grad.js
 var eluGradConfig = {
   kernelName: Elu,
   outputsToSave: [true],
@@ -22430,8 +14678,6 @@ var eluGradConfig = {
     return { x: () => ENGINE.runKernel(EluGrad, inputs) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Erf_grad.js
 var erfGradConfig = {
   kernelName: Erf,
   inputsToSave: ["x"],
@@ -22441,8 +14687,6 @@ var erfGradConfig = {
     return { x: () => mul(dy, a) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Exp_grad.js
 var expGradConfig = {
   kernelName: Exp,
   outputsToSave: [true],
@@ -22451,8 +14695,6 @@ var expGradConfig = {
     return { x: () => mul(dy, y) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/ExpandDims_grad.js
 var expandDimsGradConfig = {
   kernelName: ExpandDims,
   inputsToSave: ["input"],
@@ -22461,8 +14703,6 @@ var expandDimsGradConfig = {
     return { input: () => reshape(dy, input2.shape) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Expm1_grad.js
 var expm1GradConfig = {
   kernelName: Expm1,
   inputsToSave: ["x"],
@@ -22471,16 +14711,12 @@ var expm1GradConfig = {
     return { x: () => mul(dy, exp(x)) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Floor_grad.js
 var floorGradConfig = {
   kernelName: Floor,
   gradFunc: (dy) => {
     return { x: () => zerosLike(dy) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/FloorDiv_grad.js
 var floorDivGradConfig = {
   kernelName: FloorDiv,
   inputsToSave: ["a", "b"],
@@ -22507,8 +14743,6 @@ var floorDivGradConfig = {
     return { a: derA, b: derB };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/FusedBatchNorm_grad.js
 var fusedBatchNormGradConfig = {
   kernelName: FusedBatchNorm,
   inputsToSave: ["x", "mean", "variance", "scale"],
@@ -22573,8 +14807,6 @@ var fusedBatchNormGradConfig = {
     };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/GatherV2_grad.js
 var gatherGradConfig = {
   kernelName: GatherV2,
   inputsToSave: ["x", "indices"],
@@ -22632,14 +14864,12 @@ function arrayRange(start, stop) {
 function arrayConcat(arrays) {
   const result = [];
   for (let i = 0; i < arrays.length; ++i) {
-    for (let j3 = 0; j3 < arrays[i].length; ++j3) {
-      result.push(arrays[i][j3]);
+    for (let j = 0; j < arrays[i].length; ++j) {
+      result.push(arrays[i][j]);
     }
   }
   return result;
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/GreaterEqual_grad.js
 var greaterEqualGradConfig = {
   kernelName: GreaterEqual,
   inputsToSave: ["a", "b"],
@@ -22648,40 +14878,30 @@ var greaterEqualGradConfig = {
     return { a: () => zerosLike(a), b: () => zerosLike(b) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Identity_grad.js
 var identityGradConfig = {
   kernelName: Identity,
   gradFunc: (dy) => {
     return { x: () => cast(dy, "float32") };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/IsFinite_grad.js
 var isFiniteGradConfig = {
   kernelName: IsFinite,
   gradFunc: (dy) => {
     return { x: () => zerosLike(dy) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/IsInf_grad.js
 var isInfGradConfig = {
   kernelName: IsInf,
   gradFunc: (dy) => {
     return { x: () => zerosLike(dy) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/IsNan_grad.js
 var isNanGradConfig = {
   kernelName: IsNan,
   gradFunc: (dy) => {
     return { x: () => zerosLike(dy) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/LeakyRelu_grad.js
 var leakyReluGradConfig = {
   kernelName: LeakyRelu,
   inputsToSave: ["x"],
@@ -22692,8 +14912,6 @@ var leakyReluGradConfig = {
     return { x: () => where(mask, dy, mul(dy, alpha)) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Log1p_grad.js
 var log1pGradConfig = {
   kernelName: Log1p,
   inputsToSave: ["x"],
@@ -22702,8 +14920,6 @@ var log1pGradConfig = {
     return { x: () => div(dy, add2(x, 1)) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Log_grad.js
 var logGradConfig = {
   kernelName: Log,
   inputsToSave: ["x"],
@@ -22712,8 +14928,6 @@ var logGradConfig = {
     return { x: () => div(dy, cast(x, "float32")) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/LogSoftmax_grad.js
 var logSoftmaxGradConfig = {
   kernelName: LogSoftmax,
   inputsToSave: [],
@@ -22730,16 +14944,12 @@ var logSoftmaxGradConfig = {
     };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/local_response_normalization_backprop.js
 function localResponseNormalizationBackprop_(x, y, dy, depthRadius = 5, bias = 1, alpha = 1, beta = 0.5) {
   const inputs = { x, y, dy };
   const attrs = { depthRadius, bias, alpha, beta };
   return ENGINE.runKernel(LRNGrad, inputs, attrs);
 }
 var localResponseNormalizationBackprop = op({ localResponseNormalizationBackprop_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/LRN_grad.js
 var lrnGradConfig = {
   kernelName: LRN,
   inputsToSave: ["x"],
@@ -22752,8 +14962,6 @@ var lrnGradConfig = {
     };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/min_max_grad_util.js
 function gradForMinAndMax(dy, y, xOrig, origAxes) {
   if (y.rank < xOrig.rank) {
     y = reshape(y, expandShapeToKeepDim(y.shape, origAxes));
@@ -22768,8 +14976,6 @@ function gradForMinAndMax(dy, y, xOrig, origAxes) {
     }
   };
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Max_grad.js
 var maxGradConfig = {
   kernelName: Max,
   inputsToSave: ["x"],
@@ -22788,8 +14994,6 @@ var maxGradConfig = {
     };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Maximum_grad.js
 var maximumGradConfig = {
   kernelName: Maximum,
   inputsToSave: ["a", "b"],
@@ -22800,8 +15004,6 @@ var maximumGradConfig = {
     return { a: derA, b: derB };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/max_pool_3d_grad.js
 function maxPool3dGrad_(dy, input2, output, filterSize, strides, pad2, dimRoundingMode) {
   const $dy = convertToTensor(dy, "dy", "maxPool3dGrad");
   const $input = convertToTensor(input2, "input", "maxPool3dGrad");
@@ -22841,8 +15043,6 @@ function maxPool3dGrad_(dy, input2, output, filterSize, strides, pad2, dimRoundi
   return res;
 }
 var maxPool3dGrad = /* @__PURE__ */ op({ maxPool3dGrad_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/MaxPool3D_grad.js
 var maxPool3DGradConfig = {
   kernelName: MaxPool3D,
   inputsToSave: ["x"],
@@ -22855,8 +15055,6 @@ var maxPool3DGradConfig = {
     };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/max_pool_grad.js
 function maxPoolGrad_(dy, input2, output, filterSize, strides, pad2, dimRoundingMode) {
   const $dy = convertToTensor(dy, "dy", "maxPoolGrad");
   const $input = convertToTensor(input2, "input", "maxPoolGrad");
@@ -22870,8 +15068,6 @@ function maxPoolGrad_(dy, input2, output, filterSize, strides, pad2, dimRounding
   return ENGINE.runKernel(MaxPoolGrad, inputs, attrs);
 }
 var maxPoolGrad = /* @__PURE__ */ op({ maxPoolGrad_ });
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/MaxPool_grad.js
 var maxPoolGradConfig = {
   kernelName: MaxPool,
   inputsToSave: ["x"],
@@ -22884,8 +15080,6 @@ var maxPoolGradConfig = {
     };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Mean_grad.js
 var meanGradConfig = {
   kernelName: Mean,
   inputsToSave: ["x"],
@@ -22908,8 +15102,6 @@ var meanGradConfig = {
     return { x: derX };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Min_grad.js
 var minGradConfig = {
   kernelName: Min,
   inputsToSave: ["x"],
@@ -22927,8 +15119,6 @@ var minGradConfig = {
     };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Minimum_grad.js
 var minimumGradConfig = {
   kernelName: Minimum,
   inputsToSave: ["a", "b"],
@@ -22939,8 +15129,6 @@ var minimumGradConfig = {
     return { a: derA, b: derB };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/MirrorPad_grad.js
 var mirrorPadGradConfig = {
   kernelName: MirrorPad,
   inputsToSave: ["x"],
@@ -22951,8 +15139,6 @@ var mirrorPadGradConfig = {
     return { x: () => slice(dy, begin, x.shape) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Mod_grad.js
 var modGradConfig = {
   kernelName: Mod,
   inputsToSave: ["a", "b"],
@@ -22977,8 +15163,6 @@ var modGradConfig = {
     return { a: derA, b: derB };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Multiply_grad.js
 var multiplyGradConfig = {
   kernelName: Multiply,
   inputsToSave: ["a", "b"],
@@ -23004,16 +15188,12 @@ var multiplyGradConfig = {
     return { a: derA, b: derB };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Neg_grad.js
 var negGradConfig = {
   kernelName: Neg,
   gradFunc: (dy) => {
     return { x: () => neg(dy) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/OneHot_grad.js
 var oneHotGradConfig = {
   kernelName: OneHot,
   inputsToSave: ["indices"],
@@ -23022,27 +15202,21 @@ var oneHotGradConfig = {
     return { indices: () => zeros(indices.shape, "float32") };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/OnesLike_grad.js
 var onesLikeGradConfig = {
   kernelName: OnesLike,
   gradFunc: (dy) => {
     return { x: () => zerosLike(dy) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Pack_grad.js
 var packGradConfig = {
   kernelName: Pack,
   saveAllInputs: true,
   gradFunc: (dy, saved, attrs) => {
     const { axis } = attrs;
     const derTensors = unstack(dy, axis);
-    return derTensors.map((t3) => () => t3);
+    return derTensors.map((t) => () => t);
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/PadV2_grad.js
 var padV2GradConfig = {
   kernelName: PadV2,
   inputsToSave: ["x"],
@@ -23053,8 +15227,6 @@ var padV2GradConfig = {
     return { x: () => slice(dy, begin, x.shape) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Pow_grad.js
 var powGradConfig = {
   kernelName: Pow,
   inputsToSave: ["a", "b"],
@@ -23086,8 +15258,6 @@ var powGradConfig = {
     return { a: derBase, b: derExp };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Prelu_grad.js
 var preluGradConfig = {
   kernelName: Prelu,
   inputsToSave: ["x", "alpha"],
@@ -23107,8 +15277,6 @@ var preluGradConfig = {
     };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Prod_grad.js
 function prodGradFn_(x, dy, axis) {
   const expandedYShape = x.shape.slice();
   expandedYShape[axis] = 1;
@@ -23147,7 +15315,7 @@ var prodGradConfig = {
     const { axis } = attrs;
     let axisArr = [];
     if (axis === void 0 || axis === null) {
-      axisArr = x.shape.map((_3, i) => i);
+      axisArr = x.shape.map((_, i) => i);
     } else if (typeof axis === "number") {
       axisArr = [axis];
     } else {
@@ -23156,8 +15324,6 @@ var prodGradConfig = {
     return { x: () => prodsGradFn_(x, dy, axisArr) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/RealDiv_grad.js
 var divGradConfig = {
   kernelName: RealDiv,
   inputsToSave: ["a", "b"],
@@ -23184,8 +15350,6 @@ var divGradConfig = {
     return { a: derA, b: derB };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Reciprocal_grad.js
 var reciprocalGradConfig = {
   kernelName: Reciprocal,
   inputsToSave: ["x"],
@@ -23194,8 +15358,6 @@ var reciprocalGradConfig = {
     return { x: () => div(dy, neg(square(x))) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Relu6_grad.js
 var relu6GradConfig = {
   kernelName: Relu6,
   inputsToSave: ["x"],
@@ -23205,8 +15367,6 @@ var relu6GradConfig = {
     return { x: () => mul(dy, cast(mask, "float32")) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Relu_grad.js
 var reluGradConfig = {
   kernelName: Relu,
   inputsToSave: ["x"],
@@ -23215,8 +15375,6 @@ var reluGradConfig = {
     return { x: () => mul(dy, cast(step(x), "float32")) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Reshape_grad.js
 var reshapeGradConfig = {
   kernelName: Reshape,
   inputsToSave: ["x"],
@@ -23225,8 +15383,6 @@ var reshapeGradConfig = {
     return { x: () => reshape(dy, x.shape) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/ResizeBilinear_grad.js
 var resizeBilinearGradConfig = {
   kernelName: ResizeBilinear,
   inputsToSave: ["images"],
@@ -23240,8 +15396,6 @@ var resizeBilinearGradConfig = {
     return { images: imagesDer };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/ResizeNearestNeighbor_grad.js
 var resizeNearestNeighborGradConfig = {
   kernelName: ResizeNearestNeighbor,
   inputsToSave: ["images"],
@@ -23255,8 +15409,6 @@ var resizeNearestNeighborGradConfig = {
     return { images: imagesDer };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Reverse_grad.js
 var reverseGradConfig = {
   kernelName: Reverse,
   gradFunc: (dy, saved, attrs) => {
@@ -23265,16 +15417,12 @@ var reverseGradConfig = {
     return { x: () => reverse(dy, axes) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Round_grad.js
 var roundGradConfig = {
   kernelName: Round,
   gradFunc: (dy) => {
     return { x: () => zerosLike(dy) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Rsqrt_grad.js
 var rsqrtGradConfig = {
   kernelName: Rsqrt,
   inputsToSave: ["x"],
@@ -23283,8 +15431,6 @@ var rsqrtGradConfig = {
     return { x: () => neg(div(dy, mul(pow(x, 1.5), 2))) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Select_grad.js
 var selectGradConfig = {
   kernelName: Select,
   inputsToSave: ["condition"],
@@ -23299,8 +15445,6 @@ var selectGradConfig = {
     };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Selu_grad.js
 var seluGradConfig = {
   kernelName: Selu,
   inputsToSave: ["x"],
@@ -23318,8 +15462,6 @@ var seluGradConfig = {
     };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Sigmoid_grad.js
 var sigmoidGradConfig = {
   kernelName: Sigmoid,
   outputsToSave: [true],
@@ -23328,16 +15470,12 @@ var sigmoidGradConfig = {
     return { x: () => mul(dy, mul(y, sub(scalar(1), y))) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Sign_grad.js
 var signGradConfig = {
   kernelName: Sign,
   gradFunc: (dy) => {
     return { x: () => zerosLike(dy) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Sin_grad.js
 var sinGradConfig = {
   kernelName: Sin,
   inputsToSave: ["x"],
@@ -23346,8 +15484,6 @@ var sinGradConfig = {
     return { x: () => mul(cos(cast(x, "float32")), dy) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Sinh_grad.js
 var sinhGradConfig = {
   kernelName: Sinh,
   inputsToSave: ["x"],
@@ -23356,8 +15492,6 @@ var sinhGradConfig = {
     return { x: () => mul(cosh(cast(x, "float32")), dy) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Slice_grad.js
 var sliceGradConfig = {
   kernelName: Slice,
   inputsToSave: ["x"],
@@ -23373,8 +15507,6 @@ var sliceGradConfig = {
     return { x: () => pad(dy, paddings) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Softmax_grad.js
 var softmaxGradConfig = {
   kernelName: Softmax,
   outputsToSave: [true],
@@ -23388,8 +15520,6 @@ var softmaxGradConfig = {
     };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Softplus_grad.js
 var softplusGradConfig = {
   kernelName: Softplus,
   inputsToSave: ["x"],
@@ -23398,8 +15528,6 @@ var softplusGradConfig = {
     return { x: () => mul(dy, sigmoid(x)) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/SpaceToBatchND_grad.js
 var spaceToBatchNDGradConfig = {
   kernelName: SpaceToBatchND,
   gradFunc: (dy, saved, attrs) => {
@@ -23407,8 +15535,6 @@ var spaceToBatchNDGradConfig = {
     return { x: () => batchToSpaceND(dy, blockShape, paddings) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/SplitV_grad.js
 var splitVGradConfig = {
   kernelName: SplitV,
   gradFunc: (dy, saved, attrs) => {
@@ -23416,8 +15542,6 @@ var splitVGradConfig = {
     return { x: () => concat(dy, axis) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Sqrt_grad.js
 var sqrtGradConfig = {
   kernelName: Sqrt,
   inputsToSave: ["x"],
@@ -23426,8 +15550,6 @@ var sqrtGradConfig = {
     return { x: () => div(dy, mul(sqrt(cast(x, "float32")), 2)) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Square_grad.js
 var squareGradConfig = {
   kernelName: Square,
   inputsToSave: ["x"],
@@ -23436,8 +15558,6 @@ var squareGradConfig = {
     return { x: () => mul(dy, mul(cast(x, "float32"), 2)) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/SquaredDifference_grad.js
 var squaredDifferenceGradConfig = {
   kernelName: SquaredDifference,
   inputsToSave: ["a", "b"],
@@ -23449,16 +15569,12 @@ var squaredDifferenceGradConfig = {
     return { a: derA, b: derB };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Step_grad.js
 var stepGradConfig = {
   kernelName: Step,
   gradFunc: (dy) => {
     return { x: () => zerosLike(dy) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Sub_grad.js
 var subGradConfig = {
   kernelName: Sub,
   inputsToSave: ["a", "b"],
@@ -23484,8 +15600,6 @@ var subGradConfig = {
     return { a: derA, b: derB };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Sum_grad.js
 var sumGradConfig = {
   kernelName: Sum,
   inputsToSave: ["x"],
@@ -23502,8 +15616,6 @@ var sumGradConfig = {
     return { x: () => derX };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Tan_grad.js
 var tanGradConfig = {
   kernelName: Tan,
   inputsToSave: ["x"],
@@ -23512,8 +15624,6 @@ var tanGradConfig = {
     return { x: () => div(dy, square(cos(x))) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Tanh_grad.js
 var tanhGradConfig = {
   kernelName: Tanh,
   outputsToSave: [true],
@@ -23522,8 +15632,6 @@ var tanhGradConfig = {
     return { x: () => mul(sub(scalar(1), square(y)), dy) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Tile_grad.js
 var tileGradConfig = {
   kernelName: Tile,
   inputsToSave: ["x"],
@@ -23538,8 +15646,8 @@ var tileGradConfig = {
         }
       } else if (x.rank === 2) {
         for (let i = 0; i < reps[0]; ++i) {
-          for (let j3 = 0; j3 < reps[1]; ++j3) {
-            xGrad = add2(xGrad, slice(dy, [i * x.shape[0], j3 * x.shape[1]], [
+          for (let j = 0; j < reps[1]; ++j) {
+            xGrad = add2(xGrad, slice(dy, [i * x.shape[0], j * x.shape[1]], [
               x.shape[0],
               x.shape[1]
             ]));
@@ -23547,21 +15655,21 @@ var tileGradConfig = {
         }
       } else if (x.rank === 3) {
         for (let i = 0; i < reps[0]; ++i) {
-          for (let j3 = 0; j3 < reps[1]; ++j3) {
-            for (let k4 = 0; k4 < reps[2]; ++k4) {
-              xGrad = add2(xGrad, slice(dy, [i * x.shape[0], j3 * x.shape[1], k4 * x.shape[2]], [x.shape[0], x.shape[1], x.shape[2]]));
+          for (let j = 0; j < reps[1]; ++j) {
+            for (let k = 0; k < reps[2]; ++k) {
+              xGrad = add2(xGrad, slice(dy, [i * x.shape[0], j * x.shape[1], k * x.shape[2]], [x.shape[0], x.shape[1], x.shape[2]]));
             }
           }
         }
       } else if (x.rank === 4) {
         for (let i = 0; i < reps[0]; ++i) {
-          for (let j3 = 0; j3 < reps[1]; ++j3) {
-            for (let k4 = 0; k4 < reps[2]; ++k4) {
+          for (let j = 0; j < reps[1]; ++j) {
+            for (let k = 0; k < reps[2]; ++k) {
               for (let l = 0; l < reps[3]; ++l) {
                 xGrad = add2(xGrad, slice(dy, [
                   i * x.shape[0],
-                  j3 * x.shape[1],
-                  k4 * x.shape[2],
+                  j * x.shape[1],
+                  k * x.shape[2],
                   l * x.shape[3]
                 ], [x.shape[0], x.shape[1], x.shape[2], x.shape[3]]));
               }
@@ -23576,8 +15684,6 @@ var tileGradConfig = {
     return { x: derX };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Transpose_grad.js
 var transposeGradConfig = {
   kernelName: Transpose,
   gradFunc: (dy, saved, attrs) => {
@@ -23587,8 +15693,6 @@ var transposeGradConfig = {
     return { x: () => transpose(dy, undoPerm) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/Unpack_grad.js
 var unpackGradConfig = {
   kernelName: Unpack,
   gradFunc: (dy, saved, attrs) => {
@@ -23597,8 +15701,6 @@ var unpackGradConfig = {
     return { value: () => stack(dy, axis) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/UnsortedSegmentSum_grad.js
 var unsortedSegmentSumGradConfig = {
   kernelName: UnsortedSegmentSum,
   inputsToSave: ["segmentIds"],
@@ -23622,16 +15724,12 @@ function gatherDropNegatives(x, indices) {
   const zeroSlice = zerosLike(gathered);
   return where(isPositive, gathered, zeroSlice);
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/gradients/ZerosLike_grad.js
 var zerosLikeGradConfig = {
   kernelName: ZerosLike,
   gradFunc: (dy) => {
     return { x: () => zerosLike(dy) };
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/register_all_gradients.js
 var gradConfigs = [
   absGradConfig,
   acosGradConfig,
@@ -23742,171 +15840,115 @@ var gradConfigs = [
 for (const gradientConfig of gradConfigs) {
   registerGradient(gradientConfig);
 }
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/abs.js
 getGlobalTensorClass().prototype.abs = function() {
   this.throwIfDisposed();
   return abs(this);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/acos.js
 getGlobalTensorClass().prototype.acos = function() {
   this.throwIfDisposed();
   return acos(this);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/acosh.js
 getGlobalTensorClass().prototype.acosh = function() {
   this.throwIfDisposed();
   return acosh(this);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/add.js
 getGlobalTensorClass().prototype.add = function(b) {
   this.throwIfDisposed();
   return add2(this, b);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/all.js
 getGlobalTensorClass().prototype.all = function(axis, keepDims) {
   this.throwIfDisposed();
   return all(this, axis, keepDims);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/any.js
 getGlobalTensorClass().prototype.any = function(axis, keepDims) {
   this.throwIfDisposed();
   return any(this, axis, keepDims);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/arg_max.js
 getGlobalTensorClass().prototype.argMax = function(axis) {
   this.throwIfDisposed();
   return argMax(this, axis);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/arg_min.js
 getGlobalTensorClass().prototype.argMin = function(axis) {
   this.throwIfDisposed();
   return argMin(this, axis);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/as_scalar.js
 getGlobalTensorClass().prototype.asScalar = function() {
   this.throwIfDisposed();
   assert(this.size === 1, () => "The array must have only 1 element.");
   return reshape(this, []);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/as_type.js
 getGlobalTensorClass().prototype.asType = function(dtype) {
   this.throwIfDisposed();
   return cast(this, dtype);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/as1d.js
 getGlobalTensorClass().prototype.as1D = function() {
   this.throwIfDisposed();
   return reshape(this, [this.size]);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/as2d.js
 getGlobalTensorClass().prototype.as2D = function(rows, columns) {
   this.throwIfDisposed();
   return reshape(this, [rows, columns]);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/as3d.js
 getGlobalTensorClass().prototype.as3D = function(rows, columns, depth) {
   this.throwIfDisposed();
   return reshape(this, [rows, columns, depth]);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/as4d.js
 getGlobalTensorClass().prototype.as4D = function(rows, columns, depth, depth2) {
   this.throwIfDisposed();
   return reshape(this, [rows, columns, depth, depth2]);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/as5d.js
 getGlobalTensorClass().prototype.as5D = function(rows, columns, depth, depth2, depth3) {
   this.throwIfDisposed();
   return reshape(this, [rows, columns, depth, depth2, depth3]);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/asin.js
 getGlobalTensorClass().prototype.asin = function() {
   this.throwIfDisposed();
   return asin(this);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/asinh.js
 getGlobalTensorClass().prototype.asinh = function() {
   this.throwIfDisposed();
   return asinh(this);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/atan.js
 getGlobalTensorClass().prototype.atan = function() {
   this.throwIfDisposed();
   return atan(this);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/atan2.js
 getGlobalTensorClass().prototype.atan2 = function(b) {
   this.throwIfDisposed();
   return atan2(this, b);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/atanh.js
 getGlobalTensorClass().prototype.atanh = function() {
   this.throwIfDisposed();
   return atanh(this);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/avg_pool.js
 getGlobalTensorClass().prototype.avgPool = function(filterSize, strides, pad2, dimRoundingMode) {
   this.throwIfDisposed();
   return avgPool(this, filterSize, strides, pad2, dimRoundingMode);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/batch_to_space_nd.js
 getGlobalTensorClass().prototype.batchToSpaceND = function(blockShape, crops) {
   this.throwIfDisposed();
   return batchToSpaceND(this, blockShape, crops);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/batchnorm.js
 getGlobalTensorClass().prototype.batchNorm = function(mean3, variance, offset, scale2, varianceEpsilon) {
   this.throwIfDisposed();
   return batchNorm(this, mean3, variance, offset, scale2, varianceEpsilon);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/broadcast_to.js
 getGlobalTensorClass().prototype.broadcastTo = function(shape) {
   this.throwIfDisposed();
   return broadcastTo(this, shape);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/cast.js
 getGlobalTensorClass().prototype.cast = function(dtype) {
   this.throwIfDisposed();
   return cast(this, dtype);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/ceil.js
 getGlobalTensorClass().prototype.ceil = function() {
   this.throwIfDisposed();
   return ceil(this);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/clip_by_value.js
 getGlobalTensorClass().prototype.clipByValue = function(min5, max5) {
   this.throwIfDisposed();
   return clipByValue(this, min5, max5);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/concat.js
 getGlobalTensorClass().prototype.concat = function(x, axis) {
   this.throwIfDisposed();
   if (x instanceof Tensor) {
@@ -23914,663 +15956,443 @@ getGlobalTensorClass().prototype.concat = function(x, axis) {
   }
   return concat([this, ...x], axis);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/conv1d.js
 getGlobalTensorClass().prototype.conv1d = function(filter, stride, pad2, dataFormat, dilation, dimRoundingMode) {
   this.throwIfDisposed();
   return conv1d(this, filter, stride, pad2, dataFormat, dilation, dimRoundingMode);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/conv2d_transpose.js
 getGlobalTensorClass().prototype.conv2dTranspose = function(filter, outputShape, strides, pad2, dimRoundingMode) {
   this.throwIfDisposed();
   return conv2dTranspose(this, filter, outputShape, strides, pad2, dimRoundingMode);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/conv2d.js
 getGlobalTensorClass().prototype.conv2d = function(filter, strides, pad2, dataFormat, dilations, dimRoundingMode) {
   this.throwIfDisposed();
   return conv2d(this, filter, strides, pad2, dataFormat, dilations, dimRoundingMode);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/cos.js
 getGlobalTensorClass().prototype.cos = function() {
   this.throwIfDisposed();
   return cos(this);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/cosh.js
 getGlobalTensorClass().prototype.cosh = function() {
   this.throwIfDisposed();
   return cosh(this);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/cumprod.js
 getGlobalTensorClass().prototype.cumprod = function(axis, exclusive, reverse4) {
   this.throwIfDisposed();
   return cumprod(this, axis, exclusive, reverse4);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/cumsum.js
 getGlobalTensorClass().prototype.cumsum = function(axis, exclusive, reverse4) {
   this.throwIfDisposed();
   return cumsum(this, axis, exclusive, reverse4);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/depth_to_space.js
 getGlobalTensorClass().prototype.depthToSpace = function(blockSize, dataFormat) {
   this.throwIfDisposed();
   return depthToSpace(this, blockSize, dataFormat);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/depthwise_conv2d.js
 getGlobalTensorClass().prototype.depthwiseConv2d = function(filter, strides, pad2, dataFormat, dilations, dimRoundingMode) {
   this.throwIfDisposed();
   return depthwiseConv2d(this, filter, strides, pad2, dataFormat, dilations, dimRoundingMode);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/dilation2d.js
 getGlobalTensorClass().prototype.dilation2d = function(filter, strides, pad2, dilations, dataFormat) {
   this.throwIfDisposed();
   return dilation2d(this, filter, strides, pad2, dilations, dataFormat);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/div_no_nan.js
 getGlobalTensorClass().prototype.divNoNan = function(b) {
   this.throwIfDisposed();
   return divNoNan(this, b);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/div.js
 getGlobalTensorClass().prototype.div = function(b) {
   this.throwIfDisposed();
   return div(this, b);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/dot.js
 getGlobalTensorClass().prototype.dot = function(b) {
   this.throwIfDisposed();
   return dot(this, b);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/elu.js
 getGlobalTensorClass().prototype.elu = function() {
   this.throwIfDisposed();
   return elu(this);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/equal.js
 getGlobalTensorClass().prototype.equal = function(b) {
   this.throwIfDisposed();
   return equal(this, b);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/erf.js
 getGlobalTensorClass().prototype.erf = function() {
   this.throwIfDisposed();
   return erf(this);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/euclidean_norm.js
 getGlobalTensorClass().prototype.euclideanNorm = function(axis, keepDims) {
   this.throwIfDisposed();
   return euclideanNorm(this, axis, keepDims);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/exp.js
 getGlobalTensorClass().prototype.exp = function() {
   this.throwIfDisposed();
   return exp(this);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/expand_dims.js
 getGlobalTensorClass().prototype.expandDims = function(axis) {
   this.throwIfDisposed();
   return expandDims(this, axis);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/expm1.js
 getGlobalTensorClass().prototype.expm1 = function() {
   this.throwIfDisposed();
   return expm1(this);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/fft.js
 getGlobalTensorClass().prototype.fft = function() {
   this.throwIfDisposed();
   return fft(this);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/flatten.js
 getGlobalTensorClass().prototype.flatten = function() {
   this.throwIfDisposed();
   return reshape(this, [this.size]);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/floor.js
 getGlobalTensorClass().prototype.floor = function() {
   this.throwIfDisposed();
   return floor(this);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/floorDiv.js
 getGlobalTensorClass().prototype.floorDiv = function(b) {
   this.throwIfDisposed();
   return floorDiv(this, b);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/gather.js
 getGlobalTensorClass().prototype.gather = function(indices, axis, batchDims) {
   this.throwIfDisposed();
   return gather(this, indices, axis, batchDims);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/greater_equal.js
 getGlobalTensorClass().prototype.greaterEqual = function(b) {
   this.throwIfDisposed();
   return greaterEqual(this, b);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/greater.js
 getGlobalTensorClass().prototype.greater = function(b) {
   this.throwIfDisposed();
   return greater(this, b);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/ifft.js
 getGlobalTensorClass().prototype.ifft = function() {
   this.throwIfDisposed();
   return ifft(this);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/irfft.js
 getGlobalTensorClass().prototype.irfft = function() {
   this.throwIfDisposed();
   return irfft(this);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/is_finite.js
 getGlobalTensorClass().prototype.isFinite = function() {
   this.throwIfDisposed();
   return isFinite2(this);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/is_inf.js
 getGlobalTensorClass().prototype.isInf = function() {
   this.throwIfDisposed();
   return isInf(this);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/is_nan.js
 getGlobalTensorClass().prototype.isNaN = function() {
   this.throwIfDisposed();
   return isNaN2(this);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/leaky_relu.js
 getGlobalTensorClass().prototype.leakyRelu = function(alpha) {
   this.throwIfDisposed();
   return leakyRelu(this, alpha);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/less_equal.js
 getGlobalTensorClass().prototype.lessEqual = function(b) {
   this.throwIfDisposed();
   return lessEqual(this, b);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/less.js
 getGlobalTensorClass().prototype.less = function(b) {
   this.throwIfDisposed();
   return less(this, b);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/local_response_normalization.js
 getGlobalTensorClass().prototype.localResponseNormalization = function(depthRadius, bias, alpha, beta) {
   this.throwIfDisposed();
   return localResponseNormalization(this, depthRadius, bias, alpha, beta);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/log_sigmoid.js
 getGlobalTensorClass().prototype.logSigmoid = function() {
   this.throwIfDisposed();
   return logSigmoid(this);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/log_softmax.js
 getGlobalTensorClass().prototype.logSoftmax = function(axis) {
   this.throwIfDisposed();
   return logSoftmax(this, axis);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/log_sum_exp.js
 getGlobalTensorClass().prototype.logSumExp = function(axis, keepDims) {
   this.throwIfDisposed();
   return logSumExp(this, axis, keepDims);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/log.js
 getGlobalTensorClass().prototype.log = function() {
   this.throwIfDisposed();
   return log2(this);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/log1p.js
 getGlobalTensorClass().prototype.log1p = function() {
   this.throwIfDisposed();
   return log1p(this);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/logical_and.js
 getGlobalTensorClass().prototype.logicalAnd = function(b) {
   this.throwIfDisposed();
   return logicalAnd(this, b);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/logical_not.js
 getGlobalTensorClass().prototype.logicalNot = function() {
   this.throwIfDisposed();
   return logicalNot(this);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/logical_or.js
 getGlobalTensorClass().prototype.logicalOr = function(b) {
   this.throwIfDisposed();
   return logicalOr(this, b);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/logical_xor.js
 getGlobalTensorClass().prototype.logicalXor = function(b) {
   this.throwIfDisposed();
   return logicalXor(this, b);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/mat_mul.js
 getGlobalTensorClass().prototype.matMul = function(b, transposeA, transposeB) {
   this.throwIfDisposed();
   return matMul(this, b, transposeA, transposeB);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/max_pool.js
 getGlobalTensorClass().prototype.maxPool = function(filterSize, strides, pad2, dimRoundingMode) {
   this.throwIfDisposed();
   return maxPool(this, filterSize, strides, pad2, dimRoundingMode);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/max.js
 getGlobalTensorClass().prototype.max = function(axis, keepDims) {
   this.throwIfDisposed();
   return max(this, axis, keepDims);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/maximum.js
 getGlobalTensorClass().prototype.maximum = function(b) {
   this.throwIfDisposed();
   return maximum(this, b);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/mean.js
 getGlobalTensorClass().prototype.mean = function(axis, keepDims) {
   this.throwIfDisposed();
   return mean(this, axis, keepDims);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/min.js
 getGlobalTensorClass().prototype.min = function(axis, keepDims) {
   this.throwIfDisposed();
   return min(this, axis, keepDims);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/minimum.js
 getGlobalTensorClass().prototype.minimum = function(b) {
   this.throwIfDisposed();
   return minimum(this, b);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/mirror_pad.js
 getGlobalTensorClass().prototype.mirrorPad = function(paddings, mode) {
   this.throwIfDisposed();
   return mirrorPad(this, paddings, mode);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/mod.js
 getGlobalTensorClass().prototype.mod = function(b) {
   this.throwIfDisposed();
   return mod(this, b);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/mul.js
 getGlobalTensorClass().prototype.mul = function(b) {
   this.throwIfDisposed();
   return mul(this, b);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/neg.js
 getGlobalTensorClass().prototype.neg = function() {
   this.throwIfDisposed();
   return neg(this);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/norm.js
 getGlobalTensorClass().prototype.norm = function(ord, axis, keepDims) {
   this.throwIfDisposed();
   return norm(this, ord, axis, keepDims);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/not_equal.js
 getGlobalTensorClass().prototype.notEqual = function(b) {
   this.throwIfDisposed();
   return notEqual(this, b);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/one_hot.js
 getGlobalTensorClass().prototype.oneHot = function(depth, onValue = 1, offValue = 0) {
   this.throwIfDisposed();
   return oneHot(this, depth, onValue, offValue);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/ones_like.js
 getGlobalTensorClass().prototype.onesLike = function() {
   this.throwIfDisposed();
   return onesLike(this);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/pad.js
 getGlobalTensorClass().prototype.pad = function(paddings, constantValue) {
   this.throwIfDisposed();
   return pad(this, paddings, constantValue);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/pool.js
 getGlobalTensorClass().prototype.pool = function(windowShape, poolingType, padding, dilationRate, strides, dimRoundingMode) {
   this.throwIfDisposed();
   return pool(this, windowShape, poolingType, padding, dilationRate, strides, dimRoundingMode);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/pow.js
 getGlobalTensorClass().prototype.pow = function(exp4) {
   this.throwIfDisposed();
   return pow(this, exp4);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/prelu.js
 getGlobalTensorClass().prototype.prelu = function(alpha) {
   this.throwIfDisposed();
   return prelu(this, alpha);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/prod.js
 getGlobalTensorClass().prototype.prod = function(axis, keepDims) {
   this.throwIfDisposed();
   return prod(this, axis, keepDims);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/reciprocal.js
 getGlobalTensorClass().prototype.reciprocal = function() {
   this.throwIfDisposed();
   return reciprocal(this);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/relu.js
 getGlobalTensorClass().prototype.relu = function() {
   this.throwIfDisposed();
   return relu(this);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/relu6.js
 getGlobalTensorClass().prototype.relu6 = function() {
   this.throwIfDisposed();
   return relu6(this);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/reshape_as.js
 getGlobalTensorClass().prototype.reshapeAs = function(x) {
   this.throwIfDisposed();
   return reshape(this, x.shape);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/reshape.js
 getGlobalTensorClass().prototype.reshape = function(shape) {
   this.throwIfDisposed();
   return reshape(this, shape);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/resize_bilinear.js
 getGlobalTensorClass().prototype.resizeBilinear = function(newShape2D, alignCorners, halfPixelCenters) {
   this.throwIfDisposed();
   return resizeBilinear(this, newShape2D, alignCorners, halfPixelCenters);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/resize_nearest_neighbor.js
 getGlobalTensorClass().prototype.resizeNearestNeighbor = function(newShape2D, alignCorners, halfFloatCenters) {
   this.throwIfDisposed();
   return resizeNearestNeighbor(this, newShape2D, alignCorners, halfFloatCenters);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/reverse.js
 getGlobalTensorClass().prototype.reverse = function(axis) {
   this.throwIfDisposed();
   return reverse(this, axis);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/rfft.js
 getGlobalTensorClass().prototype.rfft = function() {
   this.throwIfDisposed();
   return rfft(this);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/round.js
 getGlobalTensorClass().prototype.round = function() {
   this.throwIfDisposed();
   return round2(this);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/rsqrt.js
 getGlobalTensorClass().prototype.rsqrt = function() {
   this.throwIfDisposed();
   return rsqrt(this);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/selu.js
 getGlobalTensorClass().prototype.selu = function() {
   this.throwIfDisposed();
   return selu(this);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/separable_conv2d.js
 getGlobalTensorClass().prototype.separableConv2d = function(depthwiseFilter, pointwiseFilter, strides, pad2, dilation, dataFormat) {
   this.throwIfDisposed();
   return separableConv2d(this, depthwiseFilter, pointwiseFilter, strides, pad2, dilation, dataFormat);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/sigmoid.js
 getGlobalTensorClass().prototype.sigmoid = function() {
   this.throwIfDisposed();
   return sigmoid(this);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/sign.js
 getGlobalTensorClass().prototype.sign = function() {
   this.throwIfDisposed();
   return sign(this);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/sin.js
 getGlobalTensorClass().prototype.sin = function() {
   this.throwIfDisposed();
   return sin(this);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/sinh.js
 getGlobalTensorClass().prototype.sinh = function() {
   this.throwIfDisposed();
   return sinh(this);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/slice.js
 getGlobalTensorClass().prototype.slice = function(begin, size) {
   this.throwIfDisposed();
   return slice(this, begin, size);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/softmax.js
 getGlobalTensorClass().prototype.softmax = function(dim) {
   this.throwIfDisposed();
   return softmax(this, dim);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/softplus.js
 getGlobalTensorClass().prototype.softplus = function() {
   this.throwIfDisposed();
   return softplus(this);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/space_to_batch_nd.js
 getGlobalTensorClass().prototype.spaceToBatchND = function(blockShape, paddings) {
   this.throwIfDisposed();
   return spaceToBatchND(this, blockShape, paddings);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/split.js
 getGlobalTensorClass().prototype.split = function(numOrSizeSplits, axis) {
   this.throwIfDisposed();
   return split(this, numOrSizeSplits, axis);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/sqrt.js
 getGlobalTensorClass().prototype.sqrt = function() {
   this.throwIfDisposed();
   return sqrt(this);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/square.js
 getGlobalTensorClass().prototype.square = function() {
   this.throwIfDisposed();
   return square(this);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/squared_difference.js
 getGlobalTensorClass().prototype.squaredDifference = function(b) {
   this.throwIfDisposed();
   return squaredDifference(this, b);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/squeeze.js
 getGlobalTensorClass().prototype.squeeze = function(axis) {
   this.throwIfDisposed();
   return squeeze(this, axis);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/stack.js
 getGlobalTensorClass().prototype.stack = function(x, axis) {
   this.throwIfDisposed();
   const tensorsToBeStacked = x instanceof Tensor ? [this, x] : [this, ...x];
   return stack(tensorsToBeStacked, axis);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/step.js
 getGlobalTensorClass().prototype.step = function(alpha) {
   this.throwIfDisposed();
   return step(this, alpha);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/strided_slice.js
 getGlobalTensorClass().prototype.stridedSlice = function(begin, end, strides, beginMask, endMask, ellipsisMask, newAxisMask, shrinkAxisMask) {
   this.throwIfDisposed();
   return stridedSlice(this, begin, end, strides, beginMask, endMask, ellipsisMask, newAxisMask, shrinkAxisMask);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/sub.js
 getGlobalTensorClass().prototype.sub = function(b) {
   this.throwIfDisposed();
   return sub(this, b);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/sum.js
 getGlobalTensorClass().prototype.sum = function(axis, keepDims) {
   this.throwIfDisposed();
   return sum2(this, axis, keepDims);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/tan.js
 getGlobalTensorClass().prototype.tan = function() {
   this.throwIfDisposed();
   return tan(this);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/tanh.js
 getGlobalTensorClass().prototype.tanh = function() {
   this.throwIfDisposed();
   return tanh2(this);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/tile.js
 getGlobalTensorClass().prototype.tile = function(reps) {
   this.throwIfDisposed();
   return tile(this, reps);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/to_bool.js
 getGlobalTensorClass().prototype.toBool = function() {
   this.throwIfDisposed();
   return cast(this, "bool");
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/to_float.js
 getGlobalTensorClass().prototype.toFloat = function() {
   this.throwIfDisposed();
   return cast(this, "float32");
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/to_int.js
 getGlobalTensorClass().prototype.toInt = function() {
   this.throwIfDisposed();
   return cast(this, "int32");
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/topk.js
-getGlobalTensorClass().prototype.topk = function(k4, sorted) {
+getGlobalTensorClass().prototype.topk = function(k, sorted) {
   this.throwIfDisposed();
-  return topk(this, k4, sorted);
+  return topk(this, k, sorted);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/transpose.js
 getGlobalTensorClass().prototype.transpose = function(perm) {
   this.throwIfDisposed();
   return transpose(this, perm);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/unique.js
 getGlobalTensorClass().prototype.unique = function(axis) {
   this.throwIfDisposed();
   return unique(this, axis);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/unsorted_segment_sum.js
 getGlobalTensorClass().prototype.unsortedSegmentSum = function(segmentIds, numSegments) {
   this.throwIfDisposed();
   return unsortedSegmentSum(this, segmentIds, numSegments);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/unstack.js
 getGlobalTensorClass().prototype.unstack = function(axis) {
   this.throwIfDisposed();
   return unstack(this, axis);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/where.js
 getGlobalTensorClass().prototype.where = function(condition, x) {
   this.throwIfDisposed();
   return where(condition, this, x);
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/zeros_like.js
 getGlobalTensorClass().prototype.zerosLike = function() {
   this.throwIfDisposed();
   return zerosLike(this);
 };
-
-// node_modules/@tensorflow/tfjs-layers/dist/errors.js
 var AttributeError = class _AttributeError extends Error {
   constructor(message) {
     super(message);
@@ -24601,8 +16423,6 @@ var AssertionError = class _AssertionError extends Error {
     Object.setPrototypeOf(this, _AssertionError.prototype);
   }
 };
-
-// node_modules/@tensorflow/tfjs-layers/dist/utils/executor_utils.js
 var LruCache = class {
   constructor(maxEntries) {
     this.maxEntries = maxEntries || 100;
@@ -24656,8 +16476,6 @@ var LruCache = class {
     this.maxEntries = maxEntries;
   }
 };
-
-// node_modules/@tensorflow/tfjs-layers/dist/utils/generic_utils.js
 function pyListRepeat(value, numValues) {
   if (Array.isArray(value)) {
     let newArray = [];
@@ -24896,8 +16714,6 @@ function mapActivationToFusedKernel(activationName) {
   }
   return null;
 }
-
-// node_modules/@tensorflow/tfjs-layers/dist/backend/state.js
 var _nextUniqueTensorId = 0;
 function getNextUniqueTensorId() {
   return _nextUniqueTensorId++;
@@ -24910,15 +16726,11 @@ function getUid(prefix = "") {
   _uidPrefixes[prefix] += 1;
   return prefix + _uidPrefixes[prefix].toString();
 }
-
-// node_modules/@tensorflow/tfjs-layers/dist/keras_format/common.js
 var VALID_DATA_FORMAT_VALUES = ["channelsFirst", "channelsLast"];
 var VALID_INTERPOLATION_FORMAT_VALUES = ["nearest", "bilinear"];
 var VALID_PADDING_MODE_VALUES = ["valid", "same", "causal"];
 var VALID_POOL_MODE_VALUES = ["max", "avg"];
 var VALID_BIDIRECTIONAL_MERGE_MODES = ["sum", "mul", "concat", "ave"];
-
-// node_modules/@tensorflow/tfjs-layers/dist/common.js
 var nameMap = /* @__PURE__ */ new Map();
 function checkDataFormat(value) {
   checkStringTypeUnionValue(VALID_DATA_FORMAT_VALUES, "DataFormat", value);
@@ -24979,8 +16791,6 @@ var tensorNameRegex = new RegExp(/^[A-Za-z0-9][-A-Za-z0-9\._\/]*$/);
 function isValidTensorName(name) {
   return !!name.match(tensorNameRegex);
 }
-
-// node_modules/@tensorflow/tfjs-layers/dist/utils/math_utils.js
 function isInteger(x) {
   return x === parseInt(x.toString(), 10);
 }
@@ -25033,8 +16843,6 @@ function range2(begin, end) {
   }
   return out;
 }
-
-// node_modules/@tensorflow/tfjs-layers/dist/backend/common.js
 var _epsilon;
 function epsilon() {
   if (_epsilon == null) {
@@ -25045,8 +16853,6 @@ function epsilon() {
 function imageDataFormat() {
   return "channelsLast";
 }
-
-// node_modules/@tensorflow/tfjs-layers/dist/backend/tfjs_backend.js
 function cast2(x, dtype) {
   return cast(x, dtype);
 }
@@ -25241,7 +17047,7 @@ function dot2(a, b, activation2, bias) {
     const bLastDim = bShape.pop();
     const ySecondLastDim = bShape.pop();
     const yOtherDims = [...bShape, bLastDim];
-    const perm = Array.from({ length: b.rank }, (_3, i) => {
+    const perm = Array.from({ length: b.rank }, (_, i) => {
       if (i === 0) {
         return b.rank - 2;
       } else if (i <= b.rank - 2) {
@@ -25358,12 +17164,8 @@ function hardSigmoid(x) {
 function inTrainPhase(x, alt, training = false) {
   return training ? x() : alt();
 }
-
-// node_modules/@tensorflow/tfjs-layers/dist/keras_format/initializer_config.js
 var VALID_FAN_MODE_VALUES = ["fanIn", "fanOut", "fanAvg"];
 var VALID_DISTRIBUTION_VALUES = ["normal", "uniform", "truncatedNormal"];
-
-// node_modules/@tensorflow/tfjs-layers/dist/initializers.js
 function checkFanMode(value) {
   checkStringTypeUnionValue(VALID_FAN_MODE_VALUES, "FanMode", value);
 }
@@ -25771,8 +17573,6 @@ function getInitializer(identifier) {
     return deserializeInitializer(identifier);
   }
 }
-
-// node_modules/@tensorflow/tfjs-layers/dist/utils/types_utils.js
 function isArrayOfShapes(x) {
   return Array.isArray(x) && Array.isArray(x[0]);
 }
@@ -25809,8 +17609,6 @@ function getExactlyOneShape(shapes) {
     return shapes;
   }
 }
-
-// node_modules/@tensorflow/tfjs-layers/dist/utils/variable_utils.js
 function countParamsInWeights(weights) {
   let count2 = 0;
   for (const weight of weights) {
@@ -25822,8 +17620,6 @@ function countParamsInWeights(weights) {
   }
   return count2;
 }
-
-// node_modules/@tensorflow/tfjs-layers/dist/variables.js
 var DEFAULT_VARIABLE_NAME_PREFIX = "Variable";
 var LayerVariable = class {
   /**
@@ -25914,8 +17710,6 @@ function batchSetValue(variablesAndValues) {
     variable2.write(variableAndValue[1]);
   });
 }
-
-// node_modules/@tensorflow/tfjs-layers/dist/engine/topology.js
 var InputSpec = class {
   constructor(args) {
     this.dtype = args.dtype;
@@ -26903,8 +18697,6 @@ function checkNoneSymbolic(tensors) {
   }
   return noneAreSymbolic;
 }
-
-// node_modules/@tensorflow/tfjs-layers/dist/engine/input_layer.js
 var InputLayer = class extends Layer {
   constructor(args) {
     super({
@@ -26996,8 +18788,6 @@ function Input(config) {
   const outputs = inputLayer2.inboundNodes[0].outputTensors;
   return outputs[0];
 }
-
-// node_modules/@tensorflow/tfjs-layers/dist/engine/executor.js
 function assertFeedCompatibility(key, val) {
   if (key.dtype == null || key.dtype === val.dtype) {
     return val;
@@ -27142,7 +18932,7 @@ function execute(fetches, feedDict, kwargs, probe) {
   const training = kwargs == null ? false : kwargs["training"];
   const arrayFetches = Array.isArray(fetches);
   const fetchArray = arrayFetches ? fetches : [fetches];
-  const outputNames = fetchArray.map((t3) => t3.name);
+  const outputNames = fetchArray.map((t) => t.name);
   const finalOutputs = [];
   const feedNames = feedDict.names();
   for (const outputName of outputNames) {
@@ -27328,12 +19118,8 @@ function getNodeOutputs(fetch4) {
   }
   return layerOutputs;
 }
-
-// node_modules/@tensorflow/tfjs-layers/dist/flags_layers.js
 var ENV3 = env();
 ENV3.registerFlag("TOPOLOGICAL_SORT_CACHE_MAX_ENTRIES", () => 100, updateCacheMaxEntries);
-
-// node_modules/@tensorflow/tfjs-layers/dist/exports_constraints.js
 var exports_constraints_exports = {};
 __export(exports_constraints_exports, {
   maxNorm: () => maxNorm,
@@ -27341,8 +19127,6 @@ __export(exports_constraints_exports, {
   nonNeg: () => nonNeg,
   unitNorm: () => unitNorm
 });
-
-// node_modules/@tensorflow/tfjs-layers/dist/constraints.js
 function calcL2Norms(w, axis) {
   return tidy(() => sqrt(sum2(mul(w, w), axis, true)));
 }
@@ -27450,8 +19234,6 @@ function getConstraint(identifier) {
     return deserializeConstraint(identifier);
   }
 }
-
-// node_modules/@tensorflow/tfjs-layers/dist/exports_constraints.js
 function maxNorm(args) {
   return new MaxNorm(args);
 }
@@ -27464,8 +19246,6 @@ function nonNeg() {
 function minMaxNorm(config) {
   return new MinMaxNorm(config);
 }
-
-// node_modules/@tensorflow/tfjs-layers/dist/exports_initializers.js
 var exports_initializers_exports = {};
 __export(exports_initializers_exports, {
   constant: () => constant,
@@ -27529,8 +19309,6 @@ function leCunUniform(args) {
 function orthogonal(args) {
   return new Orthogonal(args);
 }
-
-// node_modules/@tensorflow/tfjs-layers/dist/exports_layers.js
 var exports_layers_exports = {};
 __export(exports_layers_exports, {
   Layer: () => Layer,
@@ -27614,8 +19392,6 @@ __export(exports_layers_exports, {
   upSampling2d: () => upSampling2d,
   zeroPadding2d: () => zeroPadding2d
 });
-
-// node_modules/@tensorflow/tfjs-layers/dist/logs.js
 async function resolveScalarsInLogs(logs) {
   if (logs == null) {
     return;
@@ -27651,8 +19427,6 @@ function disposeTensorsInLogs(logs) {
     }
   }
 }
-
-// node_modules/@tensorflow/tfjs-layers/dist/base_callbacks.js
 var ModelLoggingVerbosity;
 (function(ModelLoggingVerbosity2) {
   ModelLoggingVerbosity2[ModelLoggingVerbosity2["SILENT"] = 0] = "SILENT";
@@ -28077,13 +19851,9 @@ function configureCallbacks(callbacks2, verbose, epochs, initialEpoch, numTrainS
   });
   return { callbackList, history };
 }
-
-// node_modules/@tensorflow/tfjs-layers/dist/layers/serialization.js
 function deserialize(config, customObjects = {}, fastWeightInit = false) {
   return deserializeKerasObject(config, serialization_exports.SerializationMap.getMap().classNameMap, customObjects, "layer", fastWeightInit);
 }
-
-// node_modules/@tensorflow/tfjs-layers/dist/losses.js
 function l2Normalize(x, axis) {
   return tidy(() => {
     if (x.dtype !== "float32") {
@@ -28235,8 +20005,6 @@ function get(identifierOrFn) {
     return identifierOrFn;
   }
 }
-
-// node_modules/@tensorflow/tfjs-layers/dist/metrics.js
 function binaryAccuracy(yTrue, yPred) {
   return tidy(() => {
     const threshold3 = mul(0.5, onesLike(yPred));
@@ -28357,8 +20125,6 @@ function getLossOrMetricName(fn) {
     return fn.name;
   }
 }
-
-// node_modules/@tensorflow/tfjs-layers/dist/optimizers.js
 function getOptimizer(identifier) {
   const optimizerMap = {
     "Adagrad": () => train.adagrad(0.01),
@@ -28379,8 +20145,6 @@ function getOptimizer(identifier) {
   }
   throw new ValueError(`Unknown Optimizer ${identifier}`);
 }
-
-// node_modules/@tensorflow/tfjs-layers/dist/user_defined_metadata.js
 var MAX_USER_DEFINED_METADATA_SERIALIZED_LENGTH = 1 * 1024 * 1024;
 function checkUserDefinedMetadata(userDefinedMetadata, modelName, checkSize = false) {
   if (userDefinedMetadata == null || typeof userDefinedMetadata !== "object" || Object.getPrototypeOf(userDefinedMetadata) !== Object.prototype || !plainObjectCheck(userDefinedMetadata)) {
@@ -28425,8 +20189,6 @@ function plainObjectCheck(x) {
     return xType === "string" || xType === "number" || xType === "boolean";
   }
 }
-
-// node_modules/@tensorflow/tfjs-layers/dist/utils/layer_utils.js
 function printSummary(model2, lineLength, positions, printFn = console.log) {
   const sequentialLike = isModelSequentialLike(model2);
   const toDisplay = ["Layer (type)", "Input Shape", "Output shape", "Param #"];
@@ -28586,8 +20348,6 @@ function printLayerSummaryWithConnections(layer, positions, relevantNodes, print
     printRow(["", "", "", "", connections[i]], positions, printFn);
   }
 }
-
-// node_modules/@tensorflow/tfjs-layers/dist/utils/serialization_utils.js
 function isArrayItemInputOrOutputName(key, index, value) {
   return (key === "inboundNodes" || key === "outputLayers" || key === "inputLayers") && index === 0 && typeof value === "string";
 }
@@ -28657,11 +20417,7 @@ function convertTsToPythonic(tsConfig, key) {
     return pyDict;
   }
 }
-
-// node_modules/@tensorflow/tfjs-layers/dist/version.js
 var version2 = "4.22.0";
-
-// node_modules/@tensorflow/tfjs-layers/dist/engine/container.js
 var isKerasSavedModelFormat = (weights) => {
   const keys = Object.keys(weights);
   if (keys.length === 0) {
@@ -29153,10 +20909,10 @@ var Container = class _Container extends Layer {
             continue;
           }
           const inputShapes2 = [];
-          for (let j3 = 0; j3 < node.inboundLayers.length; j3++) {
-            const inboundLayer = node.inboundLayers[j3];
-            const nodeIndex2 = node.nodeIndices[j3];
-            const tensorIndex = node.tensorIndices[j3];
+          for (let j = 0; j < node.inboundLayers.length; j++) {
+            const inboundLayer = node.inboundLayers[j];
+            const nodeIndex2 = node.nodeIndices[j];
+            const tensorIndex = node.tensorIndices[j];
             const shapeKey = `${inboundLayer.name}_${nodeIndex2}_${tensorIndex}`;
             const inputShape2 = layersToOutputShapes[shapeKey];
             inputShapes2.push(inputShape2);
@@ -29164,9 +20920,9 @@ var Container = class _Container extends Layer {
           const outputShape = layer.computeOutputShape(singletonOrArray(inputShapes2));
           const outputShapes2 = normalizeShapeList(outputShape);
           const nodeIndex = layer.inboundNodes.indexOf(node);
-          for (let j3 = 0; j3 < outputShapes2.length; j3++) {
-            const shapeKey = `${layer.name}_${nodeIndex}_${j3}`;
-            layersToOutputShapes[shapeKey] = outputShapes2[j3];
+          for (let j = 0; j < outputShapes2.length; j++) {
+            const shapeKey = `${layer.name}_${nodeIndex}_${j}`;
+            layersToOutputShapes[shapeKey] = outputShapes2[j];
           }
         }
       }
@@ -29554,8 +21310,6 @@ var Container = class _Container extends Layer {
     });
   }
 };
-
-// node_modules/@tensorflow/tfjs-layers/dist/engine/training_utils.js
 function standardizeSampleOrClassWeights(xWeight, outputNames, weightType) {
   const numOutputs = outputNames.length;
   if (xWeight == null || Array.isArray(xWeight) && xWeight.length === 0) {
@@ -29631,8 +21385,6 @@ async function standardizeWeights(y, sampleWeight, classWeight, sampleWeightMode
 function computeWeightedLoss2(losses2, sampleWeights) {
   return mul(losses2, sampleWeights);
 }
-
-// node_modules/@tensorflow/tfjs-layers/dist/engine/training_dataset.js
 var DEFAULT_VALIDATION_BATCH_SIZE = 32;
 function standardizeDataIteratorOutput(model2, iteratorOut) {
   let xs;
@@ -29877,8 +21629,6 @@ async function evaluateDataset(model2, dataset, args) {
   }
   return singletonOrArray(outs);
 }
-
-// node_modules/@tensorflow/tfjs-layers/dist/engine/training_tensors.js
 function checkBatchSize(batchSize) {
   util_exports.assert(batchSize > 0 && Number.isInteger(batchSize), () => `batchSize is required to be a positive integer, but got ${batchSize}`);
 }
@@ -29941,7 +21691,7 @@ function disposeNewTensors(tensors, refTensors) {
   if (refTensors instanceof Tensor) {
     oldTensorIds.push(refTensors.id);
   } else if (Array.isArray(refTensors)) {
-    refTensors.forEach((t3) => oldTensorIds.push(t3.id));
+    refTensors.forEach((t) => oldTensorIds.push(t.id));
   } else if (refTensors != null) {
     for (const name in refTensors) {
       const oldTensor = refTensors[name];
@@ -29954,9 +21704,9 @@ function disposeNewTensors(tensors, refTensors) {
       tensorsToDispose.push(tensors);
     }
   } else if (Array.isArray(tensors)) {
-    tensors.forEach((t3) => {
-      if (oldTensorIds.indexOf(t3.id) === -1) {
-        tensorsToDispose.push(t3);
+    tensors.forEach((t) => {
+      if (oldTensorIds.indexOf(t.id) === -1) {
+        tensorsToDispose.push(t);
       }
     });
   } else if (tensors != null) {
@@ -29967,14 +21717,12 @@ function disposeNewTensors(tensors, refTensors) {
       }
     }
   }
-  tensorsToDispose.forEach((t3) => {
-    if (!t3.isDisposed) {
-      t3.dispose();
+  tensorsToDispose.forEach((t) => {
+    if (!t.isDisposed) {
+      t.dispose();
     }
   });
 }
-
-// node_modules/@tensorflow/tfjs-layers/dist/engine/training.js
 function isDataTensor(x) {
   return x instanceof Tensor;
 }
@@ -30042,12 +21790,12 @@ function standardizeInputData(data, names, shapes, checkBatchAxis = true, except
       if (array2.shape.length !== shapes[i].length) {
         throw new ValueError(`Error when checking ${exceptionPrefix}: expected ${names[i]} to have ${shapes[i].length} dimension(s). but got array with shape ${array2.shape}`);
       }
-      for (let j3 = 0; j3 < shapes[i].length; ++j3) {
-        if (j3 === 0 && !checkBatchAxis) {
+      for (let j = 0; j < shapes[i].length; ++j) {
+        if (j === 0 && !checkBatchAxis) {
           continue;
         }
-        const dim = array2.shape[j3];
-        const refDim = shapes[i][j3];
+        const dim = array2.shape[j];
+        const refDim = shapes[i][j];
         if (refDim != null && refDim >= 0 && dim !== refDim) {
           throw new ValueError(`${exceptionPrefix} expected a batch of elements where each example has shape [${shapes[i].slice(1, shapes[i].length)}] (i.e.,tensor shape [*,${shapes[i].slice(1, shapes[i].length)}]) but the ${exceptionPrefix} received an input with ${array2.shape[0]} examples, each with shape [${array2.shape.slice(1, array2.shape.length)}] (tensor shape [${array2.shape}])`);
         }
@@ -30092,9 +21840,9 @@ function checkLossAndTargetCompatibility(targets, lossFns, outputShapes) {
     if (keyLosses.indexOf(loss) !== -1) {
       const slicedYShape = y.shape.slice(1);
       const slicedShape = shape.slice(1);
-      for (let j3 = 0; j3 < slicedYShape.length; ++j3) {
-        const targetDim = slicedYShape[j3];
-        const outDim = slicedShape[j3];
+      for (let j = 0; j < slicedYShape.length; ++j) {
+        const targetDim = slicedYShape[j];
+        const outDim = slicedShape[j];
         if (outDim != null && targetDim !== outDim) {
           throw new ValueError(`A target Tensor with shape ${y.shape} was passed for an output of shape ${shape}, while using a loss function that expects targets to have the same shape as the output.`);
         }
@@ -30124,12 +21872,12 @@ function checkInputData(data, names, shapes, checkBatchAxis = true, exceptionPre
       if (array2.shape.length !== shapes[i].length) {
         throw new ValueError(`Error when checking ${exceptionPrefix}: expected ${names[i]} to have ${shapes[i].length} dimension(s), but got array with shape ${JSON.stringify(array2.shape)}`);
       }
-      for (let j3 = 0; j3 < shapes[i].length; ++j3) {
-        if (j3 === 0 && !checkBatchAxis) {
+      for (let j = 0; j < shapes[i].length; ++j) {
+        if (j === 0 && !checkBatchAxis) {
           continue;
         }
-        const dim = array2.shape[j3];
-        const refDim = shapes[i][j3];
+        const dim = array2.shape[j];
+        const refDim = shapes[i][j];
         if (refDim != null) {
           if (refDim !== dim) {
             throw new ValueError(`Error when checking ${exceptionPrefix}: expected ${names[i]} to have shape ${JSON.stringify(shapes[i])} but got array with shape ${JSON.stringify(array2.shape)}.`);
@@ -30259,7 +22007,7 @@ var LayersModel = class extends Container {
       lossFunctions = theLosses.map((l) => get(l));
     } else {
       const lossFunction = get(args.loss);
-      this.outputs.forEach((_3) => {
+      this.outputs.forEach((_) => {
         lossFunctions.push(lossFunction);
       });
     }
@@ -31472,8 +23220,6 @@ var Functional = class extends LayersModel {
 };
 Functional.className = "Functional";
 serialization_exports.registerClass(Functional);
-
-// node_modules/@tensorflow/tfjs-layers/dist/models.js
 async function modelFromJSON(modelAndWeightsConfig, customObjects) {
   if (!("modelTopology" in modelAndWeightsConfig)) {
     modelAndWeightsConfig = { modelTopology: modelAndWeightsConfig };
@@ -32145,8 +23891,6 @@ var Sequential = class _Sequential extends LayersModel {
 };
 Sequential.className = "Sequential";
 serialization_exports.registerClass(Sequential);
-
-// node_modules/@tensorflow/tfjs-layers/dist/exports.js
 function model(args) {
   return new LayersModel(args);
 }
@@ -32159,8 +23903,6 @@ function input(config) {
 function registerCallbackConstructor(verbosityLevel, callbackConstructor) {
   CallbackConstructorRegistry.registerCallbackConstructor(verbosityLevel, callbackConstructor);
 }
-
-// node_modules/@tensorflow/tfjs-layers/dist/activations.js
 var Activation = class extends serialization_exports.Serializable {
   getConfig() {
     return {};
@@ -32367,8 +24109,6 @@ function getActivation(identifier) {
     return deserializeActivation(identifier);
   }
 }
-
-// node_modules/@tensorflow/tfjs-layers/dist/regularizers.js
 function assertObjectArgs(args) {
   if (args != null && typeof args !== "object") {
     throw new Error(`Argument to L1L2 regularizer's constructor is expected to be an object, but received: ${args}`);
@@ -32442,8 +24182,6 @@ function getRegularizer(identifier) {
     return deserializeRegularizer(identifier);
   }
 }
-
-// node_modules/@tensorflow/tfjs-layers/dist/layers/advanced_activations.js
 var ReLU = class extends Layer {
   constructor(args) {
     super(args == null ? {} : args);
@@ -32650,8 +24388,6 @@ var Softmax3 = class extends Layer {
 };
 Softmax3.className = "Softmax";
 serialization_exports.registerClass(Softmax3);
-
-// node_modules/@tensorflow/tfjs-layers/dist/utils/conv_utils.js
 function normalizeArray(value, n, name) {
   if (typeof value === "number") {
     return pyListRepeat(value, n);
@@ -32694,8 +24430,6 @@ function deconvLength(dimSize, strideSize, kernelSize, padding) {
   }
   return dimSize;
 }
-
-// node_modules/@tensorflow/tfjs-layers/dist/layers/convolutional.js
 function preprocessConv2DInput(x, dataFormat) {
   return tidy(() => {
     checkDataFormat(dataFormat);
@@ -33429,8 +25163,6 @@ var UpSampling2D = class extends Layer {
 };
 UpSampling2D.className = "UpSampling2D";
 serialization_exports.registerClass(UpSampling2D);
-
-// node_modules/@tensorflow/tfjs-layers/dist/layers/convolutional_depthwise.js
 function depthwiseConv2d3(x, depthwiseKernel, strides = [1, 1], padding = "valid", dataFormat, dilationRate) {
   return tidy(() => {
     if (dataFormat == null) {
@@ -33521,8 +25253,6 @@ var DepthwiseConv2D = class extends BaseConv {
 };
 DepthwiseConv2D.className = "DepthwiseConv2D";
 serialization_exports.registerClass(DepthwiseConv2D);
-
-// node_modules/@tensorflow/tfjs-layers/dist/layers/recurrent.js
 function standardizeArgs(inputs, initialState, constants, numConstants) {
   if (Array.isArray(inputs)) {
     if (initialState != null || constants != null) {
@@ -33584,15 +25314,15 @@ function rnn(stepFunction, inputs, initialStates, goBackwards = false, mask, con
     if (mask != null) {
       perStepMasks = unstack(mask);
     }
-    for (let t3 = 0; t3 < timeSteps; ++t3) {
-      const currentInput = perStepInputs[t3];
+    for (let t = 0; t < timeSteps; ++t) {
+      const currentInput = perStepInputs[t];
       const stepOutputs = tidy(() => stepFunction(currentInput, states));
       if (mask == null) {
         lastOutput = stepOutputs[0];
         states = stepOutputs[1];
       } else {
         const maskedOutputs = tidy(() => {
-          const stepMask = perStepMasks[t3];
+          const stepMask = perStepMasks[t];
           const negStepMask = sub(onesLike(stepMask), stepMask);
           const output = add2(mul(stepOutputs[0], stepMask), mul(states[0], negStepMask));
           const newStates = states.map((state, i) => {
@@ -34185,7 +25915,7 @@ var GRUCell = class extends RNNCell {
       }
       const dpMask = this.dropoutMask;
       const recDpMask = this.recurrentDropoutMask;
-      let z3;
+      let z;
       let r;
       let hh;
       if (0 < this.dropout && this.dropout < 1) {
@@ -34203,11 +25933,11 @@ var GRUCell = class extends RNNCell {
       const matrixInner = dot2(hTMinus1, rk1);
       const [xZ, xR, xH] = split(matrixX, 3, matrixX.rank - 1);
       const [recurrentZ, recurrentR] = split(matrixInner, 2, matrixInner.rank - 1);
-      z3 = this.recurrentActivation.apply(add2(xZ, recurrentZ));
+      z = this.recurrentActivation.apply(add2(xZ, recurrentZ));
       r = this.recurrentActivation.apply(add2(xR, recurrentR));
       const recurrentH = dot2(mul(r, hTMinus1), rk2);
       hh = this.activation.apply(add2(xH, recurrentH));
-      const h = add2(mul(z3, hTMinus1), mul(add2(1, neg(z3)), hh));
+      const h = add2(mul(z, hTMinus1), mul(add2(1, neg(z)), hh));
       return [h, h];
     });
   }
@@ -34372,19 +26102,19 @@ var LSTMCell = class extends RNNCell {
       if (0 < this.dropout && this.dropout < 1) {
         inputs = mul(inputs, dpMask[0]);
       }
-      let z3 = dot2(inputs, this.kernel.read());
+      let z = dot2(inputs, this.kernel.read());
       if (0 < this.recurrentDropout && this.recurrentDropout < 1) {
         hTMinus1 = mul(hTMinus1, recDpMask[0]);
       }
-      z3 = add2(z3, dot2(hTMinus1, this.recurrentKernel.read()));
+      z = add2(z, dot2(hTMinus1, this.recurrentKernel.read()));
       if (this.useBias) {
-        z3 = biasAdd(z3, this.bias.read());
+        z = biasAdd(z, this.bias.read());
       }
-      const [z0, z1, z22, z32] = split(z3, 4, z3.rank - 1);
+      const [z0, z1, z2, z3] = split(z, 4, z.rank - 1);
       i = this.recurrentActivation.apply(z0);
       f = this.recurrentActivation.apply(z1);
-      c = add2(mul(f, cTMinus1), mul(i, this.activation.apply(z22)));
-      o = this.recurrentActivation.apply(z32);
+      c = add2(mul(f, cTMinus1), mul(i, this.activation.apply(z2)));
+      o = this.recurrentActivation.apply(z3);
       const h = mul(o, this.activation.apply(c));
       return [h, h, c];
     });
@@ -34604,18 +26334,16 @@ function generateDropoutMask(args) {
   const masks = Array(count2).fill(void 0).map(createMask);
   return masks.map((m) => keep(m.clone()));
 }
-
-// node_modules/@tensorflow/tfjs-layers/dist/layers/convolutional_recurrent.js
 var __rest = function(s, e) {
-  var t3 = {};
+  var t = {};
   for (var p2 in s) if (Object.prototype.hasOwnProperty.call(s, p2) && e.indexOf(p2) < 0)
-    t3[p2] = s[p2];
+    t[p2] = s[p2];
   if (s != null && typeof Object.getOwnPropertySymbols === "function")
     for (var i = 0, p2 = Object.getOwnPropertySymbols(s); i < p2.length; i++) {
       if (e.indexOf(p2[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p2[i]))
-        t3[p2[i]] = s[p2[i]];
+        t[p2[i]] = s[p2[i]];
     }
-  return t3;
+  return t;
 };
 var ConvRNN2D = class extends RNN {
   constructor(args) {
@@ -34853,7 +26581,7 @@ var ConvLSTM2DCell = class extends LSTMCell {
     });
   }
   getConfig() {
-    const _a = super.getConfig(), { "units": _3 } = _a, baseConfig = __rest(_a, ["units"]);
+    const _a = super.getConfig(), { "units": _ } = _a, baseConfig = __rest(_a, ["units"]);
     const config = {
       filters: this.filters,
       kernelSize: this.kernelSize,
@@ -34890,8 +26618,6 @@ var ConvLSTM2D = class extends ConvRNN2D {
 };
 ConvLSTM2D.className = "ConvLSTM2D";
 serialization_exports.registerClass(ConvLSTM2D);
-
-// node_modules/@tensorflow/tfjs-layers/dist/layers/core.js
 var Dropout = class extends Layer {
   constructor(args) {
     super(args);
@@ -35299,8 +27025,6 @@ var Masking = class extends Layer {
 };
 Masking.className = "Masking";
 serialization_exports.registerClass(Masking);
-
-// node_modules/@tensorflow/tfjs-layers/dist/layers/embeddings.js
 var Embedding = class extends Layer {
   constructor(args) {
     super(args);
@@ -35357,9 +27081,9 @@ var Embedding = class extends Layer {
       throw new ValueError(`"inputLength" is ${this.inputLength}, but received input shape has shape ${inputShape}`);
     } else {
       let i = 0;
-      for (let k4 = 0; k4 < inLens.length; ++k4) {
-        const s1 = inLens[k4];
-        const s2 = inputShape[k4 + 1];
+      for (let k = 0; k < inLens.length; ++k) {
+        const s1 = inLens[k];
+        const s2 = inputShape[k + 1];
         if (s1 != null && s2 != null && s1 !== s2) {
           throw new ValueError(`"inputLength" is ${this.inputLength}, but received input shape has shape ${inputShape}`);
         } else if (s1 == null) {
@@ -35399,8 +27123,6 @@ var Embedding = class extends Layer {
 };
 Embedding.className = "Embedding";
 serialization_exports.registerClass(Embedding);
-
-// node_modules/@tensorflow/tfjs-layers/dist/layers/merge.js
 var Merge = class extends Layer {
   constructor(args) {
     super(args || {});
@@ -35432,17 +27154,17 @@ var Merge = class extends Layer {
       return shape1;
     }
     const outputShape = shape1.slice(0, shape1.length - shape2.length);
-    for (let k4 = 0; k4 < shape2.length; ++k4) {
-      const i = shape1[shape1.length - shape2.length + k4];
-      const j3 = shape2[k4];
-      if (i == null || j3 == null || i < 0 || j3 < 0) {
+    for (let k = 0; k < shape2.length; ++k) {
+      const i = shape1[shape1.length - shape2.length + k];
+      const j = shape2[k];
+      if (i == null || j == null || i < 0 || j < 0) {
         outputShape.push(null);
       } else if (i === 1) {
-        outputShape.push(j3);
-      } else if (j3 === 1) {
+        outputShape.push(j);
+      } else if (j === 1) {
         outputShape.push(i);
       } else {
-        if (i !== j3) {
+        if (i !== j) {
           throw new ValueError("Operands could not be broadcast together with shapes " + JSON.stringify(shape1) + " " + JSON.stringify(shape2));
         }
         outputShape.push(i);
@@ -35490,7 +27212,7 @@ var Merge = class extends Layer {
           const maxNDim = max2(inputDims);
           for (let x of inputs) {
             const xNDim = x.rank;
-            for (let k4 = 0; k4 < maxNDim - xNDim; ++k4) {
+            for (let k = 0; k < maxNDim - xNDim; ++k) {
               x = expandDims2(x, 1);
             }
             reshapedInputs.push(x);
@@ -35944,8 +27666,6 @@ var Dot = class extends Merge {
 };
 Dot.className = "Dot";
 serialization_exports.registerClass(Dot);
-
-// node_modules/@tensorflow/tfjs-layers/dist/layers/noise.js
 var GaussianNoise = class extends Layer {
   constructor(args) {
     super(args);
@@ -36048,8 +27768,6 @@ var AlphaDropout = class extends Layer {
 };
 AlphaDropout.className = "AlphaDropout";
 serialization_exports.registerClass(AlphaDropout);
-
-// node_modules/@tensorflow/tfjs-layers/dist/layers/normalization.js
 function batchNormalization(x, mean3, variance, beta, gamma, epsilon3 = 1e-3) {
   let out;
   if (x.rank === 2) {
@@ -36330,8 +28048,6 @@ var LayerNormalization = class extends Layer {
 };
 LayerNormalization.className = "LayerNormalization";
 serialization_exports.registerClass(LayerNormalization);
-
-// node_modules/@tensorflow/tfjs-layers/dist/layers/padding.js
 function spatial2dPadding(x, padding, dataFormat) {
   return tidy(() => {
     if (x.rank !== 4) {
@@ -36439,8 +28155,6 @@ var ZeroPadding2D = class extends Layer {
 };
 ZeroPadding2D.className = "ZeroPadding2D";
 serialization_exports.registerClass(ZeroPadding2D);
-
-// node_modules/@tensorflow/tfjs-layers/dist/layers/pooling.js
 function pool2d(x, poolSize, strides, padding, dataFormat, poolMode) {
   return tidy(() => {
     checkDataFormat(dataFormat);
@@ -36844,8 +28558,6 @@ var GlobalMaxPooling2D = class extends GlobalPooling2D {
 };
 GlobalMaxPooling2D.className = "GlobalMaxPooling2D";
 serialization_exports.registerClass(GlobalMaxPooling2D);
-
-// node_modules/@tensorflow/tfjs-layers/dist/layers/wrappers.js
 var Wrapper = class extends Layer {
   constructor(args) {
     super(args);
@@ -37231,8 +28943,6 @@ var Bidirectional = class extends Wrapper {
 };
 Bidirectional.className = "Bidirectional";
 serialization_exports.registerClass(Bidirectional);
-
-// node_modules/@tensorflow/tfjs-layers/dist/layers/preprocessing/image_preprocessing.js
 var Rescaling = class extends Layer {
   constructor(args) {
     super(args);
@@ -37264,8 +28974,6 @@ var Rescaling = class extends Layer {
 };
 Rescaling.className = "Rescaling";
 serialization_exports.registerClass(Rescaling);
-
-// node_modules/@tensorflow/tfjs-layers/dist/layers/preprocessing/center_crop.js
 var { resizeBilinear: resizeBilinear2, cropAndResize: cropAndResize2 } = image;
 var CenterCrop = class extends Layer {
   constructor(args) {
@@ -37353,8 +29061,6 @@ var CenterCrop = class extends Layer {
 };
 CenterCrop.className = "CenterCrop";
 serialization_exports.registerClass(CenterCrop);
-
-// node_modules/@tensorflow/tfjs-layers/dist/layers/preprocessing/preprocessing_utils.js
 function encodeCategoricalInputs(inputs, outputMode, depth, weights) {
   let input2 = getExactlyOneTensor(inputs);
   if (input2.dtype !== "int32") {
@@ -37392,8 +29098,6 @@ function encodeCategoricalInputs(inputs, outputMode, depth, weights) {
     throw new ValueError(`When outputMode is 'tfIdf', weights must be provided.`);
   }
 }
-
-// node_modules/@tensorflow/tfjs-layers/dist/layers/preprocessing/category_encoding.js
 var CategoryEncoding = class extends Layer {
   constructor(args) {
     super(args);
@@ -37452,8 +29156,6 @@ var CategoryEncoding = class extends Layer {
 };
 CategoryEncoding.className = "CategoryEncoding";
 serialization_exports.registerClass(CategoryEncoding);
-
-// node_modules/@tensorflow/tfjs-layers/dist/layers/preprocessing/image_resizing.js
 var INTERPOLATION_KEYS = ["bilinear", "nearest"];
 var INTERPOLATION_METHODS = new Set(INTERPOLATION_KEYS);
 var Resizing = class extends Layer {
@@ -37503,8 +29205,6 @@ var Resizing = class extends Layer {
 };
 Resizing.className = "Resizing";
 serialization_exports.registerClass(Resizing);
-
-// node_modules/@tensorflow/tfjs-layers/dist/backend/random_seed.js
 var RandomSeed = class {
   constructor(seed) {
     this.seed = seed;
@@ -37517,8 +29217,6 @@ var RandomSeed = class {
   }
 };
 RandomSeed.className = "RandomSeed";
-
-// node_modules/@tensorflow/tfjs-layers/dist/engine/base_random_layer.js
 var BaseRandomLayer = class extends Layer {
   constructor(args) {
     super(args);
@@ -37534,8 +29232,6 @@ var BaseRandomLayer = class extends Layer {
   }
 };
 BaseRandomLayer.className = "BaseRandomLayer";
-
-// node_modules/@tensorflow/tfjs-layers/dist/layers/preprocessing/random_width.js
 var INTERPOLATION_KEYS2 = ["bilinear", "nearest"];
 var INTERPOLATION_METHODS2 = new Set(INTERPOLATION_KEYS2);
 var RandomWidth = class extends BaseRandomLayer {
@@ -37606,8 +29302,6 @@ var RandomWidth = class extends BaseRandomLayer {
 };
 RandomWidth.className = "RandomWidth";
 serialization_exports.registerClass(RandomWidth);
-
-// node_modules/@tensorflow/tfjs-layers/dist/exports_layers.js
 function inputLayer(args) {
   return new InputLayer(args);
 }
@@ -37828,8 +29522,6 @@ function categoryEncoding(args) {
 function randomWidth(args) {
   return new RandomWidth(args);
 }
-
-// node_modules/@tensorflow/tfjs-layers/dist/exports_metrics.js
 var exports_metrics_exports = {};
 __export(exports_metrics_exports, {
   MAPE: () => MAPE2,
@@ -37897,14 +29589,10 @@ function mse2(yTrue, yPred) {
 function r2Score2(yTrue, yPred) {
   return r2Score(yTrue, yPred);
 }
-
-// node_modules/@tensorflow/tfjs-layers/dist/exports_models.js
 var exports_models_exports = {};
 __export(exports_models_exports, {
   modelFromJSON: () => modelFromJSON
 });
-
-// node_modules/@tensorflow/tfjs-layers/dist/exports_regularizers.js
 var exports_regularizers_exports = {};
 __export(exports_regularizers_exports, {
   l1: () => l12,
@@ -37920,8 +29608,6 @@ function l12(config) {
 function l22(config) {
   return l2(config);
 }
-
-// node_modules/@tensorflow/tfjs-layers/dist/callbacks.js
 var Callback = class extends BaseCallback {
   constructor() {
     super(...arguments);
@@ -38020,16 +29706,12 @@ function earlyStopping(args) {
   return new EarlyStopping(args);
 }
 var callbacks = { earlyStopping };
-
-// node_modules/@tensorflow/tfjs-converter/dist/flags.js
 var ENV4 = env();
 ENV4.registerFlag("KEEP_INTERMEDIATE_TENSORS", () => false, (debugValue) => {
   if (debugValue) {
     console.warn("Keep intermediate tensors is ON. This will print the values of all intermediate tensors during model inference. Not all models support this mode. For details, check e2e/benchmarks/ model_config.js. This significantly impacts performance.");
   }
 });
-
-// node_modules/@tensorflow/tfjs-converter/dist/data/compiled_api.js
 var DataType;
 (function(DataType2) {
   DataType2[DataType2["DT_INVALID"] = 0] = "DT_INVALID";
@@ -38089,8 +29771,6 @@ var SaverDef;
     CheckpointFormatVersion2[CheckpointFormatVersion2["V2"] = 2] = "V2";
   })(CheckpointFormatVersion = SaverDef2.CheckpointFormatVersion || (SaverDef2.CheckpointFormatVersion = {}));
 })(SaverDef || (SaverDef = {}));
-
-// node_modules/@tensorflow/tfjs-converter/dist/operations/custom_op/register.js
 var CUSTOM_OPS = {};
 function registerOp(name, opFunc) {
   const opMapper = {
@@ -38108,8 +29788,6 @@ function getRegisteredOp(name) {
 function deregisterOp(name) {
   delete CUSTOM_OPS[name];
 }
-
-// node_modules/@tensorflow/tfjs-converter/dist/operations/executors/utils.js
 function getParamValue(paramName, node, tensorMap, context, resourceManager) {
   const inputParam = node.inputParams[paramName];
   if (inputParam && inputParam.inputIndexStart !== void 0) {
@@ -38203,8 +29881,6 @@ function getPadding(node, tensorMap, context) {
 function cloneTensor(tensor2) {
   return tensor2.kept ? tensor2 : clone(tensor2);
 }
-
-// node_modules/@tensorflow/tfjs-converter/dist/operations/op_list/arithmetic.js
 var arithmetic_exports = {};
 __export(arithmetic_exports, {
   json: () => json
@@ -38589,8 +30265,6 @@ var json = [
     ]
   }
 ];
-
-// node_modules/@tensorflow/tfjs-converter/dist/operations/op_list/basic_math.js
 var basic_math_exports = {};
 __export(basic_math_exports, {
   json: () => json2
@@ -39476,8 +31150,6 @@ var json2 = [
     ]
   }
 ];
-
-// node_modules/@tensorflow/tfjs-converter/dist/operations/op_list/control.js
 var control_exports = {};
 __export(control_exports, {
   json: () => json3
@@ -40346,8 +32018,6 @@ var json3 = [
     ]
   }
 ];
-
-// node_modules/@tensorflow/tfjs-converter/dist/operations/op_list/convolution.js
 var convolution_exports = {};
 __export(convolution_exports, {
   json: () => json4
@@ -41041,8 +32711,6 @@ var json4 = [
     ]
   }
 ];
-
-// node_modules/@tensorflow/tfjs-converter/dist/operations/op_list/creation.js
 var creation_exports = {};
 __export(creation_exports, {
   json: () => json5
@@ -41451,8 +33119,6 @@ var json5 = [
     ]
   }
 ];
-
-// node_modules/@tensorflow/tfjs-converter/dist/operations/op_list/dynamic.js
 var dynamic_exports = {};
 __export(dynamic_exports, {
   json: () => json6
@@ -41645,8 +33311,6 @@ var json6 = [
     ]
   }
 ];
-
-// node_modules/@tensorflow/tfjs-converter/dist/operations/op_list/evaluation.js
 var evaluation_exports = {};
 __export(evaluation_exports, {
   json: () => json7
@@ -41735,8 +33399,6 @@ var json7 = [
     ]
   }
 ];
-
-// node_modules/@tensorflow/tfjs-converter/dist/operations/op_list/graph.js
 var graph_exports = {};
 __export(graph_exports, {
   json: () => json8
@@ -41939,8 +33601,6 @@ var json8 = [
     ]
   }
 ];
-
-// node_modules/@tensorflow/tfjs-converter/dist/operations/op_list/hash_table.js
 var hash_table_exports = {};
 __export(hash_table_exports, {
   json: () => json9
@@ -42205,8 +33865,6 @@ var json9 = [
     ]
   }
 ];
-
-// node_modules/@tensorflow/tfjs-converter/dist/operations/op_list/image.js
 var image_exports = {};
 __export(image_exports, {
   json: () => json10
@@ -42357,8 +34015,6 @@ var json10 = [
     ]
   }
 ];
-
-// node_modules/@tensorflow/tfjs-converter/dist/operations/op_list/logical.js
 var logical_exports = {};
 __export(logical_exports, {
   json: () => json11
@@ -42650,8 +34306,6 @@ var json11 = [
     ]
   }
 ];
-
-// node_modules/@tensorflow/tfjs-converter/dist/operations/op_list/matrices.js
 var matrices_exports = {};
 __export(matrices_exports, {
   json: () => json12
@@ -42906,8 +34560,6 @@ var json12 = [
     ]
   }
 ];
-
-// node_modules/@tensorflow/tfjs-converter/dist/operations/op_list/normalization.js
 var normalization_exports = {};
 __export(normalization_exports, {
   json: () => json13
@@ -43132,8 +34784,6 @@ var json13 = [
     ]
   }
 ];
-
-// node_modules/@tensorflow/tfjs-converter/dist/operations/op_list/reduction.js
 var reduction_exports = {};
 __export(reduction_exports, {
   json: () => json14
@@ -43444,8 +35094,6 @@ var json14 = [
     ]
   }
 ];
-
-// node_modules/@tensorflow/tfjs-converter/dist/operations/op_list/slice_join.js
 var slice_join_exports = {};
 __export(slice_join_exports, {
   json: () => json15
@@ -43869,8 +35517,6 @@ var json15 = [
     ]
   }
 ];
-
-// node_modules/@tensorflow/tfjs-converter/dist/operations/op_list/sparse.js
 var sparse_exports = {};
 __export(sparse_exports, {
   json: () => json16
@@ -43974,8 +35620,6 @@ var json16 = [
     ]
   }
 ];
-
-// node_modules/@tensorflow/tfjs-converter/dist/operations/op_list/spectral.js
 var spectral_exports = {};
 __export(spectral_exports, {
   json: () => json17
@@ -44038,8 +35682,6 @@ var json17 = [
     ]
   }
 ];
-
-// node_modules/@tensorflow/tfjs-converter/dist/operations/op_list/string.js
 var string_exports = {};
 __export(string_exports, {
   json: () => json18
@@ -44172,8 +35814,6 @@ var json18 = [
     ]
   }
 ];
-
-// node_modules/@tensorflow/tfjs-converter/dist/operations/op_list/transformation.js
 var transformation_exports = {};
 __export(transformation_exports, {
   json: () => json19
@@ -44439,8 +36079,6 @@ var json19 = [
     "attrs": []
   }
 ];
-
-// node_modules/@tensorflow/tfjs-converter/dist/operations/operation_mapper.js
 var OperationMapper = class {
   // Singleton instance for the mapper
   static get Instance() {
@@ -44884,8 +36522,6 @@ function getBoolArrayParam(attrs, name, def) {
   }
   return def;
 }
-
-// node_modules/@tensorflow/tfjs-converter/dist/operations/custom_op/node_value_impl.js
 var NodeValueImpl = class {
   constructor(node, tensorMap, context) {
     this.node = node;
@@ -44952,8 +36588,6 @@ var NodeValueImpl = class {
     return defaultValue;
   }
 };
-
-// node_modules/@tensorflow/tfjs-core/dist/ops/ops_for_converter.js
 var ops_for_converter_exports = {};
 __export(ops_for_converter_exports, {
   OP_SCOPE_SUFFIX: () => OP_SCOPE_SUFFIX,
@@ -45174,8 +36808,6 @@ __export(ops_for_converter_exports, {
   zeros: () => zeros,
   zerosLike: () => zerosLike
 });
-
-// node_modules/@tensorflow/tfjs-converter/dist/operations/executors/arithmetic_executor.js
 var executeOp = (node, tensorMap, context, ops = ops_for_converter_exports) => {
   switch (node.op) {
     case "BiasAdd":
@@ -45220,8 +36852,6 @@ var executeOp = (node, tensorMap, context, ops = ops_for_converter_exports) => {
       throw TypeError(`Node type ${node.op} is not implemented`);
   }
 };
-
-// node_modules/@tensorflow/tfjs-converter/dist/operations/executors/basic_math_executor.js
 var executeOp2 = (node, tensorMap, context, ops = ops_for_converter_exports) => {
   switch (node.op) {
     case "Abs":
@@ -45325,8 +36955,6 @@ var executeOp2 = (node, tensorMap, context, ops = ops_for_converter_exports) => 
       throw TypeError(`Node type ${node.op} is not implemented`);
   }
 };
-
-// node_modules/@tensorflow/tfjs-converter/dist/executor/tensor_utils.js
 function assertShapesMatchAllowUndefinedSize(shapeA, shapeB, errorMessagePrefix = "") {
   if (typeof shapeA === "number" || typeof shapeB === "number") {
     return;
@@ -45381,8 +37009,6 @@ function mergeElementShape(elementShapeA, elementShapeB) {
   }
   return result;
 }
-
-// node_modules/@tensorflow/tfjs-converter/dist/executor/tensor_array.js
 var TensorArray = class {
   constructor(name, dtype, maxSize, elementShape, identicalElementShapes, dynamicSize, clearAfterRead) {
     this.name = name;
@@ -45458,7 +37084,7 @@ var TensorArray = class {
     if (index < 0 || !this.dynamicSize && index >= this.maxSize) {
       throw new Error(`Tried to write to index ${index}, but array is not resizeable and size is: ${this.maxSize}`);
     }
-    const t3 = this.tensors[index] || {};
+    const t = this.tensors[index] || {};
     if (tensor2.dtype !== this.dtype) {
       throw new Error(`TensorArray ${this.name}: Could not write to TensorArray index ${index},
           because the value dtype is ${tensor2.dtype}, but TensorArray dtype is ${this.dtype}.`);
@@ -45467,16 +37093,16 @@ var TensorArray = class {
       this.elementShape = tensor2.shape;
     }
     assertShapesMatchAllowUndefinedSize(this.elementShape, tensor2.shape, `TensorArray ${this.name}: Could not write to TensorArray index ${index}.`);
-    if (t3.read) {
+    if (t.read) {
       throw new Error(`TensorArray ${this.name}: Could not write to TensorArray index ${index}, because it has already been read.`);
     }
-    if (t3.written) {
+    if (t.written) {
       throw new Error(`TensorArray ${this.name}: Could not write to TensorArray index ${index}, because it has already been written.`);
     }
-    t3.tensor = tensor2;
+    t.tensor = tensor2;
     keep(tensor2);
-    t3.written = true;
-    this.tensors[index] = t3;
+    t.written = true;
+    this.tensors[index] = t;
   }
   /**
    * Helper method to write multiple tensors to the specified indices.
@@ -45593,8 +37219,6 @@ var TensorArray = class {
     this.writeMany(indices, tensors);
   }
 };
-
-// node_modules/@tensorflow/tfjs-converter/dist/executor/tensor_list.js
 var TensorList = class _TensorList {
   get id() {
     return this.idTensor.id;
@@ -45797,7 +37421,7 @@ var TensorList = class _TensorList {
       return tensor([], [0].concat(outputElementShape));
     }
     return tidy(() => {
-      const tensors = this.tensors.map((t3) => reshape(t3, outputElementShape));
+      const tensors = this.tensors.map((t) => reshape(t, outputElementShape));
       return concat(tensors, 0);
     });
   }
@@ -45865,8 +37489,6 @@ function split2(tensor2, length, elementShape) {
   }
   return list;
 }
-
-// node_modules/@tensorflow/tfjs-converter/dist/operations/executors/control_executor.js
 var executeOp3 = async (node, tensorMap, context) => {
   switch (node.op) {
     case "If":
@@ -46130,8 +37752,6 @@ var executeOp3 = async (node, tensorMap, context) => {
       throw TypeError(`Node type ${node.op} is not implemented`);
   }
 };
-
-// node_modules/@tensorflow/tfjs-converter/dist/operations/executors/convolution_executor.js
 function fusedConvAndDepthWiseParams(node, tensorMap, context) {
   const [extraOp, activationFunc] = getParamValue("fusedOps", node, tensorMap, context);
   const isBiasAdd = extraOp === "biasadd";
@@ -46293,8 +37913,6 @@ var executeOp4 = (node, tensorMap, context, ops = ops_for_converter_exports) => 
       throw TypeError(`Node type ${node.op} is not implemented`);
   }
 };
-
-// node_modules/@tensorflow/tfjs-converter/dist/operations/executors/creation_executor.js
 var executeOp5 = (node, tensorMap, context, ops = ops_for_converter_exports) => {
   switch (node.op) {
     case "Fill": {
@@ -46367,8 +37985,6 @@ var executeOp5 = (node, tensorMap, context, ops = ops_for_converter_exports) => 
       throw TypeError(`Node type ${node.op} is not implemented`);
   }
 };
-
-// node_modules/@tensorflow/tfjs-converter/dist/operations/executors/dynamic_executor.js
 function nmsParams(node, tensorMap, context) {
   const boxes = getParamValue("boxes", node, tensorMap, context);
   const scores = getParamValue("scores", node, tensorMap, context);
@@ -46416,8 +38032,6 @@ var executeOp6 = async (node, tensorMap, context, resourceManager, ops = ops_for
       throw TypeError(`Node type ${node.op} is not implemented`);
   }
 };
-
-// node_modules/@tensorflow/tfjs-converter/dist/operations/executors/evaluation_executor.js
 var executeOp7 = (node, tensorMap, context, ops = ops_for_converter_exports) => {
   switch (node.op) {
     case "LowerBound": {
@@ -46427,9 +38041,9 @@ var executeOp7 = (node, tensorMap, context, ops = ops_for_converter_exports) => 
     }
     case "TopKV2": {
       const x = getParamValue("x", node, tensorMap, context);
-      const k4 = getParamValue("k", node, tensorMap, context);
+      const k = getParamValue("k", node, tensorMap, context);
       const sorted = getParamValue("sorted", node, tensorMap, context);
-      const result = ops.topk(x, k4, sorted);
+      const result = ops.topk(x, k, sorted);
       return [result.values, result.indices];
     }
     case "UpperBound": {
@@ -46452,8 +38066,6 @@ var executeOp7 = (node, tensorMap, context, ops = ops_for_converter_exports) => 
       throw TypeError(`Node type ${node.op} is not implemented`);
   }
 };
-
-// node_modules/@tensorflow/tfjs-converter/dist/operations/executors/graph_executor.js
 var executeOp8 = (node, tensorMap, context, ops = ops_for_converter_exports) => {
   switch (node.op) {
     case "Const": {
@@ -46471,14 +38083,14 @@ var executeOp8 = (node, tensorMap, context, ops = ops_for_converter_exports) => 
       return [cloneTensor(data2)];
     }
     case "IdentityN":
-      return getParamValue("x", node, tensorMap, context).map((t3) => cloneTensor(t3));
+      return getParamValue("x", node, tensorMap, context).map((t) => cloneTensor(t));
     case "Snapshot":
       const snapshot = getParamValue("x", node, tensorMap, context);
       return [cloneTensor(snapshot)];
     case "Shape":
       return [ops.tensor1d(getParamValue("x", node, tensorMap, context).shape, "int32")];
     case "ShapeN":
-      return getParamValue("x", node, tensorMap, context).map((t3) => ops.tensor1d(t3.shape));
+      return getParamValue("x", node, tensorMap, context).map((t) => ops.tensor1d(t.shape));
     case "Size":
       return [ops.scalar(getParamValue("x", node, tensorMap, context).size, "int32")];
     case "Rank":
@@ -46500,8 +38112,6 @@ var executeOp8 = (node, tensorMap, context, ops = ops_for_converter_exports) => 
       throw TypeError(`Node type ${node.op} is not implemented`);
   }
 };
-
-// node_modules/@tensorflow/tfjs-converter/dist/executor/hash_table.js
 var HashTable = class {
   get id() {
     return this.handle.id;
@@ -46605,8 +38215,6 @@ var HashTable = class {
     }
   }
 };
-
-// node_modules/@tensorflow/tfjs-converter/dist/operations/executors/hash_table_executor.js
 var executeOp9 = async (node, tensorMap, context, resourceManager) => {
   switch (node.op) {
     case "HashTable":
@@ -46650,8 +38258,6 @@ var executeOp9 = async (node, tensorMap, context, resourceManager) => {
       throw TypeError(`Node type ${node.op} is not implemented`);
   }
 };
-
-// node_modules/@tensorflow/tfjs-converter/dist/operations/executors/image_executor.js
 var executeOp10 = (node, tensorMap, context, ops = ops_for_converter_exports) => {
   switch (node.op) {
     case "ResizeBilinear": {
@@ -46690,8 +38296,6 @@ var executeOp10 = (node, tensorMap, context, ops = ops_for_converter_exports) =>
       throw TypeError(`Node type ${node.op} is not implemented`);
   }
 };
-
-// node_modules/@tensorflow/tfjs-converter/dist/operations/executors/logical_executor.js
 var executeOp11 = (node, tensorMap, context, ops = ops_for_converter_exports) => {
   switch (node.op) {
     case "Equal": {
@@ -46732,8 +38336,6 @@ var executeOp11 = (node, tensorMap, context, ops = ops_for_converter_exports) =>
       throw TypeError(`Node type ${node.op} is not implemented`);
   }
 };
-
-// node_modules/@tensorflow/tfjs-converter/dist/operations/executors/matrices_executor.js
 var executeOp12 = (node, tensorMap, context, ops = ops_for_converter_exports) => {
   switch (node.op) {
     case "BatchMatMul":
@@ -46775,8 +38377,6 @@ var executeOp12 = (node, tensorMap, context, ops = ops_for_converter_exports) =>
       throw TypeError(`Node type ${node.op} is not implemented`);
   }
 };
-
-// node_modules/@tensorflow/tfjs-converter/dist/operations/executors/normalization_executor.js
 var executeOp13 = (node, tensorMap, context, ops = ops_for_converter_exports) => {
   switch (node.op) {
     case "EuclideanNorm":
@@ -46801,8 +38401,6 @@ var executeOp13 = (node, tensorMap, context, ops = ops_for_converter_exports) =>
       throw TypeError(`Node type ${node.op} is not implemented`);
   }
 };
-
-// node_modules/@tensorflow/tfjs-converter/dist/operations/executors/ragged_executor.js
 var executeOp14 = (node, tensorMap, context, ops = ops_for_converter_exports) => {
   switch (node.op) {
     case "RaggedGather": {
@@ -46820,8 +38418,6 @@ var executeOp14 = (node, tensorMap, context, ops = ops_for_converter_exports) =>
       throw TypeError(`Node type ${node.op} is not implemented`);
   }
 };
-
-// node_modules/@tensorflow/tfjs-converter/dist/operations/executors/reduction_executor.js
 var executeOp15 = (node, tensorMap, context, ops = ops_for_converter_exports) => {
   switch (node.op) {
     case "Max": {
@@ -46895,8 +38491,6 @@ var executeOp15 = (node, tensorMap, context, ops = ops_for_converter_exports) =>
       throw TypeError(`Node type ${node.op} is not implemented`);
   }
 };
-
-// node_modules/@tensorflow/tfjs-converter/dist/operations/executors/slice_join_executor.js
 var executeOp16 = (node, tensorMap, context, ops = ops_for_converter_exports) => {
   switch (node.op) {
     case "ConcatV2":
@@ -47012,8 +38606,6 @@ var executeOp16 = (node, tensorMap, context, ops = ops_for_converter_exports) =>
       throw TypeError(`Node type ${node.op} is not implemented`);
   }
 };
-
-// node_modules/@tensorflow/tfjs-converter/dist/operations/executors/sparse_executor.js
 var executeOp17 = (node, tensorMap, context, ops = ops_for_converter_exports) => {
   switch (node.op) {
     case "SparseFillEmptyRows": {
@@ -47041,8 +38633,6 @@ var executeOp17 = (node, tensorMap, context, ops = ops_for_converter_exports) =>
       throw TypeError(`Node type ${node.op} is not implemented`);
   }
 };
-
-// node_modules/@tensorflow/tfjs-converter/dist/operations/executors/spectral_executor.js
 var executeOp18 = (node, tensorMap, context, ops = ops_for_converter_exports) => {
   switch (node.op) {
     case "FFT": {
@@ -47061,8 +38651,6 @@ var executeOp18 = (node, tensorMap, context, ops = ops_for_converter_exports) =>
       throw TypeError(`Node type ${node.op} is not implemented`);
   }
 };
-
-// node_modules/@tensorflow/tfjs-converter/dist/operations/executors/string_executor.js
 var executeOp19 = (node, tensorMap, context, ops = ops_for_converter_exports) => {
   switch (node.op) {
     case "StaticRegexReplace": {
@@ -47084,8 +38672,6 @@ var executeOp19 = (node, tensorMap, context, ops = ops_for_converter_exports) =>
       throw TypeError(`Node type ${node.op} is not implemented`);
   }
 };
-
-// node_modules/@tensorflow/tfjs-converter/dist/operations/executors/transformation_executor.js
 var executeOp20 = (node, tensorMap, context, ops = ops_for_converter_exports) => {
   switch (node.op) {
     case "Cast": {
@@ -47137,8 +38723,6 @@ var executeOp20 = (node, tensorMap, context, ops = ops_for_converter_exports) =>
       throw TypeError(`Node type ${node.op} is not implemented`);
   }
 };
-
-// node_modules/@tensorflow/tfjs-converter/dist/operations/operation_executor.js
 function executeOp21(node, tensorMap, context, resourceManager, tidy2 = tidy) {
   const value = ((node2, tensorMap2, context2) => {
     switch (node2.category) {
@@ -47198,8 +38782,6 @@ function executeOp21(node, tensorMap, context, resourceManager, tidy2 = tidy) {
   }
   return [].concat(value);
 }
-
-// node_modules/@tensorflow/tfjs-converter/dist/executor/execution_context.js
 var ExecutionContext = class {
   constructor(weightMap = {}, tensorArrayMap = {}, tensorListMap = {}, functionMap = {}, parseNodeNameCache) {
     this.weightMap = weightMap;
@@ -47320,8 +38902,6 @@ var ExecutionContext = class {
     }
   }
 };
-
-// node_modules/@tensorflow/tfjs-converter/dist/executor/model_analysis.js
 function getExecutionSubgraph(inputs, outputs, weightMap, initNodes) {
   const usedNodes = /* @__PURE__ */ new Set();
   const missingInputs = [];
@@ -47524,8 +39104,6 @@ function isDynamicShape(node) {
 function isHashTable(node) {
   return HASH_TABLE_OPS.has(node.op);
 }
-
-// node_modules/@tensorflow/tfjs-converter/dist/executor/graph_executor.js
 var GraphExecutor = class _GraphExecutor {
   get weightIds() {
     return this.parent ? this.parent.weightIds : this._weightIds;
@@ -47857,7 +39435,7 @@ var GraphExecutor = class _GraphExecutor {
     }
     const tensorsMap = await this.executeWithControlFlow(inputs, context, outputs, isFunctionExecution);
     const results = outputs.map((name) => getTensor(name, tensorsMap, context));
-    const outputIds = results.map((t3) => t3.id);
+    const outputIds = results.map((t) => t.id);
     const inputIds = Object.keys(inputs).map((name) => inputs[name].id);
     const keepIds = /* @__PURE__ */ new Set([...outputIds, ...inputIds, ...this.weightIds]);
     Object.values(tensorsMap).forEach((tensorsList) => {
@@ -47950,15 +39528,15 @@ var GraphExecutor = class _GraphExecutor {
         }
         const currentContext = context.currentContext;
         if (util_exports.isPromise(tensors)) {
-          promises.push(tensors.then((t3) => {
-            tensorMap[nodeName] = t3;
+          promises.push(tensors.then((t) => {
+            tensorMap[nodeName] = t;
             if (this.keepIntermediateTensors) {
-              this.clonedTensorsMap[nodeName] = this.cloneTensorList(t3);
+              this.clonedTensorsMap[nodeName] = this.cloneTensorList(t);
             }
             context.currentContext = currentContext;
             this.checkTensorForDisposal(nodeName, item.node, tensorMap, context, tensorsToKeep, outputNodeNameSet, intermediateTensorConsumerCount);
             this.processChildNodes(item.node, stack2, context, tensorMap, added, usedNodes);
-            return t3;
+            return t;
           }));
         } else {
           tensorMap[nodeName] = tensors;
@@ -48057,8 +39635,6 @@ var GraphExecutor = class _GraphExecutor {
     });
   }
 };
-
-// node_modules/@tensorflow/tfjs-converter/dist/executor/resource_manager.js
 var ResourceManager = class {
   constructor(hashTableNameToHandle = {}, hashTableMap = {}) {
     this.hashTableNameToHandle = hashTableNameToHandle;
@@ -48106,8 +39682,6 @@ var ResourceManager = class {
     }
   }
 };
-
-// node_modules/@tensorflow/tfjs-converter/dist/executor/graph_model.js
 var TFHUB_SEARCH_PARAM = "?tfjs-format=file";
 var DEFAULT_MODEL_NAME = "model.json";
 var GraphModel = class {
@@ -48603,11 +40177,7 @@ function getTFHubUrl(modelUrl) {
   }
   return `${modelUrl}${DEFAULT_MODEL_NAME}${TFHUB_SEARCH_PARAM}`;
 }
-
-// node_modules/@tensorflow/tfjs-converter/dist/version.js
 var version3 = "4.22.0";
-
-// node_modules/@tensorflow/tfjs-data/dist/index.js
 var dist_exports2 = {};
 __export(dist_exports2, {
   CSVDataset: () => CSVDataset,
@@ -48624,14 +40194,8 @@ __export(dist_exports2, {
   webcam: () => webcam,
   zip: () => zip
 });
-
-// node_modules/@tensorflow/tfjs-data/dist/dataset.js
 var seedrandom3 = __toESM(require_seedrandom2());
-
-// node_modules/@tensorflow/tfjs-data/dist/iterators/lazy_iterator.js
 var seedrandom2 = __toESM(require_seedrandom2());
-
-// node_modules/@tensorflow/tfjs-data/dist/util/deep_map.js
 function deepMap(input2, mapFn) {
   return deepMapInternal(input2, mapFn);
 }
@@ -48658,10 +40222,10 @@ function deepMapInternal(input2, mapFn, seen = /* @__PURE__ */ new Map(), contai
   } else if (isIterable2(input2)) {
     const mappedIterable = Array.isArray(input2) ? [] : {};
     containedIn.add(input2);
-    for (const k4 in input2) {
-      const child = input2[k4];
+    for (const k in input2) {
+      const child = input2[k];
       const childResult = deepMapInternal(child, mapFn, seen, containedIn);
-      mappedIterable[k4] = childResult;
+      mappedIterable[k] = childResult;
     }
     containedIn.delete(input2);
     if (input2.__proto__) {
@@ -48689,10 +40253,10 @@ function deepZipInternal(inputs, zipFn, containedIn = /* @__PURE__ */ new Set())
   } else if (isIterable2(input2)) {
     const mappedIterable = Array.isArray(input2) ? [] : {};
     containedIn.add(input2);
-    for (const k4 in input2) {
-      const children = inputs.map((x) => x[k4]);
+    for (const k in input2) {
+      const children = inputs.map((x) => x[k]);
       const childResult = deepZipInternal(children, zipFn, containedIn);
-      mappedIterable[k4] = childResult;
+      mappedIterable[k] = childResult;
     }
     containedIn.delete(input2);
     return mappedIterable;
@@ -48739,8 +40303,6 @@ function canTensorify(obj) {
 function isPrimitive(value) {
   return value === null || typeof value !== "object" && typeof value !== "function";
 }
-
-// node_modules/@tensorflow/tfjs-data/dist/util/deep_clone.js
 function deepClone(container) {
   return deepMap(container, cloneIfTensor);
 }
@@ -48753,8 +40315,6 @@ function cloneIfTensor(item) {
     return { value: item, recurse: false };
   }
 }
-
-// node_modules/@tensorflow/tfjs-data/dist/util/ring_buffer.js
 var RingBuffer = class {
   /**
    * Constructs a `RingBuffer`.
@@ -48891,8 +40451,6 @@ var RingBuffer = class {
     return result;
   }
 };
-
-// node_modules/@tensorflow/tfjs-data/dist/util/growing_ring_buffer.js
 var GrowingRingBuffer = class _GrowingRingBuffer extends RingBuffer {
   /**
    * Constructs a `GrowingRingBuffer`.
@@ -48933,8 +40491,6 @@ var GrowingRingBuffer = class _GrowingRingBuffer extends RingBuffer {
   }
 };
 GrowingRingBuffer.INITIAL_CAPACITY = 32;
-
-// node_modules/@tensorflow/tfjs-data/dist/iterators/lazy_iterator.js
 function iteratorFromItems(items) {
   return new ArrayIterator(items);
 }
@@ -49396,9 +40952,9 @@ var MapIterator = class extends LazyIterator {
     const inputTensors = tensor_util_exports.getTensorsInContainer(item.value);
     const mapped = this.transform(item.value);
     const outputTensors = tensor_util_exports.getTensorsInContainer(mapped);
-    for (const t3 of inputTensors) {
-      if (!tensor_util_exports.isTensorInList(t3, outputTensors)) {
-        t3.dispose();
+    for (const t of inputTensors) {
+      if (!tensor_util_exports.isTensorInList(t, outputTensors)) {
+        t.dispose();
       }
     }
     return { value: mapped, done: false };
@@ -49448,9 +41004,9 @@ var AsyncMapIterator = class extends LazyIterator {
     const inputTensors = tensor_util_exports.getTensorsInContainer(item.value);
     const mapped = await this.transform(item.value);
     const outputTensors = tensor_util_exports.getTensorsInContainer(mapped);
-    for (const t3 of inputTensors) {
-      if (!tensor_util_exports.isTensorInList(t3, outputTensors)) {
-        t3.dispose();
+    for (const t of inputTensors) {
+      if (!tensor_util_exports.isTensorInList(t, outputTensors)) {
+        t.dispose();
       }
     }
     return { value: mapped, done: false };
@@ -49493,9 +41049,9 @@ var FlatmapIterator = class extends OneToManyIterator {
     const mappedArray = this.transform(item.value);
     const outputTensors = tensor_util_exports.getTensorsInContainer(mappedArray);
     this.outputQueue.pushAll(mappedArray);
-    for (const t3 of inputTensors) {
-      if (!tensor_util_exports.isTensorInList(t3, outputTensors)) {
-        t3.dispose();
+    for (const t of inputTensors) {
+      if (!tensor_util_exports.isTensorInList(t, outputTensors)) {
+        t.dispose();
       }
     }
     return true;
@@ -49659,8 +41215,6 @@ var ShuffleIterator = class extends PrefetchIterator {
     return { value: null, done: true };
   }
 };
-
-// node_modules/@tensorflow/tfjs-data/dist/dataset.js
 var Dataset = class {
   constructor() {
     this.size = null;
@@ -50120,8 +41674,6 @@ function batchConcat(arrays) {
     return tensor(arrays);
   }
 }
-
-// node_modules/@tensorflow/tfjs-data/dist/datasets/text_line_dataset.js
 var TextLineDataset = class extends Dataset {
   /**
    * Create a `TextLineDataset`.
@@ -50144,8 +41696,6 @@ var TextLineDataset = class extends Dataset {
     return lineIterator;
   }
 };
-
-// node_modules/@tensorflow/tfjs-data/dist/datasets/csv_dataset.js
 var CODE_QUOTE = '"';
 var STATE_OUT = Symbol("out");
 var STATE_FIELD = Symbol("field");
@@ -50443,8 +41993,6 @@ var CSVDataset = class extends Dataset {
     return result;
   }
 };
-
-// node_modules/@tensorflow/tfjs-data/dist/iterators/microphone_iterator.js
 var MicrophoneIterator = class _MicrophoneIterator extends LazyIterator {
   constructor(microphoneConfig) {
     super();
@@ -50590,8 +42138,6 @@ var MicrophoneIterator = class _MicrophoneIterator extends LazyIterator {
     return tensor(vals, shape);
   }
 };
-
-// node_modules/@tensorflow/tfjs-data/dist/iterators/webcam_iterator.js
 var WebcamIterator = class _WebcamIterator extends LazyIterator {
   constructor(webcamVideoElement, webcamConfig) {
     super();
@@ -50731,12 +42277,8 @@ var WebcamIterator = class _WebcamIterator extends LazyIterator {
     throw new Error("Can not convert infinite video stream to array.");
   }
 };
-
-// node_modules/@tensorflow/tfjs-data/dist/datasource.js
 var DataSource = class {
 };
-
-// node_modules/@tensorflow/tfjs-data/dist/iterators/string_iterator.js
 var StringIterator = class extends LazyIterator {
   /**
    * Splits a string stream on a given separator.
@@ -50802,8 +42344,6 @@ var SplitIteratorImpl = class extends OneToManyIterator {
     return true;
   }
 };
-
-// node_modules/@tensorflow/tfjs-data/dist/iterators/byte_chunk_iterator.js
 var ByteChunkIterator = class extends LazyIterator {
   /**
    * Decode a stream of UTF8-encoded byte arrays to a stream of strings.
@@ -50863,8 +42403,6 @@ var Utf8IteratorImpl = class extends OneToManyIterator {
     return true;
   }
 };
-
-// node_modules/@tensorflow/tfjs-data/dist/iterators/file_chunk_iterator.js
 var FileChunkIterator = class extends ByteChunkIterator {
   constructor(file, options = {}) {
     super();
@@ -50911,8 +42449,6 @@ var FileChunkIterator = class extends ByteChunkIterator {
     return { value: await chunk, done: false };
   }
 };
-
-// node_modules/@tensorflow/tfjs-data/dist/iterators/url_chunk_iterator.js
 async function urlChunkIterator(url, options = {}, fetchFunc) {
   let urlString;
   let requestInit;
@@ -50944,13 +42480,9 @@ var getRequestInitFromRequest = (request) => {
   };
   return init;
 };
-
-// node_modules/@tensorflow/tfjs-data/dist/util/source_util.js
 function isLocalPath(source) {
   return typeof source === "string" && source.slice(0, 7) === "file://";
 }
-
-// node_modules/@tensorflow/tfjs-data/dist/sources/file_data_source.js
 var FileDataSource = class extends DataSource {
   /**
    * Create a `FileDataSource`.
@@ -50973,8 +42505,6 @@ var FileDataSource = class extends DataSource {
     return new FileChunkIterator(this.input, this.options);
   }
 };
-
-// node_modules/@tensorflow/tfjs-data/dist/sources/url_data_source.js
 var URLDataSource = class extends DataSource {
   /**
    * Create a `URLDataSource`.
@@ -51000,8 +42530,6 @@ var URLDataSource = class extends DataSource {
     }
   }
 };
-
-// node_modules/@tensorflow/tfjs-data/dist/readers.js
 function csv(source, csvConfig = {}) {
   return new CSVDataset(new URLDataSource(source), csvConfig);
 }
@@ -51021,23 +42549,17 @@ async function webcam(webcamVideoElement, webcamConfig) {
 async function microphone(microphoneConfig) {
   return MicrophoneIterator.create(microphoneConfig);
 }
-
-// node_modules/@tensorflow/tfjs-data/dist/version.js
 var version4 = "4.22.0";
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/cpu_util.js
 function assertNotComplex(tensor2, opName) {
   if (!Array.isArray(tensor2)) {
     tensor2 = [tensor2];
   }
-  tensor2.forEach((t3) => {
-    if (t3 != null) {
-      util_exports.assert(t3.dtype !== "complex64", () => `${opName} does not support complex64 tensors in the CPU backend.`);
+  tensor2.forEach((t) => {
+    if (t != null) {
+      util_exports.assert(t.dtype !== "complex64", () => `${opName} does not support complex64 tensors in the CPU backend.`);
     }
   });
 }
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/backend_cpu.js
 var whereImpl2 = kernel_impls_exports.whereImpl;
 var MathBackendCPU = class _MathBackendCPU extends KernelBackend {
   nextDataId() {
@@ -51114,17 +42636,17 @@ var MathBackendCPU = class _MathBackendCPU extends KernelBackend {
     }
     return util_exports.convertBackendValuesAndArrayBuffer(this.data.get(dataId).values, dtype);
   }
-  bufferSync(t3) {
-    const data = this.readSync(t3.dataId);
-    if (t3.dtype === "string") {
+  bufferSync(t) {
+    const data = this.readSync(t.dataId);
+    if (t.dtype === "string") {
       try {
         const strings = data.map((d) => util_exports.decodeString(d));
-        return buffer(t3.shape, t3.dtype, strings);
+        return buffer(t.shape, t.dtype, strings);
       } catch (_a) {
         throw new Error("Failed to decode encoded string bytes into utf-8");
       }
     }
-    return buffer(t3.shape, t3.dtype, data);
+    return buffer(t.shape, t.dtype, data);
   }
   makeOutput(values, shape, dtype) {
     return engine().makeTensorFromTensorInfo(this.makeTensorInfo(shape, dtype, values), this);
@@ -51183,8 +42705,6 @@ var MathBackendCPU = class _MathBackendCPU extends KernelBackend {
   }
 };
 MathBackendCPU.nextDataId = 0;
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/shared.js
 var shared_exports = {};
 __export(shared_exports, {
   addImpl: () => addImpl,
@@ -51239,8 +42759,6 @@ __export(shared_exports, {
   transposeImpl: () => transposeImpl,
   uniqueImpl: () => uniqueImpl
 });
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Abs.js
 function simpleAbsImpl(vals) {
   const resultValues = new Float32Array(vals.length);
   for (let i = 0; i < vals.length; ++i) {
@@ -51262,8 +42780,6 @@ var absConfig = {
   backendName: "cpu",
   kernelFunc: abs2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/utils/binary_impl.js
 function createSimpleBinaryKernelImpl(op2) {
   return (aShape, bShape, aVals, bVals, dtype) => {
     const newShape = backend_util_exports.assertAndGetBroadcastShape(aShape, bShape);
@@ -51296,8 +42812,6 @@ function createSimpleBinaryKernelImpl(op2) {
     return [result, newShape];
   };
 }
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Complex.js
 function complex2(args) {
   const { inputs, backend: backend2 } = args;
   const { real: real4, imag: imag4 } = inputs;
@@ -51316,8 +42830,6 @@ var complexConfig = {
   backendName: "cpu",
   kernelFunc: complex2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/utils/zeros_impl.js
 function zeros3(backend2, shape, dtype = "float32") {
   if (dtype === "complex64") {
     const real4 = zeros3(backend2, shape, "float32");
@@ -51327,8 +42839,6 @@ function zeros3(backend2, shape, dtype = "float32") {
   const values = util_exports.makeZerosTypedArray(util_exports.sizeFromShape(shape), dtype);
   return backend2.makeTensorInfo(shape, dtype, values);
 }
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Identity.js
 function identity2(args) {
   const { inputs, backend: backend2 } = args;
   const { x } = inputs;
@@ -51340,8 +42850,6 @@ var identityConfig = {
   backendName: "cpu",
   kernelFunc: identity2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Real.js
 function real2(args) {
   const { inputs, backend: backend2 } = args;
   const { input: input2 } = inputs;
@@ -51354,8 +42862,6 @@ var realConfig = {
   backendName: "cpu",
   kernelFunc: real2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Cast.js
 function castImpl(values, shape, inputType, dtype) {
   if (dtype === "int32") {
     const resultValues = Int32Array.from(values);
@@ -51402,8 +42908,6 @@ var castConfig = {
   backendName: "cpu",
   kernelFunc: cast3
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/utils/binary_utils.js
 function binaryKernelFunc(name, simpleImpl, complexImpl, dtype) {
   if (complexImpl == null) {
     return ({ inputs, backend: backend2 }) => {
@@ -51500,8 +43004,6 @@ function createComplexBinaryKernelImpl(op2) {
     return [resultRealVals, resultImagVals, resultShape];
   };
 }
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Add.js
 var addImpl = createSimpleBinaryKernelImpl((a, b) => a + b);
 var addComplexImpl = createComplexBinaryKernelImpl((aReal, aImag, bReal, bImag) => {
   return { real: aReal + bReal, imag: aImag + bImag };
@@ -51512,8 +43014,6 @@ var addConfig = {
   backendName: "cpu",
   kernelFunc: add4
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Bincount_impl.js
 function bincountImpl(xVals, weightsVals, weightsDtype, weightsShape, size) {
   const weightsSize = util_exports.sizeFromShape(weightsShape);
   const outVals = util_exports.makeZerosTypedArray(size, weightsDtype);
@@ -51538,8 +43038,8 @@ function bincountReduceImpl(xBuf, weightsBuf, size, binaryOutput = false) {
   const numCols = xBuf.shape[1];
   const outBuf = buffer([numRows, size], weightsBuf.dtype);
   for (let i = 0; i < numRows; i++) {
-    for (let j3 = 0; j3 < numCols; j3++) {
-      const value = xBuf.get(i, j3);
+    for (let j = 0; j < numCols; j++) {
+      const value = xBuf.get(i, j);
       if (value < 0) {
         throw new Error("Input x must be non-negative!");
       }
@@ -51550,7 +43050,7 @@ function bincountReduceImpl(xBuf, weightsBuf, size, binaryOutput = false) {
         outBuf.set(1, i, value);
       } else {
         if (weightsBuf.size > 0) {
-          outBuf.set(outBuf.get(i, value) + weightsBuf.get(i, j3), i, value);
+          outBuf.set(outBuf.get(i, value) + weightsBuf.get(i, j), i, value);
         } else {
           outBuf.set(outBuf.get(i, value) + 1, i, value);
         }
@@ -51559,8 +43059,6 @@ function bincountReduceImpl(xBuf, weightsBuf, size, binaryOutput = false) {
   }
   return outBuf;
 }
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/BitwiseAnd.js
 var bitwiseAndImpl = createSimpleBinaryKernelImpl((a, b) => a & b);
 var bitwiseAnd2 = binaryKernelFunc(BitwiseAnd, bitwiseAndImpl);
 var bitwiseAndConfig = {
@@ -51568,8 +43066,6 @@ var bitwiseAndConfig = {
   backendName: "cpu",
   kernelFunc: bitwiseAnd2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/utils/unary_impl.js
 function createSimpleUnaryImpl(op2) {
   return (values, dtype, attrs) => {
     const newValues = util_exports.getArrayFromDType(dtype, values.length);
@@ -51579,8 +43075,6 @@ function createSimpleUnaryImpl(op2) {
     return newValues;
   };
 }
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/utils/unary_utils.js
 function unaryKernelFunc(name, op2, dtype) {
   const impl = createSimpleUnaryImpl(op2);
   return unaryKernelFuncFromImpl(name, impl, dtype);
@@ -51605,8 +43099,6 @@ function unaryKernelFuncFromImpl(name, unaryImpl, dtype) {
     return cpuBackend.makeTensorInfo(x.shape, $dtype, newValues);
   };
 }
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Ceil.js
 var ceilImpl = createSimpleUnaryImpl((xi) => Math.ceil(xi));
 var ceil2 = unaryKernelFuncFromImpl(Ceil, ceilImpl);
 var ceilConfig = {
@@ -51614,8 +43106,6 @@ var ceilConfig = {
   backendName: "cpu",
   kernelFunc: ceil2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Concat_impl.js
 function concatImpl(inputs, outShape, dtype, simplyConcat) {
   const outVals = util_exports.getArrayFromDType(dtype, util_exports.sizeFromShape(outShape));
   if (simplyConcat && dtype !== "string") {
@@ -51641,8 +43131,6 @@ function concatImpl(inputs, outShape, dtype, simplyConcat) {
   }
   return outVals;
 }
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Equal.js
 var equalImpl = createSimpleBinaryKernelImpl((a, b) => a === b ? 1 : 0);
 var equal2 = binaryKernelFunc(Equal, equalImpl, null, "bool");
 var equalConfig = {
@@ -51650,8 +43138,6 @@ var equalConfig = {
   backendName: "cpu",
   kernelFunc: equal2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Exp.js
 var expImpl = createSimpleUnaryImpl((xi) => Math.exp(xi));
 var exp2 = unaryKernelFuncFromImpl(Exp, expImpl, "float32");
 var expConfig = {
@@ -51659,8 +43145,6 @@ var expConfig = {
   backendName: "cpu",
   kernelFunc: exp2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Expm1.js
 var expm1Impl = createSimpleUnaryImpl((xi) => Math.expm1(xi));
 var expm12 = unaryKernelFuncFromImpl(Expm1, expm1Impl);
 var expm1Config = {
@@ -51668,8 +43152,6 @@ var expm1Config = {
   backendName: "cpu",
   kernelFunc: expm12
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Floor.js
 var floorImpl = createSimpleUnaryImpl((xi) => Math.floor(xi));
 var floor2 = unaryKernelFuncFromImpl(Floor, floorImpl);
 var floorConfig = {
@@ -51677,8 +43159,6 @@ var floorConfig = {
   backendName: "cpu",
   kernelFunc: floor2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/FloorDiv.js
 var floorDivImpl = createSimpleBinaryKernelImpl((a, b) => Math.floor(a / b));
 var floorDiv2 = binaryKernelFunc(FloorDiv, floorDivImpl, null, "int32");
 var floorDivConfig = {
@@ -51686,29 +43166,25 @@ var floorDivConfig = {
   backendName: "cpu",
   kernelFunc: floorDiv2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/GatherNd_Impl.js
 function gatherNdImpl(indicesData, paramsBuf, dtype, numSlices, sliceRank, sliceSize, strides, paramsShape, paramsSize) {
   const outBuf = buffer([numSlices, sliceSize], dtype);
   for (let i = 0; i < numSlices; i++) {
     const index = [];
     let flattenIndex = 0;
-    for (let j3 = 0; j3 < sliceRank; j3++) {
-      const dim = indicesData[i * sliceRank + j3];
-      flattenIndex += dim * strides[j3];
+    for (let j = 0; j < sliceRank; j++) {
+      const dim = indicesData[i * sliceRank + j];
+      flattenIndex += dim * strides[j];
       index.push(dim);
     }
     if (flattenIndex < 0 || flattenIndex >= paramsSize / sliceSize) {
       throw new Error(`Invalid indices: ${index} does not index into ${paramsShape}`);
     }
-    for (let k4 = 0; k4 < sliceSize; k4++) {
-      outBuf.values[i * sliceSize + k4] = paramsBuf.get(...paramsBuf.indexToLoc(flattenIndex * sliceSize + k4));
+    for (let k = 0; k < sliceSize; k++) {
+      outBuf.values[i * sliceSize + k] = paramsBuf.get(...paramsBuf.indexToLoc(flattenIndex * sliceSize + k));
     }
   }
   return outBuf;
 }
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/GatherV2_impl.js
 function gatherV2Impl(xBuf, indicesBuf, flattenOutputShape) {
   const outBuf = buffer(flattenOutputShape, xBuf.dtype);
   for (let i = 0; i < outBuf.size; ++i) {
@@ -51725,8 +43201,6 @@ function gatherV2Impl(xBuf, indicesBuf, flattenOutputShape) {
   }
   return outBuf;
 }
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Greater.js
 var greaterImpl = createSimpleBinaryKernelImpl((a, b) => a > b ? 1 : 0);
 var greater3 = binaryKernelFunc(Greater, greaterImpl, null, "bool");
 var greaterConfig = {
@@ -51734,8 +43208,6 @@ var greaterConfig = {
   backendName: "cpu",
   kernelFunc: greater3
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/GreaterEqual.js
 var greaterEqualImpl = createSimpleBinaryKernelImpl((a, b) => a >= b ? 1 : 0);
 var greaterEqual2 = binaryKernelFunc(GreaterEqual, greaterEqualImpl, null, "bool");
 var greaterEqualConfig = {
@@ -51743,8 +43215,6 @@ var greaterEqualConfig = {
   backendName: "cpu",
   kernelFunc: greaterEqual2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Less.js
 var lessImpl = createSimpleBinaryKernelImpl((a, b) => a < b ? 1 : 0);
 var less3 = binaryKernelFunc(Less, lessImpl, null, "bool");
 var lessConfig = {
@@ -51752,8 +43222,6 @@ var lessConfig = {
   backendName: "cpu",
   kernelFunc: less3
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/LessEqual.js
 var lessEqualImpl = createSimpleBinaryKernelImpl((a, b) => a <= b ? 1 : 0);
 var lessEqual2 = binaryKernelFunc(LessEqual, lessEqualImpl, null, "bool");
 var lessEqualConfig = {
@@ -51761,8 +43229,6 @@ var lessEqualConfig = {
   backendName: "cpu",
   kernelFunc: lessEqual2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/LinSpace_impl.js
 function linSpaceImpl(start, stop, num) {
   const step4 = (stop - start) / (num - 1);
   const values = util_exports.makeZerosTypedArray(num, "float32");
@@ -51772,8 +43238,6 @@ function linSpaceImpl(start, stop, num) {
   }
   return values;
 }
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Log.js
 var logImpl = createSimpleUnaryImpl((xi) => Math.log(xi));
 var log3 = unaryKernelFuncFromImpl(Log, logImpl);
 var logConfig = {
@@ -51781,15 +43245,13 @@ var logConfig = {
   backendName: "cpu",
   kernelFunc: log3
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Max_impl.js
 function maxImpl(aVals, reduceSize, outShape, dtype) {
   const vals = util_exports.getTypedArrayFromDType(dtype, util_exports.sizeFromShape(outShape));
   for (let i = 0; i < vals.length; ++i) {
     const offset = i * reduceSize;
     let max5 = aVals[offset];
-    for (let j3 = 0; j3 < reduceSize; ++j3) {
-      const value = aVals[offset + j3];
+    for (let j = 0; j < reduceSize; ++j) {
+      const value = aVals[offset + j];
       if (Number.isNaN(value) || value > max5) {
         max5 = value;
       }
@@ -51798,8 +43260,6 @@ function maxImpl(aVals, reduceSize, outShape, dtype) {
   }
   return vals;
 }
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Maximum.js
 var maximumImpl = createSimpleBinaryKernelImpl((aValue, bValue) => Math.max(aValue, bValue));
 var maximum3 = binaryKernelFunc(Maximum, maximumImpl);
 var maximumConfig = {
@@ -51807,8 +43267,6 @@ var maximumConfig = {
   backendName: "cpu",
   kernelFunc: maximum3
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Minimum.js
 var minimumImpl = createSimpleBinaryKernelImpl((aValue, bValue) => Math.min(aValue, bValue));
 var minimum3 = binaryKernelFunc(Minimum, minimumImpl);
 var minimumConfig = {
@@ -51816,8 +43274,6 @@ var minimumConfig = {
   backendName: "cpu",
   kernelFunc: minimum3
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Multiply.js
 var multiplyImpl = createSimpleBinaryKernelImpl((aValue, bValue) => aValue * bValue);
 var multiplyComplexImpl = createComplexBinaryKernelImpl((aReal, aImag, bReal, bImag) => {
   return {
@@ -51831,8 +43287,6 @@ var multiplyConfig = {
   backendName: "cpu",
   kernelFunc: multiply2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Neg.js
 function negImpl(xVals, xShape, xDtype) {
   const minusOne = util_exports.createScalarValue(-1, xDtype);
   return multiplyImpl([], xShape, minusOne, xVals, xDtype);
@@ -51850,8 +43304,6 @@ var negConfig = {
   backendName: "cpu",
   kernelFunc: neg2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/NotEqual.js
 var notEqualImpl = createSimpleBinaryKernelImpl((a, b) => a !== b ? 1 : 0);
 var notEqual2 = binaryKernelFunc(NotEqual, notEqualImpl, null, "bool");
 var notEqualConfig = {
@@ -51859,8 +43311,6 @@ var notEqualConfig = {
   backendName: "cpu",
   kernelFunc: notEqual2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Transpose_impl.js
 function transposeImpl(xVals, xShape, dtype, perm, newShape) {
   const xRank = xShape.length;
   const xSize = util_exports.sizeFromShape(xShape);
@@ -51878,8 +43328,6 @@ function transposeImpl(xVals, xShape, dtype, perm, newShape) {
   }
   return result;
 }
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Transpose.js
 function transpose2(args) {
   const { inputs, attrs, backend: backend2 } = args;
   const { x } = inputs;
@@ -51900,8 +43348,6 @@ var transposeConfig = {
   backendName: "cpu",
   kernelFunc: transpose2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Prod.js
 function prodImpl(xShape, xDtype, xVals, reductionAxes) {
   const [outShape, reduceShape] = backend_util_exports.computeOutAndReduceShapes(xShape, reductionAxes);
   const outDtype = upcastType(xDtype, "int32");
@@ -51910,8 +43356,8 @@ function prodImpl(xShape, xDtype, xVals, reductionAxes) {
   for (let i = 0; i < outVals.length; ++i) {
     const offset = i * reduceSize;
     let prod4 = 1;
-    for (let j3 = 0; j3 < reduceSize; ++j3) {
-      prod4 *= xVals[offset + j3];
+    for (let j = 0; j < reduceSize; ++j) {
+      prod4 *= xVals[offset + j];
     }
     outVals[i] = prod4;
   }
@@ -51939,7 +43385,7 @@ function prod2(args) {
   if (keepDims) {
     resultShape = backend_util_exports.expandShapeToKeepDim(outShape, axes);
   }
-  intermediateTensorInfos.forEach((t3) => backend2.disposeIntermediateTensorInfo(t3));
+  intermediateTensorInfos.forEach((t) => backend2.disposeIntermediateTensorInfo(t));
   return backend2.makeTensorInfo(resultShape, outDtype, outVals);
 }
 var prodConfig = {
@@ -51947,8 +43393,6 @@ var prodConfig = {
   backendName: "cpu",
   kernelFunc: prod2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/RaggedGather_impl.js
 function validateIndices(indices, indicesShape, numParams) {
   indices.forEach((index, i) => {
     if (index < 0 || index >= numParams) {
@@ -52000,8 +43444,8 @@ function makeSplits(indices, indicesShape, paramsNestedSplits, numParamsDenseVal
       if (outDim >= 0) {
         const outSplitsOutDim = outSplits[outDim];
         const delta = outSplitsOutDim[outSplitsOutDim.length - 1] - splits[start];
-        for (let j3 = start; j3 < limit; ++j3) {
-          outSplits[outDim].push(splits[j3 + 1] + delta);
+        for (let j = start; j < limit; ++j) {
+          outSplits[outDim].push(splits[j + 1] + delta);
         }
       }
       start = splits[start];
@@ -52020,7 +43464,7 @@ function getSplits(outSplits) {
     const numSplits = outSplits[i].length;
     const splits = util_exports.getArrayFromDType("int32", numSplits);
     splitsOut.push(splits);
-    outSplits[i].forEach((value, j3) => splits[j3] = value);
+    outSplits[i].forEach((value, j) => splits[j] = value);
   }
   return splitsOut;
 }
@@ -52040,8 +43484,8 @@ function writeValueSlices(paramsDenseValues, paramsDenseValuesShape, valueSlices
   let outPos = 0;
   for (const slice4 of valueSlices) {
     for (let i = slice4[0]; i < slice4[1]; ++i) {
-      for (let j3 = 0; j3 < valueSize; ++j3) {
-        values[outPos * valuesM + j3] = paramsDenseValues[i * denseM + j3];
+      for (let j = 0; j < valueSize; ++j) {
+        values[outPos * valuesM + j] = paramsDenseValues[i * denseM + j];
       }
       ++outPos;
     }
@@ -52074,8 +43518,6 @@ function raggedGatherImpl(paramsNestedSplits, paramsNestedSplitsShapes, paramsDe
   const outputDenseValues = getValues(paramsDenseValues, paramsDenseValuesShape, paramsDenseValuesDType, valueSlices, numValues);
   return [outputNestedSplits, outputDenseValues[0], outputDenseValues[1]];
 }
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/RaggedRange_impl.js
 var INT32_MAX2 = 2147483647;
 function raggedRangeImpl(starts, startsShape, startsDType, limits, limitsShape, deltas, deltasShape) {
   if (startsShape.length > 1) {
@@ -52140,8 +43582,6 @@ function raggedRangeImpl(starts, startsShape, startsDType, limits, limitsShape, 
   }
   return [rtNestedSplits, rtDenseValues];
 }
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/RaggedTensorToTensor_impl.js
 var RowPartitionType2 = backend_util_exports.RowPartitionType;
 var RaggedTensorToTensorOp = class _RaggedTensorToTensorOp {
   constructor(shape, shapeShape, values, valuesShape, valuesDType, defaultValue, defaultValueShape, rowPartitionValues, rowPartitionValuesShapes, rowPartitionTypeStrings) {
@@ -52215,14 +43655,14 @@ var RaggedTensorToTensorOp = class _RaggedTensorToTensorOp {
     }
     return Math.max(indexLength - firstEqualIndex, maxWidth);
   }
-  tensorShapeFromTensor(t3, tShape, isPartial = true) {
+  tensorShapeFromTensor(t, tShape, isPartial = true) {
     if (tShape.length === 0) {
-      if (t3[0] === -1) {
+      if (t[0] === -1) {
         return [];
       }
       throw new Error(`The only valid scalar shape tensor is the fully unknown shape specified as -1.`);
     }
-    return makeShape(t3, isPartial);
+    return makeShape(t, isPartial);
   }
   calculateOutputSize(firstDim) {
     const valueShape = this.valuesShape;
@@ -52274,11 +43714,11 @@ var RaggedTensorToTensorOp = class _RaggedTensorToTensorOp {
       if (parentOutputIndexCurrent === -1) {
         realLength = 0;
       }
-      for (let j3 = 0; j3 < realLength; ++j3) {
+      for (let j = 0; j < realLength; ++j) {
         result.push(parentOutputIndexCurrent);
         parentOutputIndexCurrent += outputIndexMultiplier;
       }
-      for (let j3 = 0; j3 < rowLength - realLength; ++j3) {
+      for (let j = 0; j < rowLength - realLength; ++j) {
         result.push(-1);
       }
     }
@@ -52489,8 +43929,6 @@ function makeShape(shape, isPartial) {
 function raggedTensorToTensorImpl(shape, shapesShape, values, valuesShape, valuesDType, defaultValue, defaultValueShape, rowPartitionValues, rowPartitionValuesShapes, rowPartitionTypes) {
   return new RaggedTensorToTensorOp(shape, shapesShape, values, valuesShape, valuesDType, defaultValue, defaultValueShape, rowPartitionValues, rowPartitionValuesShapes, rowPartitionTypes).compute();
 }
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Range_impl.js
 function rangeImpl(start, stop, step4, dtype) {
   const sameStartStop = start === stop;
   const increasingRangeNegativeStep = start < stop && step4 < 0;
@@ -52509,8 +43947,6 @@ function rangeImpl(start, stop, step4, dtype) {
   }
   return values;
 }
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Rsqrt.js
 var rsqrtImpl = createSimpleUnaryImpl((xi) => 1 / Math.sqrt(xi));
 var rsqrt2 = unaryKernelFuncFromImpl(Rsqrt, rsqrtImpl);
 var rsqrtConfig = {
@@ -52518,8 +43954,6 @@ var rsqrtConfig = {
   backendName: "cpu",
   kernelFunc: rsqrt2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Scatter_impl.js
 function scatterImpl(indices, updates, shape, outputSize, sliceSize, numUpdates, sliceRank, strides, defaultValue, sumDupeIndices) {
   const flattenShape = [outputSize / sliceSize, sliceSize];
   const indicesData = indices.values;
@@ -52538,26 +43972,24 @@ function scatterImpl(indices, updates, shape, outputSize, sliceSize, numUpdates,
   for (let i = 0; i < numUpdates; i++) {
     const index = [];
     let flattenIndex = 0;
-    for (let j3 = 0; j3 < sliceRank; j3++) {
-      const dim = indicesData[i * sliceRank + j3];
+    for (let j = 0; j < sliceRank; j++) {
+      const dim = indicesData[i * sliceRank + j];
       index.push(dim);
-      flattenIndex += dim * strides[j3];
+      flattenIndex += dim * strides[j];
     }
     if (flattenIndex < 0 || flattenIndex >= outputSize / sliceSize) {
       throw new Error(`Invalid indices: ${index} does not index into ${shape}`);
     }
-    for (let k4 = 0; k4 < sliceSize; k4++) {
+    for (let k = 0; k < sliceSize; k++) {
       if (sumDupeIndices) {
-        outBuf.values[flattenIndex * sliceSize + k4] += updatesData[i * sliceSize + k4];
+        outBuf.values[flattenIndex * sliceSize + k] += updatesData[i * sliceSize + k];
       } else {
-        outBuf.values[flattenIndex * sliceSize + k4] = updates.rank === 0 ? updatesData[0] : updatesData[i * sliceSize + k4];
+        outBuf.values[flattenIndex * sliceSize + k] = updates.rank === 0 ? updatesData[0] : updatesData[i * sliceSize + k];
       }
     }
   }
   return outBuf;
 }
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Sigmoid.js
 var sigmoidImpl = createSimpleUnaryImpl((xi) => 1 / (1 + Math.exp(-xi)));
 var sigmoid2 = unaryKernelFunc(Sigmoid, (xi) => 1 / (1 + Math.exp(-xi)));
 var sigmoidConfig = {
@@ -52565,8 +43997,6 @@ var sigmoidConfig = {
   backendName: "cpu",
   kernelFunc: sigmoid2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Slice.js
 function sliceImpl(vals, begin, size, shape, dtype) {
   const isContinous = slice_util_exports.isSliceContinous(shape, begin, size);
   const length = util_exports.sizeFromShape(size);
@@ -52583,7 +44013,7 @@ function sliceImpl(vals, begin, size, shape, dtype) {
   const outBuf = buffer(size, dtype);
   for (let i = 0; i < outBuf.size; ++i) {
     const outLoc = outBuf.indexToLoc(i);
-    const inLoc = outLoc.map((idx, j3) => idx + begin[j3]);
+    const inLoc = outLoc.map((idx, j) => idx + begin[j]);
     outBuf.set(inBuf.get(...inLoc), ...outLoc);
   }
   if (dtype === "string") {
@@ -52607,8 +44037,6 @@ var sliceConfig = {
   backendName: "cpu",
   kernelFunc: slice2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/SparseFillEmptyRows_impl.js
 function sparseFillEmptyRowsImpl(indices, indicesShape, indicesDType, values, valuesDType, denseShape, defaultValue) {
   const indicesCount = indicesShape[0];
   const denseRows = denseShape[0];
@@ -52677,8 +44105,8 @@ function sparseFillEmptyRowsImpl(indices, indicesShape, indicesDType, values, va
       const offset = filledCount[row];
       const outputI = (row === 0 ? 0 : csrOffset[row - 1]) + offset;
       filledCount[row]++;
-      for (let j3 = 0; j3 < rank; ++j3) {
-        outputIndices[outputI * rank + j3] = indices[i * rank + j3];
+      for (let j = 0; j < rank; ++j) {
+        outputIndices[outputI * rank + j] = indices[i * rank + j];
       }
       outputValues[outputI] = values[i];
       reverseIndexMap[i] = outputI;
@@ -52703,8 +44131,6 @@ function sparseFillEmptyRowsImpl(indices, indicesShape, indicesDType, values, va
     ];
   }
 }
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/SparseReshape_impl.js
 function sparseReshapeImpl(inputIndices, inputIndicesShape, inputDType, inputShape, targetShape) {
   const denseSize = util_exports.sizeFromShape(inputShape);
   const nnz = inputIndicesShape[0];
@@ -52760,18 +44186,16 @@ function sparseReshapeImpl(inputIndices, inputIndicesShape, inputDType, inputSha
   const newIndices = util_exports.getArrayFromDType(inputDType, nnz * outputRank);
   for (let i = 0; i < nnz; ++i) {
     let id = 0;
-    for (let j3 = 0; j3 < inputRank; ++j3) {
-      id += inputIndices[i * inputRank + j3] * inputStrides[j3];
+    for (let j = 0; j < inputRank; ++j) {
+      id += inputIndices[i * inputRank + j] * inputStrides[j];
     }
-    for (let j3 = 0; j3 < outputRank; ++j3) {
-      newIndices[i * outputRank + j3] = Math.trunc(id / outputStrides[j3]);
-      id %= outputStrides[j3];
+    for (let j = 0; j < outputRank; ++j) {
+      newIndices[i * outputRank + j] = Math.trunc(id / outputStrides[j]);
+      id %= outputStrides[j];
     }
   }
   return [newIndices, [nnz, outputRank], outputShape];
 }
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/SparseSegmentReduction_impl.js
 function sparseSegmentReductionImpl(input2, inputShape, inputDType, indices, segmentIds, isMean = false, defaultValue = 0) {
   const numIndices = indices.length;
   const inputFlat = [inputShape[0], input2.length / inputShape[0]];
@@ -52820,13 +44244,13 @@ function sparseSegmentReductionImpl(input2, inputShape, inputDType, indices, seg
       if (index < 0 || index >= inputFlat[0]) {
         throw new Error(backend_util_exports.getSparseSegmentReductionIndicesOutOfRangeErrorMessage(i, indices[i], inputFlat[0]));
       }
-      for (let j3 = 0; j3 < numCol; j3++) {
-        output[outIndex * numCol + j3] += input2[index * numCol + j3];
+      for (let j = 0; j < numCol; j++) {
+        output[outIndex * numCol + j] += input2[index * numCol + j];
       }
     }
     if (isMean) {
-      for (let j3 = 0; j3 < numCol; j3++) {
-        output[outIndex * numCol + j3] /= end - start;
+      for (let j = 0; j < numCol; j++) {
+        output[outIndex * numCol + j] /= end - start;
       }
     }
     start = end;
@@ -52842,8 +44266,6 @@ function sparseSegmentReductionImpl(input2, inputShape, inputDType, indices, seg
   }
   return [output, outputShape];
 }
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Sqrt.js
 var sqrtImpl = createSimpleUnaryImpl((xi) => Math.sqrt(xi));
 var sqrt2 = unaryKernelFunc(Sqrt, (xi) => Math.sqrt(xi));
 var sqrtConfig = {
@@ -52851,8 +44273,6 @@ var sqrtConfig = {
   backendName: "cpu",
   kernelFunc: sqrt2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/SquaredDifference.js
 var squaredDifferenceImpl = createSimpleBinaryKernelImpl((a, b) => {
   const diff = a - b;
   return diff * diff;
@@ -52863,8 +44283,6 @@ var squaredDifferenceConfig = {
   backendName: "cpu",
   kernelFunc: squaredDifference2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/StaticRegexReplace.js
 var staticRegexReplaceImpl = createSimpleUnaryImpl((x, attrs) => {
   const { pattern, replaceGlobal, rewrite } = attrs;
   return x.replace(new RegExp(pattern, replaceGlobal ? "g" : ""), rewrite);
@@ -52875,22 +44293,18 @@ var staticRegexReplaceConfig = {
   backendName: "cpu",
   kernelFunc: staticRegexReplace2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/StridedSlice_impl.js
 function stridedSliceImpl(outShape, xBuf, strides, begin) {
   const outBuf = buffer(outShape, xBuf.dtype);
   for (let i = 0; i < outBuf.size; i++) {
     const loc = outBuf.indexToLoc(i);
     const newLoc = new Array(loc.length);
-    for (let j3 = 0; j3 < newLoc.length; j3++) {
-      newLoc[j3] = loc[j3] * strides[j3] + begin[j3];
+    for (let j = 0; j < newLoc.length; j++) {
+      newLoc[j] = loc[j] * strides[j] + begin[j];
     }
     outBuf.set(xBuf.get(...newLoc), ...loc);
   }
   return outBuf;
 }
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/StringNGrams_impl.js
 var StringNGramsOp = class {
   constructor(separator, nGramWidths, leftPad, rightPad2, padWidth, preserveShortSequences) {
     this.separator = util_exports.encodeString(separator);
@@ -53019,8 +44433,6 @@ var StringNGramsOp = class {
 function stringNGramsImpl(data, dataSplits, separator, nGramWidths, leftPad, rightPad2, padWidth, preserveShortSequences) {
   return new StringNGramsOp(separator, nGramWidths, leftPad, rightPad2, padWidth, preserveShortSequences).compute(data, dataSplits);
 }
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/StringSplit_impl.js
 function split3(str, delimiters, skipEmpty, result) {
   if (!str.length) {
     return;
@@ -53077,17 +44489,15 @@ function stringSplitImpl(input2, delimiter, skipEmpty) {
   const shape = [batchSize, maxNumEntries];
   let c = 0;
   for (let i = 0; i < batchSize; ++i) {
-    for (let j3 = 0; j3 < numIndices[i]; ++j3) {
+    for (let j = 0; j < numIndices[i]; ++j) {
       indices[c * 2] = i;
-      indices[c * 2 + 1] = j3;
+      indices[c * 2 + 1] = j;
       values[c] = tokens[c];
       ++c;
     }
   }
   return [indices, values, shape];
 }
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/StringToHashBucketFast_impl.js
 function stringToHashBucketFastImpl(input2, numBuckets) {
   const output = util_exports.getArrayFromDType("int32", input2.length);
   for (let i = 0; i < input2.length; ++i) {
@@ -53095,8 +44505,6 @@ function stringToHashBucketFastImpl(input2, numBuckets) {
   }
   return output;
 }
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Sub.js
 var subImpl = createSimpleBinaryKernelImpl((aValue, bValue) => aValue - bValue);
 var subComplexImpl = createComplexBinaryKernelImpl((aReal, aImag, bReal, bImag) => {
   return { real: aReal - bReal, imag: aImag - bImag };
@@ -53107,8 +44515,6 @@ var subConfig = {
   backendName: "cpu",
   kernelFunc: sub2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Tile_impl.js
 function tileImpl(xBuf, reps) {
   const newShape = new Array(xBuf.rank);
   for (let i = 0; i < newShape.length; i++) {
@@ -53118,98 +44524,94 @@ function tileImpl(xBuf, reps) {
   for (let i = 0; i < result.values.length; ++i) {
     const newLoc = result.indexToLoc(i);
     const originalLoc = new Array(xBuf.rank);
-    for (let j3 = 0; j3 < originalLoc.length; j3++) {
-      originalLoc[j3] = newLoc[j3] % xBuf.shape[j3];
+    for (let j = 0; j < originalLoc.length; j++) {
+      originalLoc[j] = newLoc[j] % xBuf.shape[j];
     }
     const originalIndex = xBuf.locToIndex(originalLoc);
     result.values[i] = xBuf.values[originalIndex];
   }
   return result;
 }
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/TopK_impl.js
 var comparePair = (a, b) => {
   const valueDiff = b.value - a.value;
   return valueDiff === 0 ? a.index - b.index : valueDiff;
 };
-function select(array2, k4, left = 0, right = array2.length - 1) {
+function select(array2, k, left = 0, right = array2.length - 1) {
   while (right > left) {
     if (right - left > 600) {
       const n = right - left + 1;
-      const i2 = k4 - left + 1;
-      const z3 = Math.log(n);
-      const s = 0.5 * Math.exp(2 * z3 / 3);
-      const sd = 0.5 * Math.sqrt(z3 * s * (n - s) / n) * Math.sign(i2 - n / 2);
-      const newLeft = Math.max(left, Math.floor(k4 - i2 * s / n + sd));
-      const newRight = Math.min(right, Math.floor(k4 + (n - i2) * s / n + sd));
-      select(array2, k4, newLeft, newRight);
+      const i2 = k - left + 1;
+      const z = Math.log(n);
+      const s = 0.5 * Math.exp(2 * z / 3);
+      const sd = 0.5 * Math.sqrt(z * s * (n - s) / n) * Math.sign(i2 - n / 2);
+      const newLeft = Math.max(left, Math.floor(k - i2 * s / n + sd));
+      const newRight = Math.min(right, Math.floor(k + (n - i2) * s / n + sd));
+      select(array2, k, newLeft, newRight);
     }
-    const t3 = array2[k4];
+    const t = array2[k];
     let i = left;
-    let j3 = right;
-    util_exports.swap(array2, left, k4);
-    if (comparePair(array2[right], t3) > 0) {
+    let j = right;
+    util_exports.swap(array2, left, k);
+    if (comparePair(array2[right], t) > 0) {
       util_exports.swap(array2, left, right);
     }
-    while (i < j3) {
-      util_exports.swap(array2, i, j3);
+    while (i < j) {
+      util_exports.swap(array2, i, j);
       i++;
-      j3--;
-      while (comparePair(array2[i], t3) < 0) {
+      j--;
+      while (comparePair(array2[i], t) < 0) {
         i = i + 1;
       }
-      while (comparePair(array2[j3], t3) > 0) {
-        j3 = j3 - 1;
+      while (comparePair(array2[j], t) > 0) {
+        j = j - 1;
       }
     }
-    if (comparePair(array2[left], t3) === 0) {
-      util_exports.swap(array2, left, j3);
+    if (comparePair(array2[left], t) === 0) {
+      util_exports.swap(array2, left, j);
     } else {
-      j3 = j3 + 1;
-      util_exports.swap(array2, j3, right);
+      j = j + 1;
+      util_exports.swap(array2, j, right);
     }
-    if (j3 <= k4) {
-      left = j3 + 1;
+    if (j <= k) {
+      left = j + 1;
     }
-    if (k4 <= j3) {
-      right = j3 - 1;
+    if (k <= j) {
+      right = j - 1;
     }
   }
 }
-function topKImpl(x, xShape, xDtype, k4, sorted) {
+function topKImpl(x, xShape, xDtype, k, sorted) {
   const lastDim = xShape[xShape.length - 1];
   const [batch, size] = [x.length / lastDim, lastDim];
-  const allTopKVals = util_exports.getTypedArrayFromDType(xDtype, batch * k4);
-  const allTopKIndices = util_exports.getTypedArrayFromDType("int32", batch * k4);
+  const allTopKVals = util_exports.getTypedArrayFromDType(xDtype, batch * k);
+  const allTopKIndices = util_exports.getTypedArrayFromDType("int32", batch * k);
   for (let b = 0; b < batch; b++) {
     const offset = b * size;
     const vals = x.subarray(offset, offset + size);
     let valAndInd = new Array(vals.length);
     vals.forEach((value, index) => valAndInd[index] = { value, index });
-    if (k4 < valAndInd.length) {
-      select(valAndInd, k4);
-      valAndInd = valAndInd.slice(0, k4);
+    if (k < valAndInd.length) {
+      select(valAndInd, k);
+      valAndInd = valAndInd.slice(0, k);
     }
     if (sorted) {
       valAndInd.sort(comparePair);
     }
-    const outOffset = b * k4;
-    const topKVals = allTopKVals.subarray(outOffset, outOffset + k4);
-    const topKIndices = allTopKIndices.subarray(outOffset, outOffset + k4);
-    for (let i = 0; i < k4; i++) {
+    const outOffset = b * k;
+    const topKVals = allTopKVals.subarray(outOffset, outOffset + k);
+    const topKIndices = allTopKIndices.subarray(outOffset, outOffset + k);
+    for (let i = 0; i < k; i++) {
       topKVals[i] = valAndInd[i].value;
       topKIndices[i] = valAndInd[i].index;
     }
   }
   const outputShape = xShape.slice();
-  outputShape[outputShape.length - 1] = k4;
+  outputShape[outputShape.length - 1] = k;
   return [
     buffer(outputShape, xDtype, allTopKVals),
     buffer(outputShape, "int32", allTopKIndices)
   ];
 }
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Unique_impl.js
 function uniqueImpl(values, axis, shape, dtype) {
   const $axis = util_exports.parseAxisParam(axis, shape)[0];
   const newShape = [1, shape[0], 1];
@@ -53266,27 +44668,19 @@ function uniqueImpl(values, axis, shape, dtype) {
     indices
   };
 }
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/version.js
 var version5 = "4.22.0";
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/base.js
 registerBackend(
   "cpu",
   () => new MathBackendCPU(),
   1
   /* priority */
 );
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Elu.js
 var elu4 = unaryKernelFunc(Elu, (xi) => xi >= 0 ? xi : Math.exp(xi) - 1);
 var eluConfig = {
   kernelName: Elu,
   backendName: "cpu",
   kernelFunc: elu4
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/LeakyRelu.js
 function leakyRelu2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -53305,8 +44699,6 @@ var leakyReluConfig = {
   backendName: "cpu",
   kernelFunc: leakyRelu2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Prelu.js
 var preluImpl = createSimpleBinaryKernelImpl((xValue, aValue) => xValue < 0 ? aValue * xValue : xValue);
 function prelu3(args) {
   const { inputs, backend: backend2 } = args;
@@ -53322,24 +44714,18 @@ var preluConfig = {
   backendName: "cpu",
   kernelFunc: prelu3
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Relu.js
 var relu2 = unaryKernelFunc(Relu, (xi) => Math.max(0, xi));
 var reluConfig = {
   kernelName: Relu,
   backendName: "cpu",
   kernelFunc: relu2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Relu6.js
 var relu62 = unaryKernelFunc(Relu6, (xi) => Math.min(Math.max(0, xi), 6));
 var relu6Config = {
   kernelName: Relu6,
   backendName: "cpu",
   kernelFunc: relu62
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/utils/fused_utils.js
 function applyActivation2(backend2, x, activation2, preluActivationWeights, leakyreluAlpha) {
   if (activation2 === "linear") {
     return identity2({ inputs: { x }, backend: backend2 });
@@ -53358,8 +44744,6 @@ function applyActivation2(backend2, x, activation2, preluActivationWeights, leak
   }
   throw new Error(`Activation ${activation2} has not been implemented for the CPU backend.`);
 }
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Reshape.js
 function reshape3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -53383,8 +44767,6 @@ var reshapeConfig = {
   backendName: "cpu",
   kernelFunc: reshape3
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/BatchMatMul.js
 function batchMatMul(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { a, b } = inputs;
@@ -53431,20 +44813,20 @@ function batchMatMul(args) {
         for (let k02 = 0; k02 < sharedDim; k02 += blockSize) {
           const kBlock = Math.min(k02 + blockSize, sharedDim);
           for (let i = i0; i < iBlock; i++) {
-            for (let j3 = j0; j3 < jBlock; j3++) {
+            for (let j = j0; j < jBlock; j++) {
               let sum5 = 0;
-              for (let k4 = k02; k4 < kBlock; k4++) {
+              for (let k = k02; k < kBlock; k++) {
                 const aVal = (
                   // tslint:disable-next-line: max-line-length
-                  a3dValues[batchIndexA * aBatch + i * aOuterStep + k4 * aInnerStep]
+                  a3dValues[batchIndexA * aBatch + i * aOuterStep + k * aInnerStep]
                 );
                 const bVal = (
                   // tslint:disable-next-line: max-line-length
-                  b3dValues[k4 * bInnerStep + j3 * bOuterStep + batchIndexB * bBatch]
+                  b3dValues[k * bInnerStep + j * bOuterStep + batchIndexB * bBatch]
                 );
                 sum5 += aVal * bVal;
               }
-              resVals[bi * size + (i * rightDim + j3)] += sum5;
+              resVals[bi * size + (i * rightDim + j)] += sum5;
             }
           }
         }
@@ -53460,8 +44842,6 @@ var batchMatMulConfig = {
   backendName: "cpu",
   kernelFunc: batchMatMul
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/_FusedMatMul.js
 function _fusedMatMul(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { a, b, bias, preluActivationWeights } = inputs;
@@ -53492,35 +44872,29 @@ var _fusedMatMulConfig = {
   backendName: "cpu",
   kernelFunc: _fusedMatMul
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Acos.js
 var acos2 = unaryKernelFunc(Acos, (xi) => Math.acos(xi));
 var acosConfig = {
   kernelName: Acos,
   backendName: "cpu",
   kernelFunc: acos2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Acosh.js
 var acosh2 = unaryKernelFunc(Acosh, (xi) => Math.acosh(xi));
 var acoshConfig = {
   kernelName: Acosh,
   backendName: "cpu",
   kernelFunc: acosh2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/AddN.js
 function addN2(args) {
   const { inputs, backend: backend2 } = args;
   const tensors = inputs;
   assertNotComplex(inputs, "addN");
-  const vals = tensors.map((t3) => backend2.data.get(t3.dataId).values);
+  const vals = tensors.map((t) => backend2.data.get(t.dataId).values);
   const outBuf = buffer(tensors[0].shape, tensors[0].dtype);
   const outVals = outBuf.values;
   for (let i = 0; i < tensors.length; i++) {
     const currVals = vals[i];
-    for (let j3 = 0; j3 < outVals.length; j3++) {
-      outVals[j3] += currVals[j3];
+    for (let j = 0; j < outVals.length; j++) {
+      outVals[j] += currVals[j];
     }
   }
   return backend2.makeTensorInfo(outBuf.shape, outBuf.dtype, outBuf.values);
@@ -53530,8 +44904,6 @@ var addNConfig = {
   backendName: "cpu",
   kernelFunc: addN2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/All.js
 function all2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -53553,8 +44925,8 @@ function all2(args) {
   for (let i = 0; i < vals.length; ++i) {
     const offset = i * reduceSize;
     let all4 = aVals[offset];
-    for (let j3 = 0; j3 < reduceSize; ++j3) {
-      const value = aVals[offset + j3];
+    for (let j = 0; j < reduceSize; ++j) {
+      const value = aVals[offset + j];
       all4 = all4 && value;
     }
     vals[i] = all4;
@@ -53576,8 +44948,6 @@ var allConfig = {
   backendName: "cpu",
   kernelFunc: all2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Any.js
 function any2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -53599,8 +44969,8 @@ function any2(args) {
   for (let i = 0; i < vals.length; ++i) {
     const offset = i * reduceSize;
     let anyVal = aVals[offset];
-    for (let j3 = 0; j3 < reduceSize; ++j3) {
-      const value = aVals[offset + j3];
+    for (let j = 0; j < reduceSize; ++j) {
+      const value = aVals[offset + j];
       anyVal = anyVal || value;
     }
     vals[i] = anyVal;
@@ -53622,8 +44992,6 @@ var anyConfig = {
   backendName: "cpu",
   kernelFunc: any2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/ArgMax.js
 function argMax2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -53649,16 +45017,16 @@ function argMax2(args) {
     const offset = i * reduceSize;
     let max5 = aVals[offset];
     let maxIndex = 0;
-    for (let j3 = 0; j3 < reduceSize; ++j3) {
-      const value = aVals[offset + j3];
+    for (let j = 0; j < reduceSize; ++j) {
+      const value = aVals[offset + j];
       if (value > max5) {
         max5 = value;
-        maxIndex = j3;
+        maxIndex = j;
       }
     }
     vals[i] = maxIndex;
   }
-  intermediateTensorInfos.forEach((t3) => backend2.disposeIntermediateTensorInfo(t3));
+  intermediateTensorInfos.forEach((t) => backend2.disposeIntermediateTensorInfo(t));
   return backend2.makeTensorInfo(outShape, "int32", vals);
 }
 var argMaxConfig = {
@@ -53666,8 +45034,6 @@ var argMaxConfig = {
   backendName: "cpu",
   kernelFunc: argMax2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/ArgMin.js
 function argMin2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -53693,16 +45059,16 @@ function argMin2(args) {
     const offset = i * reduceSize;
     let min5 = aVals[offset];
     let minIndex = 0;
-    for (let j3 = 0; j3 < reduceSize; ++j3) {
-      const value = aVals[offset + j3];
+    for (let j = 0; j < reduceSize; ++j) {
+      const value = aVals[offset + j];
       if (value < min5) {
         min5 = value;
-        minIndex = j3;
+        minIndex = j;
       }
     }
     vals[i] = minIndex;
   }
-  intermediateTensorInfos.forEach((t3) => backend2.disposeIntermediateTensorInfo(t3));
+  intermediateTensorInfos.forEach((t) => backend2.disposeIntermediateTensorInfo(t));
   return backend2.makeTensorInfo(outShape, "int32", vals);
 }
 var argMinConfig = {
@@ -53710,32 +45076,24 @@ var argMinConfig = {
   backendName: "cpu",
   kernelFunc: argMin2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Asin.js
 var asin2 = unaryKernelFunc(Asin, (xi) => Math.asin(xi));
 var asinConfig = {
   kernelName: Asin,
   backendName: "cpu",
   kernelFunc: asin2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Asinh.js
 var asinh2 = unaryKernelFunc(Asinh, (xi) => Math.asinh(xi));
 var asinhConfig = {
   kernelName: Asinh,
   backendName: "cpu",
   kernelFunc: asinh2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Atan.js
 var atan3 = unaryKernelFunc(Atan, (xi) => Math.atan(xi));
 var atanConfig = {
   kernelName: Atan,
   backendName: "cpu",
   kernelFunc: atan3
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Atan2.js
 var atan2Impl = createSimpleBinaryKernelImpl((aValue, bValue) => Math.atan2(aValue, bValue));
 var atan22 = binaryKernelFunc(Atan2, atan2Impl);
 var atan2Config = {
@@ -53743,16 +45101,12 @@ var atan2Config = {
   backendName: "cpu",
   kernelFunc: atan22
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Atanh.js
 var atanh2 = unaryKernelFunc(Atanh, (xi) => Math.atanh(xi));
 var atanhConfig = {
   kernelName: Atanh,
   backendName: "cpu",
   kernelFunc: atanh2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/utils/pool_utils.js
 function pool2(xValues, xShape, dtype, strides, convInfo, poolType) {
   const strideHeight = convInfo.strideHeight;
   const strideWidth = convInfo.strideWidth;
@@ -54005,8 +45359,6 @@ function maxPool3dPositions(xBuf, convInfo) {
   }
   return maxPositions;
 }
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/AvgPool.js
 function avgPool2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -54031,8 +45383,6 @@ var avgPoolConfig = {
   backendName: "cpu",
   kernelFunc: avgPool2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/AvgPool3D.js
 function avgPool3D(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -54048,8 +45398,6 @@ var avgPool3DConfig = {
   backendName: "cpu",
   kernelFunc: avgPool3D
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/AvgPool3DGrad.js
 function avgPool3DGrad(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { dy, input: input2 } = inputs;
@@ -54116,8 +45464,6 @@ var avgPool3DGradConfig2 = {
   backendName: "cpu",
   kernelFunc: avgPool3DGrad
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/AvgPoolGrad.js
 function avgPoolGrad2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { dy, input: input2 } = inputs;
@@ -54172,8 +45518,6 @@ var avgPoolGradConfig2 = {
   backendName: "cpu",
   kernelFunc: avgPoolGrad2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/BatchNorm.js
 function batchNorm2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x, scale: scale2, offset, mean: mean3, variance } = inputs;
@@ -54221,8 +45565,6 @@ var batchNormConfig = {
   backendName: "cpu",
   kernelFunc: batchNorm2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/BatchToSpaceND.js
 function batchToSpaceND2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -54252,8 +45594,6 @@ var batchToSpaceNDConfig = {
   backendName: "cpu",
   kernelFunc: batchToSpaceND2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Bincount.js
 function bincount2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x, weights } = inputs;
@@ -54268,8 +45608,6 @@ var bincountConfig = {
   backendName: "cpu",
   kernelFunc: bincount2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/BroadcastArgs.js
 function broadcastArgs2(args) {
   const { inputs, backend: backend2 } = args;
   const { s0, s1 } = inputs;
@@ -54283,8 +45621,6 @@ var broadcastArgsConfig = {
   backendName: "cpu",
   kernelFunc: broadcastArgs2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/ClipByValue.js
 var clipByValue2 = unaryKernelFunc(ClipByValue, (xi, attrs) => {
   const clipAttrs = attrs;
   if (xi > clipAttrs.clipValueMax) {
@@ -54297,8 +45633,6 @@ var clipByValueConfig = {
   backendName: "cpu",
   kernelFunc: clipByValue2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/ComplexAbs.js
 var complexAbs = (args) => {
   const { x } = args.inputs;
   const cpuBackend = args.backend;
@@ -54320,8 +45654,6 @@ var complexAbsConfig = {
   backendName: "cpu",
   kernelFunc: complexAbs
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Imag.js
 function imag2(args) {
   const { inputs, backend: backend2 } = args;
   const { input: input2 } = inputs;
@@ -54334,25 +45666,23 @@ var imagConfig = {
   backendName: "cpu",
   kernelFunc: imag2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Concat.js
 function concat2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { axis } = attrs;
   const $axis = util_exports.parseAxisParam(axis, inputs[0].shape)[0];
-  const shapes = inputs.map((t3) => t3.shape);
+  const shapes = inputs.map((t) => t.shape);
   backend_util_exports.assertParamsConsistent(shapes, $axis);
-  let outShape = backend_util_exports.computeOutShape(inputs.map((t3) => t3.shape), $axis);
+  let outShape = backend_util_exports.computeOutShape(inputs.map((t) => t.shape), $axis);
   if (util_exports.sizeFromShape(outShape) === 0) {
     return backend2.makeTensorInfo(outShape, inputs[0].dtype, []);
   }
-  const $inputs = inputs.filter((t3) => util_exports.sizeFromShape(t3.shape) > 0);
+  const $inputs = inputs.filter((t) => util_exports.sizeFromShape(t.shape) > 0);
   if ($inputs.length === 1) {
     return identity2({ inputs: { x: $inputs[0] }, backend: backend2 });
   }
   if ($inputs[0].dtype === "complex64") {
-    const reals = $inputs.map((t3) => real2({ inputs: { input: t3 }, backend: backend2 }));
-    const imags = $inputs.map((t3) => imag2({ inputs: { input: t3 }, backend: backend2 }));
+    const reals = $inputs.map((t) => real2({ inputs: { input: t }, backend: backend2 }));
+    const imags = $inputs.map((t) => imag2({ inputs: { input: t }, backend: backend2 }));
     const realConcated = concat2({ inputs: reals, backend: backend2, attrs: { axis: $axis } });
     const imagConcated = concat2({ inputs: imags, backend: backend2, attrs: { axis: $axis } });
     const result = complex2({ inputs: { real: realConcated, imag: imagConcated }, backend: backend2 });
@@ -54362,24 +45692,24 @@ function concat2(args) {
     backend2.disposeIntermediateTensorInfo(imagConcated);
     return result;
   }
-  const inputs2D = $inputs.map((t3) => {
-    const innerSize = util_exports.sizeFromShape(t3.shape.slice($axis));
+  const inputs2D = $inputs.map((t) => {
+    const innerSize = util_exports.sizeFromShape(t.shape.slice($axis));
     const shape = [-1, innerSize];
-    return reshape3({ inputs: { x: t3 }, backend: backend2, attrs: { shape } });
+    return reshape3({ inputs: { x: t }, backend: backend2, attrs: { shape } });
   });
-  const inputsValShapes = inputs2D.map((t3) => {
-    return { vals: backend2.data.get(t3.dataId).values, shape: t3.shape };
+  const inputsValShapes = inputs2D.map((t) => {
+    return { vals: backend2.data.get(t.dataId).values, shape: t.shape };
   });
   outShape = backend_util_exports.computeOutShape(
-    inputs2D.map((t3) => t3.shape),
+    inputs2D.map((t) => t.shape),
     1
     /* axis */
   );
   const simplyConcat = inputs2D[0].shape[0] === 1;
   const outVals = concatImpl(inputsValShapes, outShape, inputs[0].dtype, simplyConcat);
-  const finalOutShape = backend_util_exports.computeOutShape($inputs.map((t3) => t3.shape), $axis);
+  const finalOutShape = backend_util_exports.computeOutShape($inputs.map((t) => t.shape), $axis);
   const outInfo = backend2.makeTensorInfo(finalOutShape, inputs[0].dtype, outVals);
-  inputs2D.forEach((t3) => backend2.disposeIntermediateTensorInfo(t3));
+  inputs2D.forEach((t) => backend2.disposeIntermediateTensorInfo(t));
   return outInfo;
 }
 var concatConfig = {
@@ -54387,8 +45717,6 @@ var concatConfig = {
   backendName: "cpu",
   kernelFunc: concat2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Conv2D.js
 function conv2D(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x, filter } = inputs;
@@ -54460,8 +45788,6 @@ var conv2DConfig = {
   backendName: "cpu",
   kernelFunc: conv2D
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Conv2DBackpropFilter.js
 function conv2DBackpropFilter2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x, dy } = inputs;
@@ -54512,8 +45838,6 @@ var conv2DBackpropFilterConfig = {
   backendName: "cpu",
   kernelFunc: conv2DBackpropFilter2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Conv2DBackpropInput.js
 function conv2DBackpropInput2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { dy, filter } = inputs;
@@ -54578,8 +45902,6 @@ var conv2DBackpropInputConfig = {
   backendName: "cpu",
   kernelFunc: conv2DBackpropInput2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Conv3D.js
 function conv3D(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x, filter } = inputs;
@@ -54651,8 +45973,6 @@ var conv3DConfig = {
   backendName: "cpu",
   kernelFunc: conv3D
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Conv3DBackpropFilterV2.js
 function conv3DBackpropFilterV2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x, dy } = inputs;
@@ -54726,8 +46046,6 @@ var conv3DBackpropFilterV2Config = {
   backendName: "cpu",
   kernelFunc: conv3DBackpropFilterV2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Conv3DBackpropInputV2.js
 function conv3DBackpropInputV2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { dy, filter } = inputs;
@@ -54791,24 +46109,18 @@ var conv3DBackpropInputV2Config = {
   backendName: "cpu",
   kernelFunc: conv3DBackpropInputV2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Cos.js
 var cos2 = unaryKernelFunc(Cos, (xi) => Math.cos(xi));
 var cosConfig = {
   kernelName: Cos,
   backendName: "cpu",
   kernelFunc: cos2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Cosh.js
 var cosh2 = unaryKernelFunc(Cosh, (xi) => Math.cosh(xi));
 var coshConfig = {
   kernelName: Cosh,
   backendName: "cpu",
   kernelFunc: cosh2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/CropAndResize.js
 function cropAndResize3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { image: image2, boxes, boxInd } = inputs;
@@ -54904,8 +46216,6 @@ var cropAndResizeConfig = {
   backendName: "cpu",
   kernelFunc: cropAndResize3
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Cumprod.js
 function cumprod2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -54924,14 +46234,14 @@ function cumprod2(args) {
   const vals = util_exports.makeOnesTypedArray(util_exports.sizeFromShape($x.shape), resultDtype);
   const aVals = backend2.data.get($x.dataId).values;
   const finalDim = $x.shape[$x.shape.length - 1];
-  const indexAdjuster = reverse4 ? (i, j3) => i + finalDim - j3 - 1 : (i, j3) => i + j3;
+  const indexAdjuster = reverse4 ? (i, j) => i + finalDim - j - 1 : (i, j) => i + j;
   for (let i = 0; i < aVals.length; i += finalDim) {
-    for (let j3 = 0; j3 < finalDim; j3++) {
-      const idx = indexAdjuster(i, j3);
-      if (j3 === 0) {
+    for (let j = 0; j < finalDim; j++) {
+      const idx = indexAdjuster(i, j);
+      if (j === 0) {
         vals[idx] = exclusive ? 1 : aVals[idx];
       } else {
-        const prevIdx = indexAdjuster(i, j3 - 1);
+        const prevIdx = indexAdjuster(i, j - 1);
         vals[idx] = exclusive ? aVals[prevIdx] * vals[prevIdx] : aVals[idx] * vals[prevIdx];
       }
     }
@@ -54951,8 +46261,6 @@ var cumprodConfig = {
   backendName: "cpu",
   kernelFunc: cumprod2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Cumsum.js
 function cumsum2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -54971,14 +46279,14 @@ function cumsum2(args) {
   const vals = util_exports.makeZerosTypedArray(util_exports.sizeFromShape($x.shape), resultDtype);
   const aVals = backend2.data.get($x.dataId).values;
   const finalDim = $x.shape[$x.shape.length - 1];
-  const indexAdjuster = reverse4 ? (i, j3) => i + finalDim - j3 - 1 : (i, j3) => i + j3;
+  const indexAdjuster = reverse4 ? (i, j) => i + finalDim - j - 1 : (i, j) => i + j;
   for (let i = 0; i < aVals.length; i += finalDim) {
-    for (let j3 = 0; j3 < finalDim; j3++) {
-      const idx = indexAdjuster(i, j3);
-      if (j3 === 0) {
+    for (let j = 0; j < finalDim; j++) {
+      const idx = indexAdjuster(i, j);
+      if (j === 0) {
         vals[idx] = exclusive ? 0 : aVals[idx];
       } else {
-        const prevIdx = indexAdjuster(i, j3 - 1);
+        const prevIdx = indexAdjuster(i, j - 1);
         vals[idx] = exclusive ? aVals[prevIdx] + vals[prevIdx] : aVals[idx] + vals[prevIdx];
       }
     }
@@ -54998,8 +46306,6 @@ var cumsumConfig = {
   backendName: "cpu",
   kernelFunc: cumsum2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/DenseBincount.js
 function denseBincount2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x, weights } = inputs;
@@ -55022,8 +46328,6 @@ var denseBincountConfig = {
   backendName: "cpu",
   kernelFunc: denseBincount2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/DepthToSpace.js
 function depthToSpace2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -55062,8 +46366,6 @@ var depthToSpaceConfig = {
   backendName: "cpu",
   kernelFunc: depthToSpace2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/DepthwiseConv2dNative.js
 function depthwiseConv2dNative(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x, filter } = inputs;
@@ -55121,8 +46423,8 @@ function depthwiseConv2dNative(args) {
             let wOffset3 = wOffset2;
             for (let d1 = 0; d1 < convInfo.inChannels; ++d1) {
               const xVal = xVals[xOffset3 + d1];
-              for (let q3 = 0; q3 < chMul; ++q3) {
-                yVals[yOffset4 + q3] += xVal * wVals[wOffset3 + q3];
+              for (let q = 0; q < chMul; ++q) {
+                yVals[yOffset4 + q] += xVal * wVals[wOffset3 + q];
               }
               yOffset4 += chMul;
               wOffset3 += chMul;
@@ -55139,8 +46441,6 @@ var depthwiseConv2dNativeConfig = {
   backendName: "cpu",
   kernelFunc: depthwiseConv2dNative
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/DepthwiseConv2dNativeBackpropFilter.js
 function depthwiseConv2dNativeBackpropFilter2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x, dy } = inputs;
@@ -55195,8 +46495,6 @@ var depthwiseConv2dNativeBackpropFilterConfig = {
   backendName: "cpu",
   kernelFunc: depthwiseConv2dNativeBackpropFilter2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/DepthwiseConv2dNativeBackpropInput.js
 function depthwiseConv2dNativeBackpropInput2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { dy, filter } = inputs;
@@ -55262,8 +46560,6 @@ var depthwiseConv2dNativeBackpropInputConfig = {
   backendName: "cpu",
   kernelFunc: depthwiseConv2dNativeBackpropInput2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Diag.js
 function diag2(args) {
   const { inputs, backend: backend2 } = args;
   const { x } = inputs;
@@ -55282,8 +46578,6 @@ var diagConfig = {
   backendName: "cpu",
   kernelFunc: diag2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Dilation2D.js
 var dilation2DConfig = {
   kernelName: Dilation2D,
   backendName: "cpu",
@@ -55332,8 +46626,6 @@ var dilation2DConfig = {
     return { dataId, shape: outShape, dtype: x.dtype };
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Dilation2DBackpropFilter.js
 var dilation2DBackpropFilterConfig = {
   kernelName: Dilation2DBackpropFilter,
   backendName: "cpu",
@@ -55381,8 +46673,6 @@ var dilation2DBackpropFilterConfig = {
     return { dataId, shape: filter.shape, dtype: filter.dtype };
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Dilation2DBackpropInput.js
 var dilation2DBackpropInputConfig = {
   kernelName: Dilation2DBackpropInput,
   backendName: "cpu",
@@ -55430,8 +46720,6 @@ var dilation2DBackpropInputConfig = {
     return { dataId, shape: x.shape, dtype: x.dtype };
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Draw.js
 function draw2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { image: image2 } = inputs;
@@ -55472,11 +46760,11 @@ function draw2(args) {
         rgba[d] = value * multiplier;
       }
     }
-    const j3 = i * 4;
-    bytes[j3 + 0] = Math.round(rgba[0]);
-    bytes[j3 + 1] = Math.round(rgba[1]);
-    bytes[j3 + 2] = Math.round(rgba[2]);
-    bytes[j3 + 3] = Math.round(rgba[3]);
+    const j = i * 4;
+    bytes[j + 0] = Math.round(rgba[0]);
+    bytes[j + 1] = Math.round(rgba[1]);
+    bytes[j + 2] = Math.round(rgba[2]);
+    bytes[j + 3] = Math.round(rgba[3]);
   }
   canvas.width = width;
   canvas.height = height;
@@ -55489,8 +46777,6 @@ var drawConfig = {
   backendName: "cpu",
   kernelFunc: draw2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Sum.js
 function sum3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -55521,8 +46807,8 @@ function sum3(args) {
   for (let i = 0; i < vals.length; ++i) {
     const offset = i * reduceSize;
     let sum5 = 0;
-    for (let j3 = 0; j3 < reduceSize; ++j3) {
-      sum5 += aVals[offset + j3];
+    for (let j = 0; j < reduceSize; ++j) {
+      sum5 += aVals[offset + j];
     }
     vals[i] = sum5;
   }
@@ -55543,8 +46829,6 @@ var sumConfig = {
   backendName: "cpu",
   kernelFunc: sum3
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Einsum.js
 function einsum2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { equation } = attrs;
@@ -55567,8 +46851,8 @@ function einsum2(args) {
         tensorsToDispose.push(x);
       }
       const targetShape = x.shape.slice();
-      for (let k4 = 0; k4 < dimsToExpand.length; ++k4) {
-        targetShape.splice(dimsToExpand[k4], 0, 1);
+      for (let k = 0; k < dimsToExpand.length; ++k) {
+        targetShape.splice(dimsToExpand[k], 0, 1);
       }
       if (!util_exports.arraysEqual(x.shape, targetShape)) {
         x = reshape3({ inputs: { x }, backend: backend2, attrs: { shape: targetShape } });
@@ -55609,8 +46893,6 @@ var einsumConfig = {
   backendName: "cpu",
   kernelFunc: einsum2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/EluGrad.js
 function eluGrad(args) {
   const { inputs, backend: backend2 } = args;
   const { dy, y } = inputs;
@@ -55633,8 +46915,6 @@ var eluGradConfig2 = {
   backendName: "cpu",
   kernelFunc: eluGrad
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Erf.js
 var p = backend_util_exports.ERF_P;
 var a1 = backend_util_exports.ERF_A1;
 var a2 = backend_util_exports.ERF_A2;
@@ -55644,16 +46924,14 @@ var a5 = backend_util_exports.ERF_A5;
 var erf2 = unaryKernelFunc(Erf, (xi) => {
   const sign4 = Math.sign(xi);
   const v = Math.abs(xi);
-  const t3 = 1 / (1 + p * v);
-  return sign4 * (1 - ((((a5 * t3 + a4) * t3 + a3) * t3 + a2) * t3 + a1) * t3 * Math.exp(-v * v));
+  const t = 1 / (1 + p * v);
+  return sign4 * (1 - ((((a5 * t + a4) * t + a3) * t + a2) * t + a1) * t * Math.exp(-v * v));
 });
 var erfConfig = {
   kernelName: Erf,
   backendName: "cpu",
   kernelFunc: erf2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/ExpandDims.js
 function expandDims3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { input: input2 } = inputs;
@@ -55673,8 +46951,6 @@ var expandDimsConfig = {
   backendName: "cpu",
   kernelFunc: expandDims3
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/RealDiv.js
 var realDivImpl = createSimpleBinaryKernelImpl((a, b) => a / b);
 var div2 = binaryKernelFunc(RealDiv, realDivImpl);
 var realDivConfig = {
@@ -55682,8 +46958,6 @@ var realDivConfig = {
   backendName: "cpu",
   kernelFunc: div2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/utils/fft_utils.js
 function fftBatch(input2, inverse, cpuBackend) {
   const inputShape = input2.shape;
   const batch = inputShape[0];
@@ -55872,8 +47146,6 @@ function fourierTransformByMatmul(data, size, inverse) {
   }
   return ret;
 }
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/FFT.js
 function fft2(args) {
   const { inputs, backend: backend2 } = args;
   const { input: input2 } = inputs;
@@ -55896,8 +47168,6 @@ var fftConfig = {
   backendName: "cpu",
   kernelFunc: fft2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Fill.js
 function fill2(args) {
   const { backend: backend2, attrs } = args;
   const { shape, value, dtype } = attrs;
@@ -55918,8 +47188,6 @@ function fillValues(values, value, dtype) {
     values.fill(value);
   }
 }
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/FlipLeftRight.js
 var flipLeftRightConfig = {
   kernelName: FlipLeftRight,
   backendName: "cpu",
@@ -55953,8 +47221,6 @@ var flipLeftRightConfig = {
     return { dataId, shape: image2.shape, dtype: image2.dtype };
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/FusedConv2D.js
 function fusedConv2D(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x, filter, bias, preluActivationWeights } = inputs;
@@ -55997,8 +47263,6 @@ var fusedConv2DConfig = {
   backendName: "cpu",
   kernelFunc: fusedConv2D
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/FusedDepthwiseConv2D.js
 function fusedDepthwiseConv2D(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x, filter, bias, preluActivationWeights } = inputs;
@@ -56025,8 +47289,6 @@ var fusedDepthwiseConv2DConfig = {
   backendName: "cpu",
   kernelFunc: fusedDepthwiseConv2D
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/GatherNd.js
 function gatherNd(args) {
   const { inputs, backend: backend2 } = args;
   const { params, indices } = inputs;
@@ -56047,8 +47309,6 @@ var gatherNdConfig = {
   backendName: "cpu",
   kernelFunc: gatherNd
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/GatherV2.js
 function gatherV2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x, indices } = inputs;
@@ -56102,8 +47362,6 @@ var gatherV2Config = {
   backendName: "cpu",
   kernelFunc: gatherV2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/IFFT.js
 function ifft2(args) {
   const { inputs, backend: backend2 } = args;
   const { input: input2 } = inputs;
@@ -56126,32 +47384,24 @@ var ifftConfig = {
   backendName: "cpu",
   kernelFunc: ifft2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/IsFinite.js
 var isFinite3 = unaryKernelFunc(IsFinite, (xi) => Number.isFinite(xi) ? 1 : 0, "bool");
 var isFiniteConfig = {
   kernelName: IsFinite,
   backendName: "cpu",
   kernelFunc: isFinite3
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/IsInf.js
 var isInf2 = unaryKernelFunc(IsInf, (xi) => Math.abs(xi) === Infinity ? 1 : 0, "bool");
 var isInfConfig = {
   kernelName: IsInf,
   backendName: "cpu",
   kernelFunc: isInf2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/IsNaN.js
 var isNaN3 = unaryKernelFunc(IsNan, (xi) => Number.isNaN(xi) ? 1 : 0, "bool");
 var isNaNConfig = {
   kernelName: IsNan,
   backendName: "cpu",
   kernelFunc: isNaN3
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/LinSpace.js
 function linSpace(args) {
   const { backend: backend2, attrs } = args;
   const { start, stop, num } = attrs;
@@ -56163,16 +47413,12 @@ var linSpaceConfig = {
   backendName: "cpu",
   kernelFunc: linSpace
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Log1p.js
 var log1p2 = unaryKernelFunc(Log1p, (xi) => Math.log1p(xi));
 var log1pConfig = {
   kernelName: Log1p,
   backendName: "cpu",
   kernelFunc: log1p2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/LogicalAnd.js
 var logicalAndImpl = createSimpleBinaryKernelImpl((a, b) => a && b);
 var logicalAnd2 = binaryKernelFunc(LogicalAnd, logicalAndImpl, null, "bool");
 var logicalAndConfig = {
@@ -56180,16 +47426,12 @@ var logicalAndConfig = {
   backendName: "cpu",
   kernelFunc: logicalAnd2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/LogicalNot.js
 var logicalNot2 = unaryKernelFunc(LogicalNot, (xi) => xi ? 0 : 1, "bool");
 var logicalNotConfig = {
   kernelName: LogicalNot,
   backendName: "cpu",
   kernelFunc: logicalNot2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/LogicalOr.js
 var logicalOrImpl = createSimpleBinaryKernelImpl((a, b) => a || b);
 var logicalOr2 = binaryKernelFunc(LogicalOr, logicalOrImpl, null, "bool");
 var logicalOrConfig = {
@@ -56197,8 +47439,6 @@ var logicalOrConfig = {
   backendName: "cpu",
   kernelFunc: logicalOr2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/LRN.js
 function lRN(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -56215,8 +47455,8 @@ function lRN(args) {
     const endSumOffset = offset - currentChannel + Math.min(currentChannel + depthRadius, maxD);
     let sum5 = 0;
     for (; beginSumOffset <= endSumOffset; beginSumOffset++) {
-      const z3 = xValues[beginSumOffset];
-      sum5 += z3 * z3;
+      const z = xValues[beginSumOffset];
+      sum5 += z * z;
     }
     return sum5;
   }
@@ -56232,8 +47472,6 @@ var LRNConfig = {
   backendName: "cpu",
   kernelFunc: lRN
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/LRNGrad.js
 function lRNGrad(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x, y, dy } = inputs;
@@ -56251,17 +47489,17 @@ function lRNGrad(args) {
     const depthBegin = offset - currentChannel + Math.max(0, currentChannel - depthRadius);
     const depthEnd = offset - currentChannel + Math.min(channels, currentChannel + depthRadius + 1);
     let norm2 = 0;
-    for (let k4 = depthBegin; k4 < depthEnd; k4++) {
-      norm2 += Math.pow(xValues[k4], 2);
+    for (let k = depthBegin; k < depthEnd; k++) {
+      norm2 += Math.pow(xValues[k], 2);
     }
     norm2 = alpha * norm2 + bias;
-    for (let k4 = depthBegin; k4 < depthEnd; k4++) {
-      let dyi = -2 * alpha * beta * xValues[k4] * yValues[offset] / norm2;
-      if (offset === k4) {
+    for (let k = depthBegin; k < depthEnd; k++) {
+      let dyi = -2 * alpha * beta * xValues[k] * yValues[offset] / norm2;
+      if (offset === k) {
         dyi += Math.pow(norm2, -beta);
       }
       dyi *= dyValues[offset];
-      result[k4] += dyi;
+      result[k] += dyi;
     }
   }
   return backend2.makeTensorInfo(dy.shape, x.dtype, result);
@@ -56271,8 +47509,6 @@ var LRNGradConfig = {
   backendName: "cpu",
   kernelFunc: lRNGrad
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Max.js
 function max3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -56311,8 +47547,6 @@ var maxConfig = {
   backendName: "cpu",
   kernelFunc: max3
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/MaxPool.js
 function maxPool2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -56337,8 +47571,6 @@ var maxPoolConfig = {
   backendName: "cpu",
   kernelFunc: maxPool2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/MaxPool3D.js
 function maxPool3D(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -56354,8 +47586,6 @@ var maxPool3DConfig = {
   backendName: "cpu",
   kernelFunc: maxPool3D
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/MaxPool3DGrad.js
 function maxPool3DGrad(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { dy, input: input2 } = inputs;
@@ -56426,8 +47656,6 @@ var maxPool3DGradConfig2 = {
   backendName: "cpu",
   kernelFunc: maxPool3DGrad
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/MaxPoolGrad.js
 function maxPoolGrad2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { dy, input: input2, output } = inputs;
@@ -56487,16 +47715,12 @@ var maxPoolGradConfig2 = {
   backendName: "cpu",
   kernelFunc: maxPoolGrad2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/MaxPoolWithArgmax_impl.js
 function maxPoolWithArgmaxImpl(xValues, xShape, dtype, includeBatchInIndex, convInfo) {
   const strides = util_exports.computeStrides(xShape);
   const maxPools = pool2(xValues, xShape, dtype, strides, convInfo, "max");
   const maxPositions = maxPoolPositions(xValues, xShape, dtype, convInfo, true, includeBatchInIndex);
   return [maxPools.values, maxPositions.values];
 }
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/MaxPoolWithArgmax.js
 var maxPoolWithArgmaxConfig = {
   kernelName: MaxPoolWithArgmax,
   backendName: "cpu",
@@ -56516,8 +47740,6 @@ var maxPoolWithArgmaxConfig = {
     ];
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Mean.js
 function mean2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -56534,7 +47756,7 @@ function mean2(args) {
   const res = div2({ inputs: { a: $x, b: reduceSizeScalar }, backend: backend2 });
   toDispose.push(res);
   const result = sum3({ inputs: { x: res }, backend: backend2, attrs: { axis, keepDims } });
-  toDispose.forEach((t3) => backend2.disposeIntermediateTensorInfo(t3));
+  toDispose.forEach((t) => backend2.disposeIntermediateTensorInfo(t));
   return result;
 }
 var meanConfig = {
@@ -56542,8 +47764,6 @@ var meanConfig = {
   backendName: "cpu",
   kernelFunc: mean2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Min.js
 function min3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -56565,8 +47785,8 @@ function min3(args) {
   for (let i = 0; i < vals.length; ++i) {
     const offset = i * reduceSize;
     let min5 = aVals[offset];
-    for (let j3 = 0; j3 < reduceSize; ++j3) {
-      const value = aVals[offset + j3];
+    for (let j = 0; j < reduceSize; ++j) {
+      const value = aVals[offset + j];
       if (Number.isNaN(value) || value < min5) {
         min5 = value;
       }
@@ -56590,8 +47810,6 @@ var minConfig = {
   backendName: "cpu",
   kernelFunc: min3
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/MirrorPad.js
 function mirrorPad2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -56632,8 +47850,6 @@ var mirrorPadConfig = {
   backendName: "cpu",
   kernelFunc: mirrorPad2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Mod.js
 var modImpl = createSimpleBinaryKernelImpl((aValue, bValue) => {
   const rem = aValue % bValue;
   if (aValue < 0 && bValue < 0 || aValue >= 0 && bValue >= 0) {
@@ -56648,11 +47864,7 @@ var modConfig = {
   backendName: "cpu",
   kernelFunc: mod2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Multinomial.js
 var seedrandom4 = __toESM(require_seedrandom2());
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Softmax.js
 function softmax3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { logits } = inputs;
@@ -56691,8 +47903,6 @@ var softmaxConfig = {
   backendName: "cpu",
   kernelFunc: softmax3
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Multinomial.js
 function multinomial2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { logits } = inputs;
@@ -56734,8 +47944,6 @@ var multinomialConfig = {
   backendName: "cpu",
   kernelFunc: multinomial2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/NonMaxSuppressionV3.js
 var nonMaxSuppressionV3Impl2 = kernel_impls_exports.nonMaxSuppressionV3Impl;
 function nonMaxSuppressionV3(args) {
   const { inputs, backend: backend2, attrs } = args;
@@ -56752,8 +47960,6 @@ var nonMaxSuppressionV3Config = {
   backendName: "cpu",
   kernelFunc: nonMaxSuppressionV3
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/NonMaxSuppressionV4.js
 var nonMaxSuppressionV4Impl2 = kernel_impls_exports.nonMaxSuppressionV4Impl;
 function nonMaxSuppressionV4(args) {
   const { inputs, backend: backend2, attrs } = args;
@@ -56773,8 +47979,6 @@ var nonMaxSuppressionV4Config = {
   backendName: "cpu",
   kernelFunc: nonMaxSuppressionV4
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/NonMaxSuppressionV5.js
 var nonMaxSuppressionV5Impl2 = kernel_impls_exports.nonMaxSuppressionV5Impl;
 function nonMaxSuppressionV5(args) {
   const { inputs, backend: backend2, attrs } = args;
@@ -56798,8 +48002,6 @@ var nonMaxSuppressionV5Config = {
   backendName: "cpu",
   kernelFunc: nonMaxSuppressionV5
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/OneHot.js
 function oneHot2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { indices } = inputs;
@@ -56821,8 +48023,6 @@ var oneHotConfig = {
   backendName: "cpu",
   kernelFunc: oneHot2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/ZerosLike.js
 function zerosLike2(args) {
   const { inputs, backend: backend2 } = args;
   const { x } = inputs;
@@ -56848,8 +48048,6 @@ var zerosLikeConfig = {
   backendName: "cpu",
   kernelFunc: zerosLike2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/OnesLike.js
 function onesLike2(args) {
   const { inputs, backend: backend2 } = args;
   const { x } = inputs;
@@ -56875,8 +48073,6 @@ var onesLikeConfig = {
   backendName: "cpu",
   kernelFunc: onesLike2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Pack.js
 function pack(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { axis } = attrs;
@@ -56885,18 +48081,18 @@ function pack(args) {
   }
   const shape = inputs[0].shape;
   const dtype = inputs[0].dtype;
-  inputs.forEach((t3) => {
-    util_exports.assertShapesMatch(shape, t3.shape, "All tensors passed to stack must have matching shapes");
-    util_exports.assert(dtype === t3.dtype, () => "All tensors passed to stack must have matching dtypes");
+  inputs.forEach((t) => {
+    util_exports.assertShapesMatch(shape, t.shape, "All tensors passed to stack must have matching shapes");
+    util_exports.assert(dtype === t.dtype, () => "All tensors passed to stack must have matching dtypes");
   });
   const intermediateTensorInfos = [];
-  const expandedTensors = inputs.map((t3) => {
-    const expandedT = expandDims3({ inputs: { input: t3 }, backend: backend2, attrs: { dim: axis } });
+  const expandedTensors = inputs.map((t) => {
+    const expandedT = expandDims3({ inputs: { input: t }, backend: backend2, attrs: { dim: axis } });
     intermediateTensorInfos.push(expandedT);
     return expandedT;
   });
   const result = concat2({ inputs: expandedTensors, backend: backend2, attrs: { axis } });
-  intermediateTensorInfos.forEach((t3) => backend2.disposeIntermediateTensorInfo(t3));
+  intermediateTensorInfos.forEach((t) => backend2.disposeIntermediateTensorInfo(t));
   return result;
 }
 var packConfig = {
@@ -56904,8 +48100,6 @@ var packConfig = {
   backendName: "cpu",
   kernelFunc: pack
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/PadV2.js
 function padV2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -56941,8 +48135,6 @@ var padV2Config = {
   backendName: "cpu",
   kernelFunc: padV2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Pow.js
 var powImpl = createSimpleBinaryKernelImpl((a, b) => Math.pow(a, b));
 var pow2 = binaryKernelFunc(Pow, powImpl);
 var powConfig = {
@@ -56950,14 +48142,12 @@ var powConfig = {
   backendName: "cpu",
   kernelFunc: pow2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/RaggedGather.js
 function raggedGather2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { paramsNestedSplits, paramsDenseValues, indices } = inputs;
   const { outputRaggedRank } = attrs;
-  const $paramsNestedSplits = paramsNestedSplits.map((t3) => backend2.data.get(t3.dataId).values);
-  const $paramsNestedSplitsShapes = paramsNestedSplits.map((t3) => t3.shape);
+  const $paramsNestedSplits = paramsNestedSplits.map((t) => backend2.data.get(t.dataId).values);
+  const $paramsNestedSplitsShapes = paramsNestedSplits.map((t) => t.shape);
   const $paramsDenseValues = backend2.data.get(paramsDenseValues.dataId).values;
   const $indices = backend2.data.get(indices.dataId).values;
   const [outputNestedSplits, outputDenseValues, outputDenseValuesShape] = raggedGatherImpl($paramsNestedSplits, $paramsNestedSplitsShapes, $paramsDenseValues, paramsDenseValues.shape, paramsDenseValues.dtype, $indices, indices.shape, outputRaggedRank);
@@ -56970,8 +48160,6 @@ var raggedGatherConfig = {
   backendName: "cpu",
   kernelFunc: raggedGather2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/RaggedRange.js
 function raggedRange2(args) {
   const { inputs, backend: backend2 } = args;
   const { starts, limits, deltas } = inputs;
@@ -56988,8 +48176,6 @@ var raggedRangeConfig = {
   backendName: "cpu",
   kernelFunc: raggedRange2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/RaggedTensorToTensor.js
 function raggedTensorToTensor2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { shape, values, defaultValue, rowPartitionTensors } = inputs;
@@ -56997,8 +48183,8 @@ function raggedTensorToTensor2(args) {
   const $shape = backend2.data.get(shape.dataId).values;
   const $values = backend2.data.get(values.dataId).values;
   const $defaultValue = backend2.data.get(defaultValue.dataId).values;
-  const $rowPartitionValues = rowPartitionTensors.map((t3) => backend2.data.get(t3.dataId).values);
-  const rowPartitionValuesShapes = rowPartitionTensors.map((t3) => t3.shape);
+  const $rowPartitionValues = rowPartitionTensors.map((t) => backend2.data.get(t.dataId).values);
+  const rowPartitionValuesShapes = rowPartitionTensors.map((t) => t.shape);
   const [outputShape, output] = raggedTensorToTensorImpl($shape, shape.shape, $values, values.shape, values.dtype, $defaultValue, defaultValue.shape, $rowPartitionValues, rowPartitionValuesShapes, rowPartitionTypes);
   return backend2.makeTensorInfo(outputShape, values.dtype, output);
 }
@@ -57007,8 +48193,6 @@ var raggedTensorToTensorConfig = {
   backendName: "cpu",
   kernelFunc: raggedTensorToTensor2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Range.js
 function range3(args) {
   const { backend: backend2, attrs } = args;
   const { start, stop, dtype, step: step4 } = attrs;
@@ -57020,16 +48204,12 @@ var rangeConfig = {
   backendName: "cpu",
   kernelFunc: range3
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Reciprocal.js
 var reciprocal2 = unaryKernelFunc(Reciprocal, (xi) => 1 / xi);
 var reciprocalConfig = {
   kernelName: Reciprocal,
   backendName: "cpu",
   kernelFunc: reciprocal2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/ResizeBilinear.js
 function resizeBilinear3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { images } = inputs;
@@ -57098,8 +48278,6 @@ var resizeBilinearConfig = {
   backendName: "cpu",
   kernelFunc: resizeBilinear3
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/ResizeBilinearGrad.js
 function resizeBilinearGrad(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { images, dy } = inputs;
@@ -57162,8 +48340,6 @@ var resizeBilinearGradConfig2 = {
   backendName: "cpu",
   kernelFunc: resizeBilinearGrad
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/ResizeNearestNeighbor.js
 function resizeNearestNeighbor2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { images } = inputs;
@@ -57215,8 +48391,6 @@ var resizeNearestNeighborConfig = {
   backendName: "cpu",
   kernelFunc: resizeNearestNeighbor2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/ResizeNearestNeighborGrad.js
 function resizeNearestNeighborGrad(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { images, dy } = inputs;
@@ -57290,8 +48464,6 @@ var resizeNearestNeighborGradConfig2 = {
   backendName: "cpu",
   kernelFunc: resizeNearestNeighborGrad
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Reverse.js
 function reverse2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -57317,8 +48489,6 @@ var reverseConfig = {
   backendName: "cpu",
   kernelFunc: reverse2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/RotateWithOffset.js
 var rotateWithOffsetConfig = {
   kernelName: RotateWithOffset,
   backendName: "cpu",
@@ -57371,8 +48541,6 @@ var rotateWithOffsetConfig = {
     return { dataId, shape: image2.shape, dtype: image2.dtype };
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Round.js
 var round3 = unaryKernelFunc(Round, (xi) => {
   const base = Math.floor(xi);
   if (xi - base < 0.5) {
@@ -57392,8 +48560,6 @@ var roundConfig = {
   backendName: "cpu",
   kernelFunc: round3
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/ScatterNd.js
 function scatterNd(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { indices, updates } = inputs;
@@ -57410,8 +48576,6 @@ var scatterNdConfig = {
   backendName: "cpu",
   kernelFunc: scatterNd
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/SearchSorted_impl.js
 function lowerBound2(array2, value) {
   let left = 0;
   let right = array2.length;
@@ -57451,8 +48615,6 @@ function searchSortedImpl(sortedInputs, values, batchSize, numInputs, numValues,
   }
   return output;
 }
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/SearchSorted.js
 function searchSorted2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { sortedSequence, values } = inputs;
@@ -57467,22 +48629,20 @@ var searchSortedConfig = {
   backendName: "cpu",
   kernelFunc: searchSorted2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Select.js
 function select2(args) {
   const { inputs, backend: backend2 } = args;
-  const { condition, t: t3, e } = inputs;
-  assertNotComplex([condition, t3, e], "select");
+  const { condition, t, e } = inputs;
+  assertNotComplex([condition, t, e], "select");
   const conditionRank = condition.shape.length;
   const values = backend2.data.get(condition.dataId).values;
-  const tValues = backend2.data.get(t3.dataId).values;
+  const tValues = backend2.data.get(t.dataId).values;
   const eValues = backend2.data.get(e.dataId).values;
-  const resultDtype = upcastType(t3.dtype, e.dtype);
-  const newValues = util_exports.makeZerosTypedArray(util_exports.sizeFromShape(t3.shape), resultDtype);
+  const resultDtype = upcastType(t.dtype, e.dtype);
+  const newValues = util_exports.makeZerosTypedArray(util_exports.sizeFromShape(t.shape), resultDtype);
   let index = 0;
-  const offset = conditionRank === 0 || conditionRank > 1 || t3.shape.length === 1 ? 1 : util_exports.sizeFromShape(t3.shape.slice(1));
+  const offset = conditionRank === 0 || conditionRank > 1 || t.shape.length === 1 ? 1 : util_exports.sizeFromShape(t.shape.slice(1));
   for (let i = 0; i < values.length; i++) {
-    for (let j3 = 0; j3 < offset; j3++) {
+    for (let j = 0; j < offset; j++) {
       if (values[i] === 1) {
         newValues[index++] = tValues[i];
       } else {
@@ -57490,15 +48650,13 @@ function select2(args) {
       }
     }
   }
-  return backend2.makeTensorInfo(t3.shape, resultDtype, newValues);
+  return backend2.makeTensorInfo(t.shape, resultDtype, newValues);
 }
 var selectConfig = {
   kernelName: Select,
   backendName: "cpu",
   kernelFunc: select2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Selu.js
 var scaleAlpha = backend_util_exports.SELU_SCALEALPHA;
 var scale = backend_util_exports.SELU_SCALE;
 var selu2 = unaryKernelFunc(Selu, (xi) => {
@@ -57513,8 +48671,6 @@ var seluConfig = {
   backendName: "cpu",
   kernelFunc: selu2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Sign.js
 var sign2 = unaryKernelFunc(Sign, (xi) => {
   if (xi < 0) {
     return -1;
@@ -57529,24 +48685,18 @@ var signConfig = {
   backendName: "cpu",
   kernelFunc: sign2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Sin.js
 var sin2 = unaryKernelFunc(Sin, (xi) => Math.sin(xi));
 var sinConfig = {
   kernelName: Sin,
   backendName: "cpu",
   kernelFunc: sin2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Sinh.js
 var sinh2 = unaryKernelFunc(Sinh, (xi) => Math.sinh(xi));
 var sinhConfig = {
   kernelName: Sinh,
   backendName: "cpu",
   kernelFunc: sinh2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Softplus.js
 var epsilon2 = 11920928955078125e-23;
 var threshold2 = Math.log(epsilon2) + 2;
 var softplus2 = unaryKernelFunc(Softplus, (xi) => {
@@ -57568,8 +48718,6 @@ var softplusConfig = {
   backendName: "cpu",
   kernelFunc: softplus2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/SpaceToBatchND.js
 function spaceToBatchND2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -57608,8 +48756,6 @@ var spaceToBatchNDConfig = {
   backendName: "cpu",
   kernelFunc: spaceToBatchND2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/SparseFillEmptyRows.js
 function sparseFillEmptyRows2(args) {
   const { inputs, backend: backend2 } = args;
   const { indices, values, denseShape, defaultValue } = inputs;
@@ -57646,8 +48792,6 @@ var sparseFillEmptyRowsConfig = {
   backendName: "cpu",
   kernelFunc: sparseFillEmptyRows2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/SparseReshape.js
 function sparseReshape2(args) {
   const { inputs, backend: backend2 } = args;
   const { inputIndices, inputShape, newShape } = inputs;
@@ -57676,8 +48820,6 @@ var sparseReshapeConfig = {
   backendName: "cpu",
   kernelFunc: sparseReshape2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/SparseSegmentMean.js
 function sparseSegmentMean2(args) {
   const { inputs, backend: backend2 } = args;
   const { data, indices, segmentIds } = inputs;
@@ -57706,8 +48848,6 @@ var sparseSegmentMeanConfig = {
   backendName: "cpu",
   kernelFunc: sparseSegmentMean2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/SparseSegmentSum.js
 function sparseSegmentSum2(args) {
   const { inputs, backend: backend2 } = args;
   const { data, indices, segmentIds } = inputs;
@@ -57736,8 +48876,6 @@ var sparseSegmentSumConfig = {
   backendName: "cpu",
   kernelFunc: sparseSegmentSum2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/SparseToDense.js
 function sparseToDense2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { sparseIndices, sparseValues, defaultValue } = inputs;
@@ -57781,8 +48919,6 @@ var sparseToDenseConfig = {
   backendName: "cpu",
   kernelFunc: sparseToDense2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/SplitV.js
 function splitV(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -57804,8 +48940,6 @@ var splitVConfig = {
   backendName: "cpu",
   kernelFunc: splitV
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Square.js
 var squareConfig = {
   kernelName: Square,
   backendName: "cpu",
@@ -57823,8 +48957,6 @@ var squareConfig = {
     return { dataId, shape: x.shape, dtype: x.dtype };
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Step.js
 var step2 = unaryKernelFunc(Step, (xi, attrs) => {
   const stepAttrs = attrs;
   if (isNaN(xi)) {
@@ -57838,8 +48970,6 @@ var stepConfig = {
   backendName: "cpu",
   kernelFunc: step2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/StridedSlice.js
 function stridedSlice2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -57867,8 +48997,6 @@ var stridedSliceConfig = {
   backendName: "cpu",
   kernelFunc: stridedSlice2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/StringNGrams.js
 function stringNGrams2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { separator, nGramWidths, leftPad, rightPad: rightPad2, padWidth, preserveShortSequences } = attrs;
@@ -57886,8 +49014,6 @@ var stringNGramsConfig = {
   backendName: "cpu",
   kernelFunc: stringNGrams2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/StringSplit.js
 function stringSplit2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { skipEmpty } = attrs;
@@ -57916,8 +49042,6 @@ var stringSplitConfig = {
   backendName: "cpu",
   kernelFunc: stringSplit2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/StringToHashBucketFast.js
 function stringToHashBucketFast2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { numBuckets } = attrs;
@@ -57937,24 +49061,18 @@ var stringToHashBucketFastConfig = {
   backendName: "cpu",
   kernelFunc: stringToHashBucketFast2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Tan.js
 var tan2 = unaryKernelFunc(Tan, (xi) => Math.tan(xi));
 var tanConfig = {
   kernelName: Tan,
   backendName: "cpu",
   kernelFunc: tan2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Tanh.js
 var tanh3 = unaryKernelFunc(Tanh, (xi) => Math.tanh(xi));
 var tanhConfig = {
   kernelName: Tanh,
   backendName: "cpu",
   kernelFunc: tanh3
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/TensorScatterUpdate.js
 function tensorScatterUpdate2(args) {
   const { inputs, backend: backend2 } = args;
   const { tensor: tensor2, indices, updates } = inputs;
@@ -57971,8 +49089,6 @@ var tensorScatterUpdateConfig = {
   backendName: "cpu",
   kernelFunc: tensorScatterUpdate2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Tile.js
 function tile3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -57986,15 +49102,13 @@ var tileConfig = {
   backendName: "cpu",
   kernelFunc: tile3
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/TopK.js
 function topK(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
-  const { k: k4, sorted } = attrs;
+  const { k, sorted } = attrs;
   assertNotComplex(x, "topk");
   const xVals = backend2.data.get(x.dataId).values;
-  const [allTopKVals, allTopKIndices] = topKImpl(xVals, x.shape, x.dtype, k4, sorted);
+  const [allTopKVals, allTopKIndices] = topKImpl(xVals, x.shape, x.dtype, k, sorted);
   return [
     backend2.makeTensorInfo(allTopKVals.shape, allTopKVals.dtype, allTopKVals.values),
     backend2.makeTensorInfo(allTopKIndices.shape, allTopKIndices.dtype, allTopKIndices.values)
@@ -58005,8 +49119,6 @@ var topKConfig = {
   backendName: "cpu",
   kernelFunc: topK
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Transform.js
 function transform2(args) {
   const { inputs, attrs, backend: backend2 } = args;
   const { image: image2, transforms } = inputs;
@@ -58150,8 +49262,6 @@ function bilinearInterpolation(imageVals, imageHeight, imageWidth, batchStride, 
   const valueYCeil = (xCeil - x) * readWithFillValue(imageVals, imageHeight, imageWidth, batchStride, rowStride, colStride, batch, yCeil, xFloor, channel, fillValue) + (x - xFloor) * readWithFillValue(imageVals, imageHeight, imageWidth, batchStride, rowStride, colStride, batch, yCeil, xCeil, channel, fillValue);
   return (yCeil - y) * valueYFloor + (y - yFloor) * valueYCeil;
 }
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Unique.js
 function unique3(args) {
   const { inputs, attrs, backend: backend2 } = args;
   const { axis } = attrs;
@@ -58169,8 +49279,6 @@ var uniqueConfig = {
   backendName: "cpu",
   kernelFunc: unique3
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/Unpack.js
 function unpack(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { value } = inputs;
@@ -58204,8 +49312,6 @@ var unpackConfig = {
   backendName: "cpu",
   kernelFunc: unpack
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/kernels/UnsortedSegmentSum.js
 function unsortedSegmentSum2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x, segmentIds } = inputs;
@@ -58237,7 +49343,7 @@ function unsortedSegmentSum2(args) {
     intermediates.push(sumTensorInfo);
   }
   const result = pack({ inputs: res, backend: backend2, attrs: { axis: 0 } });
-  intermediates.forEach((t3) => backend2.disposeIntermediateTensorInfo(t3));
+  intermediates.forEach((t) => backend2.disposeIntermediateTensorInfo(t));
   return result;
 }
 var unsortedSegmentSumConfig = {
@@ -58245,8 +49351,6 @@ var unsortedSegmentSumConfig = {
   backendName: "cpu",
   kernelFunc: unsortedSegmentSum2
 };
-
-// node_modules/@tensorflow/tfjs-backend-cpu/dist/register_all_kernels.js
 var kernelConfigs = [
   _fusedMatMulConfig,
   absConfig,
@@ -58424,8 +49528,6 @@ var kernelConfigs = [
 for (const kernelConfig of kernelConfigs) {
   registerKernel(kernelConfig);
 }
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/webgl_util.js
 var webgl_util_exports = {};
 __export(webgl_util_exports, {
   assertNotComplex: () => assertNotComplex2,
@@ -58472,8 +49574,6 @@ __export(webgl_util_exports, {
   validateProgram: () => validateProgram,
   validateTextureSize: () => validateTextureSize
 });
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/canvas_util.js
 var contexts = {};
 var WEBGL_ATTRIBUTES = {
   alpha: false,
@@ -58542,8 +49642,6 @@ function getWebGLRenderingContext(webGLVersion, customCanvas) {
   }
   return canvas.getContext("webgl2", WEBGL_ATTRIBUTES);
 }
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/tex_util.js
 var PackingScheme;
 (function(PackingScheme2) {
   PackingScheme2[PackingScheme2["DENSE"] = 0] = "DENSE";
@@ -58633,8 +49731,6 @@ function getTextureConfig(gl, textureHalfFloatExtension) {
     textureTypeFloat
   };
 }
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/webgl_util.js
 function callAndCheck(gl, func2) {
   const returnValue = func2();
   if (env().getBool("DEBUG")) {
@@ -59098,14 +50194,12 @@ function assertNotComplex2(tensor2, opName) {
   if (!Array.isArray(tensor2)) {
     tensor2 = [tensor2];
   }
-  tensor2.forEach((t3) => {
-    if (t3 != null) {
-      util_exports.assert(t3.dtype !== "complex64", () => `${opName} does not support complex64 tensors in the WebGL backend.`);
+  tensor2.forEach((t) => {
+    if (t != null) {
+      util_exports.assert(t.dtype !== "complex64", () => `${opName} does not support complex64 tensors in the WebGL backend.`);
     }
   });
 }
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/flags_webgl.js
 var ENV5 = env();
 ENV5.registerFlag("HAS_WEBGL", () => ENV5.getNumber("WEBGL_VERSION") > 0);
 ENV5.registerFlag("WEBGL_VERSION", () => {
@@ -59182,8 +50276,6 @@ ENV5.registerFlag("WEBGL_MAX_SIZE_FOR_NARROW_TEXTURE", () => Infinity);
 ENV5.registerFlag("WEBGL_AUTO_SQUARIFY_NARROW_TEXTURE_SHAPE", () => false);
 ENV5.registerFlag("WEBGL2_ISNAN_CUSTOM", () => false);
 ENV5.registerFlag("ENGINE_COMPILE_ONLY", () => false);
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/glsl_version.js
 function getGlslDifferences() {
   let version9;
   let attribute;
@@ -59277,8 +50369,6 @@ function getGlslDifferences() {
     defineRound
   };
 }
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/shader_compiler_util.js
 function getLogicalCoordinatesFromFlatIndex(coords2, shape, index = "index") {
   const strides = util_exports.computeStrides(shape);
   return strides.map((stride, i) => {
@@ -59289,7 +50379,7 @@ function getLogicalCoordinatesFromFlatIndex(coords2, shape, index = "index") {
 }
 function getOutputLogicalCoordinatesFromFlatIndexByUniform(coords2, shape, index = "index") {
   const strides = util_exports.computeStrides(shape);
-  return strides.map((_3, i) => {
+  return strides.map((_, i) => {
     const line1 = `int ${coords2[i]} = ${index} / outShapeStrides[${i}]`;
     const line2 = i === strides.length - 1 ? `int ${coords2[i + 1]} = ${index} - ${coords2[i]} * outShapeStrides[${i}]` : `index -= ${coords2[i]} * outShapeStrides[${i}]`;
     return `${line1}; ${line2};`;
@@ -59306,9 +50396,9 @@ function symbolicallyComputeStrides(indicesArr, variableName) {
   return strides;
 }
 function getLogicalCoordinatesFromFlatIndexByUniform(coords2, variableName, index = "index") {
-  const indicesArray = coords2.map((_3, i) => i);
+  const indicesArray = coords2.map((_, i) => i);
   const strides = symbolicallyComputeStrides(indicesArray, variableName);
-  return strides.map((_3, i) => {
+  return strides.map((_, i) => {
     const line1 = `int ${coords2[i]} = ${index} / ${strides[i]}`;
     const line2 = i === strides.length - 1 ? `int ${coords2[i + 1]} = ${index} - ${coords2[i]} * ${strides[i]}` : `index -= ${coords2[i]} * ${strides[i]}`;
     return `${line1}; ${line2};`;
@@ -59369,8 +50459,6 @@ var ENCODE_FLOAT_SNIPPET = `
     return c / 255.0;
   }
 `;
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/shader_compiler.js
 var { getBroadcastDims: getBroadcastDims2 } = backend_util_exports;
 function makeShader(inputsInfo, outputShape, program) {
   const prefixSnippets = [];
@@ -60957,8 +52045,6 @@ function squeezeInputInfo(inInfo, squeezedShape) {
 function getSqueezedParams(params, keptDims) {
   return keptDims.map((d) => params[d]).join(", ");
 }
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/gpgpu_math.js
 function compileProgram(gpgpu, program, inputs, output) {
   const inputInfos = inputs.map((input2, i) => {
     const shapeInfo = {
@@ -61248,8 +52334,6 @@ function makeShaderKey(program, inputs, output) {
 function useShapeUniforms(rank) {
   return env().getBool("WEBGL_USE_SHAPES_UNIFORMS") && rank <= 4;
 }
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/decode_matrix_gpu.js
 var DecodeMatrixProgram = class {
   constructor(outputShape) {
     this.variableNames = ["A"];
@@ -61283,8 +52367,6 @@ var DecodeMatrixProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/decode_matrix_packed_gpu.js
 var DecodeMatrixPackedProgram = class {
   constructor(outputShape) {
     this.variableNames = ["A"];
@@ -61318,8 +52400,6 @@ var DecodeMatrixPackedProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/encode_float_gpu.js
 var EncodeFloatProgram = class {
   constructor(outputShape) {
     this.variableNames = ["A"];
@@ -61336,8 +52416,6 @@ var EncodeFloatProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/encode_float_packed_gpu.js
 var EncodeFloatPackedProgram = class {
   constructor(outputShape) {
     this.variableNames = ["A"];
@@ -61357,8 +52435,6 @@ var EncodeFloatPackedProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/encode_matrix_gpu.js
 var CHANNEL_CHAR_TO_INDEX_MAP = {
   "R": 0,
   "G": 1,
@@ -61407,8 +52483,6 @@ var EncodeMatrixProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/encode_matrix_packed_gpu.js
 var EncodeMatrixPackedProgram = class {
   constructor(outputShape, inputIsUnsignedByte = false) {
     this.variableNames = ["A"];
@@ -61476,8 +52550,6 @@ var EncodeMatrixPackedProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/gpgpu_util.js
 var gpgpu_util_exports = {};
 __export(gpgpu_util_exports, {
   bindVertexProgramAttributeStreams: () => bindVertexProgramAttributeStreams,
@@ -61660,8 +52732,6 @@ function downloadMatrixFromPackedOutputTexture(gl, physicalRows, physicalCols) {
   callAndCheck(gl, () => gl.readPixels(0, 0, physicalCols, physicalRows, gl.RGBA, gl.FLOAT, packedRGBA));
   return packedRGBA;
 }
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/gpgpu_context.js
 var GPGPUContext = class {
   constructor(gl) {
     this.outputTexture = null;
@@ -62104,11 +53174,7 @@ function linearSearchLastTrue(arr) {
   }
   return i - 1;
 }
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernel_utils/shared.js
 var { addImpl: addImplCPU, bincountImpl: bincountImplCPU, bincountReduceImpl: bincountReduceImplCPU, bitwiseAndImpl: bitwiseAndImplCPU, castImpl: castImplCPU, ceilImpl: ceilImplCPU, concatImpl: concatImplCPU, equalImpl: equalImplCPU, expImpl: expImplCPU, expm1Impl: expm1ImplCPU, floorImpl: floorImplCPU, gatherNdImpl: gatherNdImplCPU, gatherV2Impl: gatherV2ImplCPU, greaterImpl: greaterImplCPU, greaterEqualImpl: greaterEqualImplCPU, lessImpl: lessImplCPU, lessEqualImpl: lessEqualImplCPU, linSpaceImpl: linSpaceImplCPU, logImpl: logImplCPU, maxImpl: maxImplCPU, maximumImpl: maximumImplCPU, minimumImpl: minimumImplCPU, multiplyImpl: multiplyImplCPU, negImpl: negImplCPU, notEqualImpl: notEqualImplCPU, prodImpl: prodImplCPU, raggedGatherImpl: raggedGatherImplCPU, raggedRangeImpl: raggedRangeImplCPU, raggedTensorToTensorImpl: raggedTensorToTensorImplCPU, rangeImpl: rangeImplCPU, rsqrtImpl: rsqrtImplCPU, scatterImpl: scatterImplCPU, sigmoidImpl: sigmoidImplCPU, simpleAbsImpl: simpleAbsImplCPU, sliceImpl: sliceImplCPU, sparseFillEmptyRowsImpl: sparseFillEmptyRowsImplCPU, sparseReshapeImpl: sparseReshapeImplCPU, sparseSegmentReductionImpl: sparseSegmentReductionImplCPU, sqrtImpl: sqrtImplCPU, staticRegexReplaceImpl: staticRegexReplaceImplCPU, stridedSliceImpl: stridedSliceImplCPU, stringNGramsImpl: stringNGramsImplCPU, stringSplitImpl: stringSplitImplCPU, stringToHashBucketFastImpl: stringToHashBucketFastImplCPU, subImpl: subImplCPU, tileImpl: tileImplCPU, topKImpl: topKImplCPU, transposeImpl: transposeImplCPU, uniqueImpl: uniqueImplCPU } = shared_exports;
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/packing_util.js
 function getVecChannels(name, rank) {
   return ["x", "y", "z", "w", "u", "v"].slice(0, rank).map((d) => `${name}.${d}`);
 }
@@ -62131,8 +53197,6 @@ function getSourceCoords(rank, dims) {
   }
   return coords2;
 }
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/pack_gpu.js
 var PackProgram = class {
   constructor(outputShape) {
     this.variableNames = ["A"];
@@ -62223,8 +53287,6 @@ var PackProgram = class {
             rEdge || cEdge ? 0. : getA(${sourceCoords[3]})`;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/reshape_packed_gpu.js
 var ReshapePackedProgram = class {
   constructor(outputShape, inputShape) {
     this.variableNames = ["A"];
@@ -62284,8 +53346,6 @@ function getReshapedInputCoords(shape, enableShapeUniforms) {
     }
   `;
 }
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/texture_manager.js
 var TextureManager = class {
   constructor(gpgpu) {
     this.gpgpu = gpgpu;
@@ -62478,8 +53538,6 @@ function getPhysicalFromLogicalTextureType(logicalTexType, isPacked) {
 function getKeyFromTextureShape(shapeRowsCol, physicalTexType, isPacked) {
   return `${shapeRowsCol[0]}_${shapeRowsCol[1]}_${physicalTexType}_${isPacked}`;
 }
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/unaryop_gpu.js
 var UnaryOpProgram = class {
   constructor(aShape, opSnippet) {
     this.variableNames = ["A"];
@@ -62511,8 +53569,6 @@ var RELU6 = CHECK_NAN_SNIPPET + `
 `;
 var CLONE = "return x;";
 var SIGMOID = `return 1.0 / (1.0 + exp(-1.0 * x));`;
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/unaryop_packed_gpu.js
 var LINEAR2 = `return x;`;
 var ELU3 = `
   vec4 result;
@@ -62568,8 +53624,6 @@ var UnaryOpPackedProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/unpack_gpu.js
 var UnpackProgram = class {
   constructor(outputShape) {
     this.variableNames = ["A"];
@@ -62593,8 +53647,6 @@ var UnpackProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/backend_webgl.js
 var whereImpl3 = kernel_impls_exports.whereImpl;
 var EPSILON_FLOAT322 = 1e-7;
 var EPSILON_FLOAT162 = 1e-4;
@@ -62866,17 +53918,17 @@ var MathBackendWebGL = class _MathBackendWebGL extends KernelBackend {
     const tmpData = this.texData.get(tmpTarget.dataId);
     return Object.assign({ tensorRef }, tmpData.texture);
   }
-  bufferSync(t3) {
-    const data = this.readSync(t3.dataId);
-    if (t3.dtype === "string") {
+  bufferSync(t) {
+    const data = this.readSync(t.dataId);
+    if (t.dtype === "string") {
       try {
         const strings = data.map((d) => util_exports.decodeString(d));
-        return buffer(t3.shape, t3.dtype, strings);
+        return buffer(t.shape, t.dtype, strings);
       } catch (_a) {
         throw new Error("Failed to decode encoded string bytes into utf-8");
       }
     }
-    return buffer(t3.shape, t3.dtype, data);
+    return buffer(t.shape, t.dtype, data);
   }
   checkNumericalProblems(values) {
     if (values == null) {
@@ -63468,16 +54520,10 @@ function float32ToTypedArray(a, dtype) {
     throw new Error(`Unknown dtype ${dtype}`);
   }
 }
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/version.js
 var version6 = "4.22.0";
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/webgl.js
 function forceHalfFloat() {
   env().set("WEBGL_FORCE_F16_TEXTURES", true);
 }
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/base.js
 if (device_util_exports.isBrowser()) {
   registerBackend(
     "webgl",
@@ -63487,8 +54533,6 @@ if (device_util_exports.isBrowser()) {
   );
 }
 var webgl = { forceHalfFloat };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/binaryop_gpu.js
 var CHECK_NAN_SNIPPET2 = `
   if (isnan(a)) return a;
   if (isnan(b)) return b;
@@ -63511,8 +54555,6 @@ var BinaryOpProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/binaryop_packed_gpu.js
 var CHECK_NAN_SNIPPET_PACKED = `
   result.r = isNaN.r ? NAN : result.r;
   result.g = isNaN.g ? NAN : result.g;
@@ -63598,8 +54640,6 @@ var BinaryOpPackedProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Identity.js
 function identity3(args) {
   const { inputs, backend: backend2 } = args;
   const { x } = inputs;
@@ -63611,8 +54651,6 @@ var identityConfig2 = {
   backendName: "webgl",
   kernelFunc: identity3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Complex.js
 function complex3(args) {
   const { inputs, backend: backend2 } = args;
   const { real: real4, imag: imag4 } = inputs;
@@ -63628,8 +54666,6 @@ var complexConfig2 = {
   backendName: "webgl",
   kernelFunc: complex3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/LeakyRelu.js
 var LEAKYRELU = `return (a < 0.) ? b * a : a;`;
 var LEAKYRELU_PACKED = `
   vec4 aLessThanZero = vec4(lessThan(a, vec4(0.)));
@@ -63650,8 +54686,6 @@ var leakyReluConfig2 = {
   backendName: "webgl",
   kernelFunc: leakyRelu3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Prelu.js
 var PRELU = `return (a < 0.) ? b * a : a;`;
 var PRELU_PACKED = `
   vec4 aLessThanZero = vec4(lessThan(a, vec4(0.)));
@@ -63668,8 +54702,6 @@ var preluConfig2 = {
   backendName: "webgl",
   kernelFunc: prelu4
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernel_utils/kernel_funcs_utils.js
 var CHECK_NAN_SNIPPET_UNARY = `if (isnan(x)) return x;`;
 function unaryKernelFunc2({ opSnippet, packedOpSnippet, cpuKernelImpl, dtype }) {
   return ({ inputs, backend: backend2 }) => {
@@ -63788,8 +54820,6 @@ function mapActivationToShaderProgram(activation2, packed = false) {
   }
   throw new Error(`Activation ${activation2} has not been implemented for the WebGL backend.`);
 }
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/mulmat_packed_gpu.js
 var MatMulPackedProgram = class {
   constructor(aShape, bShape, outputShape, transposeA = false, transposeB = false, addBias = false, activation2 = null, hasPreluActivation = false, hasLeakyreluActivation = false) {
     this.variableNames = ["matrixA", "matrixB"];
@@ -63873,8 +54903,6 @@ var MatMulPackedProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/binaryop_complex_gpu.js
 var COMPLEX_MULTIPLY = {
   REAL: "return areal * breal - aimag * bimag;",
   IMAG: "return areal * bimag + aimag * breal;"
@@ -63899,8 +54927,6 @@ var BinaryOpComplexProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Multiply.js
 var MUL = "return a * b;";
 function multiply3(args) {
   const { inputs, backend: backend2 } = args;
@@ -63962,8 +54988,6 @@ var multiplyConfig2 = {
   backendName: "webgl",
   kernelFunc: multiply3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernel_utils/reshape.js
 function packedReshape(input2, afterShape, backend2) {
   const input3DShape = [
     getBatchDim(input2.shape),
@@ -63984,8 +55008,6 @@ function packedReshape(input2, afterShape, backend2) {
   const output = backend2.runWebGLProgram(program, [input3D], input2.dtype, customValues, preventEagerUnpackingOfOutput);
   return { dataId: output.dataId, shape: afterShape, dtype: output.dtype };
 }
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Reshape.js
 function reshape4(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -64007,8 +55029,6 @@ var reshapeConfig2 = {
   backendName: "webgl",
   kernelFunc: reshape4
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/mean_gpu.js
 var MeanProgram = class {
   constructor(reduceInfo, divisor) {
     this.variableNames = ["x"];
@@ -64081,8 +55101,6 @@ var MeanProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/reduce_gpu.js
 var ReduceProgram = class {
   constructor(reduceInfo, reduceType) {
     this.variableNames = ["x"];
@@ -64221,8 +55239,6 @@ var ReduceProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernel_utils/reduce.js
 function getReductionStages(inShape) {
   const stages = [];
   while (stages.length === 0 || stages[stages.length - 1].outSize !== 1) {
@@ -64256,8 +55272,6 @@ function reduce(x, dtype, reductionType, backend2) {
   }
   return result;
 }
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/transpose_gpu.js
 var TransposeProgram = class {
   constructor(aShape, newDim) {
     this.variableNames = ["A"];
@@ -64289,8 +55303,6 @@ function getSwitchedCoords(newDim) {
   }
   return switchedCoords.join();
 }
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/transpose_packed_gpu.js
 var TransposePackedProgram = class {
   constructor(aShape, newDim) {
     this.variableNames = ["A"];
@@ -64334,14 +55346,10 @@ var TransposePackedProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Transpose_impl.js
 function transposeImpl2(x, perm, backend2) {
   const program = env().getBool("WEBGL_PACK_ARRAY_OPERATIONS") ? new TransposePackedProgram(x.shape, perm) : new TransposeProgram(x.shape, perm);
   return backend2.runWebGLProgram(program, [x], x.dtype);
 }
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Sum_impl.js
 function sumImpl(x, axis, keepDims, backend2) {
   const reductionIndices = axis;
   const xRank = x.shape.length;
@@ -64374,8 +55382,6 @@ function sumImpl(x, axis, keepDims, backend2) {
   }
   return out;
 }
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Sum.js
 function sum4(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -64387,8 +55393,6 @@ var sumConfig2 = {
   backendName: "webgl",
   kernelFunc: sum4
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Transpose.js
 function transpose3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -64417,8 +55421,6 @@ var transposeConfig2 = {
   backendName: "webgl",
   kernelFunc: transpose3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/BatchMatMul_impl.js
 var MATMUL_SHARED_DIM_THRESHOLD = 1e3;
 function batchMatMulImpl({ a, b, transposeA, transposeB, backend: backend2, bias = null, preluActivationWeights = null, leakyreluAlpha = 0, activation: activation2 = null }) {
   const aRank = a.shape.length;
@@ -64506,8 +55508,6 @@ function batchMatMulImpl({ a, b, transposeA, transposeB, backend: backend2, bias
   }
   return outReshaped;
 }
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/_FusedMatMul.js
 function _fusedMatMul2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { a, b, bias, preluActivationWeights } = inputs;
@@ -64529,8 +55529,6 @@ var _fusedMatMulConfig2 = {
   backendName: "webgl",
   kernelFunc: _fusedMatMul2
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Abs.js
 var ABS2 = `return abs(x);`;
 function abs3(args) {
   const { inputs, backend: backend2 } = args;
@@ -64553,8 +55551,6 @@ var absConfig2 = {
   backendName: "webgl",
   kernelFunc: abs3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Acos.js
 var ACOS = CHECK_NAN_SNIPPET + `
   if (abs(x) > 1.) {
     return NAN;
@@ -64567,8 +55563,6 @@ var acosConfig2 = {
   backendName: "webgl",
   kernelFunc: acos3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Acosh.js
 var ACOSH = CHECK_NAN_SNIPPET + `
   if (x < 1.0) return NAN;
 return log(x + sqrt(x * x - 1.0));`;
@@ -64578,8 +55572,6 @@ var acoshConfig2 = {
   backendName: "webgl",
   kernelFunc: acosh3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Add.js
 var ADD = "return a + b;";
 var addKernelFunc = binaryKernelFunc2({
   opSnippet: ADD,
@@ -64592,13 +55584,11 @@ var addConfig2 = {
   backendName: "webgl",
   kernelFunc: addKernelFunc
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/addn_gpu.js
 var AddNProgram = class {
   constructor(outputShape, shapes) {
     this.outputShape = [];
     this.outputShape = outputShape;
-    this.variableNames = shapes.map((_3, i) => `T${i}`);
+    this.variableNames = shapes.map((_, i) => `T${i}`);
     const snippets = [];
     this.variableNames.forEach((variable2) => {
       snippets.push(`float v${variable2} = get${variable2}AtOutCoords();`);
@@ -64616,15 +55606,13 @@ var AddNProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/addn_packed_gpu.js
 var AddNPackedProgram = class {
   constructor(outputShape, shapes) {
     this.outputShape = [];
     this.packedInputs = true;
     this.packedOutput = true;
     this.outputShape = outputShape;
-    this.variableNames = shapes.map((_3, i) => `T${i}`);
+    this.variableNames = shapes.map((_, i) => `T${i}`);
     const snippets = [];
     this.variableNames.forEach((variable2) => {
       snippets.push(`vec4 v${variable2} = get${variable2}AtOutCoords();`);
@@ -64642,8 +55630,6 @@ var AddNPackedProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/AddN.js
 function addN3(args) {
   const { inputs, backend: backend2 } = args;
   const tensors = inputs;
@@ -64656,8 +55642,8 @@ function addN3(args) {
     const rightSide = addN3({ inputs: tensors.slice(midIndex), backend: backend2 });
     return addN3({ inputs: [leftSide, rightSide], backend: backend2 });
   }
-  const dtype = tensors.map((t3) => t3.dtype).reduce((d1, d2) => upcastType(d1, d2));
-  const shapes = tensors.map((t3) => t3.shape);
+  const dtype = tensors.map((t) => t.dtype).reduce((d1, d2) => upcastType(d1, d2));
+  const shapes = tensors.map((t) => t.shape);
   const usePackedOp = env().getBool("WEBGL_PACK");
   const program = usePackedOp ? new AddNPackedProgram(tensors[0].shape, shapes) : new AddNProgram(tensors[0].shape, shapes);
   return backend2.runWebGLProgram(program, tensors, dtype);
@@ -64667,8 +55653,6 @@ var addNConfig2 = {
   backendName: "webgl",
   kernelFunc: addN3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/All.js
 function all3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -64706,8 +55690,6 @@ var allConfig2 = {
   backendName: "webgl",
   kernelFunc: all3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Any.js
 function any3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -64745,8 +55727,6 @@ var anyConfig2 = {
   backendName: "webgl",
   kernelFunc: any3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/argminmax_gpu.js
 var ArgMinMaxProgram = class {
   constructor(reduceInfo, op2, firstPass) {
     this.variableNames = ["A"];
@@ -64780,8 +55760,6 @@ var ArgMinMaxProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/argminmax_packed_gpu.js
 var ArgMinMaxPackedProgram = class {
   constructor(shape, windowSize, op2, firstPass) {
     this.variableNames = ["A"];
@@ -64887,8 +55865,6 @@ var ArgMinMaxPackedProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernel_utils/arg_min_max.js
 function argReduce(backend2, x, reduceType, bestIndicesA = null) {
   let batchSize = x.shape[0];
   let inSize = x.shape[1];
@@ -64944,13 +55920,11 @@ function argMinMaxReduce(backend2, x, axis, reduceType) {
     const reduced = argReduce(backend2, a2D, reduceType);
     intermediateTensorInfos.push(reduced);
     const reshaped = reshape4({ inputs: { x: reduced }, backend: backend2, attrs: { shape: outShape } });
-    intermediateTensorInfos.forEach((t3) => backend2.disposeIntermediateTensorInfo(t3));
+    intermediateTensorInfos.forEach((t) => backend2.disposeIntermediateTensorInfo(t));
     return reshaped;
   }
   return argReducePacked(backend2, x, reduceType);
 }
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/ArgMax.js
 function argMax3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -64966,7 +55940,7 @@ function argMax3(args) {
   }
   backend_util_exports.assertAxesAreInnerMostDims("argMax", [axes[0]], $x.shape.length);
   const out = argMinMaxReduce(backend2, $x, axes[0], "max");
-  intermediateTensorInfos.forEach((t3) => backend2.disposeIntermediateTensorInfo(t3));
+  intermediateTensorInfos.forEach((t) => backend2.disposeIntermediateTensorInfo(t));
   return out;
 }
 var argMaxConfig2 = {
@@ -64974,8 +55948,6 @@ var argMaxConfig2 = {
   backendName: "webgl",
   kernelFunc: argMax3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/ArgMin.js
 function argMin3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -64991,7 +55963,7 @@ function argMin3(args) {
   }
   backend_util_exports.assertAxesAreInnerMostDims("argMin", [axes[0]], $x.shape.length);
   const out = argMinMaxReduce(backend2, $x, axes[0], "min");
-  intermediateTensorInfos.forEach((t3) => backend2.disposeIntermediateTensorInfo(t3));
+  intermediateTensorInfos.forEach((t) => backend2.disposeIntermediateTensorInfo(t));
   return out;
 }
 var argMinConfig2 = {
@@ -64999,8 +55971,6 @@ var argMinConfig2 = {
   backendName: "webgl",
   kernelFunc: argMin3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Asin.js
 var ASIN = CHECK_NAN_SNIPPET + `
   if (abs(x) > 1.) {
     return NAN;
@@ -65013,8 +55983,6 @@ var asinConfig2 = {
   backendName: "webgl",
   kernelFunc: asin3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Asinh.js
 var ASINH = CHECK_NAN_SNIPPET + `return log(x + sqrt(x * x + 1.0));`;
 var asinh3 = unaryKernelFunc2({ opSnippet: ASINH });
 var asinhConfig2 = {
@@ -65022,8 +55990,6 @@ var asinhConfig2 = {
   backendName: "webgl",
   kernelFunc: asinh3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Atan.js
 var ATAN = CHECK_NAN_SNIPPET + `
   return atan(x);
 `;
@@ -65033,8 +55999,6 @@ var atanConfig2 = {
   backendName: "webgl",
   kernelFunc: atan4
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Atan2.js
 var ATAN2 = CHECK_NAN_SNIPPET2 + `
   return atan(a, b);
 `;
@@ -65052,8 +56016,6 @@ var atan2Config2 = {
   backendName: "webgl",
   kernelFunc: atan23
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Atanh.js
 var ATANH = CHECK_NAN_SNIPPET + `
   if ((x < -1.0) || (x > 1.0)) return NAN;
 return (log(1.0 + x) - log(1.0 - x)) / 2.0;`;
@@ -65063,8 +56025,6 @@ var atanhConfig2 = {
   backendName: "webgl",
   kernelFunc: atanh3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/pool_gpu.js
 var Pool2DProgram = class {
   constructor(convInfo, poolType, computePositions, flattenPositions = false, includeBatchInIndex = false) {
     this.variableNames = ["x"];
@@ -65449,8 +56409,6 @@ var Pool3DProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/AvgPool.js
 function avgPool3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -65470,8 +56428,6 @@ var avgPoolConfig2 = {
   backendName: "webgl",
   kernelFunc: avgPool3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/AvgPool3D.js
 function avgPool3D2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -65486,8 +56442,6 @@ var avgPool3DConfig2 = {
   backendName: "webgl",
   kernelFunc: avgPool3D2
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/avg_pool_backprop_gpu.js
 var AvgPool2DBackpropProgram = class {
   constructor(convInfo) {
     this.variableNames = ["dy"];
@@ -65627,8 +56581,6 @@ var AvgPool3DBackpropProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/AvgPool3DGrad.js
 function avgPool3DGrad2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { dy, input: input2 } = inputs;
@@ -65644,8 +56596,6 @@ var avgPool3DGradConfig3 = {
   backendName: "webgl",
   kernelFunc: avgPool3DGrad2
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/AvgPoolGrad.js
 function avgPoolGrad3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { dy, input: input2 } = inputs;
@@ -65661,8 +56611,6 @@ var avgPoolGradConfig3 = {
   backendName: "webgl",
   kernelFunc: avgPoolGrad3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/BatchMatMul.js
 function batchMatMul2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { a, b } = inputs;
@@ -65674,8 +56622,6 @@ var batchMatMulConfig2 = {
   backendName: "webgl",
   kernelFunc: batchMatMul2
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/batchnorm_gpu.js
 var BatchNormProgram = class {
   constructor(xShape, meanShape, varianceShape, offsetShape, scaleShape, varianceEpsilon) {
     this.outputShape = [];
@@ -65708,8 +56654,6 @@ var BatchNormProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/batchnorm_packed_gpu.js
 var BatchNormPackedProgram = class {
   constructor(xShape, meanShape, varianceShape, offsetShape, scaleShape, varianceEpsilon) {
     this.packedInputs = true;
@@ -65746,8 +56690,6 @@ var BatchNormPackedProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/BatchNorm.js
 var batchNorm3 = ({ inputs, backend: backend2, attrs }) => {
   const { x, mean: mean3, variance, offset, scale: scale2 } = inputs;
   util_exports.assert(mean3.shape.length === variance.shape.length, () => "Batch normalization gradient requires mean and variance to have equal ranks.");
@@ -65777,8 +56719,6 @@ var batchNormConfig2 = {
   backendName: "webgl",
   kernelFunc: batchNorm3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/slice_gpu.js
 var SliceProgram = class {
   constructor(destSize) {
     this.variableNames = ["source"];
@@ -65788,7 +56728,7 @@ var SliceProgram = class {
     this.customUniforms = [{ name: "start", arrayIndex: this.rank, type: "int" }];
     const sourceCoords = getCoords(this.rank);
     let body;
-    const coordSum = destSize.map((_3, i) => {
+    const coordSum = destSize.map((_, i) => {
       return `sourceLoc.${coords[i]} = start[${i}] + coords.${coords[i]};`;
     });
     body = `
@@ -65814,8 +56754,6 @@ function getCoords(rank) {
     throw Error(`Slicing for rank ${rank} is not yet supported`);
   }
 }
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/slice_packed_gpu.js
 var SlicePackedProgram = class {
   constructor(destSize) {
     this.variableNames = ["source"];
@@ -65849,7 +56787,7 @@ var SlicePackedProgram = class {
       }
     `;
     const sourceLocSetup = this.rank <= 4 ? `sourceLoc = coords +
-            ${dtype}(${destSize.map((_3, i) => `start[${i}]`).join()});` : destSize.map((_3, i) => `${sourceLoc[i]} = ${coords2[i]} + start[${i}];`).join("\n");
+            ${dtype}(${destSize.map((_, i) => `start[${i}]`).join()});` : destSize.map((_, i) => `${sourceLoc[i]} = ${coords2[i]} + start[${i}];`).join("\n");
     this.userCode = `
       void main() {
         ${dtype} coords = getOutputCoords();
@@ -65863,12 +56801,10 @@ var SlicePackedProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Slice.js
 function shallowSlice(x, begin, size, backend2) {
   const xTexData = backend2.texData.get(x.dataId);
-  const t3 = backend2.makeTensorInfo(size, x.dtype);
-  const newTexData = backend2.texData.get(t3.dataId);
+  const t = backend2.makeTensorInfo(size, x.dtype);
+  const newTexData = backend2.texData.get(t.dataId);
   Object.assign(newTexData, xTexData);
   newTexData.refCount = 1;
   newTexData.shape = size;
@@ -65884,7 +56820,7 @@ function shallowSlice(x, begin, size, backend2) {
   };
   const refCount = backend2.dataRefCount.get(newTexData.slice.origDataId) || 1;
   backend2.dataRefCount.set(newTexData.slice.origDataId, refCount + 1);
-  return t3;
+  return t;
 }
 function slice3(args) {
   const { inputs, backend: backend2, attrs } = args;
@@ -65915,8 +56851,6 @@ var sliceConfig2 = {
   backendName: "webgl",
   kernelFunc: slice3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/BatchToSpaceND.js
 var batchToSpaceND3 = (args) => {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -65944,7 +56878,7 @@ var batchToSpaceND3 = (args) => {
   toDispose.push(reshapedIntermediate);
   toDispose.push(transposedIntermediate);
   toDispose.push(reshapedIntermediate2);
-  toDispose.forEach((t3) => backend2.disposeIntermediateTensorInfo(t3));
+  toDispose.forEach((t) => backend2.disposeIntermediateTensorInfo(t));
   return sliced;
 };
 var batchToSpaceNDConfig2 = {
@@ -65952,8 +56886,6 @@ var batchToSpaceNDConfig2 = {
   backendName: "webgl",
   kernelFunc: batchToSpaceND3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Bincount.js
 function bincount3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x, weights } = inputs;
@@ -65968,8 +56900,6 @@ var bincountConfig2 = {
   backendName: "webgl",
   kernelFunc: bincount3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/BitwiseAnd.js
 var BITWISEAND = `
   int r = int(a.r) & int(b.r);
   int g = int(a.g) & int(b.g);
@@ -66007,8 +56937,6 @@ var bitwiseAndConfig2 = {
   backendName: "webgl",
   kernelFunc: bitwiseAnd3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/BroadcastArgs.js
 function broadcastArgs3(args) {
   const { inputs, backend: backend2 } = args;
   const { s0, s1 } = inputs;
@@ -66022,8 +56950,6 @@ var broadcastArgsConfig2 = {
   backendName: "webgl",
   kernelFunc: broadcastArgs3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/NotEqual.js
 var NOT_EQUAL = `return float(a != b);`;
 var notEqual3 = binaryKernelFunc2({ opSnippet: NOT_EQUAL, cpuKernelImpl: notEqualImplCPU, dtype: "bool" });
 var notEqualConfig2 = {
@@ -66031,8 +56957,6 @@ var notEqualConfig2 = {
   backendName: "webgl",
   kernelFunc: notEqual3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Real.js
 function real3(args) {
   const { inputs, backend: backend2 } = args;
   const { input: input2 } = inputs;
@@ -66044,16 +56968,12 @@ var realConfig2 = {
   backendName: "webgl",
   kernelFunc: real3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernel_utils/int.js
 var TO_INT = `return float(int(x));`;
 function int(input2, backend2) {
   const program = new UnaryOpProgram(input2.shape, TO_INT);
   const output = backend2.runWebGLProgram(program, [input2], "int32");
   return { dataId: output.dataId, shape: output.shape, dtype: output.dtype };
 }
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Cast.js
 function cast4(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -66101,8 +57021,6 @@ var castConfig2 = {
   backendName: "webgl",
   kernelFunc: cast4
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Ceil.js
 var CEIL = `return ceil(x);`;
 var ceil3 = unaryKernelFunc2({ opSnippet: CEIL, packedOpSnippet: CEIL, cpuKernelImpl: ceilImplCPU });
 var ceilConfig2 = {
@@ -66110,8 +57028,6 @@ var ceilConfig2 = {
   backendName: "webgl",
   kernelFunc: ceil3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/clip_gpu.js
 var ClipProgram = class {
   constructor(aShape) {
     this.variableNames = ["A"];
@@ -66134,8 +57050,6 @@ var ClipProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/clip_packed_gpu.js
 var ClipPackedProgram = class {
   constructor(aShape) {
     this.variableNames = ["A"];
@@ -66160,8 +57074,6 @@ var ClipPackedProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/ClipByValue.js
 function clipByValue3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -66180,8 +57092,6 @@ var clipByValueConfig2 = {
   backendName: "webgl",
   kernelFunc: clipByValue3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/complex_abs_gpu.js
 var ComplexAbsProgram = class {
   constructor(shape) {
     this.variableNames = ["real", "imag"];
@@ -66202,8 +57112,6 @@ var ComplexAbsProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/ComplexAbs.js
 function makeComplexComponentTensorInfo(complexTensor, complexPart) {
   return {
     dataId: complexPart.dataId,
@@ -66227,8 +57135,6 @@ var complexAbsConfig2 = {
   backendName: "webgl",
   kernelFunc: complexAbs2
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/concat_gpu.js
 var ConcatProgram = class {
   // Concats 2d tensors along axis=1. See comments in MathBackendWebGL.concat().
   constructor(shapes) {
@@ -66238,7 +57144,7 @@ var ConcatProgram = class {
       1
       /* axis */
     );
-    this.variableNames = shapes.map((_3, i) => `T${i}`);
+    this.variableNames = shapes.map((_, i) => `T${i}`);
     const offsets = new Array(shapes.length - 1);
     offsets[0] = shapes[0][1];
     for (let i = 1; i < offsets.length; i++) {
@@ -66263,8 +57169,6 @@ var ConcatProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/concat_packed_gpu.js
 var ConcatPackedProgram = class {
   constructor(shapes, axis) {
     this.packedInputs = true;
@@ -66276,7 +57180,7 @@ var ConcatPackedProgram = class {
     const dtype = getCoordsDataType(rank);
     const coords2 = getChannels("coords", rank);
     const channels = ["x", "y", "z", "w", "u", "v"].slice(0, rank);
-    this.variableNames = shapes.map((_3, i) => `T${i}`);
+    this.variableNames = shapes.map((_, i) => `T${i}`);
     const offsets = new Array(shapes.length - 1);
     offsets[0] = shapes[0][axis];
     for (let i = 1; i < offsets.length; i++) {
@@ -66344,8 +57248,6 @@ function shiftedChannels(channels, channel, shift) {
   });
   return res.join();
 }
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Imag.js
 function imag3(args) {
   const { inputs, backend: backend2 } = args;
   const { input: input2 } = inputs;
@@ -66357,13 +57259,11 @@ var imagConfig2 = {
   backendName: "webgl",
   kernelFunc: imag3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Concat_impl.js
 function concatImpl2(inputs, axis, backend2) {
   const dtype = inputs[0].dtype;
   if (dtype === "complex64") {
-    const reals = inputs.map((t3) => real3({ inputs: { input: t3 }, backend: backend2 }));
-    const imags = inputs.map((t3) => imag3({ inputs: { input: t3 }, backend: backend2 }));
+    const reals = inputs.map((t) => real3({ inputs: { input: t }, backend: backend2 }));
+    const imags = inputs.map((t) => imag3({ inputs: { input: t }, backend: backend2 }));
     const realConcated = concatImpl2(reals, axis, backend2);
     const imagConcated = concatImpl2(imags, axis, backend2);
     const result2 = complex3({ inputs: { real: realConcated, imag: imagConcated }, backend: backend2 });
@@ -66378,27 +57278,27 @@ function concatImpl2(inputs, axis, backend2) {
     runOnCpu = true;
   }
   if (runOnCpu) {
-    const tensors2D2 = inputs.map((t3) => {
-      const innerSize = util_exports.sizeFromShape(t3.shape.slice(axis));
+    const tensors2D2 = inputs.map((t) => {
+      const innerSize = util_exports.sizeFromShape(t.shape.slice(axis));
       const shape = [-1, innerSize];
-      return reshape4({ inputs: { x: t3 }, backend: backend2, attrs: { shape } });
+      return reshape4({ inputs: { x: t }, backend: backend2, attrs: { shape } });
     });
-    const inputsValShapes = tensors2D2.map((t3) => {
-      return { vals: backend2.readSync(t3.dataId), shape: t3.shape };
+    const inputsValShapes = tensors2D2.map((t) => {
+      return { vals: backend2.readSync(t.dataId), shape: t.shape };
     });
     const outShape2 = backend_util_exports.computeOutShape(
-      tensors2D2.map((t3) => t3.shape),
+      tensors2D2.map((t) => t.shape),
       1
       /* axis */
     );
     const simplyConcat = tensors2D2[0].shape[0] === 1;
     const outVals = concatImplCPU(inputsValShapes, outShape2, dtype, simplyConcat);
-    const finalOutShape = backend_util_exports.computeOutShape(inputs.map((t3) => t3.shape), axis);
+    const finalOutShape = backend_util_exports.computeOutShape(inputs.map((t) => t.shape), axis);
     const outInfo = backend2.makeTensorInfo(finalOutShape, dtype, outVals);
-    tensors2D2.forEach((t3) => backend2.disposeIntermediateTensorInfo(t3));
+    tensors2D2.forEach((t) => backend2.disposeIntermediateTensorInfo(t));
     return outInfo;
   }
-  const $inputs = inputs.filter((t3) => util_exports.sizeFromShape(t3.shape) > 0);
+  const $inputs = inputs.filter((t) => util_exports.sizeFromShape(t.shape) > 0);
   const shouldPack = env().getBool("WEBGL_PACK_ARRAY_OPERATIONS") && $inputs[0].shape.length > 1;
   if ($inputs.length === 1) {
     const program2 = shouldPack ? new UnaryOpProgram(inputs[0].shape, CLONE) : new UnaryOpPackedProgram(inputs[0].shape, CLONE);
@@ -66418,11 +57318,11 @@ function concatImpl2(inputs, axis, backend2) {
     return result2;
   }
   if (shouldPack) {
-    const program2 = new ConcatPackedProgram($inputs.map((t3) => t3.shape), axis);
+    const program2 = new ConcatPackedProgram($inputs.map((t) => t.shape), axis);
     return backend2.runWebGLProgram(program2, $inputs, dtype);
   }
   const { tensors2D, outShape } = computeTensors2D($inputs, axis, backend2);
-  const program = new ConcatProgram(tensors2D.map((t3) => t3.shape));
+  const program = new ConcatProgram(tensors2D.map((t) => t.shape));
   const result = backend2.runWebGLProgram(program, tensors2D, dtype);
   tensors2D.forEach((r) => backend2.disposeIntermediateTensorInfo(r));
   const reshapedResult = reshape4({ inputs: { x: result }, attrs: { shape: outShape }, backend: backend2 });
@@ -66430,7 +57330,7 @@ function concatImpl2(inputs, axis, backend2) {
   return reshapedResult;
 }
 function computeTensors2D(inputs, axis, backend2) {
-  const outShape = backend_util_exports.computeOutShape(inputs.map((t3) => t3.shape), axis);
+  const outShape = backend_util_exports.computeOutShape(inputs.map((t) => t.shape), axis);
   const tensors2D = inputs.map((x) => reshape4({
     inputs: { x },
     attrs: { shape: [-1, util_exports.sizeFromShape(x.shape.slice(axis))] },
@@ -66438,19 +57338,17 @@ function computeTensors2D(inputs, axis, backend2) {
   }));
   return { tensors2D, outShape };
 }
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Concat.js
 function concat3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { axis } = attrs;
   const $axis = util_exports.parseAxisParam(axis, inputs[0].shape)[0];
-  const shapes = inputs.map((t3) => t3.shape);
+  const shapes = inputs.map((t) => t.shape);
   backend_util_exports.assertParamsConsistent(shapes, $axis);
-  const outShape = backend_util_exports.computeOutShape(inputs.map((t3) => t3.shape), $axis);
+  const outShape = backend_util_exports.computeOutShape(inputs.map((t) => t.shape), $axis);
   if (util_exports.sizeFromShape(outShape) === 0) {
     return backend2.makeTensorInfo(outShape, inputs[0].dtype, []);
   }
-  const $inputs = inputs.filter((t3) => util_exports.sizeFromShape(t3.shape) > 0);
+  const $inputs = inputs.filter((t) => util_exports.sizeFromShape(t.shape) > 0);
   if ($inputs.length === 1) {
     return identity3({ inputs: { x: $inputs[0] }, backend: backend2 });
   }
@@ -66461,8 +57359,6 @@ var concatConfig2 = {
   backendName: "webgl",
   kernelFunc: concat3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/conv_gpu.js
 var Conv2DProgram = class {
   constructor(convInfo, addBias = false, activation2 = null, hasPreluActivationWeights = false, hasLeakyreluAlpha = false) {
     this.variableNames = ["x", "W"];
@@ -66748,8 +57644,6 @@ var Conv3DProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/conv_packed_gpu.js
 var Conv2DPackedProgram = class {
   constructor(convInfo, addBias = false, activation2 = null, hasPreluActivation = false, hasLeakyReluAlpha = false) {
     this.variableNames = ["x", "W"];
@@ -67056,8 +57950,6 @@ var Conv2DPackedProgram = class {
      `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/im2col_packed_gpu.js
 var Im2ColPackedProgram = class {
   constructor(outputShape, convInfo) {
     this.variableNames = ["A"];
@@ -67136,8 +58028,6 @@ var Im2ColPackedProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Conv2D_impl.js
 function getShapeForBatchMatMul(shape, isChannelsLast) {
   const length = shape.length;
   if (length >= 3) {
@@ -67331,8 +58221,6 @@ function conv2dWithIm2Row({ x, filter, convInfo, backend: backend2, bias = null,
   }
   return out;
 }
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Conv2D.js
 function conv2d4(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x, filter } = inputs;
@@ -67366,8 +58254,6 @@ var conv2DConfig2 = {
   backendName: "webgl",
   kernelFunc: conv2d4
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/conv_backprop_gpu.js
 var Conv2DDerFilterProgram = class {
   constructor(convInfo) {
     this.variableNames = ["x", "dy"];
@@ -67615,8 +58501,6 @@ var Conv3DDerInputProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Conv2DBackpropFilter.js
 function conv2DBackpropFilter3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x, dy } = inputs;
@@ -67631,8 +58515,6 @@ var conv2DBackpropFilterConfig2 = {
   backendName: "webgl",
   kernelFunc: conv2DBackpropFilter3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/conv_backprop_packed_gpu.js
 var Conv2DDerInputPackedProgram = class {
   constructor(convInfo) {
     this.variableNames = ["dy", "W"];
@@ -67724,8 +58606,6 @@ var Conv2DDerInputPackedProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Conv2DBackpropInput.js
 function conv2DBackpropInput3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { dy, filter } = inputs;
@@ -67748,8 +58628,6 @@ var conv2DBackpropInputConfig2 = {
   backendName: "webgl",
   kernelFunc: conv2DBackpropInput3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Conv3D.js
 function conv3D2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x, filter } = inputs;
@@ -67763,8 +58641,6 @@ var conv3DConfig2 = {
   backendName: "webgl",
   kernelFunc: conv3D2
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Conv3DBackpropFilterV2.js
 function conv3DBackpropFilterV22(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x, dy } = inputs;
@@ -67778,8 +58654,6 @@ var conv3DBackpropFilterV2Config2 = {
   backendName: "webgl",
   kernelFunc: conv3DBackpropFilterV22
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Conv3DBackpropInputV2.js
 function conv3DBackpropInput2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { dy, filter } = inputs;
@@ -67793,8 +58667,6 @@ var conv3DBackpropInputConfig = {
   backendName: "webgl",
   kernelFunc: conv3DBackpropInput2
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Cos.js
 var COS = CHECK_NAN_SNIPPET_UNARY + `
   return cos(x);
 `;
@@ -67810,8 +58682,6 @@ var cosConfig2 = {
   backendName: "webgl",
   kernelFunc: cos3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Cosh.js
 var COSH = `
   float e2x = exp(-x);
   return (e2x + 1.0 / e2x) / 2.0;
@@ -67822,8 +58692,6 @@ var coshConfig2 = {
   backendName: "webgl",
   kernelFunc: cosh3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/crop_and_resize_gpu.js
 var CropAndResizeProgram = class {
   constructor(imageShape, boxShape, cropSize, method, extrapolationValue) {
     this.variableNames = ["Image", "Boxes", "BoxInd"];
@@ -67916,8 +58784,6 @@ var CropAndResizeProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/CropAndResize.js
 var cropAndResize4 = (args) => {
   const { inputs, backend: backend2, attrs } = args;
   const { image: image2, boxes, boxInd } = inputs;
@@ -67930,8 +58796,6 @@ var cropAndResizeConfig2 = {
   backendName: "webgl",
   kernelFunc: cropAndResize4
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/cum_gpu.js
 var CumOpType;
 (function(CumOpType2) {
   CumOpType2["Prod"] = "*";
@@ -67998,8 +58862,6 @@ function getFinalCoord(rank, name, op2) {
     throw new Error(`Cumulative ${op2} for rank ${rank} is not yet supported`);
   }
 }
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Cum_impl.js
 function cumImpl(op2, x, backend2, axis, exclusive, reverse4) {
   const xRank = x.shape.length;
   const permutation = backend_util_exports.getAxesPermutation([axis], xRank);
@@ -68035,8 +58897,6 @@ function cumImpl(op2, x, backend2, axis, exclusive, reverse4) {
   }
   return result;
 }
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Cumprod.js
 function cumprod3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -68048,8 +58908,6 @@ var cumprodConfig2 = {
   backendName: "webgl",
   kernelFunc: cumprod3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Cumsum.js
 function cumsum3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -68061,8 +58919,6 @@ var cumsumConfig2 = {
   backendName: "webgl",
   kernelFunc: cumsum3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/DenseBincount.js
 function denseBincount3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x, weights } = inputs;
@@ -68085,8 +58941,6 @@ var denseBincountConfig2 = {
   backendName: "webgl",
   kernelFunc: denseBincount3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/depth_to_space_gpu.js
 var DepthToSpaceProgram = class {
   constructor(outputShape, blockSize, dataFormat) {
     this.variableNames = ["x"];
@@ -68151,8 +59005,6 @@ var DepthToSpaceProgram = class {
     }
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/DepthToSpace.js
 function depthToSpace3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -68173,8 +59025,6 @@ var depthToSpaceConfig2 = {
   backendName: "webgl",
   kernelFunc: depthToSpace3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/conv_gpu_depthwise.js
 var DepthwiseConv2DProgram = class {
   constructor(convInfo, addBias = false, activation2 = null, hasPreluActivation = false, hasLeakyReluAlpha = false) {
     this.variableNames = ["x", "W"];
@@ -68266,8 +59116,6 @@ var DepthwiseConv2DProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/conv_packed_gpu_depthwise.js
 var DepthwiseConvPacked2DProgram = class {
   constructor(convInfo, addBias = false, activation2 = null, hasPreluActivation = false, hasLeakyReluAlpha = false) {
     this.variableNames = ["x", "W"];
@@ -68567,8 +59415,6 @@ var DepthwiseConvPacked2DProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/DepthwiseConv2dNative.js
 function depthwiseConv2dNative2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x, filter } = inputs;
@@ -68607,8 +59453,6 @@ var depthwiseConv2dNativeConfig2 = {
   backendName: "webgl",
   kernelFunc: depthwiseConv2dNative2
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/conv_backprop_gpu_depthwise.js
 var DepthwiseConv2DDerFilterProgram = class {
   constructor(convInfo) {
     this.variableNames = ["x", "dy"];
@@ -68715,8 +59559,6 @@ var DepthwiseConv2DDerInputProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/DepthwiseConv2dNativeBackpropFilter.js
 function depthwiseConv2dNativeBackpropFilter3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x, dy } = inputs;
@@ -68739,8 +59581,6 @@ var depthwiseConv2dNativeBackpropFilterConfig2 = {
   backendName: "webgl",
   kernelFunc: depthwiseConv2dNativeBackpropFilter3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/DepthwiseConv2dNativeBackpropInput.js
 function depthwiseConv2dNativeBackpropInput3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { dy, filter } = inputs;
@@ -68763,8 +59603,6 @@ var depthwiseConv2dNativeBackpropInputConfig2 = {
   backendName: "webgl",
   kernelFunc: depthwiseConv2dNativeBackpropInput3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/diag_gpu.js
 var DiagProgram = class {
   constructor(size) {
     this.variableNames = ["X"];
@@ -68778,8 +59616,6 @@ var DiagProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Diag.js
 function diag3(args) {
   const { inputs, backend: backend2 } = args;
   const { x } = inputs;
@@ -68798,8 +59634,6 @@ var diagConfig2 = {
   backendName: "webgl",
   kernelFunc: diag3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/dilation_gpu.js
 var Dilation2DProgram = class {
   constructor(convInfo) {
     this.variableNames = ["x", "W"];
@@ -68847,8 +59681,6 @@ var Dilation2DProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Dilation2D.js
 function dilation2D(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x, filter } = inputs;
@@ -68866,8 +59698,6 @@ var dilation2DConfig2 = {
   backendName: "webgl",
   kernelFunc: dilation2D
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Einsum.js
 function einsum3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { equation } = attrs;
@@ -68890,8 +59720,8 @@ function einsum3(args) {
         tensorsToDispose.push(x);
       }
       const targetShape = x.shape.slice();
-      for (let k4 = 0; k4 < dimsToExpand.length; ++k4) {
-        targetShape.splice(dimsToExpand[k4], 0, 1);
+      for (let k = 0; k < dimsToExpand.length; ++k) {
+        targetShape.splice(dimsToExpand[k], 0, 1);
       }
       if (!util_exports.arraysEqual(x.shape, targetShape)) {
         x = reshape4({ inputs: { x }, backend: backend2, attrs: { shape: targetShape } });
@@ -68932,8 +59762,6 @@ var einsumConfig2 = {
   backendName: "webgl",
   kernelFunc: einsum3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Elu.js
 var ELU4 = `return (x >= 0.0) ? x : (exp(x) - 1.0);`;
 var ELU_PACKED = `
   vec4 result;
@@ -68951,8 +59779,6 @@ var eluConfig2 = {
   backendName: "webgl",
   kernelFunc: elu5
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/EluGrad.js
 var ELU_DER = `return (b >= 0.0) ? a : a * (b + 1.0);`;
 var ELU_DER_PACKED = `
   vec4 bGTEZero = vec4(greaterThanEqual(b, vec4(0.)));
@@ -68969,8 +59795,6 @@ var eluGradConfig3 = {
   backendName: "webgl",
   kernelFunc: eluGrad2
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Equal.js
 var PACKED_EQUAL = `
   return vec4(equal(a, b));
 `;
@@ -68986,8 +59810,6 @@ var equalConfig2 = {
   backendName: "webgl",
   kernelFunc: equal3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Erf.js
 var ERF = `
   // Error function is calculated approximately with elementary function.
   // See "Handbook of Mathematical Functions with Formulas,
@@ -69010,8 +59832,6 @@ var erfConfig2 = {
   backendName: "webgl",
   kernelFunc: erf3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Exp.js
 var EXP = CHECK_NAN_SNIPPET_UNARY + `
   return exp(x);
 `;
@@ -69036,8 +59856,6 @@ var expConfig2 = {
   backendName: "webgl",
   kernelFunc: exp3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/ExpandDims.js
 function expandDims4(args) {
   const { inputs, attrs, backend: backend2 } = args;
   const { dim } = attrs;
@@ -69057,8 +59875,6 @@ var expandDimsConfig2 = {
   backendName: "webgl",
   kernelFunc: expandDims4
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Expm1.js
 var EXPM1 = `return exp(x) - 1.0;`;
 var expm13 = unaryKernelFunc2({ opSnippet: EXPM1, packedOpSnippet: EXPM1, cpuKernelImpl: expm1ImplCPU });
 var expm1Config2 = {
@@ -69066,8 +59882,6 @@ var expm1Config2 = {
   backendName: "webgl",
   kernelFunc: expm13
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/fft_gpu.js
 var FFTProgram = class {
   constructor(component, inputShape, inverse) {
     this.variableNames = ["real", "imag"];
@@ -69119,8 +59933,6 @@ var FFTProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/FFT_impl.js
 function fftImpl2(x, inverse, backend2) {
   const xData = backend2.texData.get(x.dataId);
   const inputSize = util_exports.sizeFromShape(x.shape);
@@ -69152,8 +59964,6 @@ function fftImpl2(x, inverse, backend2) {
   backend2.disposeIntermediateTensorInfo(complexOutput);
   return complexOutputReshaped;
 }
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/FFT.js
 function fft3(args) {
   const { inputs, backend: backend2 } = args;
   const { input: input2 } = inputs;
@@ -69164,8 +59974,6 @@ var fftConfig2 = {
   backendName: "webgl",
   kernelFunc: fft3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/fill_gpu.js
 var FillProgram = class {
   constructor(shape, value) {
     this.outputShape = [];
@@ -69180,8 +59988,6 @@ var FillProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Fill.js
 function fill3(args) {
   const { backend: backend2, attrs } = args;
   const { shape, value } = attrs;
@@ -69202,8 +60008,6 @@ var fillConfig2 = {
   backendName: "webgl",
   kernelFunc: fill3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/flip_left_right_gpu.js
 var FlipLeftRightProgram = class {
   constructor(imageShape) {
     this.variableNames = ["Image"];
@@ -69227,8 +60031,6 @@ var FlipLeftRightProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/FlipLeftRight.js
 var flipLeftRightConfig2 = {
   kernelName: FlipLeftRight,
   backendName: "webgl",
@@ -69240,8 +60042,6 @@ var flipLeftRightConfig2 = {
     return output;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Floor.js
 var FLOOR = `return floor(x);`;
 var floor3 = unaryKernelFunc2({ opSnippet: FLOOR, packedOpSnippet: FLOOR, cpuKernelImpl: floorImplCPU });
 var floorConfig2 = {
@@ -69249,8 +60049,6 @@ var floorConfig2 = {
   backendName: "webgl",
   kernelFunc: floor3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/FloorDiv.js
 var INT_DIV = `
   float s = sign(a) * sign(b);
   int ia = round(a);
@@ -69290,8 +60088,6 @@ var floorDivConfig2 = {
   backendName: "webgl",
   kernelFunc: floorDiv3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/FromPixels_utils/from_pixels_gpu.js
 var FromPixelsProgram = class {
   constructor(outputShape) {
     this.variableNames = ["A"];
@@ -69323,8 +60119,6 @@ var FromPixelsProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/FromPixels_utils/from_pixels_packed_gpu.js
 var FromPixelsPackedProgram = class {
   constructor(outputShape) {
     this.variableNames = ["A"];
@@ -69370,8 +60164,6 @@ var FromPixelsPackedProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/FromPixels.js
 var fromPixelsConfig = {
   kernelName: FromPixels,
   backendName: "webgl",
@@ -69410,8 +60202,6 @@ function fromPixels2(args) {
   backend2.disposeData(tempPixelHandle.dataId);
   return res;
 }
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/FusedConv2D.js
 function fusedConv2d(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x, filter, bias, preluActivationWeights } = inputs;
@@ -69491,7 +60281,7 @@ function fusedConv2d(args) {
   }
   const outReshaped = reshape4({ inputs: { x: out }, backend: backend2, attrs: { shape: convInfo.outShape } });
   intermediates.push(out);
-  intermediates.forEach((t3) => backend2.disposeIntermediateTensorInfo(t3));
+  intermediates.forEach((t) => backend2.disposeIntermediateTensorInfo(t));
   return outReshaped;
 }
 var fusedConv2DConfig2 = {
@@ -69499,8 +60289,6 @@ var fusedConv2DConfig2 = {
   backendName: "webgl",
   kernelFunc: fusedConv2d
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/FusedDepthwiseConv2D.js
 function fusedDepthwiseConv2D2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x, filter, bias, preluActivationWeights } = inputs;
@@ -69551,7 +60339,7 @@ function fusedDepthwiseConv2D2(args) {
     [convInfo.inHeight, convInfo.inWidth]
   ];
   const result = backend2.runWebGLProgram(program, programInputs, "float32", customValues);
-  intermediates.forEach((t3) => backend2.disposeIntermediateTensorInfo(t3));
+  intermediates.forEach((t) => backend2.disposeIntermediateTensorInfo(t));
   return result;
 }
 var fusedDepthwiseConv2DConfig2 = {
@@ -69559,8 +60347,6 @@ var fusedDepthwiseConv2DConfig2 = {
   backendName: "webgl",
   kernelFunc: fusedDepthwiseConv2D2
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/gather_nd_gpu.js
 var GatherNDProgram = class {
   constructor(sliceDim, strides, shape, paramsShape) {
     this.sliceDim = sliceDim;
@@ -69571,12 +60357,12 @@ var GatherNDProgram = class {
     const dtype = getCoordsDataType(shape.length);
     let mainLoop = `
     int index;`;
-    for (let j3 = 0; j3 < this.sliceDim; j3++) {
+    for (let j = 0; j < this.sliceDim; j++) {
       mainLoop += `
-          index = round(getIndices(coords[0], ${j3}));
+          index = round(getIndices(coords[0], ${j}));
           out_of_bounds = out_of_bounds || index < 0;
-          out_of_bounds = out_of_bounds || index >= ${this.paramsShape[j3]};
-          flattenIndex += index * ${this.strides[j3]};`;
+          out_of_bounds = out_of_bounds || index >= ${this.paramsShape[j]};
+          flattenIndex += index * ${this.strides[j]};`;
     }
     this.userCode = `
          void main() {
@@ -69591,8 +60377,6 @@ var GatherNDProgram = class {
       `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/GatherNd.js
 function gatherNd2(args) {
   const { inputs, backend: backend2 } = args;
   const { params, indices } = inputs;
@@ -69625,8 +60409,6 @@ var gatherNdConfig2 = {
   backendName: "webgl",
   kernelFunc: gatherNd2
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/gather_gpu.js
 var GatherProgram = class {
   constructor(aShape, outputShape) {
     this.variableNames = ["A", "indices"];
@@ -69656,8 +60438,6 @@ function getSourceCoords2(aShape, axis) {
   }
   return sourceCoords.join();
 }
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/GatherV2.js
 function gatherV22(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x, indices } = inputs;
@@ -69703,14 +60483,14 @@ function gatherV22(args) {
     const indicesBuf = backend2.bufferSync(flattenIndex);
     const xBuf = backend2.bufferSync(flattenX);
     const outBuf = gatherV2ImplCPU(xBuf, indicesBuf, flattenOutputShape);
-    toDispose.forEach((t3) => backend2.disposeIntermediateTensorInfo(t3));
+    toDispose.forEach((t) => backend2.disposeIntermediateTensorInfo(t));
     return backend2.makeTensorInfo(shapeInfo.outputShape, outBuf.dtype, outBuf.values);
   }
   const program = new GatherProgram(flattenX.shape, flattenOutputShape);
   const res = backend2.runWebGLProgram(program, [flattenX, flattenIndex], flattenX.dtype);
   toDispose.push(res);
   const reshaped = reshape4({ inputs: { x: res }, backend: backend2, attrs: { shape: shapeInfo.outputShape } });
-  toDispose.forEach((t3) => backend2.disposeIntermediateTensorInfo(t3));
+  toDispose.forEach((t) => backend2.disposeIntermediateTensorInfo(t));
   return reshaped;
 }
 var gatherV2Config2 = {
@@ -69718,8 +60498,6 @@ var gatherV2Config2 = {
   backendName: "webgl",
   kernelFunc: gatherV22
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Greater.js
 var GREATER = `return float(a > b);`;
 var GREATER_PACKED = `
   return vec4(greaterThan(a, b));
@@ -69735,8 +60513,6 @@ var greaterConfig2 = {
   backendName: "webgl",
   kernelFunc: greater4
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/GreaterEqual.js
 var GREATER_EQUAL = `return float(a >= b);`;
 var GREATER_EQUAL_PACKED = `
   return vec4(greaterThanEqual(a, b));
@@ -69752,8 +60528,6 @@ var greaterEqualConfig2 = {
   backendName: "webgl",
   kernelFunc: greaterEqual3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/IFFT.js
 function ifft3(args) {
   const { inputs, backend: backend2 } = args;
   const { input: input2 } = inputs;
@@ -69764,8 +60538,6 @@ var ifftConfig2 = {
   backendName: "webgl",
   kernelFunc: ifft3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/IsFinite.js
 var IS_FINITE = `return float(!isnan(x) && !isinf(x));`;
 var isFinite4 = unaryKernelFunc2({ opSnippet: IS_FINITE, dtype: "bool" });
 var isFiniteConfig2 = {
@@ -69773,8 +60545,6 @@ var isFiniteConfig2 = {
   backendName: "webgl",
   kernelFunc: isFinite4
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/IsInf.js
 var IS_INF = `return float(isinf(x));`;
 var isInf3 = unaryKernelFunc2({ opSnippet: IS_INF, dtype: "bool" });
 var isInfConfig2 = {
@@ -69782,8 +60552,6 @@ var isInfConfig2 = {
   backendName: "webgl",
   kernelFunc: isInf3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/IsNaN.js
 var IS_NAN = `return float(isnan(x));`;
 var isNaN4 = unaryKernelFunc2({ opSnippet: IS_NAN, dtype: "bool" });
 var isNaNConfig2 = {
@@ -69791,8 +60559,6 @@ var isNaNConfig2 = {
   backendName: "webgl",
   kernelFunc: isNaN4
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Less.js
 var LESS = `return float(a < b);`;
 var LESS_PACKED = `
   return vec4(lessThan(a, b));
@@ -69808,8 +60574,6 @@ var lessConfig2 = {
   backendName: "webgl",
   kernelFunc: less4
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/LessEqual.js
 var LESS_EQUAL = `return float(a <= b);`;
 var LESS_EQUAL_PACKED = `
   return vec4(lessThanEqual(a, b));
@@ -69825,8 +60589,6 @@ var lessEqualConfig2 = {
   backendName: "webgl",
   kernelFunc: lessEqual3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/LinSpace.js
 function linSpace2(args) {
   const { backend: backend2, attrs } = args;
   const { start, stop, num } = attrs;
@@ -69838,8 +60600,6 @@ var linSpaceConfig2 = {
   backendName: "webgl",
   kernelFunc: linSpace2
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Log.js
 var LOG = CHECK_NAN_SNIPPET_UNARY + `
   return x < 0.0 ? 0./0. : log(x);
 `;
@@ -69858,8 +60618,6 @@ var logConfig2 = {
   backendName: "webgl",
   kernelFunc: log4
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Log1p.js
 var LOG1P = CHECK_NAN_SNIPPET_UNARY + `
   return log(1.0 + x);
 `;
@@ -69869,8 +60627,6 @@ var log1pConfig2 = {
   backendName: "webgl",
   kernelFunc: log1p3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/LogicalAnd.js
 var LOGICAL_AND = `return float(a >= 1.0 && b >= 1.0);`;
 var LOGICAL_AND_PACKED = `
   return vec4(
@@ -69887,8 +60643,6 @@ var logicalAndConfig2 = {
   backendName: "webgl",
   kernelFunc: logicalAnd3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/LogicalNot.js
 var LOGICAL_NOT = `return float(!(x >= 1.0));`;
 var logicalNot3 = unaryKernelFunc2({ opSnippet: LOGICAL_NOT });
 var logicalNotConfig2 = {
@@ -69896,8 +60650,6 @@ var logicalNotConfig2 = {
   backendName: "webgl",
   kernelFunc: logicalNot3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/LogicalOr.js
 var LOGICAL_OR = `return float(a >= 1.0 || b >= 1.0);`;
 var LOGICAL_OR_PACKED = `
   return min(
@@ -69911,8 +60663,6 @@ var logicalOrConfig2 = {
   backendName: "webgl",
   kernelFunc: logicalOr3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/lrn_gpu.js
 var LRNProgram = class {
   constructor(xShape, radius, bias, alpha, beta) {
     this.variableNames = ["x"];
@@ -69951,8 +60701,6 @@ var LRNProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/lrn_packed_gpu.js
 var LRNPackedProgram = class {
   constructor(xShape, radius, bias, alpha, beta) {
     this.variableNames = ["x"];
@@ -70036,8 +60784,6 @@ var LRNPackedProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/LRN.js
 var lrn = (args) => {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -70050,8 +60796,6 @@ var LRNConfig2 = {
   backendName: "webgl",
   kernelFunc: lrn
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/lrn_grad_gpu.js
 var LRNGradProgram = class {
   constructor(inputShape, depthRadius, bias, alpha, beta) {
     this.variableNames = ["inputImage", "outputImage", "dy"];
@@ -70120,8 +60864,6 @@ var LRNGradProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/LRNGrad.js
 var lrnGrad = (args) => {
   const { inputs, backend: backend2, attrs } = args;
   const { x, y, dy } = inputs;
@@ -70134,8 +60876,6 @@ var LRNGradConfig2 = {
   backendName: "webgl",
   kernelFunc: lrnGrad
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Max_impl.js
 function maxImpl2(x, reduceShape, outShape, backend2) {
   const inSize = util_exports.sizeFromShape(reduceShape);
   const xSize = util_exports.sizeFromShape(x.shape);
@@ -70147,8 +60887,6 @@ function maxImpl2(x, reduceShape, outShape, backend2) {
   backend2.disposeIntermediateTensorInfo(reduced);
   return reshapedOutput;
 }
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Max.js
 function max4(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -70204,8 +60942,6 @@ var maxConfig2 = {
   backendName: "webgl",
   kernelFunc: max4
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Maximum.js
 var MAXIMUM = CHECK_NAN_SNIPPET2 + `
   return max(a, b);
 `;
@@ -70227,8 +60963,6 @@ var maximumConfig2 = {
   backendName: "webgl",
   kernelFunc: maximum4
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/MaxPool.js
 function maxPool3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -70248,8 +60982,6 @@ var maxPoolConfig2 = {
   backendName: "webgl",
   kernelFunc: maxPool3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/MaxPool3D.js
 function maxPool3d2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -70264,8 +60996,6 @@ var maxPool3DConfig2 = {
   backendName: "webgl",
   kernelFunc: maxPool3d2
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/max_pool_backprop_gpu.js
 var MaxPool2DBackpropProgram = class {
   constructor(convInfo) {
     this.variableNames = ["dy", "maxPos"];
@@ -70411,8 +61141,6 @@ var MaxPool3DBackpropProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/MaxPool3DGrad.js
 function maxPool3DGrad2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { dy, input: input2 } = inputs;
@@ -70437,8 +61165,6 @@ var maxPool3DGradConfig3 = {
   backendName: "webgl",
   kernelFunc: maxPool3DGrad2
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/MaxPoolGrad.js
 function maxPoolGrad3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { dy, input: input2, output } = inputs;
@@ -70459,8 +61185,6 @@ var maxPoolGradConfig3 = {
   backendName: "webgl",
   kernelFunc: maxPoolGrad3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/MaxPoolWithArgmax_impl.js
 function maxPoolWithArgmaxImpl2(x, includeBatchInIndex, convInfo, backend2) {
   let program = new Pool2DProgram(convInfo, "max", false);
   const poolOutput = backend2.runWebGLProgram(program, [x], "float32");
@@ -70468,8 +61192,6 @@ function maxPoolWithArgmaxImpl2(x, includeBatchInIndex, convInfo, backend2) {
   const indexOutput = backend2.runWebGLProgram(program, [x], "float32");
   return [poolOutput, indexOutput];
 }
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/MaxPoolWithArgmax.js
 var maxPoolWithArgmaxConfig2 = {
   kernelName: MaxPoolWithArgmax,
   backendName: "webgl",
@@ -70485,8 +61207,6 @@ var maxPoolWithArgmaxConfig2 = {
     return [result, indexes];
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Mean_impl.js
 function meanImpl(x, reduceShape, outShape, backend2) {
   const inSize = util_exports.sizeFromShape(reduceShape);
   const xSize = util_exports.sizeFromShape(x.shape);
@@ -70498,8 +61218,6 @@ function meanImpl(x, reduceShape, outShape, backend2) {
   backend2.disposeIntermediateTensorInfo(reduced);
   return reshapedOutput;
 }
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Mean.js
 var meanConfig2 = {
   kernelName: Mean,
   backendName: "webgl",
@@ -70546,8 +61264,6 @@ var meanConfig2 = {
     return out;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Min.js
 function min4(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -70585,8 +61301,6 @@ var minConfig2 = {
   backendName: "webgl",
   kernelFunc: min4
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Minimum.js
 var MINIMUM = CHECK_NAN_SNIPPET2 + `
   return min(a, b);
 `;
@@ -70608,8 +61322,6 @@ var minimumConfig2 = {
   backendName: "webgl",
   kernelFunc: minimum4
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/mirror_pad_gpu.js
 var MirrorPadProgram = class {
   constructor(xShape, paddings, mode) {
     this.variableNames = ["x"];
@@ -70659,8 +61371,6 @@ var MirrorPadProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/mirror_pad_packed_gpu.js
 var MirrorPadPackedProgram = class {
   constructor(xShape, paddings, mode) {
     this.variableNames = ["x"];
@@ -70746,8 +61456,6 @@ var MirrorPadPackedProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/MirrorPad.js
 var mirrorPadKernelFunc = ({ inputs, backend: backend2, attrs }) => {
   const { x } = inputs;
   const { paddings, mode } = attrs;
@@ -70760,8 +61468,6 @@ var mirrorPadConfig2 = {
   backendName: "webgl",
   kernelFunc: mirrorPadKernelFunc
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Mod.js
 var MOD = `if (b == 0.0) return NAN;
   return mod(a, b);`;
 var MOD_PACKED = `
@@ -70779,8 +61485,6 @@ var modConfig2 = {
   backendName: "webgl",
   kernelFunc: mod3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/multinomial_gpu.js
 var MultinomialProgram = class {
   constructor(batchSize, numOutcomes, numSamples) {
     this.variableNames = ["probs"];
@@ -70809,8 +61513,6 @@ var MultinomialProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/RealDiv.js
 var DIV = `
 if (a == b) {
   return 1.0;
@@ -70841,8 +61543,6 @@ var realDivConfig2 = {
   backendName: "webgl",
   kernelFunc: realDiv
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Sub.js
 var SUB = "return a - b;";
 var sub3 = binaryKernelFunc2({
   opSnippet: SUB,
@@ -70855,8 +61555,6 @@ var subConfig2 = {
   backendName: "webgl",
   kernelFunc: sub3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Softmax.js
 function softmax4(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { logits } = inputs;
@@ -70887,8 +61585,6 @@ var softmaxConfig2 = {
   backendName: "webgl",
   kernelFunc: softmax4
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Multinomial.js
 function multinomial3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { logits } = inputs;
@@ -70909,8 +61605,6 @@ var multinomialConfig2 = {
   backendName: "webgl",
   kernelFunc: multinomial3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Neg.js
 var NEG = CHECK_NAN_SNIPPET + `
   return -x;
 `;
@@ -70946,8 +61640,6 @@ var negConfig2 = {
   backendName: "webgl",
   kernelFunc: neg3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/NonMaxSuppressionV3.js
 var nonMaxSuppressionV3Impl3 = kernel_impls_exports.nonMaxSuppressionV3Impl;
 function nonMaxSuppressionV32(args) {
   backend_util_exports.warn("tf.nonMaxSuppression() in webgl locks the UI thread. Call tf.nonMaxSuppressionAsync() instead");
@@ -70964,8 +61656,6 @@ var nonMaxSuppressionV3Config2 = {
   backendName: "webgl",
   kernelFunc: nonMaxSuppressionV32
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/NonMaxSuppressionV4.js
 var nonMaxSuppressionV4Impl3 = kernel_impls_exports.nonMaxSuppressionV4Impl;
 function nonMaxSuppressionV42(args) {
   backend_util_exports.warn("tf.nonMaxSuppression() in webgl locks the UI thread. Call tf.nonMaxSuppressionAsync() instead");
@@ -70985,8 +61675,6 @@ var nonMaxSuppressionV4Config2 = {
   backendName: "webgl",
   kernelFunc: nonMaxSuppressionV42
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/NonMaxSuppressionV5.js
 var nonMaxSuppressionV5Impl3 = kernel_impls_exports.nonMaxSuppressionV5Impl;
 function nonMaxSuppressionV52(args) {
   backend_util_exports.warn("tf.nonMaxSuppression() in webgl locks the UI thread. Call tf.nonMaxSuppressionAsync() instead");
@@ -71010,8 +61698,6 @@ var nonMaxSuppressionV5Config2 = {
   backendName: "webgl",
   kernelFunc: nonMaxSuppressionV52
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/onehot_gpu.js
 var OneHotProgram = class {
   constructor(numIndices, depth, onValue, offValue) {
     this.variableNames = ["indices"];
@@ -71026,8 +61712,6 @@ var OneHotProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/OneHot.js
 var oneHot3 = (args) => {
   const { inputs, backend: backend2, attrs } = args;
   const { indices } = inputs;
@@ -71047,8 +61731,6 @@ var oneHotConfig2 = {
   backendName: "webgl",
   kernelFunc: oneHot3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/ZerosLike.js
 function zerosLike3(args) {
   const { inputs, backend: backend2 } = args;
   const { x } = inputs;
@@ -71079,8 +61761,6 @@ var zerosLikeConfig2 = {
   backendName: "webgl",
   kernelFunc: zerosLike3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/OnesLike.js
 function onesLike3(args) {
   const { inputs, backend: backend2 } = args;
   const { x } = inputs;
@@ -71106,8 +61786,6 @@ var onesLikeConfig2 = {
   backendName: "webgl",
   kernelFunc: onesLike3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Pack.js
 function pack2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { axis } = attrs;
@@ -71116,18 +61794,18 @@ function pack2(args) {
   }
   const shape = inputs[0].shape;
   const dtype = inputs[0].dtype;
-  inputs.forEach((t3) => {
-    util_exports.assertShapesMatch(shape, t3.shape, "All tensors passed to stack must have matching shapes");
-    util_exports.assert(dtype === t3.dtype, () => "All tensors passed to stack must have matching dtypes");
+  inputs.forEach((t) => {
+    util_exports.assertShapesMatch(shape, t.shape, "All tensors passed to stack must have matching shapes");
+    util_exports.assert(dtype === t.dtype, () => "All tensors passed to stack must have matching dtypes");
   });
   const intermediateTensorInfos = [];
-  const expandedTensors = inputs.map((t3) => {
-    const expandedT = expandDims4({ inputs: { input: t3 }, backend: backend2, attrs: { dim: axis } });
+  const expandedTensors = inputs.map((t) => {
+    const expandedT = expandDims4({ inputs: { input: t }, backend: backend2, attrs: { dim: axis } });
     intermediateTensorInfos.push(expandedT);
     return expandedT;
   });
   const result = concat3({ inputs: expandedTensors, backend: backend2, attrs: { axis } });
-  intermediateTensorInfos.forEach((t3) => backend2.disposeIntermediateTensorInfo(t3));
+  intermediateTensorInfos.forEach((t) => backend2.disposeIntermediateTensorInfo(t));
   return result;
 }
 var packConfig2 = {
@@ -71135,8 +61813,6 @@ var packConfig2 = {
   backendName: "webgl",
   kernelFunc: pack2
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/pad_gpu.js
 var PadProgram = class {
   constructor(xShape, paddings, constantValue) {
     this.variableNames = ["x"];
@@ -71182,8 +61858,6 @@ var PadProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/pad_packed_gpu.js
 var PadPackedProgram = class {
   constructor(xShape, paddings, constantValue) {
     this.variableNames = ["x"];
@@ -71216,7 +61890,7 @@ var PadPackedProgram = class {
     ];
     const paddingArea = rank === 1 ? "rc < start || rc >= end" : "any(lessThan(rc, start)) || any(greaterThanEqual(rc, end))";
     let mainLoop = "";
-    for (let i = 0, j3 = rank === 1 ? 2 : 4; i < j3; i++) {
+    for (let i = 0, j = rank === 1 ? 2 : 4; i < j; i++) {
       mainLoop += `
         ${componentSetup[i]}
         if (${paddingArea}) {
@@ -71241,8 +61915,6 @@ var PadPackedProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/PadV2.js
 var padV22 = (args) => {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -71266,8 +61938,6 @@ var padV2Config2 = {
   backendName: "webgl",
   kernelFunc: padV22
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Pow.js
 var POW = `
   if(a < 0.0 && floor(b) < b){
     return NAN;
@@ -71303,8 +61973,6 @@ var powConfig2 = {
   backendName: "webgl",
   kernelFunc: pow3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Prod.js
 function prod3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -71341,7 +62009,7 @@ function prod3(args) {
     const newShape = backend_util_exports.expandShapeToKeepDim(res.shape, origAxes);
     res = reshape4({ inputs: { x: res }, backend: backend2, attrs: { shape: newShape } });
   }
-  toDispose.forEach((t3) => backend2.disposeIntermediateTensorInfo(t3));
+  toDispose.forEach((t) => backend2.disposeIntermediateTensorInfo(t));
   return res;
 }
 var prodConfig2 = {
@@ -71349,14 +62017,12 @@ var prodConfig2 = {
   backendName: "webgl",
   kernelFunc: prod3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/RaggedGather.js
 function raggedGather3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { paramsNestedSplits, paramsDenseValues, indices } = inputs;
   const { outputRaggedRank } = attrs;
-  const $paramsNestedSplits = paramsNestedSplits.map((t3) => backend2.readSync(t3.dataId));
-  const $paramsNestedSplitsShapes = paramsNestedSplits.map((t3) => t3.shape);
+  const $paramsNestedSplits = paramsNestedSplits.map((t) => backend2.readSync(t.dataId));
+  const $paramsNestedSplitsShapes = paramsNestedSplits.map((t) => t.shape);
   const $paramsDenseValues = backend2.readSync(paramsDenseValues.dataId);
   const $indices = backend2.readSync(indices.dataId);
   const [outputNestedSplits, outputDenseValues, outputDenseValuesShape] = raggedGatherImplCPU($paramsNestedSplits, $paramsNestedSplitsShapes, $paramsDenseValues, paramsDenseValues.shape, paramsDenseValues.dtype, $indices, indices.shape, outputRaggedRank);
@@ -71369,8 +62035,6 @@ var raggedGatherConfig2 = {
   backendName: "webgl",
   kernelFunc: raggedGather3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/RaggedRange.js
 function raggedRange3(args) {
   const { inputs, backend: backend2 } = args;
   const { starts, limits, deltas } = inputs;
@@ -71387,8 +62051,6 @@ var raggedRangeConfig2 = {
   backendName: "webgl",
   kernelFunc: raggedRange3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/RaggedTensorToTensor.js
 function raggedTensorToTensor3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { shape, values, defaultValue, rowPartitionTensors } = inputs;
@@ -71396,8 +62058,8 @@ function raggedTensorToTensor3(args) {
   const $shape = backend2.readSync(shape.dataId);
   const $values = backend2.readSync(values.dataId);
   const $defaultValue = backend2.readSync(defaultValue.dataId);
-  const $rowPartitionValues = rowPartitionTensors.map((t3) => backend2.readSync(t3.dataId));
-  const rowPartitionValuesShapes = rowPartitionTensors.map((t3) => t3.shape);
+  const $rowPartitionValues = rowPartitionTensors.map((t) => backend2.readSync(t.dataId));
+  const rowPartitionValuesShapes = rowPartitionTensors.map((t) => t.shape);
   const [outputShape, output] = raggedTensorToTensorImplCPU($shape, shape.shape, $values, values.shape, values.dtype, $defaultValue, defaultValue.shape, $rowPartitionValues, rowPartitionValuesShapes, rowPartitionTypes);
   return backend2.makeTensorInfo(outputShape, values.dtype, output);
 }
@@ -71406,8 +62068,6 @@ var raggedTensorToTensorConfig2 = {
   backendName: "webgl",
   kernelFunc: raggedTensorToTensor3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Range.js
 var range4 = (args) => {
   const { backend: backend2, attrs } = args;
   const { start, stop, step: step4, dtype } = attrs;
@@ -71419,8 +62079,6 @@ var rangeConfig2 = {
   backendName: "webgl",
   kernelFunc: range4
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Reciprocal.js
 var RECIPROCAL = `return 1.0 / x;`;
 var reciprocal3 = unaryKernelFunc2({ opSnippet: RECIPROCAL });
 var reciprocalConfig2 = {
@@ -71428,8 +62086,6 @@ var reciprocalConfig2 = {
   backendName: "webgl",
   kernelFunc: reciprocal3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Relu.js
 var RELU3 = CHECK_NAN_SNIPPET + `
   return (x < 0.0) ? 0.0 : x;
 `;
@@ -71450,8 +62106,6 @@ var reluConfig2 = {
   backendName: "webgl",
   kernelFunc: relu3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Relu6.js
 var RELU63 = CHECK_NAN_SNIPPET + `
   return (x < 0.0) ? 0.0 : min(6.0, x);
 `;
@@ -71472,8 +62126,6 @@ var relu6Config2 = {
   backendName: "webgl",
   kernelFunc: relu63
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/resize_bilinear_gpu.js
 var ResizeBilinearProgram = class {
   constructor(inputShape, newHeight, newWidth, alignCorners, halfPixelCenters) {
     this.variableNames = ["A"];
@@ -71530,8 +62182,6 @@ var ResizeBilinearProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/resize_bilinear_packed_gpu.js
 var ResizeBilinearPackedProgram = class {
   constructor(inputShape, newHeight, newWidth, alignCorners, halfPixelCenters) {
     this.variableNames = ["A"];
@@ -71634,8 +62284,6 @@ var ResizeBilinearPackedProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/ResizeBilinear.js
 function resizeBilinear4(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { images } = inputs;
@@ -71649,8 +62297,6 @@ var resizeBilinearConfig2 = {
   backendName: "webgl",
   kernelFunc: resizeBilinear4
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/resize_bilinear_backprop_gpu.js
 var ResizeBilinearBackpropProgram = class {
   constructor(dyShape, inputShape, alignCorners) {
     this.variableNames = ["dy"];
@@ -71756,8 +62402,6 @@ var ResizeBilinearBackpropProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/ResizeBilinearGrad.js
 function resizeBilinearGrad2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { images, dy } = inputs;
@@ -71770,8 +62414,6 @@ var resizeBilinearGradConfig3 = {
   backendName: "webgl",
   kernelFunc: resizeBilinearGrad2
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/resize_nearest_neighbor_gpu.js
 var ResizeNearestNeighborProgram = class {
   constructor(inputShape, newHeight, newWidth, alignCorners, halfPixelCenters) {
     this.variableNames = ["A"];
@@ -71818,8 +62460,6 @@ var ResizeNearestNeighborProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/resize_nearest_neighbor_packed_gpu.js
 var ResizeNearestNeighborPackedProgram = class {
   constructor(inputShape, newHeight, newWidth, alignCorners, halfPixelCenters) {
     this.variableNames = ["A"];
@@ -71887,8 +62527,6 @@ var ResizeNearestNeighborPackedProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/ResizeNearestNeighbor.js
 function resizeNearestNeighbor3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { images } = inputs;
@@ -71902,8 +62540,6 @@ var resizeNearestNeighborConfig2 = {
   backendName: "webgl",
   kernelFunc: resizeNearestNeighbor3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/resize_nearest_neighbor_backprop_gpu.js
 var ResizeNearestNeigborBackpropProgram = class {
   constructor(dyShape, inputShape, alignCorners) {
     this.variableNames = ["dy"];
@@ -71998,8 +62634,6 @@ var ResizeNearestNeigborBackpropProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/ResizeNearestNeighborGrad.js
 function resizeNearestNeighborGrad2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { images, dy } = inputs;
@@ -72012,8 +62646,6 @@ var resizeNearestNeighborGradConfig3 = {
   backendName: "webgl",
   kernelFunc: resizeNearestNeighborGrad2
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/reverse_gpu.js
 var ReverseProgram = class {
   constructor(xShape, axis) {
     this.variableNames = ["x"];
@@ -72037,7 +62669,7 @@ var ReverseProgram = class {
       }
       return `coords[${i}]`;
     };
-    const inCoords = xShape.map((_3, i) => getInCoord(i)).join(",");
+    const inCoords = xShape.map((_, i) => getInCoord(i)).join(",");
     const type = getCoordsDataType(rank);
     this.userCode = `
       void main() {
@@ -72047,8 +62679,6 @@ var ReverseProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/reverse_packed_gpu.js
 var ReversePackedProgram = class {
   constructor(xShape, axis) {
     this.variableNames = ["x"];
@@ -72113,7 +62743,7 @@ var ReversePackedProgram = class {
       return getChannel(channels2);
     }
     function getChannel(channels2) {
-      const inCoordsArray = xShape.map((_3, i) => getInCoord(i, channels2));
+      const inCoordsArray = xShape.map((_, i) => getInCoord(i, channels2));
       const inCoords = inCoordsArray.join(",");
       const innerDims = inCoordsArray.slice(-2).join(",");
       return `getChannel(getX(${inCoords}), vec2(${innerDims}))`;
@@ -72127,8 +62757,6 @@ var ReversePackedProgram = class {
     }
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Reverse.js
 function reverse3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -72146,8 +62774,6 @@ var reverseConfig2 = {
   backendName: "webgl",
   kernelFunc: reverse3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/rotate_gpu.js
 var RotateProgram = class {
   constructor(imageShape, fillValue) {
     this.variableNames = ["Image"];
@@ -72184,8 +62810,6 @@ var RotateProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/RotateWithOffset.js
 var rotateWithOffsetConfig2 = {
   kernelName: RotateWithOffset,
   backendName: "webgl",
@@ -72200,8 +62824,6 @@ var rotateWithOffsetConfig2 = {
     return output;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Round.js
 var ROUND = `
   // OpenGL ES does not support round function.
   // The algorithm is based on banker's rounding.
@@ -72224,8 +62846,6 @@ var roundConfig2 = {
   backendName: "webgl",
   kernelFunc: round4
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Rsqrt.js
 var RSQRT = `return inversesqrt(x);`;
 var rsqrt3 = unaryKernelFunc2({ opSnippet: RSQRT, cpuKernelImpl: rsqrtImplCPU });
 var rsqrtConfig2 = {
@@ -72233,8 +62853,6 @@ var rsqrtConfig2 = {
   backendName: "webgl",
   kernelFunc: rsqrt3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/scatter_gpu.js
 var ScatterProgram = class {
   constructor(updateSize, sliceDim, indicesRank, updatesRank, strides, shape, summingDupeIndex = true, defaultIsTensor = false) {
     this.variableNames = ["updates", "indices", "defaultValue"];
@@ -72284,8 +62902,6 @@ var ScatterProgram = class {
       `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/scatter_packed_gpu.js
 var ScatterPackedProgram = class {
   constructor(updateSize, sliceDim, indicesRank, updatesRank, strides, shape, summingDupeIndex = true, defaultIsTensor = false) {
     this.variableNames = ["updates", "indices", "defaultValue"];
@@ -72355,8 +62971,6 @@ var ScatterPackedProgram = class {
       `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/ScatterNd.js
 function scatterNd2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { indices, updates } = inputs;
@@ -72388,8 +63002,6 @@ var scatterNdConfig2 = {
   backendName: "webgl",
   kernelFunc: scatterNd2
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/search_sorted_gpu.js
 var SearchSortedProgram = class {
   constructor(batchSize, numInputs, numValues, side) {
     this.variableNames = ["sortedSequence", "values"];
@@ -72427,8 +63039,6 @@ var SearchSortedProgram = class {
      `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/SearchSorted.js
 function searchSorted3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { sortedSequence, values } = inputs;
@@ -72442,8 +63052,6 @@ var searchSortedConfig2 = {
   backendName: "webgl",
   kernelFunc: searchSorted3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/select_gpu.js
 var SelectProgram = class {
   constructor(cRank, shape, rank) {
     this.variableNames = ["c", "a", "b"];
@@ -72483,21 +63091,17 @@ var SelectProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Select.js
 function select3(args) {
   const { inputs, backend: backend2 } = args;
-  const { condition, t: t3, e } = inputs;
-  const program = new SelectProgram(condition.shape.length, t3.shape, t3.shape.length);
-  return backend2.runWebGLProgram(program, [condition, t3, e], upcastType(t3.dtype, e.dtype));
+  const { condition, t, e } = inputs;
+  const program = new SelectProgram(condition.shape.length, t.shape, t.shape.length);
+  return backend2.runWebGLProgram(program, [condition, t, e], upcastType(t.dtype, e.dtype));
 }
 var selectConfig2 = {
   kernelName: Select,
   backendName: "webgl",
   kernelFunc: select3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Selu.js
 var SELU = `
   // Stable and Attracting Fixed Point (0, 1) for Normalized Weights.
   // see: https://arxiv.org/abs/1706.02515
@@ -72511,8 +63115,6 @@ var seluConfig2 = {
   backendName: "webgl",
   kernelFunc: selu3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Sigmoid.js
 var SIGMOID3 = CHECK_NAN_SNIPPET_UNARY + `
   return 1.0 / (1.0 + exp(-1.0 * x));
 `;
@@ -72537,8 +63139,6 @@ var sigmoidConfig2 = {
   backendName: "webgl",
   kernelFunc: sigmoid3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Sign.js
 var SIGN = `
   if (isnan(x)) { return 0.0; }
   return sign(x);
@@ -72549,8 +63149,6 @@ var signConfig2 = {
   backendName: "webgl",
   kernelFunc: sign3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Sin.js
 var SIN = CHECK_NAN_SNIPPET_UNARY + `
   return sin(x);
 `;
@@ -72566,8 +63164,6 @@ var sinConfig2 = {
   backendName: "webgl",
   kernelFunc: sin3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Sinh.js
 var SINH = `
   float e2x = exp(x);
   return (e2x - 1.0 / e2x) / 2.0;
@@ -72578,8 +63174,6 @@ var sinhConfig2 = {
   backendName: "webgl",
   kernelFunc: sinh3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Softplus.js
 var SOFTPLUS = `
   float epsilon = 1.1920928955078125e-7;
   float threshold = log(epsilon) + 2.0;
@@ -72607,8 +63201,6 @@ var softplusConfig2 = {
   backendName: "webgl",
   kernelFunc: softplus3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/SpaceToBatchND.js
 var spaceToBatchND3 = (args) => {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -72639,7 +63231,7 @@ var spaceToBatchND3 = (args) => {
   toDispose.push(paddedX);
   toDispose.push(reshapedPaddedX);
   toDispose.push(paddedXT);
-  toDispose.forEach((t3) => backend2.disposeIntermediateTensorInfo(t3));
+  toDispose.forEach((t) => backend2.disposeIntermediateTensorInfo(t));
   return result;
 };
 var spaceToBatchNDConfig2 = {
@@ -72647,8 +63239,6 @@ var spaceToBatchNDConfig2 = {
   backendName: "webgl",
   kernelFunc: spaceToBatchND3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/SparseFillEmptyRows.js
 function sparseFillEmptyRows3(args) {
   const { inputs, backend: backend2 } = args;
   const { indices, values, denseShape, defaultValue } = inputs;
@@ -72685,8 +63275,6 @@ var sparseFillEmptyRowsConfig2 = {
   backendName: "webgl",
   kernelFunc: sparseFillEmptyRows3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/SparseReshape.js
 function sparseReshape3(args) {
   const { inputs, backend: backend2 } = args;
   const { inputIndices, inputShape, newShape } = inputs;
@@ -72713,8 +63301,6 @@ var sparseReshapeConfig2 = {
   backendName: "webgl",
   kernelFunc: sparseReshape3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/SparseSegmentMean.js
 function sparseSegmentMean3(args) {
   const { inputs, backend: backend2 } = args;
   const { data, indices, segmentIds } = inputs;
@@ -72740,8 +63326,6 @@ var sparseSegmentMeanConfig2 = {
   backendName: "webgl",
   kernelFunc: sparseSegmentMean3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/SparseSegmentSum.js
 function sparseSegmentSum3(args) {
   const { inputs, backend: backend2 } = args;
   const { data, indices, segmentIds } = inputs;
@@ -72767,8 +63351,6 @@ var sparseSegmentSumConfig2 = {
   backendName: "webgl",
   kernelFunc: sparseSegmentSum3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/SparseToDense.js
 function sparseToDense3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { sparseIndices, sparseValues, defaultValue } = inputs;
@@ -72793,8 +63375,6 @@ var sparseToDenseConfig2 = {
   backendName: "webgl",
   kernelFunc: sparseToDense3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/SplitV.js
 function splitV2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -72817,8 +63397,6 @@ var splitVConfig2 = {
   backendName: "webgl",
   kernelFunc: splitV2
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Sqrt.js
 var SQRT = `return sqrt(x);`;
 var sqrt3 = unaryKernelFunc2({ opSnippet: SQRT, packedOpSnippet: SQRT, cpuKernelImpl: sqrtImplCPU });
 var sqrtConfig2 = {
@@ -72826,8 +63404,6 @@ var sqrtConfig2 = {
   backendName: "webgl",
   kernelFunc: sqrt3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Square.js
 var SQUARE = `return x * x;`;
 var square3 = unaryKernelFunc2({ opSnippet: SQUARE });
 var squareConfig2 = {
@@ -72835,8 +63411,6 @@ var squareConfig2 = {
   backendName: "webgl",
   kernelFunc: square3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/SquaredDifference.js
 var SQUARED_DIFFERENCE = "return (a - b) * (a - b);";
 var squaredDifference3 = binaryKernelFunc2({ opSnippet: SQUARED_DIFFERENCE, packedOpSnippet: SQUARED_DIFFERENCE });
 var squaredDifferenceConfig2 = {
@@ -72844,8 +63418,6 @@ var squaredDifferenceConfig2 = {
   backendName: "webgl",
   kernelFunc: squaredDifference3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/StaticRegexReplace.js
 function staticRegexReplace3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -72862,8 +63434,6 @@ var staticRegexReplaceConfig2 = {
   backendName: "webgl",
   kernelFunc: staticRegexReplace3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Step.js
 function step3({ inputs, attrs, backend: backend2 }) {
   const { x } = inputs;
   const opSnippet = CHECK_NAN_SNIPPET + `
@@ -72877,8 +63447,6 @@ var stepConfig2 = {
   backendName: "webgl",
   kernelFunc: step3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/strided_slice_gpu.js
 var StridedSliceProgram = class {
   constructor(begin, strides, size) {
     this.variableNames = ["x"];
@@ -72891,7 +63459,7 @@ var StridedSliceProgram = class {
       newCoords = "coords * strides + begin";
     } else {
       let outputAxis = 0;
-      newCoords = size.map((_3, i) => {
+      newCoords = size.map((_, i) => {
         outputAxis++;
         return size.length === 1 ? `coords * strides[${i}] + begin[${i}]` : `coords[${outputAxis - 1}] * strides[${i}] + begin[${i}]`;
       }).join(",");
@@ -72907,8 +63475,6 @@ var StridedSliceProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/StridedSlice.js
 function stridedSlice3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
@@ -72944,8 +63510,6 @@ var stridedSliceConfig2 = {
   backendName: "webgl",
   kernelFunc: stridedSlice3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/StringNGrams.js
 function stringNGrams3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { separator, nGramWidths, leftPad, rightPad: rightPad2, padWidth, preserveShortSequences } = attrs;
@@ -72963,8 +63527,6 @@ var stringNGramsConfig2 = {
   backendName: "webgl",
   kernelFunc: stringNGrams3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/StringSplit.js
 function stringSplit3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { skipEmpty } = attrs;
@@ -72993,8 +63555,6 @@ var stringSplitConfig2 = {
   backendName: "webgl",
   kernelFunc: stringSplit3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/StringToHashBucketFast.js
 function stringToHashBucketFast3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { numBuckets } = attrs;
@@ -73014,8 +63574,6 @@ var stringToHashBucketFastConfig2 = {
   backendName: "webgl",
   kernelFunc: stringToHashBucketFast3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Tan.js
 var TAN = `return tan(x);`;
 var tan3 = unaryKernelFunc2({ opSnippet: TAN });
 var tanConfig2 = {
@@ -73023,8 +63581,6 @@ var tanConfig2 = {
   backendName: "webgl",
   kernelFunc: tan3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Tanh.js
 var TANH = `
   float e2x = exp(-2.0 * abs(x));
   return sign(x) * (1.0 - e2x) / (1.0 + e2x);
@@ -73035,8 +63591,6 @@ var tanhConfig2 = {
   backendName: "webgl",
   kernelFunc: tanh4
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/TensorScatterUpdate.js
 function tensorScatterUpdate3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { tensor: tensor2, indices, updates } = inputs;
@@ -73063,8 +63617,6 @@ var tensorScatterUpdateConfig2 = {
   backendName: "webgl",
   kernelFunc: tensorScatterUpdate3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/tile_gpu.js
 var TileProgram = class {
   constructor(aShape, reps) {
     this.variableNames = ["A"];
@@ -73099,8 +63651,6 @@ function getSourceCoords3(aShape) {
   }
   return sourceCoords.join();
 }
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Tile.js
 function tile4(params) {
   const { inputs, backend: backend2, attrs } = params;
   const { x } = inputs;
@@ -73121,8 +63671,6 @@ var tileConfig2 = {
   backendName: "webgl",
   kernelFunc: tile4
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/top_k_gpu.js
 var SwapProgram = class {
   /**
    * @param shape desired output shape (can be larger than input shape, output
@@ -73230,8 +63778,6 @@ var MergeProgram = class {
      `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/TopK.js
 function disposeIntermediateTensorInfoOrNull(backend2, tensorInfo) {
   if (tensorInfo !== null) {
     backend2.disposeIntermediateTensorInfo(tensorInfo);
@@ -73247,20 +63793,20 @@ function roundUpToPow2(num) {
 function topK2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x } = inputs;
-  const { k: k4, sorted } = attrs;
+  const { k, sorted } = attrs;
   const TOPK_LAST_DIM_CPU_HANDOFF_SIZE_THRESHOLD = env().getNumber("TOPK_LAST_DIM_CPU_HANDOFF_SIZE_THRESHOLD");
   const TOPK_K_CPU_HANDOFF_THRESHOLD = env().getNumber("TOPK_K_CPU_HANDOFF_THRESHOLD");
   const xShape = x.shape;
   const lastDim = xShape[xShape.length - 1];
-  if (backend2.shouldExecuteOnCPU([x]) || lastDim < TOPK_LAST_DIM_CPU_HANDOFF_SIZE_THRESHOLD || k4 > TOPK_K_CPU_HANDOFF_THRESHOLD) {
+  if (backend2.shouldExecuteOnCPU([x]) || lastDim < TOPK_LAST_DIM_CPU_HANDOFF_SIZE_THRESHOLD || k > TOPK_K_CPU_HANDOFF_THRESHOLD) {
     const xVals = backend2.readSync(x.dataId);
-    const [allTopKVals, allTopKIndices] = topKImplCPU(xVals, xShape, x.dtype, k4, sorted);
+    const [allTopKVals, allTopKIndices] = topKImplCPU(xVals, xShape, x.dtype, k, sorted);
     return [
       backend2.makeTensorInfo(allTopKVals.shape, allTopKVals.dtype, allTopKVals.values),
       backend2.makeTensorInfo(allTopKIndices.shape, allTopKIndices.dtype, allTopKIndices.values)
     ];
   }
-  if (k4 === 0) {
+  if (k === 0) {
     xShape[xShape.length - 1] = 0;
     return [
       backend2.makeTensorInfo(xShape, x.dtype, []),
@@ -73282,7 +63828,7 @@ function topK2(args) {
   if (xIsPacked) {
     disposeIntermediateTensorInfoOrNull(backend2, xUnPacked);
   }
-  const kPow2 = roundUpToPow2(k4);
+  const kPow2 = roundUpToPow2(k);
   const lastDimPow2 = roundUpToPow2(lastDim);
   let indices = null;
   const getInputs = () => indices === null ? [x2D, x2D] : [x2D, indices];
@@ -73316,12 +63862,12 @@ function topK2(args) {
     }
   }
   let prevIndices = indices;
-  indices = slice3({ inputs: { x: indices }, backend: backend2, attrs: { begin: 0, size: [batch, k4] } });
+  indices = slice3({ inputs: { x: indices }, backend: backend2, attrs: { begin: 0, size: [batch, k] } });
   disposeIntermediateTensorInfoOrNull(backend2, prevIndices);
   let values = gatherV22({ inputs: { x: x2D, indices }, backend: backend2, attrs: { axis: 1, batchDims: 1 } });
   disposeIntermediateTensorInfoOrNull(backend2, x2D);
   const newShape = xShape.slice(0, -1);
-  newShape.push(k4);
+  newShape.push(k);
   prevIndices = indices;
   indices = reshape4({ inputs: { x: indices }, attrs: { shape: newShape }, backend: backend2 });
   disposeIntermediateTensorInfoOrNull(backend2, prevIndices);
@@ -73335,8 +63881,6 @@ var topKConfig2 = {
   backendName: "webgl",
   kernelFunc: topK2
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/transform_gpu.js
 var TransformProgram = class {
   constructor(imageHeight, imageWidth, interpolation, fillMode, fillValue, outShape) {
     this.variableNames = ["Image", "Transforms"];
@@ -73475,8 +64019,6 @@ var TransformProgram = class {
         `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Transform.js
 function transform3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { image: image2, transforms } = inputs;
@@ -73497,8 +64039,6 @@ var transformConfig2 = {
   backendName: "webgl",
   kernelFunc: transform3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Unique.js
 function unique4(args) {
   const { inputs, attrs, backend: backend2 } = args;
   const { axis } = attrs;
@@ -73517,8 +64057,6 @@ var uniqueConfig2 = {
   backendName: "webgl",
   kernelFunc: unique4
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/Unpack.js
 function unpack2(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { value } = inputs;
@@ -73548,7 +64086,7 @@ function unpack2(args) {
     res[i] = reshaped;
     toDispose.push(sliced);
   }
-  toDispose.forEach((t3) => backend2.disposeIntermediateTensorInfo(t3));
+  toDispose.forEach((t) => backend2.disposeIntermediateTensorInfo(t));
   return res;
 }
 var unpackConfig2 = {
@@ -73556,8 +64094,6 @@ var unpackConfig2 = {
   backendName: "webgl",
   kernelFunc: unpack2
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/segment_gpu.js
 var SegmentOpProgram = class {
   constructor(segOpInfo, segOpType) {
     this.variableNames = ["x", "segmentIds"];
@@ -73689,8 +64225,6 @@ var SegmentOpProgram = class {
     `;
   }
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/kernels/UnsortedSegmentSum.js
 function unsortedSegmentSum3(args) {
   const { inputs, backend: backend2, attrs } = args;
   const { x, segmentIds } = inputs;
@@ -73743,7 +64277,7 @@ function unsortedSegmentSum3(args) {
     const perm = backend_util_exports.getUndoAxesPermutation(permutation);
     result = transpose3({ inputs: { x: result }, backend: backend2, attrs: { perm } });
   }
-  toDispose.forEach((t3) => backend2.disposeIntermediateTensorInfo(t3));
+  toDispose.forEach((t) => backend2.disposeIntermediateTensorInfo(t));
   return result;
 }
 var unsortedSegmentSumConfig2 = {
@@ -73751,8 +64285,6 @@ var unsortedSegmentSumConfig2 = {
   backendName: "webgl",
   kernelFunc: unsortedSegmentSum3
 };
-
-// node_modules/@tensorflow/tfjs-backend-webgl/dist/register_all_kernels.js
 var kernelConfigs2 = [
   _fusedMatMulConfig2,
   absConfig2,
@@ -73928,11 +64460,7 @@ var kernelConfigs2 = [
 for (const kernelConfig of kernelConfigs2) {
   registerKernel(kernelConfig);
 }
-
-// node_modules/@tensorflow/tfjs/dist/version.js
 var version7 = "4.22.0";
-
-// node_modules/@tensorflow/tfjs/dist/index.js
 var version8 = {
   "tfjs-core": version,
   "tfjs-backend-cpu": version5,
@@ -73942,3026 +64470,10 @@ var version8 = {
   "tfjs-converter": version3,
   "tfjs": version7
 };
-
-// node_modules/@tensorflow-models/hand-pose-detection/dist/hand-pose-detection.esm.js
-var import_hands = __toESM(require_hands());
-var I = function() {
-  return I = Object.assign || function(t3) {
-    for (var e, n = 1, i = arguments.length; n < i; n++) for (var r in e = arguments[n]) Object.prototype.hasOwnProperty.call(e, r) && (t3[r] = e[r]);
-    return t3;
-  }, I.apply(this, arguments);
-};
-function S(t3, e, n, i) {
-  return new (n || (n = Promise))(function(r, o) {
-    function a(t4) {
-      try {
-        s(i.next(t4));
-      } catch (t5) {
-        o(t5);
-      }
-    }
-    function h(t4) {
-      try {
-        s(i.throw(t4));
-      } catch (t5) {
-        o(t5);
-      }
-    }
-    function s(t4) {
-      var e2;
-      t4.done ? r(t4.value) : (e2 = t4.value, e2 instanceof n ? e2 : new n(function(t5) {
-        t5(e2);
-      })).then(a, h);
-    }
-    s((i = i.apply(t3, e || [])).next());
-  });
-}
-function T(t3, e) {
-  var n, i, r, o, a = { label: 0, sent: function() {
-    if (1 & r[0]) throw r[1];
-    return r[1];
-  }, trys: [], ops: [] };
-  return o = { next: h(0), throw: h(1), return: h(2) }, "function" == typeof Symbol && (o[Symbol.iterator] = function() {
-    return this;
-  }), o;
-  function h(h2) {
-    return function(s) {
-      return function(h3) {
-        if (n) throw new TypeError("Generator is already executing.");
-        for (; o && (o = 0, h3[0] && (a = 0)), a; ) try {
-          if (n = 1, i && (r = 2 & h3[0] ? i.return : h3[0] ? i.throw || ((r = i.return) && r.call(i), 0) : i.next) && !(r = r.call(i, h3[1])).done) return r;
-          switch (i = 0, r && (h3 = [2 & h3[0], r.value]), h3[0]) {
-            case 0:
-            case 1:
-              r = h3;
-              break;
-            case 4:
-              return a.label++, { value: h3[1], done: false };
-            case 5:
-              a.label++, i = h3[1], h3 = [0];
-              continue;
-            case 7:
-              h3 = a.ops.pop(), a.trys.pop();
-              continue;
-            default:
-              if (!(r = a.trys, (r = r.length > 0 && r[r.length - 1]) || 6 !== h3[0] && 2 !== h3[0])) {
-                a = 0;
-                continue;
-              }
-              if (3 === h3[0] && (!r || h3[1] > r[0] && h3[1] < r[3])) {
-                a.label = h3[1];
-                break;
-              }
-              if (6 === h3[0] && a.label < r[1]) {
-                a.label = r[1], r = h3;
-                break;
-              }
-              if (r && a.label < r[2]) {
-                a.label = r[2], a.ops.push(h3);
-                break;
-              }
-              r[2] && a.ops.pop(), a.trys.pop();
-              continue;
-          }
-          h3 = e.call(t3, a);
-        } catch (t4) {
-          h3 = [6, t4], i = 0;
-        } finally {
-          n = r = 0;
-        }
-        if (5 & h3[0]) throw h3[1];
-        return { value: h3[0] ? h3[1] : void 0, done: true };
-      }([h2, s]);
-    };
-  }
-}
-var _ = ["wrist", "thumb_cmc", "thumb_mcp", "thumb_ip", "thumb_tip", "index_finger_mcp", "index_finger_pip", "index_finger_dip", "index_finger_tip", "middle_finger_mcp", "middle_finger_pip", "middle_finger_dip", "middle_finger_tip", "ring_finger_mcp", "ring_finger_pip", "ring_finger_dip", "ring_finger_tip", "pinky_finger_mcp", "pinky_finger_pip", "pinky_finger_dip", "pinky_finger_tip"];
-var C = { runtime: "mediapipe", maxHands: 2, modelType: "full" };
-var k = function() {
-  function i(e) {
-    var n, i2 = this;
-    if (this.width = 0, this.height = 0, this.selfieMode = false, this.handsSolution = new import_hands.Hands({ locateFile: function(t3, n2) {
-      return e.solutionPath ? e.solutionPath.replace(/\/+$/, "") + "/" + t3 : n2 + "/" + t3;
-    } }), "lite" === e.modelType) n = 0;
-    else n = 1;
-    this.handsSolution.setOptions({ modelComplexity: n, selfieMode: this.selfieMode, maxNumHands: e.maxHands }), this.handsSolution.onResults(function(t3) {
-      if (i2.height = t3.image.height, i2.width = t3.image.width, i2.hands = [], null !== t3.multiHandLandmarks) for (var e2 = t3.multiHandedness, n2 = t3.multiHandLandmarks, r = t3.multiHandWorldLandmarks, o = 0; o < e2.length; o++) i2.hands.push(I(I({}, i2.translateOutput(n2[o], r[o])), { score: e2[o].score, handedness: e2[o].label }));
-    });
-  }
-  return i.prototype.translateOutput = function(t3, e) {
-    var n = this;
-    return { keypoints: t3.map(function(t4, e2) {
-      return { x: t4.x * n.width, y: t4.y * n.height, score: t4.visibility, name: _[e2] };
-    }), keypoints3D: e.map(function(t4, e2) {
-      return { x: t4.x, y: t4.y, z: t4.z, score: t4.visibility, name: _[e2] };
-    }) };
-  }, i.prototype.estimateHands = function(t3, i2) {
-    return S(this, void 0, void 0, function() {
-      var r, o;
-      return T(this, function(a) {
-        switch (a.label) {
-          case 0:
-            return i2 && i2.flipHorizontal && i2.flipHorizontal !== this.selfieMode && (this.selfieMode = i2.flipHorizontal, this.handsSolution.setOptions({ selfieMode: this.selfieMode })), t3 instanceof Tensor ? (o = ImageData.bind, [4, browser_exports.toPixels(t3)]) : [3, 2];
-          case 1:
-            return r = new (o.apply(ImageData, [void 0, a.sent(), t3.shape[1], t3.shape[0]]))(), [3, 3];
-          case 2:
-            r = t3, a.label = 3;
-          case 3:
-            return t3 = r, [4, this.handsSolution.send({ image: t3 })];
-          case 4:
-            return a.sent(), [2, this.hands];
-        }
-      });
-    });
-  }, i.prototype.dispose = function() {
-    this.handsSolution.close();
-  }, i.prototype.reset = function() {
-    this.handsSolution.reset(), this.width = 0, this.height = 0, this.hands = null, this.selfieMode = false;
-  }, i.prototype.initialize = function() {
-    return this.handsSolution.initialize();
-  }, i;
-}();
-function H(t3) {
-  return S(this, void 0, void 0, function() {
-    var e, n;
-    return T(this, function(i) {
-      switch (i.label) {
-        case 0:
-          return e = function(t4) {
-            if (null == t4) return I({}, C);
-            var e2 = I({}, t4);
-            return e2.runtime = "mediapipe", null == e2.maxHands && (e2.maxHands = C.maxHands), null == e2.modelType && (e2.modelType = C.modelType), e2;
-          }(t3), [4, (n = new k(e)).initialize()];
-        case 1:
-          return i.sent(), [2, n];
-      }
-    });
-  });
-}
-function z(t3) {
-  return t3.width * t3.height;
-}
-function O(t3) {
-  var e = t3.xCenter - t3.width / 2, n = e + t3.width, i = t3.yCenter - t3.height / 2;
-  return { xMin: e, xMax: n, yMin: i, yMax: i + t3.height, width: t3.width, height: t3.height };
-}
-function L(t3, e) {
-  var n = O(t3), i = O(e);
-  if (!function(t4, e2) {
-    return !(t4.xMax < e2.xMin || e2.xMax < t4.xMin || t4.yMax < e2.yMin || e2.yMax < t4.yMin);
-  }(n, i)) return 0;
-  var r = z(function(t4, e2) {
-    var n2 = Math.max(t4.xMin, e2.xMin), i2 = Math.min(t4.xMax, e2.xMax), r2 = Math.max(t4.yMin, e2.yMin), o2 = Math.min(t4.yMax, e2.yMax);
-    return { xMin: n2, xMax: i2, yMin: r2, yMax: o2, width: Math.max(i2 - n2, 0), height: Math.max(o2 - r2, 0) };
-  }(n, i)), o = z(n) + z(i) - r;
-  return o > 0 ? r / o : 0;
-}
-function E(t3, e, n, i) {
-  var r = t3.width, o = t3.height, a = i ? -1 : 1, h = Math.cos(t3.rotation), s = Math.sin(t3.rotation), u = t3.xCenter, l = t3.yCenter, d = 1 / e, c = 1 / n, f = new Array(16);
-  return f[0] = r * h * a * d, f[1] = -o * s * d, f[2] = 0, f[3] = (-0.5 * r * h * a + 0.5 * o * s + u) * d, f[4] = r * s * a * c, f[5] = o * h * c, f[6] = 0, f[7] = (-0.5 * o * h - 0.5 * r * s * a + l) * c, f[8] = 0, f[9] = 0, f[10] = r * d, f[11] = 0, f[12] = 0, f[13] = 0, f[14] = 0, f[15] = 1, function(t4) {
-    if (16 !== t4.length) throw new Error("Array length must be 16 but got " + t4.length);
-    return [[t4[0], t4[1], t4[2], t4[3]], [t4[4], t4[5], t4[6], t4[7]], [t4[8], t4[9], t4[10], t4[11]], [t4[12], t4[13], t4[14], t4[15]]];
-  }(f);
-}
-function N(t3) {
-  return t3 instanceof Tensor ? { height: t3.shape[0], width: t3.shape[1] } : { height: t3.height, width: t3.width };
-}
-function A(t3) {
-  return t3 - 2 * Math.PI * Math.floor((t3 + Math.PI) / (2 * Math.PI));
-}
-function B(t3) {
-  return t3 instanceof Tensor ? t3 : browser_exports.fromPixels(t3);
-}
-function R(t3, e) {
-  util_exports.assert(0 !== t3.width, function() {
-    return e + " width cannot be 0.";
-  }), util_exports.assert(0 !== t3.height, function() {
-    return e + " height cannot be 0.";
-  });
-}
-function V(t3, e) {
-  var n = function(t4, e2, n2, i) {
-    var r = e2 - t4, o = i - n2;
-    if (0 === r) throw new Error("Original min and max are both " + t4 + ", range cannot be 0.");
-    var a = o / r;
-    return { scale: a, offset: n2 - t4 * a };
-  }(0, 255, e[0], e[1]);
-  return tidy(function() {
-    return add2(mul(t3, n.scale), n.offset);
-  });
-}
-function P(t3, e, n) {
-  var i = e.outputTensorSize, o = e.keepAspectRatio, a = e.borderMode, d = e.outputTensorFloatRange, c = N(t3), f = function(t4, e2) {
-    return e2 ? { xCenter: e2.xCenter * t4.width, yCenter: e2.yCenter * t4.height, width: e2.width * t4.width, height: e2.height * t4.height, rotation: e2.rotation } : { xCenter: 0.5 * t4.width, yCenter: 0.5 * t4.height, width: t4.width, height: t4.height, rotation: 0 };
-  }(c, n), p2 = function(t4, e2, n2) {
-    if (void 0 === n2 && (n2 = false), !n2) return { top: 0, left: 0, right: 0, bottom: 0 };
-    var i2 = e2.height, r = e2.width;
-    R(e2, "targetSize"), R(t4, "roi");
-    var o2, a6, h = i2 / r, s = t4.height / t4.width, u = 0, l = 0;
-    return h > s ? (o2 = t4.width, a6 = t4.width * h, l = (1 - s / h) / 2) : (o2 = t4.height / h, a6 = t4.height, u = (1 - h / s) / 2), t4.width = o2, t4.height = a6, { top: l, left: u, right: u, bottom: l };
-  }(f, i, o), m = E(f, c.width, c.height, false), g = tidy(function() {
-    var e2 = B(t3), n2 = tensor2d(function(t4, e3, n3) {
-      return R(n3, "inputResolution"), [1 / n3.width * t4[0][0] * e3.width, 1 / n3.height * t4[0][1] * e3.width, t4[0][3] * e3.width, 1 / n3.width * t4[1][0] * e3.height, 1 / n3.height * t4[1][1] * e3.height, t4[1][3] * e3.height, 0, 0];
-    }(m, c, i), [1, 8]), r = "zero" === a ? "constant" : "nearest", o2 = image.transform(expandDims(cast(e2, "float32")), n2, "bilinear", r, 0, [i.height, i.width]);
-    return null != d ? V(o2, d) : o2;
-  });
-  return { imageTensor: g, padding: p2, transformationMatrix: m };
-}
-function D(t3, e, n, i) {
-  return 1 === i ? 0.5 * (t3 + e) : t3 + (e - t3) * n / (i - 1);
-}
-function K(t3) {
-  return { xCenter: t3.xMin + t3.width / 2, yCenter: t3.yMin + t3.height / 2, width: t3.width, height: t3.height };
-}
-function F(t3) {
-  var e = t3.relativeKeypoints;
-  if (e.length <= 1) throw new Error("2 or more keypoints required to calculate a rect.");
-  var n = Number.MAX_VALUE, i = Number.MAX_VALUE, r = Number.MIN_VALUE, o = Number.MIN_VALUE;
-  return e.forEach(function(t4) {
-    n = Math.min(n, t4.x), r = Math.max(r, t4.x), i = Math.min(i, t4.y), o = Math.max(o, t4.y);
-  }), { xCenter: (n + r) / 2, yCenter: (i + o) / 2, width: r - n, height: o - i };
-}
-function Y(t3, e, n, i, r) {
-  var o = "rect" === n ? function(t4, e2, n2) {
-    var i2, r2 = t4.locationData;
-    if ("boundingbox" === e2) i2 = K(r2.boundingBox);
-    else {
-      i2 = F(r2);
-      var o2 = n2.width, a = n2.height;
-      i2.xCenter = Math.round(i2.xCenter * o2), i2.yCenter = Math.round(i2.yCenter * a), i2.width = Math.round(i2.width * o2), i2.height = Math.round(i2.height * a);
-    }
-    return i2;
-  }(t3, e, i) : function(t4, e2) {
-    var n2 = t4.locationData;
-    return "boundingbox" === e2 ? K(n2.relativeBoundingBox) : F(n2);
-  }(t3, e);
-  return r && (o.rotation = function(t4, e2, n2) {
-    var i2, r2 = t4.locationData, o2 = n2.rotationVectorStartKeypointIndex, a = n2.rotationVectorEndKeypointIndex;
-    i2 = n2.rotationVectorTargetAngle ? n2.rotationVectorTargetAngle : Math.PI * n2.rotationVectorTargetAngleDegree / 180;
-    var h = r2.relativeKeypoints[o2].x * e2.width, s = r2.relativeKeypoints[o2].y * e2.height, u = r2.relativeKeypoints[a].x * e2.width, l = r2.relativeKeypoints[a].y * e2.height;
-    return A(i2 - Math.atan2(-(l - s), u - h));
-  }(t3, i, r)), o;
-}
-function U(t3) {
-  return tidy(function() {
-    var e = function(t4) {
-      return tidy(function() {
-        return [slice(t4, [0, 0, 0], [1, -1, 1]), slice(t4, [0, 0, 1], [1, -1, -1])];
-      });
-    }(t3), n = e[0], i = e[1];
-    return { boxes: squeeze(i), logits: squeeze(n) };
-  });
-}
-function j(t3, e, n, i) {
-  return S(this, void 0, void 0, function() {
-    var i2, r, o, a, u;
-    return T(this, function(l) {
-      switch (l.label) {
-        case 0:
-          return t3.sort(function(t4, e2) {
-            return Math.max.apply(Math, e2.score) - Math.max.apply(Math, t4.score);
-          }), i2 = tensor2d(t3.map(function(t4) {
-            return [t4.locationData.relativeBoundingBox.yMin, t4.locationData.relativeBoundingBox.xMin, t4.locationData.relativeBoundingBox.yMax, t4.locationData.relativeBoundingBox.xMax];
-          })), r = tensor1d(t3.map(function(t4) {
-            return t4.score[0];
-          })), [4, image.nonMaxSuppressionAsync(i2, r, e, n)];
-        case 1:
-          return [4, (o = l.sent()).array()];
-        case 2:
-          return a = l.sent(), u = t3.filter(function(t4, e2) {
-            return a.indexOf(e2) > -1;
-          }), dispose([i2, r, o]), [2, u];
-      }
-    });
-  });
-}
-function X(t3, e) {
-  return t3.map(function(t4) {
-    var n = I(I({}, t4), { x: t4.x * e.width, y: t4.y * e.height });
-    return null != t4.z && (n.z = t4.z * e.width), n;
-  });
-}
-function W(t3, e, n) {
-  return S(this, void 0, void 0, function() {
-    var i, h, s, u, l;
-    return T(this, function(p2) {
-      switch (p2.label) {
-        case 0:
-          return i = t3[0], h = t3[1], s = function(t4, e2, n2) {
-            return tidy(function() {
-              var i2, r, h2, s2;
-              n2.reverseOutputOrder ? (r = squeeze(slice(t4, [0, n2.boxCoordOffset + 0], [-1, 1])), i2 = squeeze(slice(t4, [0, n2.boxCoordOffset + 1], [-1, 1])), s2 = squeeze(slice(t4, [0, n2.boxCoordOffset + 2], [-1, 1])), h2 = squeeze(slice(t4, [0, n2.boxCoordOffset + 3], [-1, 1]))) : (i2 = squeeze(slice(t4, [0, n2.boxCoordOffset + 0], [-1, 1])), r = squeeze(slice(t4, [0, n2.boxCoordOffset + 1], [-1, 1])), h2 = squeeze(slice(t4, [0, n2.boxCoordOffset + 2], [-1, 1])), s2 = squeeze(slice(t4, [0, n2.boxCoordOffset + 3], [-1, 1]))), r = add2(mul(div(r, n2.xScale), e2.w), e2.x), i2 = add2(mul(div(i2, n2.yScale), e2.h), e2.y), n2.applyExponentialOnBoxSize ? (h2 = mul(exp(div(h2, n2.hScale)), e2.h), s2 = mul(exp(div(s2, n2.wScale)), e2.w)) : (h2 = mul(div(h2, n2.hScale), e2.h), s2 = mul(div(s2, n2.wScale), e2.h));
-              var u2 = sub(i2, div(h2, 2)), l3 = sub(r, div(s2, 2)), f = add2(i2, div(h2, 2)), p3 = add2(r, div(s2, 2)), M = concat([reshape(u2, [n2.numBoxes, 1]), reshape(l3, [n2.numBoxes, 1]), reshape(f, [n2.numBoxes, 1]), reshape(p3, [n2.numBoxes, 1])], 1);
-              if (n2.numKeypoints) for (var w = 0; w < n2.numKeypoints; ++w) {
-                var b = n2.keypointCoordOffset + w * n2.numValuesPerKeypoint, I3 = void 0, S3 = void 0;
-                n2.reverseOutputOrder ? (I3 = squeeze(slice(t4, [0, b], [-1, 1])), S3 = squeeze(slice(t4, [0, b + 1], [-1, 1]))) : (S3 = squeeze(slice(t4, [0, b], [-1, 1])), I3 = squeeze(slice(t4, [0, b + 1], [-1, 1])));
-                var T2 = add2(mul(div(I3, n2.xScale), e2.w), e2.x), _3 = add2(mul(div(S3, n2.yScale), e2.h), e2.y);
-                M = concat([M, reshape(T2, [n2.numBoxes, 1]), reshape(_3, [n2.numBoxes, 1])], 1);
-              }
-              return M;
-            });
-          }(h, e, n), u = tidy(function() {
-            var t4 = i;
-            return n.sigmoidScore ? (null != n.scoreClippingThresh && (t4 = clipByValue(i, -n.scoreClippingThresh, n.scoreClippingThresh)), t4 = sigmoid(t4)) : t4;
-          }), [4, q(s, u, n)];
-        case 1:
-          return l = p2.sent(), dispose([s, u]), [2, l];
-      }
-    });
-  });
-}
-function q(t3, e, n) {
-  return S(this, void 0, void 0, function() {
-    var i, r, o, a, h, s, u, l, d, c, f, p2;
-    return T(this, function(m) {
-      switch (m.label) {
-        case 0:
-          return i = [], [4, t3.data()];
-        case 1:
-          return r = m.sent(), [4, e.data()];
-        case 2:
-          for (o = m.sent(), a = 0; a < n.numBoxes; ++a) if (!(null != n.minScoreThresh && o[a] < n.minScoreThresh || (h = a * n.numCoords, s = G(r[h + 0], r[h + 1], r[h + 2], r[h + 3], o[a], n.flipVertically, a), (u = s.locationData.relativeBoundingBox).width < 0 || u.height < 0))) {
-            if (n.numKeypoints > 0) for ((l = s.locationData).relativeKeypoints = [], d = n.numKeypoints * n.numValuesPerKeypoint, c = 0; c < d; c += n.numValuesPerKeypoint) f = h + n.keypointCoordOffset + c, p2 = { x: r[f + 0], y: n.flipVertically ? 1 - r[f + 1] : r[f + 1] }, l.relativeKeypoints.push(p2);
-            i.push(s);
-          }
-          return [2, i];
-      }
-    });
-  });
-}
-function G(t3, e, n, i, r, o, a) {
-  return { score: [r], ind: a, locationData: { relativeBoundingBox: { xMin: e, yMin: o ? 1 - n : t3, xMax: i, yMax: o ? 1 - t3 : n, width: i - e, height: n - t3 } } };
-}
-function Z(t3, e) {
-  return "none" === t3 ? e : function(t4) {
-    return 1 / (1 + Math.exp(-t4));
-  }(e);
-}
-function $(t3, e, n, i) {
-  return S(this, void 0, void 0, function() {
-    var r, o, a, h, s, u, l, d;
-    return T(this, function(c) {
-      switch (c.label) {
-        case 0:
-          return n = n || e.flipHorizontally || false, i = i || e.flipVertically || false, r = t3.size, o = r / e.numLandmarks, [4, t3.data()];
-        case 1:
-          for (a = c.sent(), h = [], s = 0; s < e.numLandmarks; ++s) u = s * o, (d = { x: 0, y: 0 }).x = n ? e.inputImageWidth - a[u] : a[u], o > 1 && (d.y = i ? e.inputImageHeight - a[u + 1] : a[u + 1]), o > 2 && (d.z = a[u + 2]), o > 3 && (d.score = Z(e.visibilityActivation, a[u + 3])), h.push(d);
-          for (l = 0; l < h.length; ++l) (d = h[l]).x = d.x / e.inputImageWidth, d.y = d.y / e.inputImageHeight, d.z = d.z / e.inputImageWidth / (e.normalizeZ || 1);
-          return [2, h];
-      }
-    });
-  });
-}
-function J(t3, e, n) {
-  var i = t3.width, r = t3.height, o = t3.rotation;
-  if (null == n.rotation && null == n.rotationDegree || (o = function(t4, e2) {
-    null != e2.rotation ? t4 += e2.rotation : null != e2.rotationDegree && (t4 += Math.PI * e2.rotationDegree / 180);
-    return A(t4);
-  }(o, n)), 0 === o) t3.xCenter = t3.xCenter + i * n.shiftX, t3.yCenter = t3.yCenter + r * n.shiftY;
-  else {
-    var a = (e.width * i * n.shiftX * Math.cos(o) - e.height * r * n.shiftY * Math.sin(o)) / e.width, h = (e.width * i * n.shiftX * Math.sin(o) + e.height * r * n.shiftY * Math.cos(o)) / e.height;
-    t3.xCenter = t3.xCenter + a, t3.yCenter = t3.yCenter + h;
-  }
-  if (n.squareLong) {
-    var s = Math.max(i * e.width, r * e.height);
-    i = s / e.width, r = s / e.height;
-  } else if (n.squareShort) {
-    var u = Math.min(i * e.width, r * e.height);
-    i = u / e.width, r = u / e.height;
-  }
-  return t3.width = i * n.scaleX, t3.height = r * n.scaleY, t3;
-}
-function Q(t3, e) {
-  for (var n = function(t4, e2) {
-    var n2 = t4[0].x * e2.width, i2 = t4[0].y * e2.height, r2 = (t4[4].x + t4[8].x) / 2, o2 = (t4[4].y + t4[8].y) / 2;
-    return r2 = (r2 + t4[6].x) / 2 * e2.width, o2 = (o2 + t4[6].y) / 2 * e2.height, A(Math.PI / 2 - Math.atan2(-(o2 - i2), r2 - n2));
-  }(t3, e), i = A(-n), r = Number.POSITIVE_INFINITY, o = Number.NEGATIVE_INFINITY, a = Number.POSITIVE_INFINITY, h = Number.NEGATIVE_INFINITY, s = 0, u = t3; s < u.length; s++) {
-    var l = (g = u[s]).x, d = g.y;
-    r = Math.min(r, l), o = Math.max(o, l), a = Math.min(a, d), h = Math.max(h, d);
-  }
-  var c = (o + r) / 2, f = (h + a) / 2;
-  r = Number.POSITIVE_INFINITY, o = Number.NEGATIVE_INFINITY, a = Number.POSITIVE_INFINITY, h = Number.NEGATIVE_INFINITY;
-  for (var p2 = 0, m = t3; p2 < m.length; p2++) {
-    var g, x = ((g = m[p2]).x - c) * e.width, y = (g.y - f) * e.height, v = x * Math.cos(i) - y * Math.sin(i), M = x * Math.sin(i) + y * Math.cos(i);
-    r = Math.min(r, v), o = Math.max(o, v), a = Math.min(a, M), h = Math.max(h, M);
-  }
-  var w = (o + r) / 2, b = (h + a) / 2, I3 = w * Math.cos(n) - b * Math.sin(n) + e.width * c, S3 = w * Math.sin(n) + b * Math.cos(n) + e.height * f, T2 = (o - r) / e.width, _3 = (h - a) / e.height;
-  return { xCenter: I3 / e.width, yCenter: S3 / e.height, width: T2, height: _3, rotation: n };
-}
-var tt = { reduceBoxesInLowestLayer: false, interpolatedScaleAspectRatio: 1, featureMapHeight: [], featureMapWidth: [], numLayers: 4, minScale: 0.1484375, maxScale: 0.75, inputSizeHeight: 192, inputSizeWidth: 192, anchorOffsetX: 0.5, anchorOffsetY: 0.5, strides: [8, 16, 16, 16], aspectRatios: [1], fixedAnchorSize: true };
-var et = { runtime: "tfjs", modelType: "full", maxHands: 2, detectorModelUrl: "https://tfhub.dev/mediapipe/tfjs-model/handpose_3d/detector/full/1", landmarkModelUrl: "https://tfhub.dev/mediapipe/tfjs-model/handpose_3d/landmark/full/1" };
-var nt = { flipHorizontal: false, staticImageMode: false };
-var it = { applyExponentialOnBoxSize: false, flipVertically: false, ignoreClasses: [], numClasses: 1, numBoxes: 2016, numCoords: 18, boxCoordOffset: 0, keypointCoordOffset: 4, numKeypoints: 7, numValuesPerKeypoint: 2, sigmoidScore: true, scoreClippingThresh: 100, reverseOutputOrder: true, xScale: 192, yScale: 192, hScale: 192, wScale: 192, minScoreThresh: 0.5 };
-var rt = 0.3;
-var ot = { shiftX: 0, shiftY: -0.5, scaleX: 2.6, scaleY: 2.6, squareLong: true };
-var at = { shiftX: 0, shiftY: -0.1, scaleX: 2, scaleY: 2, squareLong: true };
-var ht = { outputTensorSize: { width: 192, height: 192 }, keepAspectRatio: true, outputTensorFloatRange: [0, 1], borderMode: "zero" };
-var st = { outputTensorSize: { width: 224, height: 224 }, keepAspectRatio: true, outputTensorFloatRange: [0, 1], borderMode: "zero" };
-var ut = { numLandmarks: 21, inputImageWidth: 224, inputImageHeight: 224, normalizeZ: 0.4, visibilityActivation: "none", flipHorizontally: false, flipVertically: false };
-var lt = { numLandmarks: 21, inputImageWidth: 1, inputImageHeight: 1, visibilityActivation: "none", flipHorizontally: false, flipVertically: false };
-var dt;
-var ct = function() {
-  function t3(t4, e, n) {
-    this.detectorModel = t4, this.landmarkModel = e, this.maxHands = n, this.prevHandRectsFromLandmarks = null, this.anchors = function(t5) {
-      null == t5.reduceBoxesInLowestLayer && (t5.reduceBoxesInLowestLayer = false), null == t5.interpolatedScaleAspectRatio && (t5.interpolatedScaleAspectRatio = 1), null == t5.fixedAnchorSize && (t5.fixedAnchorSize = false);
-      for (var e2 = [], n2 = 0; n2 < t5.numLayers; ) {
-        for (var i2 = [], r2 = [], o2 = [], a6 = [], h = n2; h < t5.strides.length && t5.strides[h] === t5.strides[n2]; ) {
-          var s = D(t5.minScale, t5.maxScale, h, t5.strides.length);
-          if (0 === h && t5.reduceBoxesInLowestLayer) o2.push(1), o2.push(2), o2.push(0.5), a6.push(0.1), a6.push(s), a6.push(s);
-          else {
-            for (var u = 0; u < t5.aspectRatios.length; ++u) o2.push(t5.aspectRatios[u]), a6.push(s);
-            if (t5.interpolatedScaleAspectRatio > 0) {
-              var l = h === t5.strides.length - 1 ? 1 : D(t5.minScale, t5.maxScale, h + 1, t5.strides.length);
-              a6.push(Math.sqrt(s * l)), o2.push(t5.interpolatedScaleAspectRatio);
-            }
-          }
-          h++;
-        }
-        for (var d = 0; d < o2.length; ++d) {
-          var c = Math.sqrt(o2[d]);
-          i2.push(a6[d] / c), r2.push(a6[d] * c);
-        }
-        var f = 0, p2 = 0;
-        if (t5.featureMapHeight.length > 0) f = t5.featureMapHeight[n2], p2 = t5.featureMapWidth[n2];
-        else {
-          var m = t5.strides[n2];
-          f = Math.ceil(t5.inputSizeHeight / m), p2 = Math.ceil(t5.inputSizeWidth / m);
-        }
-        for (var g = 0; g < f; ++g) for (var x = 0; x < p2; ++x) for (var y = 0; y < i2.length; ++y) {
-          var v = { xCenter: (x + t5.anchorOffsetX) / p2, yCenter: (g + t5.anchorOffsetY) / f, width: 0, height: 0 };
-          t5.fixedAnchorSize ? (v.width = 1, v.height = 1) : (v.width = r2[y], v.height = i2[y]), e2.push(v);
-        }
-        n2 = h;
-      }
-      return e2;
-    }(tt);
-    var i = tensor1d(this.anchors.map(function(t5) {
-      return t5.width;
-    })), r = tensor1d(this.anchors.map(function(t5) {
-      return t5.height;
-    })), o = tensor1d(this.anchors.map(function(t5) {
-      return t5.xCenter;
-    })), a = tensor1d(this.anchors.map(function(t5) {
-      return t5.yCenter;
-    }));
-    this.anchorTensor = { x: o, y: a, w: i, h: r };
-  }
-  return t3.prototype.estimateHands = function(t4, e) {
-    return S(this, void 0, void 0, function() {
-      var n, i, o, a, h, d, f, p2, m, g, x, y, v, M, w, b, S3, C3, k4 = this;
-      return T(this, function(T2) {
-        switch (T2.label) {
-          case 0:
-            return n = function(t5) {
-              if (null == t5) return I({}, nt);
-              var e2 = I({}, t5);
-              return null == e2.flipHorizontal && (e2.flipHorizontal = nt.flipHorizontal), null == e2.staticImageMode && (e2.staticImageMode = nt.staticImageMode), e2;
-            }(e), null == t4 ? (this.reset(), [2, []]) : (i = N(t4), o = tidy(function() {
-              var e2 = cast(B(t4), "float32");
-              if (n.flipHorizontal) {
-                e2 = squeeze(image.flipLeftRight(expandDims(e2, 0)), [0]);
-              }
-              return e2;
-            }), a = this.prevHandRectsFromLandmarks, n.staticImageMode || null == a || a.length < this.maxHands ? [4, this.detectPalm(o)] : [3, 2]);
-          case 1:
-            return 0 === (d = T2.sent()).length ? (this.reset(), o.dispose(), [2, []]) : (f = d.map(function(t5) {
-              return k4.palmDetectionToRoi(t5, i);
-            }), h = f, [3, 3]);
-          case 2:
-            h = a, T2.label = 3;
-          case 3:
-            return H3 = 0.5, z3 = [], [h].forEach(function(t5) {
-              return t5.forEach(function(t6) {
-                (z3 = z3.filter(function(e2) {
-                  return L(t6, e2) <= H3;
-                })).push(t6);
-              });
-            }), h = z3, [4, Promise.all(h.map(function(t5) {
-              return k4.handLandmarks(t5, o);
-            }))];
-          case 4:
-            for (p2 = T2.sent(), m = [], this.prevHandRectsFromLandmarks = [], g = 0, x = p2; g < x.length; g++) null != (y = x[g]) && (v = y.landmarks, M = y.worldLandmarks, w = y.handScore, b = y.handedness, this.prevHandRectsFromLandmarks.push(this.handLandmarksToRoi(v, i)), null != (S3 = X(v, i)) && S3.forEach(function(t5, e2) {
-              delete t5.z, t5.name = _[e2];
-            }), null != (C3 = M) && C3.forEach(function(t5, e2) {
-              t5.name = _[e2];
-            }), m.push({ keypoints: S3, keypoints3D: C3, handedness: b, score: w }));
-            return o.dispose(), [2, m];
-        }
-        var H3, z3;
-      });
-    });
-  }, t3.prototype.dispose = function() {
-    this.detectorModel.dispose(), this.landmarkModel.dispose(), dispose([this.anchorTensor.x, this.anchorTensor.y, this.anchorTensor.w, this.anchorTensor.h]);
-  }, t3.prototype.reset = function() {
-    this.prevHandRectsFromLandmarks = null;
-  }, t3.prototype.detectPalm = function(t4) {
-    return S(this, void 0, void 0, function() {
-      var e, n, i, r, o, a, h, s, u, l;
-      return T(this, function(d) {
-        switch (d.label) {
-          case 0:
-            return e = P(t4, ht), n = e.imageTensor, i = e.padding, r = this.detectorModel.predict(n), o = U(r), a = o.boxes, [4, W([h = o.logits, a], this.anchorTensor, it)];
-          case 1:
-            return 0 === (s = d.sent()).length ? (dispose([n, r, h, a]), [2, s]) : [4, j(s, this.maxHands, rt)];
-          case 2:
-            return u = d.sent(), l = function(t5, e2) {
-              void 0 === t5 && (t5 = []);
-              for (var n2 = e2.left, i2 = e2.top, r2 = e2.left + e2.right, o2 = e2.top + e2.bottom, a6 = 0; a6 < t5.length; a6++) {
-                var h2 = t5[a6], s2 = h2.locationData.relativeBoundingBox, u2 = (s2.xMin - n2) / (1 - r2), l3 = (s2.yMin - i2) / (1 - o2), d2 = s2.width / (1 - r2), c = s2.height / (1 - o2);
-                s2.xMin = u2, s2.yMin = l3, s2.width = d2, s2.height = c, s2.xMax = u2 + d2, s2.yMax = l3 + c;
-                var f = h2.locationData.relativeKeypoints;
-                f && f.forEach(function(t6) {
-                  var e3 = (t6.x - n2) / (1 - r2), a7 = (t6.y - i2) / (1 - o2);
-                  t6.x = e3, t6.y = a7;
-                });
-              }
-              return t5;
-            }(u, i), dispose([n, r, h, a]), [2, l];
-        }
-      });
-    });
-  }, t3.prototype.palmDetectionToRoi = function(t4, e) {
-    return J(Y(t4, "boundingbox", "normRect", e, { rotationVectorStartKeypointIndex: 0, rotationVectorEndKeypointIndex: 2, rotationVectorTargetAngleDegree: 90 }), e, ot);
-  }, t3.prototype.handLandmarks = function(t4, e) {
-    return S(this, void 0, void 0, function() {
-      var n, i, r, o, a, h, s, u, l, d, c, p2, m, g, x, y;
-      return T(this, function(v) {
-        switch (v.label) {
-          case 0:
-            return n = P(e, st, t4), i = n.imageTensor, r = n.padding, o = this.landmarkModel.execute(i, ["Identity_2:0", "Identity_1:0", "Identity:0", "Identity_3:0"]), a = o[0], h = o[1], s = o[2], u = o[3], [4, h.data()];
-          case 1:
-            return (l = v.sent()[0]) < 0.5 ? (dispose(o), dispose(i), [2, null]) : [4, s.data()];
-          case 2:
-            return d = v.sent()[0], c = d >= 0.5 ? "Left" : "Right", [4, $(a, ut)];
-          case 3:
-            return p2 = v.sent(), [4, $(u, lt)];
-          case 4:
-            return m = v.sent(), g = function(t5, e2) {
-              var n2 = e2.left, i2 = e2.top, r2 = e2.left + e2.right, o2 = e2.top + e2.bottom;
-              return t5.map(function(t6) {
-                return I(I({}, t6), { x: (t6.x - n2) / (1 - r2), y: (t6.y - i2) / (1 - o2), z: t6.z / (1 - r2) });
-              });
-            }(p2, r), x = function(t5, e2, n2) {
-              void 0 === n2 && (n2 = { ignoreRotation: false });
-              for (var i2 = [], r2 = 0, o2 = t5; r2 < o2.length; r2++) {
-                var a6 = o2[r2], h2 = a6.x - 0.5, s2 = a6.y - 0.5, u2 = n2.ignoreRotation ? 0 : e2.rotation, l3 = Math.cos(u2) * h2 - Math.sin(u2) * s2, d2 = Math.sin(u2) * h2 + Math.cos(u2) * s2;
-                l3 = l3 * e2.width + e2.xCenter, d2 = d2 * e2.height + e2.yCenter;
-                var c2 = a6.z * e2.width, f = I({}, a6);
-                f.x = l3, f.y = d2, f.z = c2, i2.push(f);
-              }
-              return i2;
-            }(g, t4), y = function(t5, e2) {
-              for (var n2 = [], i2 = 0, r2 = t5; i2 < r2.length; i2++) {
-                var o2 = r2[i2], a6 = o2.x, h2 = o2.y, s2 = e2.rotation, u2 = Math.cos(s2) * a6 - Math.sin(s2) * h2, l3 = Math.sin(s2) * a6 + Math.cos(s2) * h2, d2 = I({}, o2);
-                d2.x = u2, d2.y = l3, n2.push(d2);
-              }
-              return n2;
-            }(m, t4), dispose(o), dispose(i), [2, { landmarks: x, worldLandmarks: y, handScore: l, handedness: c }];
-        }
-      });
-    });
-  }, t3.prototype.handLandmarksToRoi = function(t4, e) {
-    return J(Q([].concat(t4.slice(0, 4), t4.slice(5, 7), t4.slice(9, 11), t4.slice(13, 15), t4.slice(17, 19)), e), e, at);
-  }, t3;
-}();
-function ft(t3) {
-  return S(this, void 0, void 0, function() {
-    var e, n, i, r, o, a;
-    return T(this, function(h) {
-      switch (h.label) {
-        case 0:
-          return e = function(t4) {
-            if (null == t4) return I({}, et);
-            var e2 = I({}, t4);
-            if (e2.runtime = "tfjs", null == e2.maxHands && (e2.maxHands = et.maxHands), null == e2.modelType && (e2.modelType = et.modelType), "lite" !== e2.modelType && "full" !== e2.modelType) throw new Error("Model type must be one of lite or full, but got " + e2.modelType);
-            null == e2.detectorModelUrl && ("lite" === e2.modelType ? e2.detectorModelUrl = "https://tfhub.dev/mediapipe/tfjs-model/handpose_3d/detector/lite/1" : e2.detectorModelUrl = "https://tfhub.dev/mediapipe/tfjs-model/handpose_3d/detector/full/1");
-            null == e2.landmarkModelUrl && ("lite" === e2.modelType ? e2.landmarkModelUrl = "https://tfhub.dev/mediapipe/tfjs-model/handpose_3d/landmark/lite/1" : e2.landmarkModelUrl = "https://tfhub.dev/mediapipe/tfjs-model/handpose_3d/landmark/full/1");
-            return e2;
-          }(t3), n = e.detectorModelUrl.indexOf("https://tfhub.dev") > -1, i = e.landmarkModelUrl.indexOf("https://tfhub.dev") > -1, [4, Promise.all([loadGraphModel(e.detectorModelUrl, { fromTFHub: n }), loadGraphModel(e.landmarkModelUrl, { fromTFHub: i })])];
-        case 1:
-          return r = h.sent(), o = r[0], a = r[1], [2, new ct(o, a, e.maxHands)];
-      }
-    });
-  });
-}
-function pt(t3, e) {
-  return S(this, void 0, void 0, function() {
-    var n, i;
-    return T(this, function(r) {
-      if (t3 === dt.MediaPipeHands) {
-        if (i = void 0, null != (n = e)) {
-          if ("tfjs" === n.runtime) return [2, ft(n)];
-          if ("mediapipe" === n.runtime) return [2, H(n)];
-          i = n.runtime;
-        }
-        throw new Error("Expect modelConfig.runtime to be either 'tfjs' or 'mediapipe', but got " + i);
-      }
-      throw new Error(t3 + " is not a supported model name.");
-    });
-  });
-}
-!function(t3) {
-  t3.MediaPipeHands = "MediaPipeHands";
-}(dt || (dt = {}));
-
-// node_modules/@tensorflow-models/face-landmarks-detection/dist/face-landmarks-detection.esm.js
-var t2 = __toESM(require_face_mesh());
-var E2 = function() {
-  return E2 = Object.assign || function(t3) {
-    for (var e, n = 1, r = arguments.length; n < r; n++) for (var i in e = arguments[n]) Object.prototype.hasOwnProperty.call(e, i) && (t3[i] = e[i]);
-    return t3;
-  }, E2.apply(this, arguments);
-};
-function S2(t3, e, n, r) {
-  return new (n || (n = Promise))(function(i, o) {
-    function a(t4) {
-      try {
-        s(r.next(t4));
-      } catch (t5) {
-        o(t5);
-      }
-    }
-    function u(t4) {
-      try {
-        s(r.throw(t4));
-      } catch (t5) {
-        o(t5);
-      }
-    }
-    function s(t4) {
-      var e2;
-      t4.done ? i(t4.value) : (e2 = t4.value, e2 instanceof n ? e2 : new n(function(t5) {
-        t5(e2);
-      })).then(a, u);
-    }
-    s((r = r.apply(t3, e || [])).next());
-  });
-}
-function F2(t3, e) {
-  var n, r, i, o, a = { label: 0, sent: function() {
-    if (1 & i[0]) throw i[1];
-    return i[1];
-  }, trys: [], ops: [] };
-  return o = { next: u(0), throw: u(1), return: u(2) }, "function" == typeof Symbol && (o[Symbol.iterator] = function() {
-    return this;
-  }), o;
-  function u(o2) {
-    return function(u2) {
-      return function(o3) {
-        if (n) throw new TypeError("Generator is already executing.");
-        for (; a; ) try {
-          if (n = 1, r && (i = 2 & o3[0] ? r.return : o3[0] ? r.throw || ((i = r.return) && i.call(r), 0) : r.next) && !(i = i.call(r, o3[1])).done) return i;
-          switch (r = 0, i && (o3 = [2 & o3[0], i.value]), o3[0]) {
-            case 0:
-            case 1:
-              i = o3;
-              break;
-            case 4:
-              return a.label++, { value: o3[1], done: false };
-            case 5:
-              a.label++, r = o3[1], o3 = [0];
-              continue;
-            case 7:
-              o3 = a.ops.pop(), a.trys.pop();
-              continue;
-            default:
-              if (!(i = a.trys, (i = i.length > 0 && i[i.length - 1]) || 6 !== o3[0] && 2 !== o3[0])) {
-                a = 0;
-                continue;
-              }
-              if (3 === o3[0] && (!i || o3[1] > i[0] && o3[1] < i[3])) {
-                a.label = o3[1];
-                break;
-              }
-              if (6 === o3[0] && a.label < i[1]) {
-                a.label = i[1], i = o3;
-                break;
-              }
-              if (i && a.label < i[2]) {
-                a.label = i[2], a.ops.push(o3);
-                break;
-              }
-              i[2] && a.ops.pop(), a.trys.pop();
-              continue;
-          }
-          o3 = e.call(t3, a);
-        } catch (t4) {
-          o3 = [6, t4], r = 0;
-        } finally {
-          n = i = 0;
-        }
-        if (5 & o3[0]) throw o3[1];
-        return { value: o3[0] ? o3[1] : void 0, done: true };
-      }([o2, u2]);
-    };
-  }
-}
-function C2(t3) {
-  var e = t3.map(function(t4) {
-    return t4[0];
-  });
-  return e.push(t3[t3.length - 1][1]), e;
-}
-var O2 = { lips: C2([[61, 146], [146, 91], [91, 181], [181, 84], [84, 17], [17, 314], [314, 405], [405, 321], [321, 375], [375, 291], [61, 185], [185, 40], [40, 39], [39, 37], [37, 0], [0, 267], [267, 269], [269, 270], [270, 409], [409, 291], [78, 95], [95, 88], [88, 178], [178, 87], [87, 14], [14, 317], [317, 402], [402, 318], [318, 324], [324, 308], [78, 191], [191, 80], [80, 81], [81, 82], [82, 13], [13, 312], [312, 311], [311, 310], [310, 415], [415, 308]]), leftEye: C2([[263, 249], [249, 390], [390, 373], [373, 374], [374, 380], [380, 381], [381, 382], [382, 362], [263, 466], [466, 388], [388, 387], [387, 386], [386, 385], [385, 384], [384, 398], [398, 362]]), leftEyebrow: C2([[276, 283], [283, 282], [282, 295], [295, 285], [300, 293], [293, 334], [334, 296], [296, 336]]), leftIris: C2([[474, 475], [475, 476], [476, 477], [477, 474]]), rightEye: C2([[33, 7], [7, 163], [163, 144], [144, 145], [145, 153], [153, 154], [154, 155], [155, 133], [33, 246], [246, 161], [161, 160], [160, 159], [159, 158], [158, 157], [157, 173], [173, 133]]), rightEyebrow: C2([[46, 53], [53, 52], [52, 65], [65, 55], [70, 63], [63, 105], [105, 66], [66, 107]]), rightIris: C2([[469, 470], [470, 471], [471, 472], [472, 469]]), faceOval: C2([[10, 338], [338, 297], [297, 332], [332, 284], [284, 251], [251, 389], [389, 356], [356, 454], [454, 323], [323, 361], [361, 288], [288, 397], [397, 365], [365, 379], [379, 378], [378, 400], [400, 377], [377, 152], [152, 148], [148, 176], [176, 149], [149, 150], [150, 136], [136, 172], [172, 58], [58, 132], [132, 93], [93, 234], [234, 127], [127, 162], [162, 21], [21, 54], [54, 103], [103, 67], [67, 109], [109, 10]]) };
-var _2 = [[127, 34], [34, 139], [139, 127], [11, 0], [0, 37], [37, 11], [232, 231], [231, 120], [120, 232], [72, 37], [37, 39], [39, 72], [128, 121], [121, 47], [47, 128], [232, 121], [121, 128], [128, 232], [104, 69], [69, 67], [67, 104], [175, 171], [171, 148], [148, 175], [118, 50], [50, 101], [101, 118], [73, 39], [39, 40], [40, 73], [9, 151], [151, 108], [108, 9], [48, 115], [115, 131], [131, 48], [194, 204], [204, 211], [211, 194], [74, 40], [40, 185], [185, 74], [80, 42], [42, 183], [183, 80], [40, 92], [92, 186], [186, 40], [230, 229], [229, 118], [118, 230], [202, 212], [212, 214], [214, 202], [83, 18], [18, 17], [17, 83], [76, 61], [61, 146], [146, 76], [160, 29], [29, 30], [30, 160], [56, 157], [157, 173], [173, 56], [106, 204], [204, 194], [194, 106], [135, 214], [214, 192], [192, 135], [203, 165], [165, 98], [98, 203], [21, 71], [71, 68], [68, 21], [51, 45], [45, 4], [4, 51], [144, 24], [24, 23], [23, 144], [77, 146], [146, 91], [91, 77], [205, 50], [50, 187], [187, 205], [201, 200], [200, 18], [18, 201], [91, 106], [106, 182], [182, 91], [90, 91], [91, 181], [181, 90], [85, 84], [84, 17], [17, 85], [206, 203], [203, 36], [36, 206], [148, 171], [171, 140], [140, 148], [92, 40], [40, 39], [39, 92], [193, 189], [189, 244], [244, 193], [159, 158], [158, 28], [28, 159], [247, 246], [246, 161], [161, 247], [236, 3], [3, 196], [196, 236], [54, 68], [68, 104], [104, 54], [193, 168], [168, 8], [8, 193], [117, 228], [228, 31], [31, 117], [189, 193], [193, 55], [55, 189], [98, 97], [97, 99], [99, 98], [126, 47], [47, 100], [100, 126], [166, 79], [79, 218], [218, 166], [155, 154], [154, 26], [26, 155], [209, 49], [49, 131], [131, 209], [135, 136], [136, 150], [150, 135], [47, 126], [126, 217], [217, 47], [223, 52], [52, 53], [53, 223], [45, 51], [51, 134], [134, 45], [211, 170], [170, 140], [140, 211], [67, 69], [69, 108], [108, 67], [43, 106], [106, 91], [91, 43], [230, 119], [119, 120], [120, 230], [226, 130], [130, 247], [247, 226], [63, 53], [53, 52], [52, 63], [238, 20], [20, 242], [242, 238], [46, 70], [70, 156], [156, 46], [78, 62], [62, 96], [96, 78], [46, 53], [53, 63], [63, 46], [143, 34], [34, 227], [227, 143], [123, 117], [117, 111], [111, 123], [44, 125], [125, 19], [19, 44], [236, 134], [134, 51], [51, 236], [216, 206], [206, 205], [205, 216], [154, 153], [153, 22], [22, 154], [39, 37], [37, 167], [167, 39], [200, 201], [201, 208], [208, 200], [36, 142], [142, 100], [100, 36], [57, 212], [212, 202], [202, 57], [20, 60], [60, 99], [99, 20], [28, 158], [158, 157], [157, 28], [35, 226], [226, 113], [113, 35], [160, 159], [159, 27], [27, 160], [204, 202], [202, 210], [210, 204], [113, 225], [225, 46], [46, 113], [43, 202], [202, 204], [204, 43], [62, 76], [76, 77], [77, 62], [137, 123], [123, 116], [116, 137], [41, 38], [38, 72], [72, 41], [203, 129], [129, 142], [142, 203], [64, 98], [98, 240], [240, 64], [49, 102], [102, 64], [64, 49], [41, 73], [73, 74], [74, 41], [212, 216], [216, 207], [207, 212], [42, 74], [74, 184], [184, 42], [169, 170], [170, 211], [211, 169], [170, 149], [149, 176], [176, 170], [105, 66], [66, 69], [69, 105], [122, 6], [6, 168], [168, 122], [123, 147], [147, 187], [187, 123], [96, 77], [77, 90], [90, 96], [65, 55], [55, 107], [107, 65], [89, 90], [90, 180], [180, 89], [101, 100], [100, 120], [120, 101], [63, 105], [105, 104], [104, 63], [93, 137], [137, 227], [227, 93], [15, 86], [86, 85], [85, 15], [129, 102], [102, 49], [49, 129], [14, 87], [87, 86], [86, 14], [55, 8], [8, 9], [9, 55], [100, 47], [47, 121], [121, 100], [145, 23], [23, 22], [22, 145], [88, 89], [89, 179], [179, 88], [6, 122], [122, 196], [196, 6], [88, 95], [95, 96], [96, 88], [138, 172], [172, 136], [136, 138], [215, 58], [58, 172], [172, 215], [115, 48], [48, 219], [219, 115], [42, 80], [80, 81], [81, 42], [195, 3], [3, 51], [51, 195], [43, 146], [146, 61], [61, 43], [171, 175], [175, 199], [199, 171], [81, 82], [82, 38], [38, 81], [53, 46], [46, 225], [225, 53], [144, 163], [163, 110], [110, 144], [52, 65], [65, 66], [66, 52], [229, 228], [228, 117], [117, 229], [34, 127], [127, 234], [234, 34], [107, 108], [108, 69], [69, 107], [109, 108], [108, 151], [151, 109], [48, 64], [64, 235], [235, 48], [62, 78], [78, 191], [191, 62], [129, 209], [209, 126], [126, 129], [111, 35], [35, 143], [143, 111], [117, 123], [123, 50], [50, 117], [222, 65], [65, 52], [52, 222], [19, 125], [125, 141], [141, 19], [221, 55], [55, 65], [65, 221], [3, 195], [195, 197], [197, 3], [25, 7], [7, 33], [33, 25], [220, 237], [237, 44], [44, 220], [70, 71], [71, 139], [139, 70], [122, 193], [193, 245], [245, 122], [247, 130], [130, 33], [33, 247], [71, 21], [21, 162], [162, 71], [170, 169], [169, 150], [150, 170], [188, 174], [174, 196], [196, 188], [216, 186], [186, 92], [92, 216], [2, 97], [97, 167], [167, 2], [141, 125], [125, 241], [241, 141], [164, 167], [167, 37], [37, 164], [72, 38], [38, 12], [12, 72], [38, 82], [82, 13], [13, 38], [63, 68], [68, 71], [71, 63], [226, 35], [35, 111], [111, 226], [101, 50], [50, 205], [205, 101], [206, 92], [92, 165], [165, 206], [209, 198], [198, 217], [217, 209], [165, 167], [167, 97], [97, 165], [220, 115], [115, 218], [218, 220], [133, 112], [112, 243], [243, 133], [239, 238], [238, 241], [241, 239], [214, 135], [135, 169], [169, 214], [190, 173], [173, 133], [133, 190], [171, 208], [208, 32], [32, 171], [125, 44], [44, 237], [237, 125], [86, 87], [87, 178], [178, 86], [85, 86], [86, 179], [179, 85], [84, 85], [85, 180], [180, 84], [83, 84], [84, 181], [181, 83], [201, 83], [83, 182], [182, 201], [137, 93], [93, 132], [132, 137], [76, 62], [62, 183], [183, 76], [61, 76], [76, 184], [184, 61], [57, 61], [61, 185], [185, 57], [212, 57], [57, 186], [186, 212], [214, 207], [207, 187], [187, 214], [34, 143], [143, 156], [156, 34], [79, 239], [239, 237], [237, 79], [123, 137], [137, 177], [177, 123], [44, 1], [1, 4], [4, 44], [201, 194], [194, 32], [32, 201], [64, 102], [102, 129], [129, 64], [213, 215], [215, 138], [138, 213], [59, 166], [166, 219], [219, 59], [242, 99], [99, 97], [97, 242], [2, 94], [94, 141], [141, 2], [75, 59], [59, 235], [235, 75], [24, 110], [110, 228], [228, 24], [25, 130], [130, 226], [226, 25], [23, 24], [24, 229], [229, 23], [22, 23], [23, 230], [230, 22], [26, 22], [22, 231], [231, 26], [112, 26], [26, 232], [232, 112], [189, 190], [190, 243], [243, 189], [221, 56], [56, 190], [190, 221], [28, 56], [56, 221], [221, 28], [27, 28], [28, 222], [222, 27], [29, 27], [27, 223], [223, 29], [30, 29], [29, 224], [224, 30], [247, 30], [30, 225], [225, 247], [238, 79], [79, 20], [20, 238], [166, 59], [59, 75], [75, 166], [60, 75], [75, 240], [240, 60], [147, 177], [177, 215], [215, 147], [20, 79], [79, 166], [166, 20], [187, 147], [147, 213], [213, 187], [112, 233], [233, 244], [244, 112], [233, 128], [128, 245], [245, 233], [128, 114], [114, 188], [188, 128], [114, 217], [217, 174], [174, 114], [131, 115], [115, 220], [220, 131], [217, 198], [198, 236], [236, 217], [198, 131], [131, 134], [134, 198], [177, 132], [132, 58], [58, 177], [143, 35], [35, 124], [124, 143], [110, 163], [163, 7], [7, 110], [228, 110], [110, 25], [25, 228], [356, 389], [389, 368], [368, 356], [11, 302], [302, 267], [267, 11], [452, 350], [350, 349], [349, 452], [302, 303], [303, 269], [269, 302], [357, 343], [343, 277], [277, 357], [452, 453], [453, 357], [357, 452], [333, 332], [332, 297], [297, 333], [175, 152], [152, 377], [377, 175], [347, 348], [348, 330], [330, 347], [303, 304], [304, 270], [270, 303], [9, 336], [336, 337], [337, 9], [278, 279], [279, 360], [360, 278], [418, 262], [262, 431], [431, 418], [304, 408], [408, 409], [409, 304], [310, 415], [415, 407], [407, 310], [270, 409], [409, 410], [410, 270], [450, 348], [348, 347], [347, 450], [422, 430], [430, 434], [434, 422], [313, 314], [314, 17], [17, 313], [306, 307], [307, 375], [375, 306], [387, 388], [388, 260], [260, 387], [286, 414], [414, 398], [398, 286], [335, 406], [406, 418], [418, 335], [364, 367], [367, 416], [416, 364], [423, 358], [358, 327], [327, 423], [251, 284], [284, 298], [298, 251], [281, 5], [5, 4], [4, 281], [373, 374], [374, 253], [253, 373], [307, 320], [320, 321], [321, 307], [425, 427], [427, 411], [411, 425], [421, 313], [313, 18], [18, 421], [321, 405], [405, 406], [406, 321], [320, 404], [404, 405], [405, 320], [315, 16], [16, 17], [17, 315], [426, 425], [425, 266], [266, 426], [377, 400], [400, 369], [369, 377], [322, 391], [391, 269], [269, 322], [417, 465], [465, 464], [464, 417], [386, 257], [257, 258], [258, 386], [466, 260], [260, 388], [388, 466], [456, 399], [399, 419], [419, 456], [284, 332], [332, 333], [333, 284], [417, 285], [285, 8], [8, 417], [346, 340], [340, 261], [261, 346], [413, 441], [441, 285], [285, 413], [327, 460], [460, 328], [328, 327], [355, 371], [371, 329], [329, 355], [392, 439], [439, 438], [438, 392], [382, 341], [341, 256], [256, 382], [429, 420], [420, 360], [360, 429], [364, 394], [394, 379], [379, 364], [277, 343], [343, 437], [437, 277], [443, 444], [444, 283], [283, 443], [275, 440], [440, 363], [363, 275], [431, 262], [262, 369], [369, 431], [297, 338], [338, 337], [337, 297], [273, 375], [375, 321], [321, 273], [450, 451], [451, 349], [349, 450], [446, 342], [342, 467], [467, 446], [293, 334], [334, 282], [282, 293], [458, 461], [461, 462], [462, 458], [276, 353], [353, 383], [383, 276], [308, 324], [324, 325], [325, 308], [276, 300], [300, 293], [293, 276], [372, 345], [345, 447], [447, 372], [352, 345], [345, 340], [340, 352], [274, 1], [1, 19], [19, 274], [456, 248], [248, 281], [281, 456], [436, 427], [427, 425], [425, 436], [381, 256], [256, 252], [252, 381], [269, 391], [391, 393], [393, 269], [200, 199], [199, 428], [428, 200], [266, 330], [330, 329], [329, 266], [287, 273], [273, 422], [422, 287], [250, 462], [462, 328], [328, 250], [258, 286], [286, 384], [384, 258], [265, 353], [353, 342], [342, 265], [387, 259], [259, 257], [257, 387], [424, 431], [431, 430], [430, 424], [342, 353], [353, 276], [276, 342], [273, 335], [335, 424], [424, 273], [292, 325], [325, 307], [307, 292], [366, 447], [447, 345], [345, 366], [271, 303], [303, 302], [302, 271], [423, 266], [266, 371], [371, 423], [294, 455], [455, 460], [460, 294], [279, 278], [278, 294], [294, 279], [271, 272], [272, 304], [304, 271], [432, 434], [434, 427], [427, 432], [272, 407], [407, 408], [408, 272], [394, 430], [430, 431], [431, 394], [395, 369], [369, 400], [400, 395], [334, 333], [333, 299], [299, 334], [351, 417], [417, 168], [168, 351], [352, 280], [280, 411], [411, 352], [325, 319], [319, 320], [320, 325], [295, 296], [296, 336], [336, 295], [319, 403], [403, 404], [404, 319], [330, 348], [348, 349], [349, 330], [293, 298], [298, 333], [333, 293], [323, 454], [454, 447], [447, 323], [15, 16], [16, 315], [315, 15], [358, 429], [429, 279], [279, 358], [14, 15], [15, 316], [316, 14], [285, 336], [336, 9], [9, 285], [329, 349], [349, 350], [350, 329], [374, 380], [380, 252], [252, 374], [318, 402], [402, 403], [403, 318], [6, 197], [197, 419], [419, 6], [318, 319], [319, 325], [325, 318], [367, 364], [364, 365], [365, 367], [435, 367], [367, 397], [397, 435], [344, 438], [438, 439], [439, 344], [272, 271], [271, 311], [311, 272], [195, 5], [5, 281], [281, 195], [273, 287], [287, 291], [291, 273], [396, 428], [428, 199], [199, 396], [311, 271], [271, 268], [268, 311], [283, 444], [444, 445], [445, 283], [373, 254], [254, 339], [339, 373], [282, 334], [334, 296], [296, 282], [449, 347], [347, 346], [346, 449], [264, 447], [447, 454], [454, 264], [336, 296], [296, 299], [299, 336], [338, 10], [10, 151], [151, 338], [278, 439], [439, 455], [455, 278], [292, 407], [407, 415], [415, 292], [358, 371], [371, 355], [355, 358], [340, 345], [345, 372], [372, 340], [346, 347], [347, 280], [280, 346], [442, 443], [443, 282], [282, 442], [19, 94], [94, 370], [370, 19], [441, 442], [442, 295], [295, 441], [248, 419], [419, 197], [197, 248], [263, 255], [255, 359], [359, 263], [440, 275], [275, 274], [274, 440], [300, 383], [383, 368], [368, 300], [351, 412], [412, 465], [465, 351], [263, 467], [467, 466], [466, 263], [301, 368], [368, 389], [389, 301], [395, 378], [378, 379], [379, 395], [412, 351], [351, 419], [419, 412], [436, 426], [426, 322], [322, 436], [2, 164], [164, 393], [393, 2], [370, 462], [462, 461], [461, 370], [164, 0], [0, 267], [267, 164], [302, 11], [11, 12], [12, 302], [268, 12], [12, 13], [13, 268], [293, 300], [300, 301], [301, 293], [446, 261], [261, 340], [340, 446], [330, 266], [266, 425], [425, 330], [426, 423], [423, 391], [391, 426], [429, 355], [355, 437], [437, 429], [391, 327], [327, 326], [326, 391], [440, 457], [457, 438], [438, 440], [341, 382], [382, 362], [362, 341], [459, 457], [457, 461], [461, 459], [434, 430], [430, 394], [394, 434], [414, 463], [463, 362], [362, 414], [396, 369], [369, 262], [262, 396], [354, 461], [461, 457], [457, 354], [316, 403], [403, 402], [402, 316], [315, 404], [404, 403], [403, 315], [314, 405], [405, 404], [404, 314], [313, 406], [406, 405], [405, 313], [421, 418], [418, 406], [406, 421], [366, 401], [401, 361], [361, 366], [306, 408], [408, 407], [407, 306], [291, 409], [409, 408], [408, 291], [287, 410], [410, 409], [409, 287], [432, 436], [436, 410], [410, 432], [434, 416], [416, 411], [411, 434], [264, 368], [368, 383], [383, 264], [309, 438], [438, 457], [457, 309], [352, 376], [376, 401], [401, 352], [274, 275], [275, 4], [4, 274], [421, 428], [428, 262], [262, 421], [294, 327], [327, 358], [358, 294], [433, 416], [416, 367], [367, 433], [289, 455], [455, 439], [439, 289], [462, 370], [370, 326], [326, 462], [2, 326], [326, 370], [370, 2], [305, 460], [460, 455], [455, 305], [254, 449], [449, 448], [448, 254], [255, 261], [261, 446], [446, 255], [253, 450], [450, 449], [449, 253], [252, 451], [451, 450], [450, 252], [256, 452], [452, 451], [451, 256], [341, 453], [453, 452], [452, 341], [413, 464], [464, 463], [463, 413], [441, 413], [413, 414], [414, 441], [258, 442], [442, 441], [441, 258], [257, 443], [443, 442], [442, 257], [259, 444], [444, 443], [443, 259], [260, 445], [445, 444], [444, 260], [467, 342], [342, 445], [445, 467], [459, 458], [458, 250], [250, 459], [289, 392], [392, 290], [290, 289], [290, 328], [328, 460], [460, 290], [376, 433], [433, 435], [435, 376], [250, 290], [290, 392], [392, 250], [411, 416], [416, 433], [433, 411], [341, 463], [463, 464], [464, 341], [453, 464], [464, 465], [465, 453], [357, 465], [465, 412], [412, 357], [343, 412], [412, 399], [399, 343], [360, 363], [363, 440], [440, 360], [437, 399], [399, 456], [456, 437], [420, 456], [456, 363], [363, 420], [401, 435], [435, 288], [288, 401], [372, 383], [383, 353], [353, 372], [339, 255], [255, 249], [249, 339], [448, 261], [261, 255], [255, 448], [133, 243], [243, 190], [190, 133], [133, 155], [155, 112], [112, 133], [33, 246], [246, 247], [247, 33], [33, 130], [130, 25], [25, 33], [398, 384], [384, 286], [286, 398], [362, 398], [398, 414], [414, 362], [362, 463], [463, 341], [341, 362], [263, 359], [359, 467], [467, 263], [263, 249], [249, 255], [255, 263], [466, 467], [467, 260], [260, 466], [75, 60], [60, 166], [166, 75], [238, 239], [239, 79], [79, 238], [162, 127], [127, 139], [139, 162], [72, 11], [11, 37], [37, 72], [121, 232], [232, 120], [120, 121], [73, 72], [72, 39], [39, 73], [114, 128], [128, 47], [47, 114], [233, 232], [232, 128], [128, 233], [103, 104], [104, 67], [67, 103], [152, 175], [175, 148], [148, 152], [119, 118], [118, 101], [101, 119], [74, 73], [73, 40], [40, 74], [107, 9], [9, 108], [108, 107], [49, 48], [48, 131], [131, 49], [32, 194], [194, 211], [211, 32], [184, 74], [74, 185], [185, 184], [191, 80], [80, 183], [183, 191], [185, 40], [40, 186], [186, 185], [119, 230], [230, 118], [118, 119], [210, 202], [202, 214], [214, 210], [84, 83], [83, 17], [17, 84], [77, 76], [76, 146], [146, 77], [161, 160], [160, 30], [30, 161], [190, 56], [56, 173], [173, 190], [182, 106], [106, 194], [194, 182], [138, 135], [135, 192], [192, 138], [129, 203], [203, 98], [98, 129], [54, 21], [21, 68], [68, 54], [5, 51], [51, 4], [4, 5], [145, 144], [144, 23], [23, 145], [90, 77], [77, 91], [91, 90], [207, 205], [205, 187], [187, 207], [83, 201], [201, 18], [18, 83], [181, 91], [91, 182], [182, 181], [180, 90], [90, 181], [181, 180], [16, 85], [85, 17], [17, 16], [205, 206], [206, 36], [36, 205], [176, 148], [148, 140], [140, 176], [165, 92], [92, 39], [39, 165], [245, 193], [193, 244], [244, 245], [27, 159], [159, 28], [28, 27], [30, 247], [247, 161], [161, 30], [174, 236], [236, 196], [196, 174], [103, 54], [54, 104], [104, 103], [55, 193], [193, 8], [8, 55], [111, 117], [117, 31], [31, 111], [221, 189], [189, 55], [55, 221], [240, 98], [98, 99], [99, 240], [142, 126], [126, 100], [100, 142], [219, 166], [166, 218], [218, 219], [112, 155], [155, 26], [26, 112], [198, 209], [209, 131], [131, 198], [169, 135], [135, 150], [150, 169], [114, 47], [47, 217], [217, 114], [224, 223], [223, 53], [53, 224], [220, 45], [45, 134], [134, 220], [32, 211], [211, 140], [140, 32], [109, 67], [67, 108], [108, 109], [146, 43], [43, 91], [91, 146], [231, 230], [230, 120], [120, 231], [113, 226], [226, 247], [247, 113], [105, 63], [63, 52], [52, 105], [241, 238], [238, 242], [242, 241], [124, 46], [46, 156], [156, 124], [95, 78], [78, 96], [96, 95], [70, 46], [46, 63], [63, 70], [116, 143], [143, 227], [227, 116], [116, 123], [123, 111], [111, 116], [1, 44], [44, 19], [19, 1], [3, 236], [236, 51], [51, 3], [207, 216], [216, 205], [205, 207], [26, 154], [154, 22], [22, 26], [165, 39], [39, 167], [167, 165], [199, 200], [200, 208], [208, 199], [101, 36], [36, 100], [100, 101], [43, 57], [57, 202], [202, 43], [242, 20], [20, 99], [99, 242], [56, 28], [28, 157], [157, 56], [124, 35], [35, 113], [113, 124], [29, 160], [160, 27], [27, 29], [211, 204], [204, 210], [210, 211], [124, 113], [113, 46], [46, 124], [106, 43], [43, 204], [204, 106], [96, 62], [62, 77], [77, 96], [227, 137], [137, 116], [116, 227], [73, 41], [41, 72], [72, 73], [36, 203], [203, 142], [142, 36], [235, 64], [64, 240], [240, 235], [48, 49], [49, 64], [64, 48], [42, 41], [41, 74], [74, 42], [214, 212], [212, 207], [207, 214], [183, 42], [42, 184], [184, 183], [210, 169], [169, 211], [211, 210], [140, 170], [170, 176], [176, 140], [104, 105], [105, 69], [69, 104], [193, 122], [122, 168], [168, 193], [50, 123], [123, 187], [187, 50], [89, 96], [96, 90], [90, 89], [66, 65], [65, 107], [107, 66], [179, 89], [89, 180], [180, 179], [119, 101], [101, 120], [120, 119], [68, 63], [63, 104], [104, 68], [234, 93], [93, 227], [227, 234], [16, 15], [15, 85], [85, 16], [209, 129], [129, 49], [49, 209], [15, 14], [14, 86], [86, 15], [107, 55], [55, 9], [9, 107], [120, 100], [100, 121], [121, 120], [153, 145], [145, 22], [22, 153], [178, 88], [88, 179], [179, 178], [197, 6], [6, 196], [196, 197], [89, 88], [88, 96], [96, 89], [135, 138], [138, 136], [136, 135], [138, 215], [215, 172], [172, 138], [218, 115], [115, 219], [219, 218], [41, 42], [42, 81], [81, 41], [5, 195], [195, 51], [51, 5], [57, 43], [43, 61], [61, 57], [208, 171], [171, 199], [199, 208], [41, 81], [81, 38], [38, 41], [224, 53], [53, 225], [225, 224], [24, 144], [144, 110], [110, 24], [105, 52], [52, 66], [66, 105], [118, 229], [229, 117], [117, 118], [227, 34], [34, 234], [234, 227], [66, 107], [107, 69], [69, 66], [10, 109], [109, 151], [151, 10], [219, 48], [48, 235], [235, 219], [183, 62], [62, 191], [191, 183], [142, 129], [129, 126], [126, 142], [116, 111], [111, 143], [143, 116], [118, 117], [117, 50], [50, 118], [223, 222], [222, 52], [52, 223], [94, 19], [19, 141], [141, 94], [222, 221], [221, 65], [65, 222], [196, 3], [3, 197], [197, 196], [45, 220], [220, 44], [44, 45], [156, 70], [70, 139], [139, 156], [188, 122], [122, 245], [245, 188], [139, 71], [71, 162], [162, 139], [149, 170], [170, 150], [150, 149], [122, 188], [188, 196], [196, 122], [206, 216], [216, 92], [92, 206], [164, 2], [2, 167], [167, 164], [242, 141], [141, 241], [241, 242], [0, 164], [164, 37], [37, 0], [11, 72], [72, 12], [12, 11], [12, 38], [38, 13], [13, 12], [70, 63], [63, 71], [71, 70], [31, 226], [226, 111], [111, 31], [36, 101], [101, 205], [205, 36], [203, 206], [206, 165], [165, 203], [126, 209], [209, 217], [217, 126], [98, 165], [165, 97], [97, 98], [237, 220], [220, 218], [218, 237], [237, 239], [239, 241], [241, 237], [210, 214], [214, 169], [169, 210], [140, 171], [171, 32], [32, 140], [241, 125], [125, 237], [237, 241], [179, 86], [86, 178], [178, 179], [180, 85], [85, 179], [179, 180], [181, 84], [84, 180], [180, 181], [182, 83], [83, 181], [181, 182], [194, 201], [201, 182], [182, 194], [177, 137], [137, 132], [132, 177], [184, 76], [76, 183], [183, 184], [185, 61], [61, 184], [184, 185], [186, 57], [57, 185], [185, 186], [216, 212], [212, 186], [186, 216], [192, 214], [214, 187], [187, 192], [139, 34], [34, 156], [156, 139], [218, 79], [79, 237], [237, 218], [147, 123], [123, 177], [177, 147], [45, 44], [44, 4], [4, 45], [208, 201], [201, 32], [32, 208], [98, 64], [64, 129], [129, 98], [192, 213], [213, 138], [138, 192], [235, 59], [59, 219], [219, 235], [141, 242], [242, 97], [97, 141], [97, 2], [2, 141], [141, 97], [240, 75], [75, 235], [235, 240], [229, 24], [24, 228], [228, 229], [31, 25], [25, 226], [226, 31], [230, 23], [23, 229], [229, 230], [231, 22], [22, 230], [230, 231], [232, 26], [26, 231], [231, 232], [233, 112], [112, 232], [232, 233], [244, 189], [189, 243], [243, 244], [189, 221], [221, 190], [190, 189], [222, 28], [28, 221], [221, 222], [223, 27], [27, 222], [222, 223], [224, 29], [29, 223], [223, 224], [225, 30], [30, 224], [224, 225], [113, 247], [247, 225], [225, 113], [99, 60], [60, 240], [240, 99], [213, 147], [147, 215], [215, 213], [60, 20], [20, 166], [166, 60], [192, 187], [187, 213], [213, 192], [243, 112], [112, 244], [244, 243], [244, 233], [233, 245], [245, 244], [245, 128], [128, 188], [188, 245], [188, 114], [114, 174], [174, 188], [134, 131], [131, 220], [220, 134], [174, 217], [217, 236], [236, 174], [236, 198], [198, 134], [134, 236], [215, 177], [177, 58], [58, 215], [156, 143], [143, 124], [124, 156], [25, 110], [110, 7], [7, 25], [31, 228], [228, 25], [25, 31], [264, 356], [356, 368], [368, 264], [0, 11], [11, 267], [267, 0], [451, 452], [452, 349], [349, 451], [267, 302], [302, 269], [269, 267], [350, 357], [357, 277], [277, 350], [350, 452], [452, 357], [357, 350], [299, 333], [333, 297], [297, 299], [396, 175], [175, 377], [377, 396], [280, 347], [347, 330], [330, 280], [269, 303], [303, 270], [270, 269], [151, 9], [9, 337], [337, 151], [344, 278], [278, 360], [360, 344], [424, 418], [418, 431], [431, 424], [270, 304], [304, 409], [409, 270], [272, 310], [310, 407], [407, 272], [322, 270], [270, 410], [410, 322], [449, 450], [450, 347], [347, 449], [432, 422], [422, 434], [434, 432], [18, 313], [313, 17], [17, 18], [291, 306], [306, 375], [375, 291], [259, 387], [387, 260], [260, 259], [424, 335], [335, 418], [418, 424], [434, 364], [364, 416], [416, 434], [391, 423], [423, 327], [327, 391], [301, 251], [251, 298], [298, 301], [275, 281], [281, 4], [4, 275], [254, 373], [373, 253], [253, 254], [375, 307], [307, 321], [321, 375], [280, 425], [425, 411], [411, 280], [200, 421], [421, 18], [18, 200], [335, 321], [321, 406], [406, 335], [321, 320], [320, 405], [405, 321], [314, 315], [315, 17], [17, 314], [423, 426], [426, 266], [266, 423], [396, 377], [377, 369], [369, 396], [270, 322], [322, 269], [269, 270], [413, 417], [417, 464], [464, 413], [385, 386], [386, 258], [258, 385], [248, 456], [456, 419], [419, 248], [298, 284], [284, 333], [333, 298], [168, 417], [417, 8], [8, 168], [448, 346], [346, 261], [261, 448], [417, 413], [413, 285], [285, 417], [326, 327], [327, 328], [328, 326], [277, 355], [355, 329], [329, 277], [309, 392], [392, 438], [438, 309], [381, 382], [382, 256], [256, 381], [279, 429], [429, 360], [360, 279], [365, 364], [364, 379], [379, 365], [355, 277], [277, 437], [437, 355], [282, 443], [443, 283], [283, 282], [281, 275], [275, 363], [363, 281], [395, 431], [431, 369], [369, 395], [299, 297], [297, 337], [337, 299], [335, 273], [273, 321], [321, 335], [348, 450], [450, 349], [349, 348], [359, 446], [446, 467], [467, 359], [283, 293], [293, 282], [282, 283], [250, 458], [458, 462], [462, 250], [300, 276], [276, 383], [383, 300], [292, 308], [308, 325], [325, 292], [283, 276], [276, 293], [293, 283], [264, 372], [372, 447], [447, 264], [346, 352], [352, 340], [340, 346], [354, 274], [274, 19], [19, 354], [363, 456], [456, 281], [281, 363], [426, 436], [436, 425], [425, 426], [380, 381], [381, 252], [252, 380], [267, 269], [269, 393], [393, 267], [421, 200], [200, 428], [428, 421], [371, 266], [266, 329], [329, 371], [432, 287], [287, 422], [422, 432], [290, 250], [250, 328], [328, 290], [385, 258], [258, 384], [384, 385], [446, 265], [265, 342], [342, 446], [386, 387], [387, 257], [257, 386], [422, 424], [424, 430], [430, 422], [445, 342], [342, 276], [276, 445], [422, 273], [273, 424], [424, 422], [306, 292], [292, 307], [307, 306], [352, 366], [366, 345], [345, 352], [268, 271], [271, 302], [302, 268], [358, 423], [423, 371], [371, 358], [327, 294], [294, 460], [460, 327], [331, 279], [279, 294], [294, 331], [303, 271], [271, 304], [304, 303], [436, 432], [432, 427], [427, 436], [304, 272], [272, 408], [408, 304], [395, 394], [394, 431], [431, 395], [378, 395], [395, 400], [400, 378], [296, 334], [334, 299], [299, 296], [6, 351], [351, 168], [168, 6], [376, 352], [352, 411], [411, 376], [307, 325], [325, 320], [320, 307], [285, 295], [295, 336], [336, 285], [320, 319], [319, 404], [404, 320], [329, 330], [330, 349], [349, 329], [334, 293], [293, 333], [333, 334], [366, 323], [323, 447], [447, 366], [316, 15], [15, 315], [315, 316], [331, 358], [358, 279], [279, 331], [317, 14], [14, 316], [316, 317], [8, 285], [285, 9], [9, 8], [277, 329], [329, 350], [350, 277], [253, 374], [374, 252], [252, 253], [319, 318], [318, 403], [403, 319], [351, 6], [6, 419], [419, 351], [324, 318], [318, 325], [325, 324], [397, 367], [367, 365], [365, 397], [288, 435], [435, 397], [397, 288], [278, 344], [344, 439], [439, 278], [310, 272], [272, 311], [311, 310], [248, 195], [195, 281], [281, 248], [375, 273], [273, 291], [291, 375], [175, 396], [396, 199], [199, 175], [312, 311], [311, 268], [268, 312], [276, 283], [283, 445], [445, 276], [390, 373], [373, 339], [339, 390], [295, 282], [282, 296], [296, 295], [448, 449], [449, 346], [346, 448], [356, 264], [264, 454], [454, 356], [337, 336], [336, 299], [299, 337], [337, 338], [338, 151], [151, 337], [294, 278], [278, 455], [455, 294], [308, 292], [292, 415], [415, 308], [429, 358], [358, 355], [355, 429], [265, 340], [340, 372], [372, 265], [352, 346], [346, 280], [280, 352], [295, 442], [442, 282], [282, 295], [354, 19], [19, 370], [370, 354], [285, 441], [441, 295], [295, 285], [195, 248], [248, 197], [197, 195], [457, 440], [440, 274], [274, 457], [301, 300], [300, 368], [368, 301], [417, 351], [351, 465], [465, 417], [251, 301], [301, 389], [389, 251], [394, 395], [395, 379], [379, 394], [399, 412], [412, 419], [419, 399], [410, 436], [436, 322], [322, 410], [326, 2], [2, 393], [393, 326], [354, 370], [370, 461], [461, 354], [393, 164], [164, 267], [267, 393], [268, 302], [302, 12], [12, 268], [312, 268], [268, 13], [13, 312], [298, 293], [293, 301], [301, 298], [265, 446], [446, 340], [340, 265], [280, 330], [330, 425], [425, 280], [322, 426], [426, 391], [391, 322], [420, 429], [429, 437], [437, 420], [393, 391], [391, 326], [326, 393], [344, 440], [440, 438], [438, 344], [458, 459], [459, 461], [461, 458], [364, 434], [434, 394], [394, 364], [428, 396], [396, 262], [262, 428], [274, 354], [354, 457], [457, 274], [317, 316], [316, 402], [402, 317], [316, 315], [315, 403], [403, 316], [315, 314], [314, 404], [404, 315], [314, 313], [313, 405], [405, 314], [313, 421], [421, 406], [406, 313], [323, 366], [366, 361], [361, 323], [292, 306], [306, 407], [407, 292], [306, 291], [291, 408], [408, 306], [291, 287], [287, 409], [409, 291], [287, 432], [432, 410], [410, 287], [427, 434], [434, 411], [411, 427], [372, 264], [264, 383], [383, 372], [459, 309], [309, 457], [457, 459], [366, 352], [352, 401], [401, 366], [1, 274], [274, 4], [4, 1], [418, 421], [421, 262], [262, 418], [331, 294], [294, 358], [358, 331], [435, 433], [433, 367], [367, 435], [392, 289], [289, 439], [439, 392], [328, 462], [462, 326], [326, 328], [94, 2], [2, 370], [370, 94], [289, 305], [305, 455], [455, 289], [339, 254], [254, 448], [448, 339], [359, 255], [255, 446], [446, 359], [254, 253], [253, 449], [449, 254], [253, 252], [252, 450], [450, 253], [252, 256], [256, 451], [451, 252], [256, 341], [341, 452], [452, 256], [414, 413], [413, 463], [463, 414], [286, 441], [441, 414], [414, 286], [286, 258], [258, 441], [441, 286], [258, 257], [257, 442], [442, 258], [257, 259], [259, 443], [443, 257], [259, 260], [260, 444], [444, 259], [260, 467], [467, 445], [445, 260], [309, 459], [459, 250], [250, 309], [305, 289], [289, 290], [290, 305], [305, 290], [290, 460], [460, 305], [401, 376], [376, 435], [435, 401], [309, 250], [250, 392], [392, 309], [376, 411], [411, 433], [433, 376], [453, 341], [341, 464], [464, 453], [357, 453], [453, 465], [465, 357], [343, 357], [357, 412], [412, 343], [437, 343], [343, 399], [399, 437], [344, 360], [360, 440], [440, 344], [420, 437], [437, 456], [456, 420], [360, 420], [420, 363], [363, 360], [361, 401], [401, 288], [288, 361], [265, 372], [372, 353], [353, 265], [390, 339], [339, 249], [249, 390], [339, 448], [448, 255], [255, 339]];
-var j2 = Object.entries(O2).map(function(t3) {
-  var e = t3[0];
-  return t3[1].map(function(t4) {
-    return [t4, e];
-  });
-}).flat();
-var k3 = new Map(j2);
-function R2(t3) {
-  for (var e = { locationData: { relativeKeypoints: [] } }, n = Number.MAX_SAFE_INTEGER, r = Number.MIN_SAFE_INTEGER, i = Number.MAX_SAFE_INTEGER, o = Number.MIN_SAFE_INTEGER, a = 0; a < t3.length; ++a) {
-    var u = t3[a];
-    n = Math.min(n, u.x), r = Math.max(r, u.x), i = Math.min(i, u.y), o = Math.max(o, u.y), e.locationData.relativeKeypoints.push({ x: u.x, y: u.y });
-  }
-  return e.locationData.relativeBoundingBox = { xMin: n, yMin: i, xMax: r, yMax: o, width: r - n, height: o - i }, e;
-}
-var I2 = { runtime: "mediapipe", maxFaces: 1, refineLandmarks: false };
-var L2 = function() {
-  function n(e) {
-    var n2 = this;
-    this.width = 0, this.height = 0, this.selfieMode = false, this.faceMeshSolution = new t2.FaceMesh({ locateFile: function(t3, n3) {
-      return e.solutionPath ? e.solutionPath.replace(/\/+$/, "") + "/" + t3 : n3 + "/" + t3;
-    } }), this.faceMeshSolution.setOptions({ refineLandmarks: e.refineLandmarks, selfieMode: this.selfieMode, maxNumFaces: e.maxFaces }), this.faceMeshSolution.onResults(function(t3) {
-      if (n2.height = t3.image.height, n2.width = t3.image.width, n2.faces = [], null !== t3.multiFaceLandmarks) for (var e2 = t3.multiFaceLandmarks, r = 0; r < e2.length; r++) {
-        var i = n2.translateOutput(e2[r]);
-        n2.faces.push({ keypoints: i, box: R2(i).locationData.relativeBoundingBox });
-      }
-    });
-  }
-  return n.prototype.translateOutput = function(t3) {
-    var e = this;
-    return t3.map(function(t4, n2) {
-      var r = { x: t4.x * e.width, y: t4.y * e.height, z: t4.z * e.width }, i = k3.get(n2);
-      return null != i && (r.name = i), r;
-    });
-  }, n.prototype.estimateFaces = function(t3, n2) {
-    return S2(this, void 0, void 0, function() {
-      var r, i;
-      return F2(this, function(o) {
-        switch (o.label) {
-          case 0:
-            return n2 && n2.flipHorizontal && n2.flipHorizontal !== this.selfieMode && (this.selfieMode = n2.flipHorizontal, this.faceMeshSolution.setOptions({ selfieMode: this.selfieMode })), t3 instanceof Tensor ? (i = ImageData.bind, [4, browser_exports.toPixels(t3)]) : [3, 2];
-          case 1:
-            return r = new (i.apply(ImageData, [void 0, o.sent(), t3.shape[1], t3.shape[0]]))(), [3, 3];
-          case 2:
-            r = t3, o.label = 3;
-          case 3:
-            return t3 = r, [4, this.faceMeshSolution.send({ image: t3 })];
-          case 4:
-            return o.sent(), [2, this.faces];
-        }
-      });
-    });
-  }, n.prototype.dispose = function() {
-    this.faceMeshSolution.close();
-  }, n.prototype.reset = function() {
-    this.faceMeshSolution.reset(), this.width = 0, this.height = 0, this.faces = null, this.selfieMode = false;
-  }, n.prototype.initialize = function() {
-    return this.faceMeshSolution.initialize();
-  }, n;
-}();
-function B2(t3) {
-  return S2(this, void 0, void 0, function() {
-    var e, n;
-    return F2(this, function(r) {
-      switch (r.label) {
-        case 0:
-          return e = function(t4) {
-            if (null == t4) return E2({}, I2);
-            var e2 = E2({}, t4);
-            return e2.runtime = "mediapipe", null == e2.maxFaces && (e2.maxFaces = I2.maxFaces), null == e2.refineLandmarks && (e2.refineLandmarks = I2.refineLandmarks), e2;
-          }(t3), [4, (n = new L2(e)).initialize()];
-        case 1:
-          return r.sent(), [2, n];
-      }
-    });
-  });
-}
-var D2 = "undefined" != typeof globalThis ? globalThis : "undefined" != typeof window ? window : "undefined" != typeof global ? global : "undefined" != typeof self ? self : {};
-var P2 = {};
-(function() {
-  var t3;
-  function e(t4) {
-    var e2 = 0;
-    return function() {
-      return e2 < t4.length ? { done: false, value: t4[e2++] } : { done: true };
-    };
-  }
-  var n = "function" == typeof Object.defineProperties ? Object.defineProperty : function(t4, e2, n2) {
-    return t4 == Array.prototype || t4 == Object.prototype || (t4[e2] = n2.value), t4;
-  };
-  var r = function(t4) {
-    t4 = ["object" == typeof globalThis && globalThis, t4, "object" == typeof window && window, "object" == typeof self && self, "object" == typeof D2 && D2];
-    for (var e2 = 0; e2 < t4.length; ++e2) {
-      var n2 = t4[e2];
-      if (n2 && n2.Math == Math) return n2;
-    }
-    throw Error("Cannot find global object");
-  }(this);
-  function i(t4, e2) {
-    if (e2) t: {
-      var i2 = r;
-      t4 = t4.split(".");
-      for (var o2 = 0; o2 < t4.length - 1; o2++) {
-        var a6 = t4[o2];
-        if (!(a6 in i2)) break t;
-        i2 = i2[a6];
-      }
-      (e2 = e2(o2 = i2[t4 = t4[t4.length - 1]])) != o2 && null != e2 && n(i2, t4, { configurable: true, writable: true, value: e2 });
-    }
-  }
-  function o(t4) {
-    return (t4 = { next: t4 })[Symbol.iterator] = function() {
-      return this;
-    }, t4;
-  }
-  function a(t4) {
-    var n2 = "undefined" != typeof Symbol && Symbol.iterator && t4[Symbol.iterator];
-    return n2 ? n2.call(t4) : { next: e(t4) };
-  }
-  function u(t4) {
-    if (!(t4 instanceof Array)) {
-      t4 = a(t4);
-      for (var e2, n2 = []; !(e2 = t4.next()).done; ) n2.push(e2.value);
-      t4 = n2;
-    }
-    return t4;
-  }
-  i("Symbol", function(t4) {
-    function e2(t5, e3) {
-      this.g = t5, n(this, "description", { configurable: true, writable: true, value: e3 });
-    }
-    if (t4) return t4;
-    e2.prototype.toString = function() {
-      return this.g;
-    };
-    var r2 = "jscomp_symbol_" + (1e9 * Math.random() >>> 0) + "_", i2 = 0;
-    return function t5(n2) {
-      if (this instanceof t5) throw new TypeError("Symbol is not a constructor");
-      return new e2(r2 + (n2 || "") + "_" + i2++, n2);
-    };
-  }), i("Symbol.iterator", function(t4) {
-    if (t4) return t4;
-    t4 = Symbol("Symbol.iterator");
-    for (var i2 = "Array Int8Array Uint8Array Uint8ClampedArray Int16Array Uint16Array Int32Array Uint32Array Float32Array Float64Array".split(" "), a6 = 0; a6 < i2.length; a6++) {
-      var u2 = r[i2[a6]];
-      "function" == typeof u2 && "function" != typeof u2.prototype[t4] && n(u2.prototype, t4, { configurable: true, writable: true, value: function() {
-        return o(e(this));
-      } });
-    }
-    return t4;
-  });
-  var s, c = "function" == typeof Object.create ? Object.create : function(t4) {
-    function e2() {
-    }
-    return e2.prototype = t4, new e2();
-  };
-  if ("function" == typeof Object.setPrototypeOf) s = Object.setPrototypeOf;
-  else {
-    var h;
-    t: {
-      var l = {};
-      try {
-        l.__proto__ = { a: true }, h = l.a;
-        break t;
-      } catch (t4) {
-      }
-      h = false;
-    }
-    s = h ? function(t4, e2) {
-      if (t4.__proto__ = e2, t4.__proto__ !== e2) throw new TypeError(t4 + " is not extensible");
-      return t4;
-    } : null;
-  }
-  var f = s;
-  function d(t4, e2) {
-    if (t4.prototype = c(e2.prototype), t4.prototype.constructor = t4, f) f(t4, e2);
-    else for (var n2 in e2) if ("prototype" != n2) if (Object.defineProperties) {
-      var r2 = Object.getOwnPropertyDescriptor(e2, n2);
-      r2 && Object.defineProperty(t4, n2, r2);
-    } else t4[n2] = e2[n2];
-    t4.na = e2.prototype;
-  }
-  function p2() {
-    this.l = false, this.i = null, this.h = void 0, this.g = 1, this.u = this.o = 0, this.j = null;
-  }
-  function g(t4) {
-    if (t4.l) throw new TypeError("Generator is already running");
-    t4.l = true;
-  }
-  function v(t4, e2) {
-    t4.j = { da: e2, ea: true }, t4.g = t4.o || t4.u;
-  }
-  function m(t4, e2, n2) {
-    return t4.g = n2, { value: e2 };
-  }
-  function y(t4) {
-    this.g = new p2(), this.h = t4;
-  }
-  function w(t4, e2, n2, r2) {
-    try {
-      var i2 = e2.call(t4.g.i, n2);
-      if (!(i2 instanceof Object)) throw new TypeError("Iterator result " + i2 + " is not an object");
-      if (!i2.done) return t4.g.l = false, i2;
-      var o2 = i2.value;
-    } catch (e3) {
-      return t4.g.i = null, v(t4.g, e3), b(t4);
-    }
-    return t4.g.i = null, r2.call(t4.g, o2), b(t4);
-  }
-  function b(t4) {
-    for (; t4.g.g; ) try {
-      var e2 = t4.h(t4.g);
-      if (e2) return t4.g.l = false, { value: e2.value, done: false };
-    } catch (e3) {
-      t4.g.h = void 0, v(t4.g, e3);
-    }
-    if (t4.g.l = false, t4.g.j) {
-      if (e2 = t4.g.j, t4.g.j = null, e2.ea) throw e2.da;
-      return { value: e2.return, done: true };
-    }
-    return { value: void 0, done: true };
-  }
-  function x(t4) {
-    this.next = function(e2) {
-      return g(t4.g), t4.g.i ? e2 = w(t4, t4.g.i.next, e2, t4.g.s) : (t4.g.s(e2), e2 = b(t4)), e2;
-    }, this.throw = function(e2) {
-      return g(t4.g), t4.g.i ? e2 = w(t4, t4.g.i.throw, e2, t4.g.s) : (v(t4.g, e2), e2 = b(t4)), e2;
-    }, this.return = function(e2) {
-      return function(t5, e3) {
-        g(t5.g);
-        var n2 = t5.g.i;
-        return n2 ? w(t5, "return" in n2 ? n2.return : function(t6) {
-          return { value: t6, done: true };
-        }, e3, t5.g.return) : (t5.g.return(e3), b(t5));
-      }(t4, e2);
-    }, this[Symbol.iterator] = function() {
-      return this;
-    };
-  }
-  function M(t4) {
-    return function(t5) {
-      function e2(e3) {
-        return t5.next(e3);
-      }
-      function n2(e3) {
-        return t5.throw(e3);
-      }
-      return new Promise(function(r2, i2) {
-        !function t6(o2) {
-          o2.done ? r2(o2.value) : Promise.resolve(o2.value).then(e2, n2).then(t6, i2);
-        }(t5.next());
-      });
-    }(new x(new y(t4)));
-  }
-  p2.prototype.s = function(t4) {
-    this.h = t4;
-  }, p2.prototype.return = function(t4) {
-    this.j = { return: t4 }, this.g = this.u;
-  }, i("Promise", function(t4) {
-    function e2(t5) {
-      this.h = 0, this.i = void 0, this.g = [], this.s = false;
-      var e3 = this.j();
-      try {
-        t5(e3.resolve, e3.reject);
-      } catch (t6) {
-        e3.reject(t6);
-      }
-    }
-    function n2() {
-      this.g = null;
-    }
-    function i2(t5) {
-      return t5 instanceof e2 ? t5 : new e2(function(e3) {
-        e3(t5);
-      });
-    }
-    if (t4) return t4;
-    n2.prototype.h = function(t5) {
-      if (null == this.g) {
-        this.g = [];
-        var e3 = this;
-        this.i(function() {
-          e3.l();
-        });
-      }
-      this.g.push(t5);
-    };
-    var o2 = r.setTimeout;
-    n2.prototype.i = function(t5) {
-      o2(t5, 0);
-    }, n2.prototype.l = function() {
-      for (; this.g && this.g.length; ) {
-        var t5 = this.g;
-        this.g = [];
-        for (var e3 = 0; e3 < t5.length; ++e3) {
-          var n3 = t5[e3];
-          t5[e3] = null;
-          try {
-            n3();
-          } catch (t6) {
-            this.j(t6);
-          }
-        }
-      }
-      this.g = null;
-    }, n2.prototype.j = function(t5) {
-      this.i(function() {
-        throw t5;
-      });
-    }, e2.prototype.j = function() {
-      function t5(t6) {
-        return function(r2) {
-          n3 || (n3 = true, t6.call(e3, r2));
-        };
-      }
-      var e3 = this, n3 = false;
-      return { resolve: t5(this.D), reject: t5(this.l) };
-    }, e2.prototype.D = function(t5) {
-      if (t5 === this) this.l(new TypeError("A Promise cannot resolve to itself"));
-      else if (t5 instanceof e2) this.H(t5);
-      else {
-        t: switch (typeof t5) {
-          case "object":
-            var n3 = null != t5;
-            break t;
-          case "function":
-            n3 = true;
-            break t;
-          default:
-            n3 = false;
-        }
-        n3 ? this.A(t5) : this.o(t5);
-      }
-    }, e2.prototype.A = function(t5) {
-      var e3 = void 0;
-      try {
-        e3 = t5.then;
-      } catch (t6) {
-        return void this.l(t6);
-      }
-      "function" == typeof e3 ? this.I(e3, t5) : this.o(t5);
-    }, e2.prototype.l = function(t5) {
-      this.u(2, t5);
-    }, e2.prototype.o = function(t5) {
-      this.u(1, t5);
-    }, e2.prototype.u = function(t5, e3) {
-      if (0 != this.h) throw Error("Cannot settle(" + t5 + ", " + e3 + "): Promise already settled in state" + this.h);
-      this.h = t5, this.i = e3, 2 === this.h && this.G(), this.B();
-    }, e2.prototype.G = function() {
-      var t5 = this;
-      o2(function() {
-        if (t5.C()) {
-          var e3 = r.console;
-          void 0 !== e3 && e3.error(t5.i);
-        }
-      }, 1);
-    }, e2.prototype.C = function() {
-      if (this.s) return false;
-      var t5 = r.CustomEvent, e3 = r.Event, n3 = r.dispatchEvent;
-      return void 0 === n3 || ("function" == typeof t5 ? t5 = new t5("unhandledrejection", { cancelable: true }) : "function" == typeof e3 ? t5 = new e3("unhandledrejection", { cancelable: true }) : (t5 = r.document.createEvent("CustomEvent")).initCustomEvent("unhandledrejection", false, true, t5), t5.promise = this, t5.reason = this.i, n3(t5));
-    }, e2.prototype.B = function() {
-      if (null != this.g) {
-        for (var t5 = 0; t5 < this.g.length; ++t5) u2.h(this.g[t5]);
-        this.g = null;
-      }
-    };
-    var u2 = new n2();
-    return e2.prototype.H = function(t5) {
-      var e3 = this.j();
-      t5.M(e3.resolve, e3.reject);
-    }, e2.prototype.I = function(t5, e3) {
-      var n3 = this.j();
-      try {
-        t5.call(e3, n3.resolve, n3.reject);
-      } catch (t6) {
-        n3.reject(t6);
-      }
-    }, e2.prototype.then = function(t5, n3) {
-      function r2(t6, e3) {
-        return "function" == typeof t6 ? function(e4) {
-          try {
-            i3(t6(e4));
-          } catch (t7) {
-            o3(t7);
-          }
-        } : e3;
-      }
-      var i3, o3, a6 = new e2(function(t6, e3) {
-        i3 = t6, o3 = e3;
-      });
-      return this.M(r2(t5, i3), r2(n3, o3)), a6;
-    }, e2.prototype.catch = function(t5) {
-      return this.then(void 0, t5);
-    }, e2.prototype.M = function(t5, e3) {
-      function n3() {
-        switch (r2.h) {
-          case 1:
-            t5(r2.i);
-            break;
-          case 2:
-            e3(r2.i);
-            break;
-          default:
-            throw Error("Unexpected state: " + r2.h);
-        }
-      }
-      var r2 = this;
-      null == this.g ? u2.h(n3) : this.g.push(n3), this.s = true;
-    }, e2.resolve = i2, e2.reject = function(t5) {
-      return new e2(function(e3, n3) {
-        n3(t5);
-      });
-    }, e2.race = function(t5) {
-      return new e2(function(e3, n3) {
-        for (var r2 = a(t5), o3 = r2.next(); !o3.done; o3 = r2.next()) i2(o3.value).M(e3, n3);
-      });
-    }, e2.all = function(t5) {
-      var n3 = a(t5), r2 = n3.next();
-      return r2.done ? i2([]) : new e2(function(t6, e3) {
-        function o3(e4) {
-          return function(n4) {
-            a6[e4] = n4, 0 == --u3 && t6(a6);
-          };
-        }
-        var a6 = [], u3 = 0;
-        do {
-          a6.push(void 0), u3++, i2(r2.value).M(o3(a6.length - 1), e3), r2 = n3.next();
-        } while (!r2.done);
-      });
-    }, e2;
-  });
-  var A2 = "function" == typeof Object.assign ? Object.assign : function(t4, e2) {
-    for (var n2 = 1; n2 < arguments.length; n2++) {
-      var r2 = arguments[n2];
-      if (r2) for (var i2 in r2) Object.prototype.hasOwnProperty.call(r2, i2) && (t4[i2] = r2[i2]);
-    }
-    return t4;
-  };
-  i("Object.assign", function(t4) {
-    return t4 || A2;
-  }), i("Object.is", function(t4) {
-    return t4 || function(t5, e2) {
-      return t5 === e2 ? 0 !== t5 || 1 / t5 == 1 / e2 : t5 != t5 && e2 != e2;
-    };
-  }), i("Array.prototype.includes", function(t4) {
-    return t4 || function(t5, e2) {
-      var n2 = this;
-      n2 instanceof String && (n2 = String(n2));
-      var r2 = n2.length;
-      for (0 > (e2 = e2 || 0) && (e2 = Math.max(e2 + r2, 0)); e2 < r2; e2++) {
-        var i2 = n2[e2];
-        if (i2 === t5 || Object.is(i2, t5)) return true;
-      }
-      return false;
-    };
-  }), i("String.prototype.includes", function(t4) {
-    return t4 || function(t5, e2) {
-      if (null == this) throw new TypeError("The 'this' value for String.prototype.includes must not be null or undefined");
-      if (t5 instanceof RegExp) throw new TypeError("First argument to String.prototype.includes must not be a regular expression");
-      return -1 !== this.indexOf(t5, e2 || 0);
-    };
-  }), i("Array.prototype.keys", function(t4) {
-    return t4 || function() {
-      return function(t5, e2) {
-        t5 instanceof String && (t5 += "");
-        var n2 = 0, r2 = false, i2 = { next: function() {
-          if (!r2 && n2 < t5.length) {
-            var i3 = n2++;
-            return { value: e2(i3, t5[i3]), done: false };
-          }
-          return r2 = true, { done: true, value: void 0 };
-        } };
-        return i2[Symbol.iterator] = function() {
-          return i2;
-        }, i2;
-      }(this, function(t5) {
-        return t5;
-      });
-    };
-  });
-  var T2 = this || self;
-  function E3(t4, e2) {
-    t4 = t4.split(".");
-    var n2, r2 = T2;
-    t4[0] in r2 || void 0 === r2.execScript || r2.execScript("var " + t4[0]);
-    for (; t4.length && (n2 = t4.shift()); ) t4.length || void 0 === e2 ? r2 = r2[n2] && r2[n2] !== Object.prototype[n2] ? r2[n2] : r2[n2] = {} : r2[n2] = e2;
-  }
-  function S3() {
-    throw Error("Invalid UTF8");
-  }
-  function F3(t4, e2) {
-    return e2 = String.fromCharCode.apply(null, e2), null == t4 ? e2 : t4 + e2;
-  }
-  var C3, O3, _3 = "undefined" != typeof TextDecoder, j3 = "undefined" != typeof TextEncoder, k4 = {}, R3 = null;
-  function I3(t4) {
-    var e2;
-    void 0 === e2 && (e2 = 0), B3(), e2 = k4[e2];
-    for (var n2 = Array(Math.floor(t4.length / 3)), r2 = e2[64] || "", i2 = 0, o2 = 0; i2 < t4.length - 2; i2 += 3) {
-      var a6 = t4[i2], u2 = t4[i2 + 1], s2 = t4[i2 + 2], c2 = e2[a6 >> 2];
-      a6 = e2[(3 & a6) << 4 | u2 >> 4], u2 = e2[(15 & u2) << 2 | s2 >> 6], s2 = e2[63 & s2], n2[o2++] = c2 + a6 + u2 + s2;
-    }
-    switch (c2 = 0, s2 = r2, t4.length - i2) {
-      case 2:
-        s2 = e2[(15 & (c2 = t4[i2 + 1])) << 2] || r2;
-      case 1:
-        t4 = t4[i2], n2[o2] = e2[t4 >> 2] + e2[(3 & t4) << 4 | c2 >> 4] + s2 + r2;
-    }
-    return n2.join("");
-  }
-  function L3(t4) {
-    var e2 = t4.length, n2 = 3 * e2 / 4;
-    n2 % 3 ? n2 = Math.floor(n2) : -1 != "=.".indexOf(t4[e2 - 1]) && (n2 = -1 != "=.".indexOf(t4[e2 - 2]) ? n2 - 2 : n2 - 1);
-    var r2 = new Uint8Array(n2), i2 = 0;
-    return function(t5, e3) {
-      function n3(e4) {
-        for (; r3 < t5.length; ) {
-          var n4 = t5.charAt(r3++), i4 = R3[n4];
-          if (null != i4) return i4;
-          if (!/^[\s\xa0]*$/.test(n4)) throw Error("Unknown base64 encoding at char: " + n4);
-        }
-        return e4;
-      }
-      B3();
-      for (var r3 = 0; ; ) {
-        var i3 = n3(-1), o2 = n3(0), a6 = n3(64), u2 = n3(64);
-        if (64 === u2 && -1 === i3) break;
-        e3(i3 << 2 | o2 >> 4), 64 != a6 && (e3(o2 << 4 & 240 | a6 >> 2), 64 != u2 && e3(a6 << 6 & 192 | u2));
-      }
-    }(t4, function(t5) {
-      r2[i2++] = t5;
-    }), i2 !== n2 ? r2.subarray(0, i2) : r2;
-  }
-  function B3() {
-    if (!R3) {
-      R3 = {};
-      for (var t4 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".split(""), e2 = ["+/=", "+/", "-_=", "-_.", "-_"], n2 = 0; 5 > n2; n2++) {
-        var r2 = t4.concat(e2[n2].split(""));
-        k4[n2] = r2;
-        for (var i2 = 0; i2 < r2.length; i2++) {
-          var o2 = r2[i2];
-          void 0 === R3[o2] && (R3[o2] = i2);
-        }
-      }
-    }
-  }
-  var P3, z3 = "function" == typeof Uint8Array;
-  function U3(t4) {
-    return z3 && null != t4 && t4 instanceof Uint8Array;
-  }
-  function N3(t4) {
-    if (this.L = t4, null !== t4 && 0 === t4.length) throw Error("ByteString should be constructed with non-empty values");
-  }
-  var V3 = "function" == typeof Uint8Array.prototype.slice, H3 = 0;
-  function K3(t4, e2) {
-    return Error("Invalid wire type: " + t4 + " (at position " + e2 + ")");
-  }
-  function W3() {
-    return Error("Failed to read varint, encoding is invalid.");
-  }
-  function G3(t4, e2) {
-    e2 = void 0 !== (e2 = void 0 === e2 ? {} : e2).v && e2.v, this.h = null, this.g = this.i = this.j = 0, this.v = e2, t4 && X3(this, t4);
-  }
-  function X3(t4, e2) {
-    t4.h = function(t5, e3) {
-      if (t5.constructor === Uint8Array) return t5;
-      if (t5.constructor === ArrayBuffer) return new Uint8Array(t5);
-      if (t5.constructor === Array) return new Uint8Array(t5);
-      if (t5.constructor === String) return L3(t5);
-      if (t5.constructor === N3) return !e3 && (e3 = t5.L) && e3.constructor === Uint8Array ? e3 : (e3 = null == (e3 = t5.L) || U3(e3) ? e3 : "string" == typeof e3 ? L3(e3) : null, (t5 = t5.L = e3) ? new Uint8Array(t5) : P3 || (P3 = new Uint8Array(0)));
-      if (t5 instanceof Uint8Array) return new Uint8Array(t5.buffer, t5.byteOffset, t5.byteLength);
-      throw Error("Type not convertible to a Uint8Array, expected a Uint8Array, an ArrayBuffer, a base64 encoded string, or Array of numbers");
-    }(e2, t4.v), t4.j = 0, t4.i = t4.h.length, t4.g = t4.j;
-  }
-  function Y3(t4) {
-    if (t4.g > t4.i) throw Error("Tried to read past the end of the data " + t4.g + " > " + t4.i);
-  }
-  function J3(t4) {
-    var e2 = t4.h, n2 = e2[t4.g], r2 = 127 & n2;
-    if (128 > n2) return t4.g += 1, Y3(t4), r2;
-    if (r2 |= (127 & (n2 = e2[t4.g + 1])) << 7, 128 > n2) return t4.g += 2, Y3(t4), r2;
-    if (r2 |= (127 & (n2 = e2[t4.g + 2])) << 14, 128 > n2) return t4.g += 3, Y3(t4), r2;
-    if (r2 |= (127 & (n2 = e2[t4.g + 3])) << 21, 128 > n2) return t4.g += 4, Y3(t4), r2;
-    if (n2 = e2[t4.g + 4], t4.g += 5, r2 |= (15 & n2) << 28, 128 > n2) return Y3(t4), r2;
-    if (128 <= e2[t4.g++] && 128 <= e2[t4.g++] && 128 <= e2[t4.g++] && 128 <= e2[t4.g++] && 128 <= e2[t4.g++]) throw W3();
-    return Y3(t4), r2;
-  }
-  G3.prototype.reset = function() {
-    this.g = this.j;
-  };
-  var q3 = [];
-  function $3() {
-    this.g = [];
-  }
-  function Z3(t4, e2) {
-    for (; 127 < e2; ) t4.g.push(127 & e2 | 128), e2 >>>= 7;
-    t4.g.push(e2);
-  }
-  function Q3(t4) {
-    var e2 = {}, n2 = void 0 !== e2.W && e2.W;
-    this.l = { v: void 0 !== e2.v && e2.v }, this.W = n2, e2 = this.l, q3.length ? (n2 = q3.pop(), e2 && (n2.v = e2.v), t4 && X3(n2, t4), t4 = n2) : t4 = new G3(t4, e2), this.g = t4, this.j = this.g.g, this.h = this.i = -1;
-  }
-  function tt3(t4) {
-    var e2 = t4.g;
-    if (e2.g == e2.i) return false;
-    t4.j = t4.g.g;
-    var n2 = J3(t4.g) >>> 0;
-    if (e2 = n2 >>> 3, !(0 <= (n2 &= 7) && 5 >= n2)) throw K3(n2, t4.j);
-    if (1 > e2) throw Error("Invalid field number: " + e2 + " (at position " + t4.j + ")");
-    return t4.i = e2, t4.h = n2, true;
-  }
-  function et3(t4) {
-    switch (t4.h) {
-      case 0:
-        if (0 != t4.h) et3(t4);
-        else t: {
-          for (var e2 = (t4 = t4.g).g, n2 = e2 + 10; e2 < n2; ) if (0 == (128 & t4.h[e2++])) {
-            t4.g = e2, Y3(t4);
-            break t;
-          }
-          throw W3();
-        }
-        break;
-      case 1:
-        (t4 = t4.g).g += 8, Y3(t4);
-        break;
-      case 2:
-        2 != t4.h ? et3(t4) : (e2 = J3(t4.g) >>> 0, (t4 = t4.g).g += e2, Y3(t4));
-        break;
-      case 5:
-        (t4 = t4.g).g += 4, Y3(t4);
-        break;
-      case 3:
-        for (e2 = t4.i; ; ) {
-          if (!tt3(t4)) throw Error("Unmatched start-group tag: stream EOF");
-          if (4 == t4.h) {
-            if (t4.i != e2) throw Error("Unmatched end-group tag");
-            break;
-          }
-          et3(t4);
-        }
-        break;
-      default:
-        throw K3(t4.h, t4.j);
-    }
-  }
-  $3.prototype.length = function() {
-    return this.g.length;
-  }, $3.prototype.end = function() {
-    var t4 = this.g;
-    return this.g = [], t4;
-  }, Q3.prototype.reset = function() {
-    this.g.reset(), this.j = this.g.g, this.h = this.i = -1;
-  };
-  var nt3 = [];
-  function rt3() {
-    this.i = [], this.h = 0, this.g = new $3();
-  }
-  function it3(t4, e2) {
-    0 !== e2.length && (t4.i.push(e2), t4.h += e2.length);
-  }
-  var ot3 = "function" == typeof Symbol && "symbol" == typeof Symbol() ? Symbol(void 0) : void 0;
-  function at3(t4, e2) {
-    Object.isFrozen(t4) || (ot3 ? t4[ot3] |= e2 : void 0 !== t4.N ? t4.N |= e2 : Object.defineProperties(t4, { N: { value: e2, configurable: true, writable: true, enumerable: false } }));
-  }
-  function ut3(t4) {
-    var e2;
-    return null == (e2 = ot3 ? t4[ot3] : t4.N) ? 0 : e2;
-  }
-  function st3(t4) {
-    return at3(t4, 1), t4;
-  }
-  function ct3(t4) {
-    return !!Array.isArray(t4) && !!(2 & ut3(t4));
-  }
-  function ht3(t4) {
-    if (!Array.isArray(t4)) throw Error("cannot mark non-array as immutable");
-    at3(t4, 2);
-  }
-  function lt3(t4) {
-    return null !== t4 && "object" == typeof t4 && !Array.isArray(t4) && t4.constructor === Object;
-  }
-  var ft3 = Object.freeze(st3([]));
-  function dt3(t4) {
-    if (ct3(t4.m)) throw Error("Cannot mutate an immutable Message");
-  }
-  var pt3, gt2 = "undefined" != typeof Symbol && void 0 !== Symbol.hasInstance;
-  function vt2(t4) {
-    return { value: t4, configurable: false, writable: false, enumerable: false };
-  }
-  function mt2(t4, e2, n2) {
-    return -1 === e2 ? null : e2 >= t4.i ? t4.g ? t4.g[e2] : void 0 : void 0 !== n2 && n2 && t4.g && null != (n2 = t4.g[e2]) ? n2 : t4.m[e2 + t4.h];
-  }
-  function yt2(t4, e2, n2, r2) {
-    r2 = void 0 !== r2 && r2, dt3(t4), e2 < t4.i && !r2 ? t4.m[e2 + t4.h] = n2 : (t4.g || (t4.g = t4.m[t4.i + t4.h] = {}))[e2] = n2;
-  }
-  function wt2(t4, e2, n2, r2) {
-    n2 = void 0 === n2 || n2;
-    var i2 = mt2(t4, e2, r2 = void 0 !== r2 && r2);
-    return null == i2 && (i2 = ft3), ct3(t4.m) ? n2 && (ht3(i2), Object.freeze(i2)) : (i2 === ft3 || ct3(i2)) && yt2(t4, e2, i2 = st3(i2.slice()), r2), i2;
-  }
-  function bt2(t4, e2, n2) {
-    return null == (t4 = null == (t4 = mt2(t4, e2)) ? t4 : +t4) ? void 0 === n2 ? 0 : n2 : t4;
-  }
-  function xt2(t4, e2, n2, r2) {
-    t4.j || (t4.j = {});
-    var i2 = ct3(t4.m), o2 = t4.j[n2];
-    if (!o2) {
-      r2 = wt2(t4, n2, true, void 0 !== r2 && r2), o2 = [], i2 = i2 || ct3(r2);
-      for (var a6 = 0; a6 < r2.length; a6++) o2[a6] = new e2(r2[a6]), i2 && ht3(o2[a6].m);
-      i2 && (ht3(o2), Object.freeze(o2)), t4.j[n2] = o2;
-    }
-    return o2;
-  }
-  function Mt2(t4, e2, n2, r2, i2) {
-    var o2 = void 0 !== o2 && o2;
-    return dt3(t4), o2 = xt2(t4, n2, e2, o2), n2 = r2 || new n2(), t4 = wt2(t4, e2), null != i2 ? (o2.splice(i2, 0, n2), t4.splice(i2, 0, n2.m)) : (o2.push(n2), t4.push(n2.m)), n2;
-  }
-  function At2(t4, e2) {
-    return null == (t4 = mt2(t4, e2)) ? 0 : t4;
-  }
-  function Tt2(t4, e2) {
-    return null == (t4 = mt2(t4, e2)) ? "" : t4;
-  }
-  function Et2(t4) {
-    var e2 = Ct2;
-    return Ft2(t4, e2 = void 0 === e2 ? Ot2 : e2);
-  }
-  function St2(t4, e2) {
-    if (null != t4) {
-      if (Array.isArray(t4)) t4 = Ft2(t4, e2);
-      else if (lt3(t4)) {
-        var n2, r2 = {};
-        for (n2 in t4) r2[n2] = St2(t4[n2], e2);
-        t4 = r2;
-      } else t4 = e2(t4);
-      return t4;
-    }
-  }
-  function Ft2(t4, e2) {
-    for (var n2 = t4.slice(), r2 = 0; r2 < n2.length; r2++) n2[r2] = St2(n2[r2], e2);
-    return Array.isArray(t4) && 1 & ut3(t4) && st3(n2), n2;
-  }
-  function Ct2(t4) {
-    return t4 && "object" == typeof t4 && t4.toJSON ? t4.toJSON() : (t4 = function(t5) {
-      switch (typeof t5) {
-        case "number":
-          return isFinite(t5) ? t5 : String(t5);
-        case "object":
-          if (t5 && !Array.isArray(t5)) {
-            if (U3(t5)) return I3(t5);
-            if (t5 instanceof N3) {
-              var e2 = t5.L;
-              return e2 = null == e2 || "string" == typeof e2 ? e2 : z3 && e2 instanceof Uint8Array ? I3(e2) : null, (t5.L = e2) || "";
-            }
-          }
-      }
-      return t5;
-    }(t4), Array.isArray(t4) ? Et2(t4) : t4);
-  }
-  function Ot2(t4) {
-    return U3(t4) ? new Uint8Array(t4) : t4;
-  }
-  function _t2(t4, e2, n2) {
-    t4 || (t4 = pt3), pt3 = null;
-    var r2 = this.constructor.h;
-    if (t4 || (t4 = r2 ? [r2] : []), this.h = (r2 ? 0 : -1) - (this.constructor.g || 0), this.j = void 0, this.m = t4, t4 = (r2 = this.m.length) - 1, r2 && lt3(r2 = this.m[t4]) ? (this.i = t4 - this.h, this.g = r2) : void 0 !== e2 && -1 < e2 ? (this.i = Math.max(e2, t4 + 1 - this.h), this.g = void 0) : this.i = Number.MAX_VALUE, n2) for (e2 = 0; e2 < n2.length; e2++) if ((t4 = n2[e2]) < this.i) t4 += this.h, (r2 = this.m[t4]) ? Array.isArray(r2) && st3(r2) : this.m[t4] = ft3;
-    else {
-      var i2 = (r2 = this.g || (this.g = this.m[this.i + this.h] = {}))[t4];
-      i2 ? Array.isArray(i2) && st3(i2) : r2[t4] = ft3;
-    }
-  }
-  function jt2() {
-    _t2.apply(this, arguments);
-  }
-  if (_t2.prototype.toJSON = function() {
-    return Et2(this.m);
-  }, _t2.prototype.toString = function() {
-    return this.m.toString();
-  }, d(jt2, _t2), gt2) {
-    var kt2 = {};
-    Object.defineProperties(jt2, (kt2[Symbol.hasInstance] = vt2(function() {
-      throw Error("Cannot perform instanceof checks for MutableMessage");
-    }), kt2));
-  }
-  function Rt2(t4, e2, n2) {
-    if (n2) {
-      var r2, i2 = {};
-      for (r2 in n2) {
-        var o2 = n2[r2], a6 = o2.ha;
-        a6 || (i2.F = o2.la || o2.fa.P, o2.aa ? (i2.U = Ut2(o2.aa), a6 = /* @__PURE__ */ function(t5) {
-          return function(e3, n3, r3) {
-            return t5.F(e3, n3, r3, t5.U);
-          };
-        }(i2)) : o2.ca ? (i2.T = Nt2(o2.X.g, o2.ca), a6 = /* @__PURE__ */ function(t5) {
-          return function(e3, n3, r3) {
-            return t5.F(e3, n3, r3, t5.T);
-          };
-        }(i2)) : a6 = i2.F, o2.ha = a6), a6(e2, t4, o2.X), i2 = { F: i2.F, U: i2.U, T: i2.T };
-      }
-    }
-    !function(t5, e3) {
-      if (e3 = e3.ba) {
-        it3(t5, t5.g.end());
-        for (var n3 = 0; n3 < e3.length; n3++) it3(t5, e3[n3]);
-      }
-    }(e2, t4);
-  }
-  var It2 = Symbol();
-  function Lt2(t4, e2, n2) {
-    return t4[It2] || (t4[It2] = function(t5, r2) {
-      return e2(t5, r2, n2);
-    });
-  }
-  function Bt2(t4) {
-    var e2 = t4[It2];
-    if (!e2) {
-      var n2 = Qt(t4);
-      e2 = function(t5, e3) {
-        return te(t5, e3, n2);
-      }, t4[It2] = e2;
-    }
-    return e2;
-  }
-  function Dt2(t4) {
-    var e2 = function(t5) {
-      var e3 = t5.aa;
-      return e3 ? Bt2(e3) : (e3 = t5.ka) ? Lt2(t5.X.g, e3, t5.ca) : void 0;
-    }(t4), n2 = t4.X, r2 = t4.fa.O;
-    return e2 ? function(t5, i2) {
-      return r2(t5, i2, n2, e2);
-    } : function(t5, e3) {
-      return r2(t5, e3, n2);
-    };
-  }
-  function Pt2(t4, e2, n2, r2, i2, o2) {
-    var a6 = 0;
-    for ((t4 = t4()).length && "number" != typeof t4[0] && (n2(e2, t4[0]), a6++); a6 < t4.length; ) {
-      n2 = t4[a6++];
-      for (var u2 = a6 + 1; u2 < t4.length && "number" != typeof t4[u2]; ) u2++;
-      var s2 = t4[a6++];
-      switch (u2 -= a6) {
-        case 0:
-          r2(e2, n2, s2);
-          break;
-        case 1:
-          r2(e2, n2, s2, t4[a6++]);
-          break;
-        case 2:
-          i2(e2, n2, s2, t4[a6++], t4[a6++]);
-          break;
-        case 3:
-          u2 = t4[a6++];
-          var c2 = t4[a6++], h2 = t4[a6++];
-          Array.isArray(h2) ? i2(e2, n2, s2, u2, c2, h2) : o2(e2, n2, s2, u2, c2, h2);
-          break;
-        case 4:
-          o2(e2, n2, s2, t4[a6++], t4[a6++], t4[a6++], t4[a6++]);
-          break;
-        default:
-          throw Error("unexpected number of binary field arguments: " + u2);
-      }
-    }
-    return e2;
-  }
-  var zt2 = Symbol();
-  function Ut2(t4) {
-    var e2 = t4[zt2];
-    if (!e2) {
-      var n2 = Xt2(t4);
-      e2 = function(t5, e3) {
-        return ne(t5, e3, n2);
-      }, t4[zt2] = e2;
-    }
-    return e2;
-  }
-  function Nt2(t4, e2) {
-    var n2 = t4[zt2];
-    return n2 || (n2 = function(t5, n3) {
-      return Rt2(t5, n3, e2);
-    }, t4[zt2] = n2), n2;
-  }
-  var Vt2 = Symbol();
-  function Ht2(t4, e2) {
-    t4.push(e2);
-  }
-  function Kt2(t4, e2, n2) {
-    t4.push(e2, n2.P);
-  }
-  function Wt2(t4, e2, n2, r2, i2) {
-    var o2 = Ut2(i2), a6 = n2.P;
-    t4.push(e2, function(t5, e3, n3) {
-      return a6(t5, e3, n3, r2, o2);
-    });
-  }
-  function Gt2(t4, e2, n2, r2, i2, o2) {
-    var a6 = Nt2(r2, o2), u2 = n2.P;
-    t4.push(e2, function(t5, e3, n3) {
-      return u2(t5, e3, n3, r2, a6);
-    });
-  }
-  function Xt2(t4) {
-    var e2 = t4[Vt2];
-    return e2 || Pt2(t4, t4[Vt2] = [], Ht2, Kt2, Wt2, Gt2);
-  }
-  var Yt2 = Symbol();
-  function Jt2(t4, e2) {
-    t4[0] = e2;
-  }
-  function qt2(t4, e2, n2, r2) {
-    var i2 = n2.O;
-    t4[e2] = r2 ? function(t5, e3, n3) {
-      return i2(t5, e3, n3, r2);
-    } : i2;
-  }
-  function $t2(t4, e2, n2, r2, i2, o2) {
-    var a6 = n2.O, u2 = Bt2(i2);
-    t4[e2] = function(t5, e3, n3) {
-      return a6(t5, e3, n3, r2, u2, o2);
-    };
-  }
-  function Zt2(t4, e2, n2, r2, i2, o2, a6) {
-    var u2 = n2.O, s2 = Lt2(r2, i2, o2);
-    t4[e2] = function(t5, e3, n3) {
-      return u2(t5, e3, n3, r2, s2, a6);
-    };
-  }
-  function Qt(t4) {
-    var e2 = t4[Yt2];
-    return e2 || Pt2(t4, t4[Yt2] = {}, Jt2, qt2, $t2, Zt2);
-  }
-  function te(t4, e2, n2) {
-    for (; tt3(e2) && 4 != e2.h; ) {
-      var r2 = e2.i, i2 = n2[r2];
-      if (!i2) {
-        var o2 = n2[0];
-        o2 && (o2 = o2[r2]) && (i2 = n2[r2] = Dt2(o2));
-      }
-      if (!(i2 && i2(e2, t4, r2) || (i2 = e2, r2 = t4, o2 = i2.j, et3(i2), i2.W))) {
-        var a6 = i2.g.h;
-        i2 = o2 === (i2 = i2.g.g) ? P3 || (P3 = new Uint8Array(0)) : V3 ? a6.slice(o2, i2) : new Uint8Array(a6.subarray(o2, i2)), (o2 = r2.ba) ? o2.push(i2) : r2.ba = [i2];
-      }
-    }
-    return t4;
-  }
-  function ee(t4, e2, n2) {
-    if (nt3.length) {
-      var r2 = nt3.pop();
-      t4 && (X3(r2.g, t4), r2.i = -1, r2.h = -1), t4 = r2;
-    } else t4 = new Q3(t4);
-    try {
-      return te(new e2(), t4, Qt(n2));
-    } finally {
-      (e2 = t4.g).h = null, e2.j = 0, e2.i = 0, e2.g = 0, e2.v = false, t4.i = -1, t4.h = -1, 100 > nt3.length && nt3.push(t4);
-    }
-  }
-  function ne(t4, e2, n2) {
-    for (var r2 = n2.length, i2 = 1 == r2 % 2, o2 = i2 ? 1 : 0; o2 < r2; o2 += 2) (0, n2[o2 + 1])(e2, t4, n2[o2]);
-    Rt2(t4, e2, i2 ? n2[0] : void 0);
-  }
-  function re(t4, e2) {
-    var n2 = new rt3();
-    ne(t4, n2, Xt2(e2)), it3(n2, n2.g.end()), t4 = new Uint8Array(n2.h);
-    for (var r2 = (e2 = n2.i).length, i2 = 0, o2 = 0; o2 < r2; o2++) {
-      var a6 = e2[o2];
-      t4.set(a6, i2), i2 += a6.length;
-    }
-    return n2.i = [t4], t4;
-  }
-  function ie(t4, e2) {
-    return { O: t4, P: e2 };
-  }
-  var oe = ie(function(t4, e2, n2) {
-    if (5 !== t4.h) return false;
-    var r2 = (t4 = t4.g).h[t4.g], i2 = t4.h[t4.g + 1], o2 = t4.h[t4.g + 2], a6 = t4.h[t4.g + 3];
-    return t4.g += 4, Y3(t4), t4 = 2 * ((i2 = (r2 << 0 | i2 << 8 | o2 << 16 | a6 << 24) >>> 0) >> 31) + 1, r2 = i2 >>> 23 & 255, i2 &= 8388607, yt2(e2, n2, 255 == r2 ? i2 ? NaN : 1 / 0 * t4 : 0 == r2 ? t4 * Math.pow(2, -149) * i2 : t4 * Math.pow(2, r2 - 150) * (i2 + Math.pow(2, 23))), true;
-  }, function(t4, e2, n2) {
-    if (null != (e2 = mt2(e2, n2))) {
-      Z3(t4.g, 8 * n2 + 5), t4 = t4.g;
-      var r2 = e2;
-      0 === (r2 = (n2 = 0 > r2 ? 1 : 0) ? -r2 : r2) ? 0 < 1 / r2 ? H3 = 0 : (0, H3 = 2147483648) : isNaN(r2) ? (0, H3 = 2147483647) : 34028234663852886e22 < r2 ? (0, H3 = (n2 << 31 | 2139095040) >>> 0) : 11754943508222875e-54 > r2 ? (r2 = Math.round(r2 / Math.pow(2, -149)), 0, H3 = (n2 << 31 | r2) >>> 0) : (e2 = Math.floor(Math.log(r2) / Math.LN2), r2 *= Math.pow(2, -e2), 16777216 <= (r2 = Math.round(8388608 * r2)) && ++e2, 0, H3 = (n2 << 31 | e2 + 127 << 23 | 8388607 & r2) >>> 0), n2 = H3, t4.g.push(n2 >>> 0 & 255), t4.g.push(n2 >>> 8 & 255), t4.g.push(n2 >>> 16 & 255), t4.g.push(n2 >>> 24 & 255);
-    }
-  }), ae = ie(function(t4, e2, n2) {
-    if (0 !== t4.h) return false;
-    for (var r2 = t4.g, i2 = 128, o2 = 0, a6 = t4 = 0; 4 > a6 && 128 <= i2; a6++) i2 = r2.h[r2.g++], Y3(r2), o2 |= (127 & i2) << 7 * a6;
-    if (128 <= i2 && (i2 = r2.h[r2.g++], Y3(r2), o2 |= (127 & i2) << 28, t4 |= (127 & i2) >> 4), 128 <= i2) for (a6 = 0; 5 > a6 && 128 <= i2; a6++) i2 = r2.h[r2.g++], Y3(r2), t4 |= (127 & i2) << 7 * a6 + 3;
-    if (!(128 > i2)) throw W3();
-    return r2 = o2 >>> 0, (t4 = 2147483648 & (i2 = t4 >>> 0)) && (i2 = ~i2 >>> 0, 0 == (r2 = 1 + ~r2 >>> 0) && (i2 = i2 + 1 >>> 0)), r2 = 4294967296 * i2 + (r2 >>> 0), yt2(e2, n2, t4 ? -r2 : r2), true;
-  }, function(t4, e2, n2) {
-    if (null != (e2 = mt2(e2, n2)) && null != e2) {
-      Z3(t4.g, 8 * n2), t4 = t4.g;
-      var r2 = e2;
-      for (n2 = 0 > r2, e2 = (r2 = Math.abs(r2)) >>> 0, r2 = Math.floor((r2 - e2) / 4294967296), r2 >>>= 0, n2 && (r2 = ~r2 >>> 0, 4294967295 < (e2 = 1 + (~e2 >>> 0)) && (e2 = 0, 4294967295 < ++r2 && (r2 = 0))), n2 = H3 = e2, e2 = r2; 0 < e2 || 127 < n2; ) t4.g.push(127 & n2 | 128), n2 = (n2 >>> 7 | e2 << 25) >>> 0, e2 >>>= 7;
-      t4.g.push(n2);
-    }
-  }), ue = ie(function(t4, e2, n2) {
-    return 0 === t4.h && (yt2(e2, n2, J3(t4.g)), true);
-  }, function(t4, e2, n2) {
-    if (null != (e2 = mt2(e2, n2)) && null != e2) if (Z3(t4.g, 8 * n2), t4 = t4.g, 0 <= (n2 = e2)) Z3(t4, n2);
-    else {
-      for (e2 = 0; 9 > e2; e2++) t4.g.push(127 & n2 | 128), n2 >>= 7;
-      t4.g.push(1);
-    }
-  }), se = ie(function(t4, e2, n2) {
-    if (2 !== t4.h) return false;
-    var r2, i2 = J3(t4.g) >>> 0, o2 = (t4 = t4.g).g;
-    if (t4.g += i2, Y3(t4), t4 = t4.h, _3) (r2 = C3) || (r2 = C3 = new TextDecoder("utf-8", { fatal: true })), r2 = r2.decode(t4.subarray(o2, o2 + i2));
-    else {
-      i2 = o2 + i2;
-      for (var a6, u2, s2, c2 = [], h2 = null; o2 < i2; ) 128 > (a6 = t4[o2++]) ? c2.push(a6) : 224 > a6 ? o2 >= i2 ? S3() : (u2 = t4[o2++], 194 > a6 || 128 != (192 & u2) ? (o2--, S3()) : c2.push((31 & a6) << 6 | 63 & u2)) : 240 > a6 ? o2 >= i2 - 1 ? S3() : 128 != (192 & (u2 = t4[o2++])) || 224 === a6 && 160 > u2 || 237 === a6 && 160 <= u2 || 128 != (192 & (r2 = t4[o2++])) ? (o2--, S3()) : c2.push((15 & a6) << 12 | (63 & u2) << 6 | 63 & r2) : 244 >= a6 ? o2 >= i2 - 2 ? S3() : 128 != (192 & (u2 = t4[o2++])) || 0 != u2 - 144 + (a6 << 28) >> 30 || 128 != (192 & (r2 = t4[o2++])) || 128 != (192 & (s2 = t4[o2++])) ? (o2--, S3()) : (a6 = (7 & a6) << 18 | (63 & u2) << 12 | (63 & r2) << 6 | 63 & s2, a6 -= 65536, c2.push(55296 + (a6 >> 10 & 1023), 56320 + (1023 & a6))) : S3(), 8192 <= c2.length && (h2 = F3(h2, c2), c2.length = 0);
-      r2 = F3(h2, c2);
-    }
-    return yt2(e2, n2, r2), true;
-  }, function(t4, e2, n2) {
-    if (null != (e2 = mt2(e2, n2))) {
-      var r2 = false;
-      if (r2 = void 0 !== r2 && r2, j3) {
-        if (r2 && /(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])/.test(e2)) throw Error("Found an unpaired surrogate");
-        e2 = (O3 || (O3 = new TextEncoder())).encode(e2);
-      } else {
-        for (var i2 = 0, o2 = new Uint8Array(3 * e2.length), a6 = 0; a6 < e2.length; a6++) {
-          var u2 = e2.charCodeAt(a6);
-          if (128 > u2) o2[i2++] = u2;
-          else {
-            if (2048 > u2) o2[i2++] = u2 >> 6 | 192;
-            else {
-              if (55296 <= u2 && 57343 >= u2) {
-                if (56319 >= u2 && a6 < e2.length) {
-                  var s2 = e2.charCodeAt(++a6);
-                  if (56320 <= s2 && 57343 >= s2) {
-                    u2 = 1024 * (u2 - 55296) + s2 - 56320 + 65536, o2[i2++] = u2 >> 18 | 240, o2[i2++] = u2 >> 12 & 63 | 128, o2[i2++] = u2 >> 6 & 63 | 128, o2[i2++] = 63 & u2 | 128;
-                    continue;
-                  }
-                  a6--;
-                }
-                if (r2) throw Error("Found an unpaired surrogate");
-                u2 = 65533;
-              }
-              o2[i2++] = u2 >> 12 | 224, o2[i2++] = u2 >> 6 & 63 | 128;
-            }
-            o2[i2++] = 63 & u2 | 128;
-          }
-        }
-        e2 = o2.subarray(0, i2);
-      }
-      Z3(t4.g, 8 * n2 + 2), Z3(t4.g, e2.length), it3(t4, t4.g.end()), it3(t4, e2);
-    }
-  }), ce = ie(function(t4, e2, n2, r2, i2) {
-    if (2 !== t4.h) return false;
-    e2 = Mt2(e2, n2, r2), n2 = t4.g.i, r2 = J3(t4.g) >>> 0;
-    var o2 = t4.g.g + r2, a6 = o2 - n2;
-    if (0 >= a6 && (t4.g.i = o2, i2(e2, t4), a6 = o2 - t4.g.g), a6) throw Error("Message parsing ended unexpectedly. Expected to read " + r2 + " bytes, instead read " + (r2 - a6) + " bytes, either the data ended unexpectedly or the message misreported its own length");
-    return t4.g.g = o2, t4.g.i = n2, true;
-  }, function(t4, e2, n2, r2, i2) {
-    if (null != (e2 = xt2(e2, r2, n2))) for (r2 = 0; r2 < e2.length; r2++) {
-      var o2 = t4;
-      Z3(o2.g, 8 * n2 + 2);
-      var a6 = o2.g.end();
-      it3(o2, a6), a6.push(o2.h), o2 = a6, i2(e2[r2], t4), a6 = t4;
-      var u2 = o2.pop();
-      for (u2 = a6.h + a6.g.length() - u2; 127 < u2; ) o2.push(127 & u2 | 128), u2 >>>= 7, a6.h++;
-      o2.push(u2), a6.h++;
-    }
-  });
-  function he() {
-    jt2.apply(this, arguments);
-  }
-  if (d(he, jt2), gt2) {
-    var le = {};
-    Object.defineProperties(he, (le[Symbol.hasInstance] = vt2(Object[Symbol.hasInstance]), le));
-  }
-  function fe(t4) {
-    he.call(this, t4);
-  }
-  function de() {
-    return [1, ue, 2, oe, 3, se, 4, se];
-  }
-  function pe(t4) {
-    he.call(this, t4, -1, ve);
-  }
-  function ge() {
-    return [1, ce, fe, de];
-  }
-  d(fe, he), d(pe, he), pe.prototype.addClassification = function(t4, e2) {
-    return Mt2(this, 1, fe, t4, e2), this;
-  };
-  var ve = [1];
-  function me(t4) {
-    he.call(this, t4);
-  }
-  function ye() {
-    return [1, oe, 2, oe, 3, oe, 4, oe, 5, oe];
-  }
-  function we(t4) {
-    he.call(this, t4, -1, xe);
-  }
-  function be() {
-    return [1, ce, me, ye];
-  }
-  d(me, he), d(we, he);
-  var xe = [1];
-  function Me(t4) {
-    he.call(this, t4);
-  }
-  function Ae() {
-    return [1, oe, 2, oe, 3, oe, 4, oe, 5, oe, 6, ae];
-  }
-  d(Me, he);
-  var Te = [[61, 146], [146, 91], [91, 181], [181, 84], [84, 17], [17, 314], [314, 405], [405, 321], [321, 375], [375, 291], [61, 185], [185, 40], [40, 39], [39, 37], [37, 0], [0, 267], [267, 269], [269, 270], [270, 409], [409, 291], [78, 95], [95, 88], [88, 178], [178, 87], [87, 14], [14, 317], [317, 402], [402, 318], [318, 324], [324, 308], [78, 191], [191, 80], [80, 81], [81, 82], [82, 13], [13, 312], [312, 311], [311, 310], [310, 415], [415, 308]], Ee = [[263, 249], [249, 390], [390, 373], [373, 374], [374, 380], [380, 381], [381, 382], [382, 362], [263, 466], [466, 388], [388, 387], [387, 386], [386, 385], [385, 384], [384, 398], [398, 362]], Se = [[276, 283], [283, 282], [282, 295], [295, 285], [300, 293], [293, 334], [334, 296], [296, 336]], Fe = [[33, 7], [7, 163], [163, 144], [144, 145], [145, 153], [153, 154], [154, 155], [155, 133], [33, 246], [246, 161], [161, 160], [160, 159], [159, 158], [158, 157], [157, 173], [173, 133]], Ce = [[46, 53], [53, 52], [52, 65], [65, 55], [70, 63], [63, 105], [105, 66], [66, 107]], Oe = [[10, 338], [338, 297], [297, 332], [332, 284], [284, 251], [251, 389], [389, 356], [356, 454], [454, 323], [323, 361], [361, 288], [288, 397], [397, 365], [365, 379], [379, 378], [378, 400], [400, 377], [377, 152], [152, 148], [148, 176], [176, 149], [149, 150], [150, 136], [136, 172], [172, 58], [58, 132], [132, 93], [93, 234], [234, 127], [127, 162], [162, 21], [21, 54], [54, 103], [103, 67], [67, 109], [109, 10]], _e = [].concat(u(Te), u(Ee), u(Se), u(Fe), u(Ce), u(Oe));
-  function je(t4, e2, n2) {
-    if (n2 = t4.createShader(0 === n2 ? t4.VERTEX_SHADER : t4.FRAGMENT_SHADER), t4.shaderSource(n2, e2), t4.compileShader(n2), !t4.getShaderParameter(n2, t4.COMPILE_STATUS)) throw Error("Could not compile WebGL shader.\n\n" + t4.getShaderInfoLog(n2));
-    return n2;
-  }
-  function ke(t4) {
-    return xt2(t4, fe, 1).map(function(t5) {
-      return { index: At2(t5, 1), ga: bt2(t5, 2), label: null != mt2(t5, 3) ? Tt2(t5, 3) : void 0, displayName: null != mt2(t5, 4) ? Tt2(t5, 4) : void 0 };
-    });
-  }
-  function Re(t4) {
-    return { x: bt2(t4, 1), y: bt2(t4, 2), z: bt2(t4, 3), visibility: null != mt2(t4, 4) ? bt2(t4, 4) : void 0 };
-  }
-  function Ie(t4, e2) {
-    this.h = t4, this.g = e2, this.l = 0;
-  }
-  function Le(t4, e2, n2) {
-    return function(t5, e3) {
-      var n3 = t5.g;
-      if (void 0 === t5.o) {
-        var r2 = je(n3, "\n  attribute vec2 aVertex;\n  attribute vec2 aTex;\n  varying vec2 vTex;\n  void main(void) {\n    gl_Position = vec4(aVertex, 0.0, 1.0);\n    vTex = aTex;\n  }", 0), i2 = je(n3, "\n  precision mediump float;\n  varying vec2 vTex;\n  uniform sampler2D sampler0;\n  void main(){\n    gl_FragColor = texture2D(sampler0, vTex);\n  }", 1), o2 = n3.createProgram();
-        if (n3.attachShader(o2, r2), n3.attachShader(o2, i2), n3.linkProgram(o2), !n3.getProgramParameter(o2, n3.LINK_STATUS)) throw Error("Could not compile WebGL program.\n\n" + n3.getProgramInfoLog(o2));
-        r2 = t5.o = o2, n3.useProgram(r2), i2 = n3.getUniformLocation(r2, "sampler0"), t5.j = { K: n3.getAttribLocation(r2, "aVertex"), J: n3.getAttribLocation(r2, "aTex"), ma: i2 }, t5.u = n3.createBuffer(), n3.bindBuffer(n3.ARRAY_BUFFER, t5.u), n3.enableVertexAttribArray(t5.j.K), n3.vertexAttribPointer(t5.j.K, 2, n3.FLOAT, false, 0, 0), n3.bufferData(n3.ARRAY_BUFFER, new Float32Array([-1, -1, -1, 1, 1, 1, 1, -1]), n3.STATIC_DRAW), n3.bindBuffer(n3.ARRAY_BUFFER, null), t5.s = n3.createBuffer(), n3.bindBuffer(n3.ARRAY_BUFFER, t5.s), n3.enableVertexAttribArray(t5.j.J), n3.vertexAttribPointer(t5.j.J, 2, n3.FLOAT, false, 0, 0), n3.bufferData(n3.ARRAY_BUFFER, new Float32Array([0, 1, 0, 0, 1, 0, 1, 1]), n3.STATIC_DRAW), n3.bindBuffer(n3.ARRAY_BUFFER, null), n3.uniform1i(i2, 0);
-      }
-      r2 = t5.j, n3.useProgram(t5.o), n3.canvas.width = e3.width, n3.canvas.height = e3.height, n3.viewport(0, 0, e3.width, e3.height), n3.activeTexture(n3.TEXTURE0), t5.h.bindTexture2d(e3.glName), n3.enableVertexAttribArray(r2.K), n3.bindBuffer(n3.ARRAY_BUFFER, t5.u), n3.vertexAttribPointer(r2.K, 2, n3.FLOAT, false, 0, 0), n3.enableVertexAttribArray(r2.J), n3.bindBuffer(n3.ARRAY_BUFFER, t5.s), n3.vertexAttribPointer(r2.J, 2, n3.FLOAT, false, 0, 0), n3.bindFramebuffer(n3.DRAW_FRAMEBUFFER ? n3.DRAW_FRAMEBUFFER : n3.FRAMEBUFFER, null), n3.clearColor(0, 0, 0, 0), n3.clear(n3.COLOR_BUFFER_BIT), n3.colorMask(true, true, true, true), n3.drawArrays(n3.TRIANGLE_FAN, 0, 4), n3.disableVertexAttribArray(r2.K), n3.disableVertexAttribArray(r2.J), n3.bindBuffer(n3.ARRAY_BUFFER, null), t5.h.bindTexture2d(0);
-    }(t4, e2), "function" == typeof t4.g.canvas.transferToImageBitmap ? Promise.resolve(t4.g.canvas.transferToImageBitmap()) : n2 ? Promise.resolve(t4.g.canvas) : "function" == typeof createImageBitmap ? createImageBitmap(t4.g.canvas) : (void 0 === t4.i && (t4.i = document.createElement("canvas")), new Promise(function(e3) {
-      t4.i.height = t4.g.canvas.height, t4.i.width = t4.g.canvas.width, t4.i.getContext("2d", {}).drawImage(t4.g.canvas, 0, 0, t4.g.canvas.width, t4.g.canvas.height), e3(t4.i);
-    }));
-  }
-  function Be(t4) {
-    this.g = t4;
-  }
-  var De = new Uint8Array([0, 97, 115, 109, 1, 0, 0, 0, 1, 4, 1, 96, 0, 0, 3, 2, 1, 0, 10, 9, 1, 7, 0, 65, 0, 253, 15, 26, 11]);
-  function Pe(t4, e2) {
-    return e2 + t4;
-  }
-  function ze(t4, e2) {
-    window[t4] = e2;
-  }
-  function Ue(t4) {
-    if (this.g = t4, this.listeners = {}, this.j = {}, this.H = {}, this.o = {}, this.u = {}, this.I = this.s = this.Z = true, this.D = Promise.resolve(), this.Y = "", this.C = {}, this.locateFile = t4 && t4.locateFile || Pe, "object" == typeof window) var e2 = window.location.pathname.toString().substring(0, window.location.pathname.toString().lastIndexOf("/")) + "/";
-    else {
-      if ("undefined" == typeof location) throw Error("solutions can only be loaded on a web page or in a web worker");
-      e2 = location.pathname.toString().substring(0, location.pathname.toString().lastIndexOf("/")) + "/";
-    }
-    if (this.$ = e2, t4.options) for (var n2 = (e2 = a(Object.keys(t4.options))).next(); !n2.done; n2 = e2.next()) {
-      n2 = n2.value;
-      var r2 = t4.options[n2].default;
-      void 0 !== r2 && (this.j[n2] = "function" == typeof r2 ? r2() : r2);
-    }
-  }
-  function Ne(t4) {
-    var e2, n2, r2, i2, o2, a6, s2, c2, h2, l3, f2;
-    return M(function(d2) {
-      switch (d2.g) {
-        case 1:
-          return t4.Z ? (e2 = void 0 === t4.g.files ? [] : "function" == typeof t4.g.files ? t4.g.files(t4.j) : t4.g.files, m(d2, M(function(t5) {
-            switch (t5.g) {
-              case 1:
-                return t5.o = 2, m(t5, WebAssembly.instantiate(De), 4);
-              case 4:
-                t5.g = 3, t5.o = 0;
-                break;
-              case 2:
-                return t5.o = 0, t5.j = null, t5.return(false);
-              case 3:
-                return t5.return(true);
-            }
-          }), 2)) : d2.return();
-        case 2:
-          if (n2 = d2.h, "object" == typeof window) return ze("createMediapipeSolutionsWasm", { locateFile: t4.locateFile }), ze("createMediapipeSolutionsPackedAssets", { locateFile: t4.locateFile }), a6 = e2.filter(function(t5) {
-            return void 0 !== t5.data;
-          }), s2 = e2.filter(function(t5) {
-            return void 0 === t5.data;
-          }), c2 = Promise.all(a6.map(function(e3) {
-            var n3 = Ve(t4, e3.url);
-            if (void 0 !== e3.path) {
-              var r3 = e3.path;
-              n3 = n3.then(function(e4) {
-                return t4.overrideFile(r3, e4), Promise.resolve(e4);
-              });
-            }
-            return n3;
-          })), h2 = Promise.all(s2.map(function(e3) {
-            return void 0 === e3.simd || e3.simd && n2 || !e3.simd && !n2 ? function(t5) {
-              var e4 = document.createElement("script");
-              return e4.setAttribute("src", t5), e4.setAttribute("crossorigin", "anonymous"), new Promise(function(t6) {
-                e4.addEventListener("load", function() {
-                  t6();
-                }, false), e4.addEventListener("error", function() {
-                  t6();
-                }, false), document.body.appendChild(e4);
-              });
-            }(t4.locateFile(e3.url, t4.$)) : Promise.resolve();
-          })).then(function() {
-            var e3, n3, r3;
-            return M(function(i3) {
-              if (1 == i3.g) return e3 = window.createMediapipeSolutionsWasm, n3 = window.createMediapipeSolutionsPackedAssets, r3 = t4, m(i3, e3(n3), 2);
-              r3.h = i3.h, i3.g = 0;
-            });
-          }), l3 = M(function(e3) {
-            return t4.g.graph && t4.g.graph.url ? e3 = m(e3, Ve(t4, t4.g.graph.url), 0) : (e3.g = 0, e3 = void 0), e3;
-          }), m(d2, Promise.all([h2, c2, l3]), 7);
-          if ("function" != typeof importScripts) throw Error("solutions can only be loaded on a web page or in a web worker");
-          return r2 = e2.filter(function(t5) {
-            return void 0 === t5.simd || t5.simd && n2 || !t5.simd && !n2;
-          }).map(function(e3) {
-            return t4.locateFile(e3.url, t4.$);
-          }), importScripts.apply(null, u(r2)), i2 = t4, m(d2, createMediapipeSolutionsWasm(Module), 6);
-        case 6:
-          i2.h = d2.h, t4.l = new OffscreenCanvas(1, 1), t4.h.canvas = t4.l, o2 = t4.h.GL.createContext(t4.l, { antialias: false, alpha: false, ja: "undefined" != typeof WebGL2RenderingContext ? 2 : 1 }), t4.h.GL.makeContextCurrent(o2), d2.g = 4;
-          break;
-        case 7:
-          if (t4.l = document.createElement("canvas"), !(f2 = t4.l.getContext("webgl2", {})) && !(f2 = t4.l.getContext("webgl", {}))) return alert("Failed to create WebGL canvas context when passing video frame."), d2.return();
-          t4.G = f2, t4.h.canvas = t4.l, t4.h.createContext(t4.l, true, true, {});
-        case 4:
-          t4.i = new t4.h.SolutionWasm(), t4.Z = false, d2.g = 0;
-      }
-    });
-  }
-  function Ve(t4, e2) {
-    var n2, r2;
-    return M(function(i2) {
-      return e2 in t4.H ? i2.return(t4.H[e2]) : (n2 = t4.locateFile(e2, ""), r2 = fetch(n2).then(function(t5) {
-        return t5.arrayBuffer();
-      }), t4.H[e2] = r2, i2.return(r2));
-    });
-  }
-  function He(t4, e2, n2) {
-    var r2, i2, o2, u2, s2, c2, h2, l3, f2, d2, p3, g2, v2, y2;
-    return M(function(w2) {
-      switch (w2.g) {
-        case 1:
-          if (!n2) return w2.return(e2);
-          for (r2 = {}, i2 = 0, o2 = a(Object.keys(n2)), u2 = o2.next(); !u2.done; u2 = o2.next()) s2 = u2.value, "string" != typeof (c2 = n2[s2]) && "texture" === c2.type && void 0 !== e2[c2.stream] && ++i2;
-          1 < i2 && (t4.I = false), h2 = a(Object.keys(n2)), u2 = h2.next();
-        case 2:
-          if (u2.done) {
-            w2.g = 4;
-            break;
-          }
-          if (l3 = u2.value, "string" == typeof (f2 = n2[l3])) return v2 = r2, y2 = l3, m(w2, function(t5, e3, n3) {
-            var r3;
-            return M(function(i3) {
-              return "number" == typeof n3 || n3 instanceof Uint8Array || n3 instanceof t5.h.Uint8BlobList ? i3.return(n3) : n3 instanceof t5.h.Texture2dDataOut ? ((r3 = t5.u[e3]) || (r3 = new Ie(t5.h, t5.G), t5.u[e3] = r3), i3.return(Le(r3, n3, t5.I))) : i3.return(void 0);
-            });
-          }(t4, l3, e2[f2]), 14);
-          if (d2 = e2[f2.stream], "detection_list" === f2.type) {
-            if (d2) {
-              for (var b2 = d2.getRectList(), x2 = d2.getLandmarksList(), A3 = d2.getClassificationsList(), T3 = [], E4 = 0; E4 < b2.size(); ++E4) {
-                var S4 = ee(b2.get(E4), Me, Ae);
-                S4 = { boundingBox: { xCenter: bt2(S4, 1), yCenter: bt2(S4, 2), height: bt2(S4, 3), width: bt2(S4, 4), rotation: bt2(S4, 5, 0), rectId: At2(S4, 6) }, landmarks: xt2(ee(x2.get(E4), we, be), me, 1).map(Re), V: ke(ee(A3.get(E4), pe, ge)) }, T3.push(S4);
-              }
-              b2 = T3;
-            } else b2 = [];
-            r2[l3] = b2, w2.g = 7;
-            break;
-          }
-          if ("proto_list" === f2.type) {
-            if (d2) {
-              for (b2 = Array(d2.size()), x2 = 0; x2 < d2.size(); x2++) b2[x2] = d2.get(x2);
-              d2.delete();
-            } else b2 = [];
-            r2[l3] = b2, w2.g = 7;
-            break;
-          }
-          if (void 0 === d2) {
-            w2.g = 3;
-            break;
-          }
-          if ("float_list" === f2.type) {
-            r2[l3] = d2, w2.g = 7;
-            break;
-          }
-          if ("proto" === f2.type) {
-            r2[l3] = d2, w2.g = 7;
-            break;
-          }
-          if ("texture" !== f2.type) throw Error("Unknown output config type: '" + f2.type + "'");
-          return (p3 = t4.u[l3]) || (p3 = new Ie(t4.h, t4.G), t4.u[l3] = p3), m(w2, Le(p3, d2, t4.I), 13);
-        case 13:
-          g2 = w2.h, r2[l3] = g2;
-        case 7:
-          f2.transform && r2[l3] && (r2[l3] = f2.transform(r2[l3])), w2.g = 3;
-          break;
-        case 14:
-          v2[y2] = w2.h;
-        case 3:
-          u2 = h2.next(), w2.g = 2;
-          break;
-        case 4:
-          return w2.return(r2);
-      }
-    });
-  }
-  function Ke(t4, e2) {
-    for (var n2 = e2.name || "$", r2 = [].concat(u(e2.wants)), i2 = new t4.h.StringList(), o2 = a(e2.wants), s2 = o2.next(); !s2.done; s2 = o2.next()) i2.push_back(s2.value);
-    o2 = t4.h.PacketListener.implement({ onResults: function(i3) {
-      for (var o3 = {}, a6 = 0; a6 < e2.wants.length; ++a6) o3[r2[a6]] = i3.get(a6);
-      var u2 = t4.listeners[n2];
-      u2 && (t4.D = He(t4, o3, e2.outs).then(function(n3) {
-        n3 = u2(n3);
-        for (var i4 = 0; i4 < e2.wants.length; ++i4) {
-          var a7 = o3[r2[i4]];
-          "object" == typeof a7 && a7.hasOwnProperty && a7.hasOwnProperty("delete") && a7.delete();
-        }
-        n3 && (t4.D = n3);
-      }));
-    } }), t4.i.attachMultiListener(i2, o2), i2.delete();
-  }
-  function We(t4) {
-    var e2 = this;
-    t4 = t4 || {};
-    var n2 = { url: "face_detection_short.binarypb" }, r2 = { type: 1, graphOptionXref: { calculatorType: "TensorsToDetectionsCalculator", calculatorName: "facedetectionshortrangegpu__facedetectionshortrangecommon__TensorsToDetectionsCalculator", fieldName: "min_score_thresh" } };
-    this.g = new Ue({ locateFile: t4.locateFile, files: [{ data: true, url: "face_detection_short.binarypb" }, { data: true, url: "face_detection_short_range.tflite" }, { simd: true, url: "face_detection_solution_simd_wasm_bin.js" }, { simd: false, url: "face_detection_solution_wasm_bin.js" }], graph: n2, listeners: [{ wants: ["detections", "image_transformed"], outs: { image: "image_transformed", detections: { type: "detection_list", stream: "detections" } } }], inputs: { image: { type: "video", stream: "input_frames_gpu" } }, options: { useCpuInference: { type: 0, graphOptionXref: { calculatorType: "InferenceCalculator", fieldName: "use_cpu_inference" }, default: "object" == typeof window && void 0 !== window.navigator && ("iPad Simulator;iPhone Simulator;iPod Simulator;iPad;iPhone;iPod".split(";").includes(navigator.platform) || navigator.userAgent.includes("Mac") && "ontouchend" in document) }, selfieMode: { type: 0, graphOptionXref: { calculatorType: "GlScalerCalculator", calculatorIndex: 1, fieldName: "flip_horizontal" } }, model: { type: 0, onChange: function(t5) {
-      var i2, o2, u2, s2, c2;
-      return M(function(h2) {
-        switch (h2.g) {
-          case 1:
-            i2 = a("short" === t5 ? ["face_detection_short_range.tflite"] : ["face_detection_full_range_sparse.tflite"]), o2 = i2.next();
-          case 2:
-            if (o2.done) {
-              h2.g = 4;
-              break;
-            }
-            return u2 = o2.value, s2 = "third_party/mediapipe/modules/face_detection/" + u2, m(h2, Ve(e2.g, u2), 5);
-          case 5:
-            c2 = h2.h, e2.g.overrideFile(s2, c2), o2 = i2.next(), h2.g = 2;
-            break;
-          case 4:
-            return n2.url = "short" === t5 ? "face_detection_short.binarypb" : "face_detection_full.binarypb", r2.graphOptionXref.calculatorName = "short" === t5 ? "facedetectionshortrangegpu__facedetectionshortrangecommon__TensorsToDetectionsCalculator" : "facedetectionfullrangegpu__facedetectionfullrangecommon__TensorsToDetectionsCalculator", h2.return(true);
-        }
-      });
-    } }, minDetectionConfidence: r2 } });
-  }
-  (t3 = Ue.prototype).close = function() {
-    return this.i && this.i.delete(), Promise.resolve();
-  }, t3.reset = function() {
-    var t4 = this;
-    return M(function(e2) {
-      t4.i && (t4.i.reset(), t4.o = {}, t4.u = {}), e2.g = 0;
-    });
-  }, t3.setOptions = function(t4, e2) {
-    var n2 = this;
-    if (e2 = e2 || this.g.options) {
-      for (var r2 = [], i2 = [], o2 = {}, u2 = a(Object.keys(t4)), s2 = u2.next(); !s2.done; o2 = { R: o2.R, S: o2.S }, s2 = u2.next()) {
-        var c2 = s2.value;
-        c2 in this.j && this.j[c2] === t4[c2] || (this.j[c2] = t4[c2], void 0 !== (s2 = e2[c2]) && (s2.onChange && (o2.R = s2.onChange, o2.S = t4[c2], r2.push(/* @__PURE__ */ function(t5) {
-          return function() {
-            return M(function(e3) {
-              if (1 == e3.g) return m(e3, t5.R(t5.S), 2);
-              true === e3.h && (n2.s = true), e3.g = 0;
-            });
-          };
-        }(o2))), s2.graphOptionXref && (c2 = { valueNumber: 1 === s2.type ? t4[c2] : 0, valueBoolean: 0 === s2.type && t4[c2], valueString: 2 === s2.type ? t4[c2] : "" }, s2 = Object.assign(Object.assign(Object.assign({}, { calculatorName: "", calculatorIndex: 0 }), s2.graphOptionXref), c2), i2.push(s2))));
-      }
-      0 === r2.length && 0 === i2.length || (this.s = true, this.B = (void 0 === this.B ? [] : this.B).concat(i2), this.A = (void 0 === this.A ? [] : this.A).concat(r2));
-    }
-  }, t3.initialize = function() {
-    var t4 = this;
-    return M(function(e2) {
-      return 1 == e2.g ? m(e2, Ne(t4), 2) : 3 != e2.g ? m(e2, function(t5) {
-        var e3, n2, r2, i2, o2, u2, s2, c2;
-        return M(function(h2) {
-          if (1 == h2.g) return t5.g.graph && t5.g.graph.url && t5.Y === t5.g.graph.url ? h2.return() : (t5.s = true, t5.g.graph && t5.g.graph.url ? (t5.Y = t5.g.graph.url, m(h2, Ve(t5, t5.g.graph.url), 3)) : void (h2.g = 2));
-          for (2 != h2.g && (e3 = h2.h, t5.i.loadGraph(e3)), n2 = a(Object.keys(t5.C)), r2 = n2.next(); !r2.done; r2 = n2.next()) i2 = r2.value, t5.i.overrideFile(i2, t5.C[i2]);
-          if (t5.C = {}, t5.g.listeners) for (o2 = a(t5.g.listeners), u2 = o2.next(); !u2.done; u2 = o2.next()) s2 = u2.value, Ke(t5, s2);
-          c2 = t5.j, t5.j = {}, t5.setOptions(c2), h2.g = 0;
-        });
-      }(t4), 3) : m(e2, function(t5) {
-        var e3, n2, r2, i2, o2, u2;
-        return M(function(s2) {
-          switch (s2.g) {
-            case 1:
-              if (!t5.s) return s2.return();
-              if (!t5.A) {
-                s2.g = 2;
-                break;
-              }
-              e3 = a(t5.A), n2 = e3.next();
-            case 3:
-              if (n2.done) {
-                s2.g = 5;
-                break;
-              }
-              return m(s2, (0, n2.value)(), 4);
-            case 4:
-              n2 = e3.next(), s2.g = 3;
-              break;
-            case 5:
-              t5.A = void 0;
-            case 2:
-              if (t5.B) {
-                for (r2 = new t5.h.GraphOptionChangeRequestList(), i2 = a(t5.B), o2 = i2.next(); !o2.done; o2 = i2.next()) u2 = o2.value, r2.push_back(u2);
-                t5.i.changeOptions(r2), r2.delete(), t5.B = void 0;
-              }
-              t5.s = false, s2.g = 0;
-          }
-        });
-      }(t4), 0);
-    });
-  }, t3.overrideFile = function(t4, e2) {
-    this.i ? this.i.overrideFile(t4, e2) : this.C[t4] = e2;
-  }, t3.clearOverriddenFiles = function() {
-    this.C = {}, this.i && this.i.clearOverriddenFiles();
-  }, t3.send = function(t4, e2) {
-    var n2, r2, i2, o2, u2, s2, c2, h2, l3, f2 = this;
-    return M(function(d2) {
-      switch (d2.g) {
-        case 1:
-          return f2.g.inputs ? (n2 = 1e3 * (null == e2 ? performance.now() : e2), m(d2, f2.D, 2)) : d2.return();
-        case 2:
-          return m(d2, f2.initialize(), 3);
-        case 3:
-          for (r2 = new f2.h.PacketDataList(), i2 = a(Object.keys(t4)), o2 = i2.next(); !o2.done; o2 = i2.next()) if (u2 = o2.value, s2 = f2.g.inputs[u2]) {
-            t: {
-              var p3 = t4[u2];
-              switch (s2.type) {
-                case "video":
-                  var g2 = f2.o[s2.stream];
-                  if (g2 || (g2 = new Ie(f2.h, f2.G), f2.o[s2.stream] = g2), 0 === g2.l && (g2.l = g2.h.createTexture()), "undefined" != typeof HTMLVideoElement && p3 instanceof HTMLVideoElement) var v2 = p3.videoWidth, y2 = p3.videoHeight;
-                  else "undefined" != typeof HTMLImageElement && p3 instanceof HTMLImageElement ? (v2 = p3.naturalWidth, y2 = p3.naturalHeight) : (v2 = p3.width, y2 = p3.height);
-                  y2 = { glName: g2.l, width: v2, height: y2 }, (v2 = g2.g).canvas.width = y2.width, v2.canvas.height = y2.height, v2.activeTexture(v2.TEXTURE0), g2.h.bindTexture2d(g2.l), v2.texImage2D(v2.TEXTURE_2D, 0, v2.RGBA, v2.RGBA, v2.UNSIGNED_BYTE, p3), g2.h.bindTexture2d(0), g2 = y2;
-                  break t;
-                case "detections":
-                  for ((g2 = f2.o[s2.stream]) || (g2 = new Be(f2.h), f2.o[s2.stream] = g2), g2.data || (g2.data = new g2.g.DetectionListData()), g2.data.reset(p3.length), y2 = 0; y2 < p3.length; ++y2) {
-                    v2 = p3[y2];
-                    var w2 = g2.data, b2 = w2.setBoundingBox, x2 = y2, M2 = v2.boundingBox, A3 = new Me();
-                    if (yt2(A3, 1, M2.xCenter), yt2(A3, 2, M2.yCenter), yt2(A3, 3, M2.height), yt2(A3, 4, M2.width), yt2(A3, 5, M2.rotation), yt2(A3, 6, M2.rectId), M2 = re(A3, Ae), b2.call(w2, x2, M2), v2.landmarks) for (w2 = 0; w2 < v2.landmarks.length; ++w2) {
-                      var T3 = !!(A3 = v2.landmarks[w2]).visibility;
-                      x2 = (b2 = g2.data).addNormalizedLandmark, M2 = y2, A3 = Object.assign(Object.assign({}, A3), { visibility: T3 ? A3.visibility : 0 }), yt2(T3 = new me(), 1, A3.x), yt2(T3, 2, A3.y), yt2(T3, 3, A3.z), A3.visibility && yt2(T3, 4, A3.visibility), A3 = re(T3, ye), x2.call(b2, M2, A3);
-                    }
-                    if (v2.V) for (w2 = 0; w2 < v2.V.length; ++w2) x2 = (b2 = g2.data).addClassification, M2 = y2, A3 = v2.V[w2], yt2(T3 = new fe(), 2, A3.ga), A3.index && yt2(T3, 1, A3.index), A3.label && yt2(T3, 3, A3.label), A3.displayName && yt2(T3, 4, A3.displayName), A3 = re(T3, de), x2.call(b2, M2, A3);
-                  }
-                  g2 = g2.data;
-                  break t;
-                default:
-                  g2 = {};
-              }
-            }
-            switch (c2 = g2, h2 = s2.stream, s2.type) {
-              case "video":
-                r2.pushTexture2d(Object.assign(Object.assign({}, c2), { stream: h2, timestamp: n2 }));
-                break;
-              case "detections":
-                (l3 = c2).stream = h2, l3.timestamp = n2, r2.pushDetectionList(l3);
-                break;
-              default:
-                throw Error("Unknown input config type: '" + s2.type + "'");
-            }
-          }
-          return f2.i.send(r2), m(d2, f2.D, 4);
-        case 4:
-          r2.delete(), d2.g = 0;
-      }
-    });
-  }, t3.onResults = function(t4, e2) {
-    this.listeners[e2 || "$"] = t4;
-  }, E3("Solution", Ue), E3("OptionType", { BOOL: 0, NUMBER: 1, ia: 2, 0: "BOOL", 1: "NUMBER", 2: "STRING" }), (t3 = We.prototype).close = function() {
-    return this.g.close(), Promise.resolve();
-  }, t3.onResults = function(t4) {
-    this.g.onResults(t4);
-  }, t3.initialize = function() {
-    var t4 = this;
-    return M(function(e2) {
-      return m(e2, t4.g.initialize(), 0);
-    });
-  }, t3.reset = function() {
-    this.g.reset();
-  }, t3.send = function(t4) {
-    var e2 = this;
-    return M(function(n2) {
-      return m(n2, e2.g.send(t4), 0);
-    });
-  }, t3.setOptions = function(t4) {
-    this.g.setOptions(t4);
-  }, E3("FaceDetection", We), E3("FACEDETECTION_LIPS", Te), E3("FACEDETECTION_LEFT_EYE", Ee), E3("FACEDETECTION_LEFT_EYEBROW", Se), E3("FACEDETECTION_RIGHT_EYE", Fe), E3("FACEDETECTION_RIGHT_EYEBROW", Ce), E3("FACEDETECTION_FACE_OVAL", Oe), E3("FACEDETECTION_CONTOURS", _e), E3("FACEDETECTION_TESSELATION", [[127, 34], [34, 139], [139, 127], [11, 0], [0, 37], [37, 11], [232, 231], [231, 120], [120, 232], [72, 37], [37, 39], [39, 72], [128, 121], [121, 47], [47, 128], [232, 121], [121, 128], [128, 232], [104, 69], [69, 67], [67, 104], [175, 171], [171, 148], [148, 175], [118, 50], [50, 101], [101, 118], [73, 39], [39, 40], [40, 73], [9, 151], [151, 108], [108, 9], [48, 115], [115, 131], [131, 48], [194, 204], [204, 211], [211, 194], [74, 40], [40, 185], [185, 74], [80, 42], [42, 183], [183, 80], [40, 92], [92, 186], [186, 40], [230, 229], [229, 118], [118, 230], [202, 212], [212, 214], [214, 202], [83, 18], [18, 17], [17, 83], [76, 61], [61, 146], [146, 76], [160, 29], [29, 30], [30, 160], [56, 157], [157, 173], [173, 56], [106, 204], [204, 194], [194, 106], [135, 214], [214, 192], [192, 135], [203, 165], [165, 98], [98, 203], [21, 71], [71, 68], [68, 21], [51, 45], [45, 4], [4, 51], [144, 24], [24, 23], [23, 144], [77, 146], [146, 91], [91, 77], [205, 50], [50, 187], [187, 205], [201, 200], [200, 18], [18, 201], [91, 106], [106, 182], [182, 91], [90, 91], [91, 181], [181, 90], [85, 84], [84, 17], [17, 85], [206, 203], [203, 36], [36, 206], [148, 171], [171, 140], [140, 148], [92, 40], [40, 39], [39, 92], [193, 189], [189, 244], [244, 193], [159, 158], [158, 28], [28, 159], [247, 246], [246, 161], [161, 247], [236, 3], [3, 196], [196, 236], [54, 68], [68, 104], [104, 54], [193, 168], [168, 8], [8, 193], [117, 228], [228, 31], [31, 117], [189, 193], [193, 55], [55, 189], [98, 97], [97, 99], [99, 98], [126, 47], [47, 100], [100, 126], [166, 79], [79, 218], [218, 166], [155, 154], [154, 26], [26, 155], [209, 49], [49, 131], [131, 209], [135, 136], [136, 150], [150, 135], [47, 126], [126, 217], [217, 47], [223, 52], [52, 53], [53, 223], [45, 51], [51, 134], [134, 45], [211, 170], [170, 140], [140, 211], [67, 69], [69, 108], [108, 67], [43, 106], [106, 91], [91, 43], [230, 119], [119, 120], [120, 230], [226, 130], [130, 247], [247, 226], [63, 53], [53, 52], [52, 63], [238, 20], [20, 242], [242, 238], [46, 70], [70, 156], [156, 46], [78, 62], [62, 96], [96, 78], [46, 53], [53, 63], [63, 46], [143, 34], [34, 227], [227, 143], [123, 117], [117, 111], [111, 123], [44, 125], [125, 19], [19, 44], [236, 134], [134, 51], [51, 236], [216, 206], [206, 205], [205, 216], [154, 153], [153, 22], [22, 154], [39, 37], [37, 167], [167, 39], [200, 201], [201, 208], [208, 200], [36, 142], [142, 100], [100, 36], [57, 212], [212, 202], [202, 57], [20, 60], [60, 99], [99, 20], [28, 158], [158, 157], [157, 28], [35, 226], [226, 113], [113, 35], [160, 159], [159, 27], [27, 160], [204, 202], [202, 210], [210, 204], [113, 225], [225, 46], [46, 113], [43, 202], [202, 204], [204, 43], [62, 76], [76, 77], [77, 62], [137, 123], [123, 116], [116, 137], [41, 38], [38, 72], [72, 41], [203, 129], [129, 142], [142, 203], [64, 98], [98, 240], [240, 64], [49, 102], [102, 64], [64, 49], [41, 73], [73, 74], [74, 41], [212, 216], [216, 207], [207, 212], [42, 74], [74, 184], [184, 42], [169, 170], [170, 211], [211, 169], [170, 149], [149, 176], [176, 170], [105, 66], [66, 69], [69, 105], [122, 6], [6, 168], [168, 122], [123, 147], [147, 187], [187, 123], [96, 77], [77, 90], [90, 96], [65, 55], [55, 107], [107, 65], [89, 90], [90, 180], [180, 89], [101, 100], [100, 120], [120, 101], [63, 105], [105, 104], [104, 63], [93, 137], [137, 227], [227, 93], [15, 86], [86, 85], [85, 15], [129, 102], [102, 49], [49, 129], [14, 87], [87, 86], [86, 14], [55, 8], [8, 9], [9, 55], [100, 47], [47, 121], [121, 100], [145, 23], [23, 22], [22, 145], [88, 89], [89, 179], [179, 88], [6, 122], [122, 196], [196, 6], [88, 95], [95, 96], [96, 88], [138, 172], [172, 136], [136, 138], [215, 58], [58, 172], [172, 215], [115, 48], [48, 219], [219, 115], [42, 80], [80, 81], [81, 42], [195, 3], [3, 51], [51, 195], [43, 146], [146, 61], [61, 43], [171, 175], [175, 199], [199, 171], [81, 82], [82, 38], [38, 81], [53, 46], [46, 225], [225, 53], [144, 163], [163, 110], [110, 144], [52, 65], [65, 66], [66, 52], [229, 228], [228, 117], [117, 229], [34, 127], [127, 234], [234, 34], [107, 108], [108, 69], [69, 107], [109, 108], [108, 151], [151, 109], [48, 64], [64, 235], [235, 48], [62, 78], [78, 191], [191, 62], [129, 209], [209, 126], [126, 129], [111, 35], [35, 143], [143, 111], [117, 123], [123, 50], [50, 117], [222, 65], [65, 52], [52, 222], [19, 125], [125, 141], [141, 19], [221, 55], [55, 65], [65, 221], [3, 195], [195, 197], [197, 3], [25, 7], [7, 33], [33, 25], [220, 237], [237, 44], [44, 220], [70, 71], [71, 139], [139, 70], [122, 193], [193, 245], [245, 122], [247, 130], [130, 33], [33, 247], [71, 21], [21, 162], [162, 71], [170, 169], [169, 150], [150, 170], [188, 174], [174, 196], [196, 188], [216, 186], [186, 92], [92, 216], [2, 97], [97, 167], [167, 2], [141, 125], [125, 241], [241, 141], [164, 167], [167, 37], [37, 164], [72, 38], [38, 12], [12, 72], [38, 82], [82, 13], [13, 38], [63, 68], [68, 71], [71, 63], [226, 35], [35, 111], [111, 226], [101, 50], [50, 205], [205, 101], [206, 92], [92, 165], [165, 206], [209, 198], [198, 217], [217, 209], [165, 167], [167, 97], [97, 165], [220, 115], [115, 218], [218, 220], [133, 112], [112, 243], [243, 133], [239, 238], [238, 241], [241, 239], [214, 135], [135, 169], [169, 214], [190, 173], [173, 133], [133, 190], [171, 208], [208, 32], [32, 171], [125, 44], [44, 237], [237, 125], [86, 87], [87, 178], [178, 86], [85, 86], [86, 179], [179, 85], [84, 85], [85, 180], [180, 84], [83, 84], [84, 181], [181, 83], [201, 83], [83, 182], [182, 201], [137, 93], [93, 132], [132, 137], [76, 62], [62, 183], [183, 76], [61, 76], [76, 184], [184, 61], [57, 61], [61, 185], [185, 57], [212, 57], [57, 186], [186, 212], [214, 207], [207, 187], [187, 214], [34, 143], [143, 156], [156, 34], [79, 239], [239, 237], [237, 79], [123, 137], [137, 177], [177, 123], [44, 1], [1, 4], [4, 44], [201, 194], [194, 32], [32, 201], [64, 102], [102, 129], [129, 64], [213, 215], [215, 138], [138, 213], [59, 166], [166, 219], [219, 59], [242, 99], [99, 97], [97, 242], [2, 94], [94, 141], [141, 2], [75, 59], [59, 235], [235, 75], [24, 110], [110, 228], [228, 24], [25, 130], [130, 226], [226, 25], [23, 24], [24, 229], [229, 23], [22, 23], [23, 230], [230, 22], [26, 22], [22, 231], [231, 26], [112, 26], [26, 232], [232, 112], [189, 190], [190, 243], [243, 189], [221, 56], [56, 190], [190, 221], [28, 56], [56, 221], [221, 28], [27, 28], [28, 222], [222, 27], [29, 27], [27, 223], [223, 29], [30, 29], [29, 224], [224, 30], [247, 30], [30, 225], [225, 247], [238, 79], [79, 20], [20, 238], [166, 59], [59, 75], [75, 166], [60, 75], [75, 240], [240, 60], [147, 177], [177, 215], [215, 147], [20, 79], [79, 166], [166, 20], [187, 147], [147, 213], [213, 187], [112, 233], [233, 244], [244, 112], [233, 128], [128, 245], [245, 233], [128, 114], [114, 188], [188, 128], [114, 217], [217, 174], [174, 114], [131, 115], [115, 220], [220, 131], [217, 198], [198, 236], [236, 217], [198, 131], [131, 134], [134, 198], [177, 132], [132, 58], [58, 177], [143, 35], [35, 124], [124, 143], [110, 163], [163, 7], [7, 110], [228, 110], [110, 25], [25, 228], [356, 389], [389, 368], [368, 356], [11, 302], [302, 267], [267, 11], [452, 350], [350, 349], [349, 452], [302, 303], [303, 269], [269, 302], [357, 343], [343, 277], [277, 357], [452, 453], [453, 357], [357, 452], [333, 332], [332, 297], [297, 333], [175, 152], [152, 377], [377, 175], [347, 348], [348, 330], [330, 347], [303, 304], [304, 270], [270, 303], [9, 336], [336, 337], [337, 9], [278, 279], [279, 360], [360, 278], [418, 262], [262, 431], [431, 418], [304, 408], [408, 409], [409, 304], [310, 415], [415, 407], [407, 310], [270, 409], [409, 410], [410, 270], [450, 348], [348, 347], [347, 450], [422, 430], [430, 434], [434, 422], [313, 314], [314, 17], [17, 313], [306, 307], [307, 375], [375, 306], [387, 388], [388, 260], [260, 387], [286, 414], [414, 398], [398, 286], [335, 406], [406, 418], [418, 335], [364, 367], [367, 416], [416, 364], [423, 358], [358, 327], [327, 423], [251, 284], [284, 298], [298, 251], [281, 5], [5, 4], [4, 281], [373, 374], [374, 253], [253, 373], [307, 320], [320, 321], [321, 307], [425, 427], [427, 411], [411, 425], [421, 313], [313, 18], [18, 421], [321, 405], [405, 406], [406, 321], [320, 404], [404, 405], [405, 320], [315, 16], [16, 17], [17, 315], [426, 425], [425, 266], [266, 426], [377, 400], [400, 369], [369, 377], [322, 391], [391, 269], [269, 322], [417, 465], [465, 464], [464, 417], [386, 257], [257, 258], [258, 386], [466, 260], [260, 388], [388, 466], [456, 399], [399, 419], [419, 456], [284, 332], [332, 333], [333, 284], [417, 285], [285, 8], [8, 417], [346, 340], [340, 261], [261, 346], [413, 441], [441, 285], [285, 413], [327, 460], [460, 328], [328, 327], [355, 371], [371, 329], [329, 355], [392, 439], [439, 438], [438, 392], [382, 341], [341, 256], [256, 382], [429, 420], [420, 360], [360, 429], [364, 394], [394, 379], [379, 364], [277, 343], [343, 437], [437, 277], [443, 444], [444, 283], [283, 443], [275, 440], [440, 363], [363, 275], [431, 262], [262, 369], [369, 431], [297, 338], [338, 337], [337, 297], [273, 375], [375, 321], [321, 273], [450, 451], [451, 349], [349, 450], [446, 342], [342, 467], [467, 446], [293, 334], [334, 282], [282, 293], [458, 461], [461, 462], [462, 458], [276, 353], [353, 383], [383, 276], [308, 324], [324, 325], [325, 308], [276, 300], [300, 293], [293, 276], [372, 345], [345, 447], [447, 372], [352, 345], [345, 340], [340, 352], [274, 1], [1, 19], [19, 274], [456, 248], [248, 281], [281, 456], [436, 427], [427, 425], [425, 436], [381, 256], [256, 252], [252, 381], [269, 391], [391, 393], [393, 269], [200, 199], [199, 428], [428, 200], [266, 330], [330, 329], [329, 266], [287, 273], [273, 422], [422, 287], [250, 462], [462, 328], [328, 250], [258, 286], [286, 384], [384, 258], [265, 353], [353, 342], [342, 265], [387, 259], [259, 257], [257, 387], [424, 431], [431, 430], [430, 424], [342, 353], [353, 276], [276, 342], [273, 335], [335, 424], [424, 273], [292, 325], [325, 307], [307, 292], [366, 447], [447, 345], [345, 366], [271, 303], [303, 302], [302, 271], [423, 266], [266, 371], [371, 423], [294, 455], [455, 460], [460, 294], [279, 278], [278, 294], [294, 279], [271, 272], [272, 304], [304, 271], [432, 434], [434, 427], [427, 432], [272, 407], [407, 408], [408, 272], [394, 430], [430, 431], [431, 394], [395, 369], [369, 400], [400, 395], [334, 333], [333, 299], [299, 334], [351, 417], [417, 168], [168, 351], [352, 280], [280, 411], [411, 352], [325, 319], [319, 320], [320, 325], [295, 296], [296, 336], [336, 295], [319, 403], [403, 404], [404, 319], [330, 348], [348, 349], [349, 330], [293, 298], [298, 333], [333, 293], [323, 454], [454, 447], [447, 323], [15, 16], [16, 315], [315, 15], [358, 429], [429, 279], [279, 358], [14, 15], [15, 316], [316, 14], [285, 336], [336, 9], [9, 285], [329, 349], [349, 350], [350, 329], [374, 380], [380, 252], [252, 374], [318, 402], [402, 403], [403, 318], [6, 197], [197, 419], [419, 6], [318, 319], [319, 325], [325, 318], [367, 364], [364, 365], [365, 367], [435, 367], [367, 397], [397, 435], [344, 438], [438, 439], [439, 344], [272, 271], [271, 311], [311, 272], [195, 5], [5, 281], [281, 195], [273, 287], [287, 291], [291, 273], [396, 428], [428, 199], [199, 396], [311, 271], [271, 268], [268, 311], [283, 444], [444, 445], [445, 283], [373, 254], [254, 339], [339, 373], [282, 334], [334, 296], [296, 282], [449, 347], [347, 346], [346, 449], [264, 447], [447, 454], [454, 264], [336, 296], [296, 299], [299, 336], [338, 10], [10, 151], [151, 338], [278, 439], [439, 455], [455, 278], [292, 407], [407, 415], [415, 292], [358, 371], [371, 355], [355, 358], [340, 345], [345, 372], [372, 340], [346, 347], [347, 280], [280, 346], [442, 443], [443, 282], [282, 442], [19, 94], [94, 370], [370, 19], [441, 442], [442, 295], [295, 441], [248, 419], [419, 197], [197, 248], [263, 255], [255, 359], [359, 263], [440, 275], [275, 274], [274, 440], [300, 383], [383, 368], [368, 300], [351, 412], [412, 465], [465, 351], [263, 467], [467, 466], [466, 263], [301, 368], [368, 389], [389, 301], [395, 378], [378, 379], [379, 395], [412, 351], [351, 419], [419, 412], [436, 426], [426, 322], [322, 436], [2, 164], [164, 393], [393, 2], [370, 462], [462, 461], [461, 370], [164, 0], [0, 267], [267, 164], [302, 11], [11, 12], [12, 302], [268, 12], [12, 13], [13, 268], [293, 300], [300, 301], [301, 293], [446, 261], [261, 340], [340, 446], [330, 266], [266, 425], [425, 330], [426, 423], [423, 391], [391, 426], [429, 355], [355, 437], [437, 429], [391, 327], [327, 326], [326, 391], [440, 457], [457, 438], [438, 440], [341, 382], [382, 362], [362, 341], [459, 457], [457, 461], [461, 459], [434, 430], [430, 394], [394, 434], [414, 463], [463, 362], [362, 414], [396, 369], [369, 262], [262, 396], [354, 461], [461, 457], [457, 354], [316, 403], [403, 402], [402, 316], [315, 404], [404, 403], [403, 315], [314, 405], [405, 404], [404, 314], [313, 406], [406, 405], [405, 313], [421, 418], [418, 406], [406, 421], [366, 401], [401, 361], [361, 366], [306, 408], [408, 407], [407, 306], [291, 409], [409, 408], [408, 291], [287, 410], [410, 409], [409, 287], [432, 436], [436, 410], [410, 432], [434, 416], [416, 411], [411, 434], [264, 368], [368, 383], [383, 264], [309, 438], [438, 457], [457, 309], [352, 376], [376, 401], [401, 352], [274, 275], [275, 4], [4, 274], [421, 428], [428, 262], [262, 421], [294, 327], [327, 358], [358, 294], [433, 416], [416, 367], [367, 433], [289, 455], [455, 439], [439, 289], [462, 370], [370, 326], [326, 462], [2, 326], [326, 370], [370, 2], [305, 460], [460, 455], [455, 305], [254, 449], [449, 448], [448, 254], [255, 261], [261, 446], [446, 255], [253, 450], [450, 449], [449, 253], [252, 451], [451, 450], [450, 252], [256, 452], [452, 451], [451, 256], [341, 453], [453, 452], [452, 341], [413, 464], [464, 463], [463, 413], [441, 413], [413, 414], [414, 441], [258, 442], [442, 441], [441, 258], [257, 443], [443, 442], [442, 257], [259, 444], [444, 443], [443, 259], [260, 445], [445, 444], [444, 260], [467, 342], [342, 445], [445, 467], [459, 458], [458, 250], [250, 459], [289, 392], [392, 290], [290, 289], [290, 328], [328, 460], [460, 290], [376, 433], [433, 435], [435, 376], [250, 290], [290, 392], [392, 250], [411, 416], [416, 433], [433, 411], [341, 463], [463, 464], [464, 341], [453, 464], [464, 465], [465, 453], [357, 465], [465, 412], [412, 357], [343, 412], [412, 399], [399, 343], [360, 363], [363, 440], [440, 360], [437, 399], [399, 456], [456, 437], [420, 456], [456, 363], [363, 420], [401, 435], [435, 288], [288, 401], [372, 383], [383, 353], [353, 372], [339, 255], [255, 249], [249, 339], [448, 261], [261, 255], [255, 448], [133, 243], [243, 190], [190, 133], [133, 155], [155, 112], [112, 133], [33, 246], [246, 247], [247, 33], [33, 130], [130, 25], [25, 33], [398, 384], [384, 286], [286, 398], [362, 398], [398, 414], [414, 362], [362, 463], [463, 341], [341, 362], [263, 359], [359, 467], [467, 263], [263, 249], [249, 255], [255, 263], [466, 467], [467, 260], [260, 466], [75, 60], [60, 166], [166, 75], [238, 239], [239, 79], [79, 238], [162, 127], [127, 139], [139, 162], [72, 11], [11, 37], [37, 72], [121, 232], [232, 120], [120, 121], [73, 72], [72, 39], [39, 73], [114, 128], [128, 47], [47, 114], [233, 232], [232, 128], [128, 233], [103, 104], [104, 67], [67, 103], [152, 175], [175, 148], [148, 152], [119, 118], [118, 101], [101, 119], [74, 73], [73, 40], [40, 74], [107, 9], [9, 108], [108, 107], [49, 48], [48, 131], [131, 49], [32, 194], [194, 211], [211, 32], [184, 74], [74, 185], [185, 184], [191, 80], [80, 183], [183, 191], [185, 40], [40, 186], [186, 185], [119, 230], [230, 118], [118, 119], [210, 202], [202, 214], [214, 210], [84, 83], [83, 17], [17, 84], [77, 76], [76, 146], [146, 77], [161, 160], [160, 30], [30, 161], [190, 56], [56, 173], [173, 190], [182, 106], [106, 194], [194, 182], [138, 135], [135, 192], [192, 138], [129, 203], [203, 98], [98, 129], [54, 21], [21, 68], [68, 54], [5, 51], [51, 4], [4, 5], [145, 144], [144, 23], [23, 145], [90, 77], [77, 91], [91, 90], [207, 205], [205, 187], [187, 207], [83, 201], [201, 18], [18, 83], [181, 91], [91, 182], [182, 181], [180, 90], [90, 181], [181, 180], [16, 85], [85, 17], [17, 16], [205, 206], [206, 36], [36, 205], [176, 148], [148, 140], [140, 176], [165, 92], [92, 39], [39, 165], [245, 193], [193, 244], [244, 245], [27, 159], [159, 28], [28, 27], [30, 247], [247, 161], [161, 30], [174, 236], [236, 196], [196, 174], [103, 54], [54, 104], [104, 103], [55, 193], [193, 8], [8, 55], [111, 117], [117, 31], [31, 111], [221, 189], [189, 55], [55, 221], [240, 98], [98, 99], [99, 240], [142, 126], [126, 100], [100, 142], [219, 166], [166, 218], [218, 219], [112, 155], [155, 26], [26, 112], [198, 209], [209, 131], [131, 198], [169, 135], [135, 150], [150, 169], [114, 47], [47, 217], [217, 114], [224, 223], [223, 53], [53, 224], [220, 45], [45, 134], [134, 220], [32, 211], [211, 140], [140, 32], [109, 67], [67, 108], [108, 109], [146, 43], [43, 91], [91, 146], [231, 230], [230, 120], [120, 231], [113, 226], [226, 247], [247, 113], [105, 63], [63, 52], [52, 105], [241, 238], [238, 242], [242, 241], [124, 46], [46, 156], [156, 124], [95, 78], [78, 96], [96, 95], [70, 46], [46, 63], [63, 70], [116, 143], [143, 227], [227, 116], [116, 123], [123, 111], [111, 116], [1, 44], [44, 19], [19, 1], [3, 236], [236, 51], [51, 3], [207, 216], [216, 205], [205, 207], [26, 154], [154, 22], [22, 26], [165, 39], [39, 167], [167, 165], [199, 200], [200, 208], [208, 199], [101, 36], [36, 100], [100, 101], [43, 57], [57, 202], [202, 43], [242, 20], [20, 99], [99, 242], [56, 28], [28, 157], [157, 56], [124, 35], [35, 113], [113, 124], [29, 160], [160, 27], [27, 29], [211, 204], [204, 210], [210, 211], [124, 113], [113, 46], [46, 124], [106, 43], [43, 204], [204, 106], [96, 62], [62, 77], [77, 96], [227, 137], [137, 116], [116, 227], [73, 41], [41, 72], [72, 73], [36, 203], [203, 142], [142, 36], [235, 64], [64, 240], [240, 235], [48, 49], [49, 64], [64, 48], [42, 41], [41, 74], [74, 42], [214, 212], [212, 207], [207, 214], [183, 42], [42, 184], [184, 183], [210, 169], [169, 211], [211, 210], [140, 170], [170, 176], [176, 140], [104, 105], [105, 69], [69, 104], [193, 122], [122, 168], [168, 193], [50, 123], [123, 187], [187, 50], [89, 96], [96, 90], [90, 89], [66, 65], [65, 107], [107, 66], [179, 89], [89, 180], [180, 179], [119, 101], [101, 120], [120, 119], [68, 63], [63, 104], [104, 68], [234, 93], [93, 227], [227, 234], [16, 15], [15, 85], [85, 16], [209, 129], [129, 49], [49, 209], [15, 14], [14, 86], [86, 15], [107, 55], [55, 9], [9, 107], [120, 100], [100, 121], [121, 120], [153, 145], [145, 22], [22, 153], [178, 88], [88, 179], [179, 178], [197, 6], [6, 196], [196, 197], [89, 88], [88, 96], [96, 89], [135, 138], [138, 136], [136, 135], [138, 215], [215, 172], [172, 138], [218, 115], [115, 219], [219, 218], [41, 42], [42, 81], [81, 41], [5, 195], [195, 51], [51, 5], [57, 43], [43, 61], [61, 57], [208, 171], [171, 199], [199, 208], [41, 81], [81, 38], [38, 41], [224, 53], [53, 225], [225, 224], [24, 144], [144, 110], [110, 24], [105, 52], [52, 66], [66, 105], [118, 229], [229, 117], [117, 118], [227, 34], [34, 234], [234, 227], [66, 107], [107, 69], [69, 66], [10, 109], [109, 151], [151, 10], [219, 48], [48, 235], [235, 219], [183, 62], [62, 191], [191, 183], [142, 129], [129, 126], [126, 142], [116, 111], [111, 143], [143, 116], [118, 117], [117, 50], [50, 118], [223, 222], [222, 52], [52, 223], [94, 19], [19, 141], [141, 94], [222, 221], [221, 65], [65, 222], [196, 3], [3, 197], [197, 196], [45, 220], [220, 44], [44, 45], [156, 70], [70, 139], [139, 156], [188, 122], [122, 245], [245, 188], [139, 71], [71, 162], [162, 139], [149, 170], [170, 150], [150, 149], [122, 188], [188, 196], [196, 122], [206, 216], [216, 92], [92, 206], [164, 2], [2, 167], [167, 164], [242, 141], [141, 241], [241, 242], [0, 164], [164, 37], [37, 0], [11, 72], [72, 12], [12, 11], [12, 38], [38, 13], [13, 12], [70, 63], [63, 71], [71, 70], [31, 226], [226, 111], [111, 31], [36, 101], [101, 205], [205, 36], [203, 206], [206, 165], [165, 203], [126, 209], [209, 217], [217, 126], [98, 165], [165, 97], [97, 98], [237, 220], [220, 218], [218, 237], [237, 239], [239, 241], [241, 237], [210, 214], [214, 169], [169, 210], [140, 171], [171, 32], [32, 140], [241, 125], [125, 237], [237, 241], [179, 86], [86, 178], [178, 179], [180, 85], [85, 179], [179, 180], [181, 84], [84, 180], [180, 181], [182, 83], [83, 181], [181, 182], [194, 201], [201, 182], [182, 194], [177, 137], [137, 132], [132, 177], [184, 76], [76, 183], [183, 184], [185, 61], [61, 184], [184, 185], [186, 57], [57, 185], [185, 186], [216, 212], [212, 186], [186, 216], [192, 214], [214, 187], [187, 192], [139, 34], [34, 156], [156, 139], [218, 79], [79, 237], [237, 218], [147, 123], [123, 177], [177, 147], [45, 44], [44, 4], [4, 45], [208, 201], [201, 32], [32, 208], [98, 64], [64, 129], [129, 98], [192, 213], [213, 138], [138, 192], [235, 59], [59, 219], [219, 235], [141, 242], [242, 97], [97, 141], [97, 2], [2, 141], [141, 97], [240, 75], [75, 235], [235, 240], [229, 24], [24, 228], [228, 229], [31, 25], [25, 226], [226, 31], [230, 23], [23, 229], [229, 230], [231, 22], [22, 230], [230, 231], [232, 26], [26, 231], [231, 232], [233, 112], [112, 232], [232, 233], [244, 189], [189, 243], [243, 244], [189, 221], [221, 190], [190, 189], [222, 28], [28, 221], [221, 222], [223, 27], [27, 222], [222, 223], [224, 29], [29, 223], [223, 224], [225, 30], [30, 224], [224, 225], [113, 247], [247, 225], [225, 113], [99, 60], [60, 240], [240, 99], [213, 147], [147, 215], [215, 213], [60, 20], [20, 166], [166, 60], [192, 187], [187, 213], [213, 192], [243, 112], [112, 244], [244, 243], [244, 233], [233, 245], [245, 244], [245, 128], [128, 188], [188, 245], [188, 114], [114, 174], [174, 188], [134, 131], [131, 220], [220, 134], [174, 217], [217, 236], [236, 174], [236, 198], [198, 134], [134, 236], [215, 177], [177, 58], [58, 215], [156, 143], [143, 124], [124, 156], [25, 110], [110, 7], [7, 25], [31, 228], [228, 25], [25, 31], [264, 356], [356, 368], [368, 264], [0, 11], [11, 267], [267, 0], [451, 452], [452, 349], [349, 451], [267, 302], [302, 269], [269, 267], [350, 357], [357, 277], [277, 350], [350, 452], [452, 357], [357, 350], [299, 333], [333, 297], [297, 299], [396, 175], [175, 377], [377, 396], [280, 347], [347, 330], [330, 280], [269, 303], [303, 270], [270, 269], [151, 9], [9, 337], [337, 151], [344, 278], [278, 360], [360, 344], [424, 418], [418, 431], [431, 424], [270, 304], [304, 409], [409, 270], [272, 310], [310, 407], [407, 272], [322, 270], [270, 410], [410, 322], [449, 450], [450, 347], [347, 449], [432, 422], [422, 434], [434, 432], [18, 313], [313, 17], [17, 18], [291, 306], [306, 375], [375, 291], [259, 387], [387, 260], [260, 259], [424, 335], [335, 418], [418, 424], [434, 364], [364, 416], [416, 434], [391, 423], [423, 327], [327, 391], [301, 251], [251, 298], [298, 301], [275, 281], [281, 4], [4, 275], [254, 373], [373, 253], [253, 254], [375, 307], [307, 321], [321, 375], [280, 425], [425, 411], [411, 280], [200, 421], [421, 18], [18, 200], [335, 321], [321, 406], [406, 335], [321, 320], [320, 405], [405, 321], [314, 315], [315, 17], [17, 314], [423, 426], [426, 266], [266, 423], [396, 377], [377, 369], [369, 396], [270, 322], [322, 269], [269, 270], [413, 417], [417, 464], [464, 413], [385, 386], [386, 258], [258, 385], [248, 456], [456, 419], [419, 248], [298, 284], [284, 333], [333, 298], [168, 417], [417, 8], [8, 168], [448, 346], [346, 261], [261, 448], [417, 413], [413, 285], [285, 417], [326, 327], [327, 328], [328, 326], [277, 355], [355, 329], [329, 277], [309, 392], [392, 438], [438, 309], [381, 382], [382, 256], [256, 381], [279, 429], [429, 360], [360, 279], [365, 364], [364, 379], [379, 365], [355, 277], [277, 437], [437, 355], [282, 443], [443, 283], [283, 282], [281, 275], [275, 363], [363, 281], [395, 431], [431, 369], [369, 395], [299, 297], [297, 337], [337, 299], [335, 273], [273, 321], [321, 335], [348, 450], [450, 349], [349, 348], [359, 446], [446, 467], [467, 359], [283, 293], [293, 282], [282, 283], [250, 458], [458, 462], [462, 250], [300, 276], [276, 383], [383, 300], [292, 308], [308, 325], [325, 292], [283, 276], [276, 293], [293, 283], [264, 372], [372, 447], [447, 264], [346, 352], [352, 340], [340, 346], [354, 274], [274, 19], [19, 354], [363, 456], [456, 281], [281, 363], [426, 436], [436, 425], [425, 426], [380, 381], [381, 252], [252, 380], [267, 269], [269, 393], [393, 267], [421, 200], [200, 428], [428, 421], [371, 266], [266, 329], [329, 371], [432, 287], [287, 422], [422, 432], [290, 250], [250, 328], [328, 290], [385, 258], [258, 384], [384, 385], [446, 265], [265, 342], [342, 446], [386, 387], [387, 257], [257, 386], [422, 424], [424, 430], [430, 422], [445, 342], [342, 276], [276, 445], [422, 273], [273, 424], [424, 422], [306, 292], [292, 307], [307, 306], [352, 366], [366, 345], [345, 352], [268, 271], [271, 302], [302, 268], [358, 423], [423, 371], [371, 358], [327, 294], [294, 460], [460, 327], [331, 279], [279, 294], [294, 331], [303, 271], [271, 304], [304, 303], [436, 432], [432, 427], [427, 436], [304, 272], [272, 408], [408, 304], [395, 394], [394, 431], [431, 395], [378, 395], [395, 400], [400, 378], [296, 334], [334, 299], [299, 296], [6, 351], [351, 168], [168, 6], [376, 352], [352, 411], [411, 376], [307, 325], [325, 320], [320, 307], [285, 295], [295, 336], [336, 285], [320, 319], [319, 404], [404, 320], [329, 330], [330, 349], [349, 329], [334, 293], [293, 333], [333, 334], [366, 323], [323, 447], [447, 366], [316, 15], [15, 315], [315, 316], [331, 358], [358, 279], [279, 331], [317, 14], [14, 316], [316, 317], [8, 285], [285, 9], [9, 8], [277, 329], [329, 350], [350, 277], [253, 374], [374, 252], [252, 253], [319, 318], [318, 403], [403, 319], [351, 6], [6, 419], [419, 351], [324, 318], [318, 325], [325, 324], [397, 367], [367, 365], [365, 397], [288, 435], [435, 397], [397, 288], [278, 344], [344, 439], [439, 278], [310, 272], [272, 311], [311, 310], [248, 195], [195, 281], [281, 248], [375, 273], [273, 291], [291, 375], [175, 396], [396, 199], [199, 175], [312, 311], [311, 268], [268, 312], [276, 283], [283, 445], [445, 276], [390, 373], [373, 339], [339, 390], [295, 282], [282, 296], [296, 295], [448, 449], [449, 346], [346, 448], [356, 264], [264, 454], [454, 356], [337, 336], [336, 299], [299, 337], [337, 338], [338, 151], [151, 337], [294, 278], [278, 455], [455, 294], [308, 292], [292, 415], [415, 308], [429, 358], [358, 355], [355, 429], [265, 340], [340, 372], [372, 265], [352, 346], [346, 280], [280, 352], [295, 442], [442, 282], [282, 295], [354, 19], [19, 370], [370, 354], [285, 441], [441, 295], [295, 285], [195, 248], [248, 197], [197, 195], [457, 440], [440, 274], [274, 457], [301, 300], [300, 368], [368, 301], [417, 351], [351, 465], [465, 417], [251, 301], [301, 389], [389, 251], [394, 395], [395, 379], [379, 394], [399, 412], [412, 419], [419, 399], [410, 436], [436, 322], [322, 410], [326, 2], [2, 393], [393, 326], [354, 370], [370, 461], [461, 354], [393, 164], [164, 267], [267, 393], [268, 302], [302, 12], [12, 268], [312, 268], [268, 13], [13, 312], [298, 293], [293, 301], [301, 298], [265, 446], [446, 340], [340, 265], [280, 330], [330, 425], [425, 280], [322, 426], [426, 391], [391, 322], [420, 429], [429, 437], [437, 420], [393, 391], [391, 326], [326, 393], [344, 440], [440, 438], [438, 344], [458, 459], [459, 461], [461, 458], [364, 434], [434, 394], [394, 364], [428, 396], [396, 262], [262, 428], [274, 354], [354, 457], [457, 274], [317, 316], [316, 402], [402, 317], [316, 315], [315, 403], [403, 316], [315, 314], [314, 404], [404, 315], [314, 313], [313, 405], [405, 314], [313, 421], [421, 406], [406, 313], [323, 366], [366, 361], [361, 323], [292, 306], [306, 407], [407, 292], [306, 291], [291, 408], [408, 306], [291, 287], [287, 409], [409, 291], [287, 432], [432, 410], [410, 287], [427, 434], [434, 411], [411, 427], [372, 264], [264, 383], [383, 372], [459, 309], [309, 457], [457, 459], [366, 352], [352, 401], [401, 366], [1, 274], [274, 4], [4, 1], [418, 421], [421, 262], [262, 418], [331, 294], [294, 358], [358, 331], [435, 433], [433, 367], [367, 435], [392, 289], [289, 439], [439, 392], [328, 462], [462, 326], [326, 328], [94, 2], [2, 370], [370, 94], [289, 305], [305, 455], [455, 289], [339, 254], [254, 448], [448, 339], [359, 255], [255, 446], [446, 359], [254, 253], [253, 449], [449, 254], [253, 252], [252, 450], [450, 253], [252, 256], [256, 451], [451, 252], [256, 341], [341, 452], [452, 256], [414, 413], [413, 463], [463, 414], [286, 441], [441, 414], [414, 286], [286, 258], [258, 441], [441, 286], [258, 257], [257, 442], [442, 258], [257, 259], [259, 443], [443, 257], [259, 260], [260, 444], [444, 259], [260, 467], [467, 445], [445, 260], [309, 459], [459, 250], [250, 309], [305, 289], [289, 290], [290, 305], [305, 290], [290, 460], [460, 305], [401, 376], [376, 435], [435, 401], [309, 250], [250, 392], [392, 309], [376, 411], [411, 433], [433, 376], [453, 341], [341, 464], [464, 453], [357, 453], [453, 465], [465, 357], [343, 357], [357, 412], [412, 343], [437, 343], [343, 399], [399, 437], [344, 360], [360, 440], [440, 344], [420, 437], [437, 456], [456, 420], [360, 420], [420, 363], [363, 360], [361, 401], [401, 288], [288, 361], [265, 372], [372, 353], [353, 265], [390, 339], [339, 249], [249, 390], [339, 448], [448, 255], [255, 339]]), E3("VERSION", "0.4.1646425229");
-}).call(D2);
-var z2 = function() {
-  return z2 = Object.assign || function(t3) {
-    for (var e, n = 1, r = arguments.length; n < r; n++) for (var i in e = arguments[n]) Object.prototype.hasOwnProperty.call(e, i) && (t3[i] = e[i]);
-    return t3;
-  }, z2.apply(this, arguments);
-};
-function U2(t3, e, n, r) {
-  return new (n || (n = Promise))(function(i, o) {
-    function a(t4) {
-      try {
-        s(r.next(t4));
-      } catch (t5) {
-        o(t5);
-      }
-    }
-    function u(t4) {
-      try {
-        s(r.throw(t4));
-      } catch (t5) {
-        o(t5);
-      }
-    }
-    function s(t4) {
-      var e2;
-      t4.done ? i(t4.value) : (e2 = t4.value, e2 instanceof n ? e2 : new n(function(t5) {
-        t5(e2);
-      })).then(a, u);
-    }
-    s((r = r.apply(t3, e || [])).next());
-  });
-}
-function N2(t3, e) {
-  var n, r, i, o, a = { label: 0, sent: function() {
-    if (1 & i[0]) throw i[1];
-    return i[1];
-  }, trys: [], ops: [] };
-  return o = { next: u(0), throw: u(1), return: u(2) }, "function" == typeof Symbol && (o[Symbol.iterator] = function() {
-    return this;
-  }), o;
-  function u(o2) {
-    return function(u2) {
-      return function(o3) {
-        if (n) throw new TypeError("Generator is already executing.");
-        for (; a; ) try {
-          if (n = 1, r && (i = 2 & o3[0] ? r.return : o3[0] ? r.throw || ((i = r.return) && i.call(r), 0) : r.next) && !(i = i.call(r, o3[1])).done) return i;
-          switch (r = 0, i && (o3 = [2 & o3[0], i.value]), o3[0]) {
-            case 0:
-            case 1:
-              i = o3;
-              break;
-            case 4:
-              return a.label++, { value: o3[1], done: false };
-            case 5:
-              a.label++, r = o3[1], o3 = [0];
-              continue;
-            case 7:
-              o3 = a.ops.pop(), a.trys.pop();
-              continue;
-            default:
-              if (!((i = (i = a.trys).length > 0 && i[i.length - 1]) || 6 !== o3[0] && 2 !== o3[0])) {
-                a = 0;
-                continue;
-              }
-              if (3 === o3[0] && (!i || o3[1] > i[0] && o3[1] < i[3])) {
-                a.label = o3[1];
-                break;
-              }
-              if (6 === o3[0] && a.label < i[1]) {
-                a.label = i[1], i = o3;
-                break;
-              }
-              if (i && a.label < i[2]) {
-                a.label = i[2], a.ops.push(o3);
-                break;
-              }
-              i[2] && a.ops.pop(), a.trys.pop();
-              continue;
-          }
-          o3 = e.call(t3, a);
-        } catch (t4) {
-          o3 = [6, t4], r = 0;
-        } finally {
-          n = i = 0;
-        }
-        if (5 & o3[0]) throw o3[1];
-        return { value: o3[0] ? o3[1] : void 0, done: true };
-      }([o2, u2]);
-    };
-  }
-}
-var V2 = ["rightEye", "leftEye", "noseTip", "mouthCenter", "rightEarTragion", "leftEarTragion"];
-var H2 = { modelType: "short", runtime: "mediapipe", maxFaces: 1 };
-var K2 = function() {
-  function t3(t4) {
-    var e = this;
-    this.width = 0, this.height = 0, this.selfieMode = false, this.faceDetectorSolution = new P2.FaceDetection({ locateFile: function(e2, n) {
-      if (t4.solutionPath) {
-        var r = t4.solutionPath.replace(/\/+$/, "");
-        return "".concat(r, "/").concat(e2);
-      }
-      return "".concat(n, "/").concat(e2);
-    } }), this.faceDetectorSolution.setOptions({ selfieMode: this.selfieMode, model: t4.modelType }), this.faceDetectorSolution.onResults(function(t5) {
-      if (e.height = t5.image.height, e.width = t5.image.width, e.faces = [], null !== t5.detections) for (var n = 0, r = t5.detections; n < r.length; n++) {
-        var i = r[n];
-        e.faces.push(e.normalizedToAbsolute(i.landmarks, (void 0, void 0, void 0, { xMin: a = (o = i.boundingBox).xCenter - o.width / 2, xMax: a + o.width, yMin: u = o.yCenter - o.height / 2, yMax: u + o.height, width: o.width, height: o.height })));
-      }
-      var o, a, u;
-    });
-  }
-  return t3.prototype.normalizedToAbsolute = function(t4, e) {
-    var n = this;
-    return { keypoints: t4.map(function(t5, e2) {
-      return { x: t5.x * n.width, y: t5.y * n.height, name: V2[e2] };
-    }), box: { xMin: e.xMin * this.width, yMin: e.yMin * this.height, xMax: e.xMax * this.width, yMax: e.yMax * this.height, width: e.width * this.width, height: e.height * this.height } };
-  }, t3.prototype.estimateFaces = function(t4, e) {
-    return U2(this, void 0, void 0, function() {
-      var i, o;
-      return N2(this, function(a) {
-        switch (a.label) {
-          case 0:
-            return e && e.flipHorizontal && e.flipHorizontal !== this.selfieMode && (this.selfieMode = e.flipHorizontal, this.faceDetectorSolution.setOptions({ selfieMode: this.selfieMode })), t4 instanceof Tensor ? (o = ImageData.bind, [4, browser_exports.toPixels(t4)]) : [3, 2];
-          case 1:
-            return i = new (o.apply(ImageData, [void 0, a.sent(), t4.shape[1], t4.shape[0]]))(), [3, 3];
-          case 2:
-            i = t4, a.label = 3;
-          case 3:
-            return t4 = i, [4, this.faceDetectorSolution.send({ image: t4 })];
-          case 4:
-            return a.sent(), [2, this.faces];
-        }
-      });
-    });
-  }, t3.prototype.dispose = function() {
-    this.faceDetectorSolution.close();
-  }, t3.prototype.reset = function() {
-    this.faceDetectorSolution.reset(), this.width = 0, this.height = 0, this.faces = null, this.selfieMode = false;
-  }, t3.prototype.initialize = function() {
-    return this.faceDetectorSolution.initialize();
-  }, t3;
-}();
-function W2(t3) {
-  return U2(this, void 0, void 0, function() {
-    var e, n;
-    return N2(this, function(r) {
-      switch (r.label) {
-        case 0:
-          return e = function(t4) {
-            if (null == t4) return z2({}, H2);
-            var e2 = z2({}, t4);
-            return e2.runtime = "mediapipe", null == e2.modelType && (e2.modelType = H2.modelType), null == e2.maxFaces && (e2.maxFaces = H2.maxFaces), e2;
-          }(t3), [4, (n = new K2(e)).initialize()];
-        case 1:
-          return r.sent(), [2, n];
-      }
-    });
-  });
-}
-function G2(t3) {
-  return t3 instanceof Tensor ? { height: t3.shape[0], width: t3.shape[1] } : { height: t3.height, width: t3.width };
-}
-function X2(t3) {
-  return t3 instanceof Tensor ? t3 : browser_exports.fromPixels(t3);
-}
-function Y2(t3, e) {
-  util_exports.assert(0 !== t3.width, function() {
-    return "".concat(e, " width cannot be 0.");
-  }), util_exports.assert(0 !== t3.height, function() {
-    return "".concat(e, " height cannot be 0.");
-  });
-}
-function J2(t3, e, n) {
-  var r = e.outputTensorSize, i = e.keepAspectRatio, o = e.borderMode, h = e.outputTensorFloatRange, f = G2(t3), g = function(t4, e2) {
-    return e2 ? { xCenter: e2.xCenter * t4.width, yCenter: e2.yCenter * t4.height, width: e2.width * t4.width, height: e2.height * t4.height, rotation: e2.rotation } : { xCenter: 0.5 * t4.width, yCenter: 0.5 * t4.height, width: t4.width, height: t4.height, rotation: 0 };
-  }(f, n), v = function(t4, e2, n2) {
-    if (void 0 === n2 && (n2 = false), !n2) return { top: 0, left: 0, right: 0, bottom: 0 };
-    var r2 = e2.height, i2 = e2.width;
-    Y2(e2, "targetSize"), Y2(t4, "roi");
-    var o2, a, u = r2 / i2, s = t4.height / t4.width, c = 0, h2 = 0;
-    return u > s ? (o2 = t4.width, a = t4.width * u, h2 = (1 - s / u) / 2) : (o2 = t4.height / u, a = t4.height, c = (1 - u / s) / 2), t4.width = o2, t4.height = a, { top: h2, left: c, right: c, bottom: h2 };
-  }(g, r, i), m = function(t4, e2, n2, r2) {
-    var i2 = t4.width, o2 = t4.height, a = r2 ? -1 : 1, u = Math.cos(t4.rotation), s = Math.sin(t4.rotation), c = t4.xCenter, h2 = t4.yCenter, l = 1 / e2, f2 = 1 / n2, d = new Array(16);
-    return d[0] = i2 * u * a * l, d[1] = -o2 * s * l, d[2] = 0, d[3] = (-0.5 * i2 * u * a + 0.5 * o2 * s + c) * l, d[4] = i2 * s * a * f2, d[5] = o2 * u * f2, d[6] = 0, d[7] = (-0.5 * o2 * u - 0.5 * i2 * s * a + h2) * f2, d[8] = 0, d[9] = 0, d[10] = i2 * l, d[11] = 0, d[12] = 0, d[13] = 0, d[14] = 0, d[15] = 1, function(t5) {
-      if (16 !== t5.length) throw new Error("Array length must be 16 but got ".concat(t5.length));
-      return [[t5[0], t5[1], t5[2], t5[3]], [t5[4], t5[5], t5[6], t5[7]], [t5[8], t5[9], t5[10], t5[11]], [t5[12], t5[13], t5[14], t5[15]]];
-    }(d);
-  }(g, f.width, f.height, false), y = tidy(function() {
-    var e2 = X2(t3), n2 = tensor2d(function(t4, e3, n3) {
-      return Y2(n3, "inputResolution"), [1 / n3.width * t4[0][0] * e3.width, 1 / n3.height * t4[0][1] * e3.width, t4[0][3] * e3.width, 1 / n3.width * t4[1][0] * e3.height, 1 / n3.height * t4[1][1] * e3.height, t4[1][3] * e3.height, 0, 0];
-    }(m, f, r), [1, 8]), i2 = "zero" === o ? "constant" : "nearest", g2 = image.transform(expandDims(cast(e2, "float32")), n2, "bilinear", i2, 0, [r.height, r.width]);
-    return null != h ? function(t4, e3) {
-      var n3 = function(t5, e4, n4, r2) {
-        var i3 = (r2 - n4) / 255;
-        return { scale: i3, offset: n4 - 0 * i3 };
-      }(0, 0, e3[0], e3[1]);
-      return tidy(function() {
-        return add2(mul(t4, n3.scale), n3.offset);
-      });
-    }(g2, h) : g2;
-  });
-  return { imageTensor: y, padding: v, transformationMatrix: m };
-}
-function q2(t3) {
-  null == t3.reduceBoxesInLowestLayer && (t3.reduceBoxesInLowestLayer = false), null == t3.interpolatedScaleAspectRatio && (t3.interpolatedScaleAspectRatio = 1), null == t3.fixedAnchorSize && (t3.fixedAnchorSize = false);
-  for (var e = [], n = 0; n < t3.numLayers; ) {
-    for (var r = [], i = [], o = [], a = [], u = n; u < t3.strides.length && t3.strides[u] === t3.strides[n]; ) {
-      var s = $2(t3.minScale, t3.maxScale, u, t3.strides.length);
-      if (0 === u && t3.reduceBoxesInLowestLayer) o.push(1), o.push(2), o.push(0.5), a.push(0.1), a.push(s), a.push(s);
-      else {
-        for (var c = 0; c < t3.aspectRatios.length; ++c) o.push(t3.aspectRatios[c]), a.push(s);
-        if (t3.interpolatedScaleAspectRatio > 0) {
-          var h = u === t3.strides.length - 1 ? 1 : $2(t3.minScale, t3.maxScale, u + 1, t3.strides.length);
-          a.push(Math.sqrt(s * h)), o.push(t3.interpolatedScaleAspectRatio);
-        }
-      }
-      u++;
-    }
-    for (var l = 0; l < o.length; ++l) {
-      var f = Math.sqrt(o[l]);
-      r.push(a[l] / f), i.push(a[l] * f);
-    }
-    var d = 0, p2 = 0;
-    if (t3.featureMapHeight.length > 0) d = t3.featureMapHeight[n], p2 = t3.featureMapWidth[n];
-    else {
-      var g = t3.strides[n];
-      d = Math.ceil(t3.inputSizeHeight / g), p2 = Math.ceil(t3.inputSizeWidth / g);
-    }
-    for (var v = 0; v < d; ++v) for (var m = 0; m < p2; ++m) for (var y = 0; y < r.length; ++y) {
-      var w = { xCenter: (m + t3.anchorOffsetX) / p2, yCenter: (v + t3.anchorOffsetY) / d, width: 0, height: 0 };
-      t3.fixedAnchorSize ? (w.width = 1, w.height = 1) : (w.width = i[y], w.height = r[y]), e.push(w);
-    }
-    n = u;
-  }
-  return e;
-}
-function $2(t3, e, n, r) {
-  return 1 === r ? 0.5 * (t3 + e) : t3 + (e - t3) * n / (r - 1);
-}
-function Z2(t3, e) {
-  var n = e[0], r = e[1];
-  return [n * t3[0] + r * t3[1] + t3[3], n * t3[4] + r * t3[5] + t3[7]];
-}
-function Q2(t3, e, n, r) {
-  return U2(this, void 0, void 0, function() {
-    var r2, s, c, h, l;
-    return N2(this, function(f) {
-      switch (f.label) {
-        case 0:
-          return t3.sort(function(t4, e2) {
-            return Math.max.apply(Math, e2.score) - Math.max.apply(Math, t4.score);
-          }), r2 = tensor2d(t3.map(function(t4) {
-            return [t4.locationData.relativeBoundingBox.yMin, t4.locationData.relativeBoundingBox.xMin, t4.locationData.relativeBoundingBox.yMax, t4.locationData.relativeBoundingBox.xMax];
-          })), s = tensor1d(t3.map(function(t4) {
-            return t4.score[0];
-          })), [4, image.nonMaxSuppressionAsync(r2, s, e, n)];
-        case 1:
-          return [4, (c = f.sent()).array()];
-        case 2:
-          return h = f.sent(), l = t3.filter(function(t4, e2) {
-            return h.indexOf(e2) > -1;
-          }), dispose([r2, s, c]), [2, l];
-      }
-    });
-  });
-}
-function tt2(t3, e, n) {
-  return U2(this, void 0, void 0, function() {
-    var r, i, a, u, c;
-    return N2(this, function(l) {
-      switch (l.label) {
-        case 0:
-          return r = t3[0], i = t3[1], a = function(t4, e2, n2) {
-            return tidy(function() {
-              var r2, i2, o, a6;
-              n2.reverseOutputOrder ? (i2 = squeeze(slice(t4, [0, n2.boxCoordOffset + 0], [-1, 1])), r2 = squeeze(slice(t4, [0, n2.boxCoordOffset + 1], [-1, 1])), a6 = squeeze(slice(t4, [0, n2.boxCoordOffset + 2], [-1, 1])), o = squeeze(slice(t4, [0, n2.boxCoordOffset + 3], [-1, 1]))) : (r2 = squeeze(slice(t4, [0, n2.boxCoordOffset + 0], [-1, 1])), i2 = squeeze(slice(t4, [0, n2.boxCoordOffset + 1], [-1, 1])), o = squeeze(slice(t4, [0, n2.boxCoordOffset + 2], [-1, 1])), a6 = squeeze(slice(t4, [0, n2.boxCoordOffset + 3], [-1, 1]))), i2 = add2(mul(div(i2, n2.xScale), e2.w), e2.x), r2 = add2(mul(div(r2, n2.yScale), e2.h), e2.y), n2.applyExponentialOnBoxSize ? (o = mul(exp(div(o, n2.hScale)), e2.h), a6 = mul(exp(div(a6, n2.wScale)), e2.w)) : (o = mul(div(o, n2.hScale), e2.h), a6 = mul(div(a6, n2.wScale), e2.h));
-              var u2 = sub(r2, div(o, 2)), s = sub(i2, div(a6, 2)), c2 = add2(r2, div(o, 2)), l3 = add2(i2, div(a6, 2)), b = concat([reshape(u2, [n2.numBoxes, 1]), reshape(s, [n2.numBoxes, 1]), reshape(c2, [n2.numBoxes, 1]), reshape(l3, [n2.numBoxes, 1])], 1);
-              if (n2.numKeypoints) for (var x = 0; x < n2.numKeypoints; ++x) {
-                var M = n2.keypointCoordOffset + x * n2.numValuesPerKeypoint, A2 = void 0, T2 = void 0;
-                n2.reverseOutputOrder ? (A2 = squeeze(slice(t4, [0, M], [-1, 1])), T2 = squeeze(slice(t4, [0, M + 1], [-1, 1]))) : (T2 = squeeze(slice(t4, [0, M], [-1, 1])), A2 = squeeze(slice(t4, [0, M + 1], [-1, 1])));
-                var E3 = add2(mul(div(A2, n2.xScale), e2.w), e2.x), S3 = add2(mul(div(T2, n2.yScale), e2.h), e2.y);
-                b = concat([b, reshape(E3, [n2.numBoxes, 1]), reshape(S3, [n2.numBoxes, 1])], 1);
-              }
-              return b;
-            });
-          }(i, e, n), u = tidy(function() {
-            var t4 = r;
-            return n.sigmoidScore ? (null != n.scoreClippingThresh && (t4 = clipByValue(r, -n.scoreClippingThresh, n.scoreClippingThresh)), t4 = sigmoid(t4)) : t4;
-          }), [4, et2(a, u, n)];
-        case 1:
-          return c = l.sent(), dispose([a, u]), [2, c];
-      }
-    });
-  });
-}
-function et2(t3, e, n) {
-  return U2(this, void 0, void 0, function() {
-    var r, i, o, a, u, s, c, h, l, f, d, p2;
-    return N2(this, function(g) {
-      switch (g.label) {
-        case 0:
-          return r = [], [4, t3.data()];
-        case 1:
-          return i = g.sent(), [4, e.data()];
-        case 2:
-          for (o = g.sent(), a = 0; a < n.numBoxes; ++a) if (!(null != n.minScoreThresh && o[a] < n.minScoreThresh || (u = a * n.numCoords, s = nt2(i[u + 0], i[u + 1], i[u + 2], i[u + 3], o[a], n.flipVertically, a), (c = s.locationData.relativeBoundingBox).width < 0 || c.height < 0))) {
-            if (n.numKeypoints > 0) for ((h = s.locationData).relativeKeypoints = [], l = n.numKeypoints * n.numValuesPerKeypoint, f = 0; f < l; f += n.numValuesPerKeypoint) d = u + n.keypointCoordOffset + f, p2 = { x: i[d + 0], y: n.flipVertically ? 1 - i[d + 1] : i[d + 1] }, h.relativeKeypoints.push(p2);
-            r.push(s);
-          }
-          return [2, r];
-      }
-    });
-  });
-}
-function nt2(t3, e, n, r, i, o, a) {
-  return { score: [i], ind: a, locationData: { relativeBoundingBox: { xMin: e, yMin: o ? 1 - n : t3, xMax: r, yMax: o ? 1 - t3 : n, width: r - e, height: n - t3 } } };
-}
-var rt2;
-var it2 = { reduceBoxesInLowestLayer: false, interpolatedScaleAspectRatio: 1, featureMapHeight: [], featureMapWidth: [], numLayers: 4, minScale: 0.1484375, maxScale: 0.75, inputSizeHeight: 128, inputSizeWidth: 128, anchorOffsetX: 0.5, anchorOffsetY: 0.5, strides: [8, 16, 16, 16], aspectRatios: [1], fixedAnchorSize: true };
-var ot2 = { reduceBoxesInLowestLayer: false, interpolatedScaleAspectRatio: 0, featureMapHeight: [], featureMapWidth: [], numLayers: 1, minScale: 0.1484375, maxScale: 0.75, inputSizeHeight: 192, inputSizeWidth: 192, anchorOffsetX: 0.5, anchorOffsetY: 0.5, strides: [4], aspectRatios: [1], fixedAnchorSize: true };
-var at2 = { runtime: "tfjs", modelType: "short", maxFaces: 1, detectorModelUrl: "https://tfhub.dev/mediapipe/tfjs-model/face_detection/short/1" };
-var ut2 = { applyExponentialOnBoxSize: false, flipVertically: false, ignoreClasses: [], numClasses: 1, numBoxes: 896, numCoords: 16, boxCoordOffset: 0, keypointCoordOffset: 4, numKeypoints: 6, numValuesPerKeypoint: 2, sigmoidScore: true, scoreClippingThresh: 100, reverseOutputOrder: true, xScale: 128, yScale: 128, hScale: 128, wScale: 128, minScoreThresh: 0.5 };
-var st2 = { applyExponentialOnBoxSize: false, flipVertically: false, ignoreClasses: [], numClasses: 1, numBoxes: 2304, numCoords: 16, boxCoordOffset: 0, keypointCoordOffset: 4, numKeypoints: 6, numValuesPerKeypoint: 2, sigmoidScore: true, scoreClippingThresh: 100, reverseOutputOrder: true, xScale: 192, yScale: 192, hScale: 192, wScale: 192, minScoreThresh: 0.6 };
-var ct2 = { outputTensorSize: { width: 128, height: 128 }, keepAspectRatio: true, outputTensorFloatRange: [-1, 1], borderMode: "zero" };
-var ht2 = { outputTensorSize: { width: 192, height: 192 }, keepAspectRatio: true, outputTensorFloatRange: [-1, 1], borderMode: "zero" };
-var lt2 = function() {
-  function t3(t4, e, n) {
-    this.detectorModel = e, this.maxFaces = n, "full" === t4 ? (this.imageToTensorConfig = ht2, this.tensorsToDetectionConfig = st2, this.anchors = q2(ot2)) : (this.imageToTensorConfig = ct2, this.tensorsToDetectionConfig = ut2, this.anchors = q2(it2));
-    var r = tensor1d(this.anchors.map(function(t5) {
-      return t5.width;
-    })), o = tensor1d(this.anchors.map(function(t5) {
-      return t5.height;
-    })), a = tensor1d(this.anchors.map(function(t5) {
-      return t5.xCenter;
-    })), u = tensor1d(this.anchors.map(function(t5) {
-      return t5.yCenter;
-    }));
-    this.anchorTensor = { x: a, y: u, w: r, h: o };
-  }
-  return t3.prototype.dispose = function() {
-    this.detectorModel.dispose(), dispose([this.anchorTensor.x, this.anchorTensor.y, this.anchorTensor.w, this.anchorTensor.h]);
-  }, t3.prototype.reset = function() {
-  }, t3.prototype.detectFaces = function(t4, e) {
-    return void 0 === e && (e = false), U2(this, void 0, void 0, function() {
-      var n, r, i, a, d, p2, g, v, m, y, w;
-      return N2(this, function(b) {
-        switch (b.label) {
-          case 0:
-            return null == t4 ? (this.reset(), [2, []]) : (n = tidy(function() {
-              var n2 = cast(X2(t4), "float32");
-              return e && (n2 = squeeze(image.flipLeftRight(expandDims(n2, 0)), [0])), n2;
-            }), r = J2(n, this.imageToTensorConfig), i = r.imageTensor, a = r.transformationMatrix, d = this.detectorModel.execute(i, "Identity:0"), p2 = function(t5) {
-              return tidy(function() {
-                var e2 = function(t6) {
-                  return tidy(function() {
-                    return [slice(t6, [0, 0, 0], [1, -1, 1]), slice(t6, [0, 0, 1], [1, -1, -1])];
-                  });
-                }(t5), n2 = e2[0], r2 = e2[1];
-                return { boxes: squeeze(r2), logits: squeeze(n2) };
-              });
-            }(d), g = p2.boxes, [4, tt2([v = p2.logits, g], this.anchorTensor, this.tensorsToDetectionConfig)]);
-          case 1:
-            return 0 === (m = b.sent()).length ? (dispose([n, i, d, v, g]), [2, m]) : [4, Q2(m, this.maxFaces, 0.3)];
-          case 2:
-            return y = b.sent(), w = function(t5, e2) {
-              void 0 === t5 && (t5 = []);
-              var n2, r2 = (n2 = e2, [].concat.apply([], n2));
-              return t5.forEach(function(t6) {
-                var e3 = t6.locationData;
-                e3.relativeKeypoints.forEach(function(t7) {
-                  var e4 = Z2(r2, [t7.x, t7.y]), n4 = e4[0], i3 = e4[1];
-                  t7.x = n4, t7.y = i3;
-                });
-                var n3 = e3.relativeBoundingBox, i2 = Number.MAX_VALUE, o = Number.MAX_VALUE, a6 = Number.MIN_VALUE, u = Number.MIN_VALUE;
-                [[n3.xMin, n3.yMin], [n3.xMin + n3.width, n3.yMin], [n3.xMin + n3.width, n3.yMin + n3.height], [n3.xMin, n3.yMin + n3.height]].forEach(function(t7) {
-                  var e4 = Z2(r2, t7), n4 = e4[0], s = e4[1];
-                  i2 = Math.min(i2, n4), a6 = Math.max(a6, n4), o = Math.min(o, s), u = Math.max(u, s);
-                }), e3.relativeBoundingBox = { xMin: i2, xMax: a6, yMin: o, yMax: u, width: a6 - i2, height: u - o };
-              }), t5;
-            }(y, a), dispose([n, i, d, v, g]), [2, w];
-        }
-      });
-    });
-  }, t3.prototype.estimateFaces = function(t4, e) {
-    return U2(this, void 0, void 0, function() {
-      var n, r;
-      return N2(this, function(i) {
-        return n = G2(t4), r = !!e && e.flipHorizontal, [2, this.detectFaces(t4, r).then(function(t5) {
-          return t5.map(function(t6) {
-            for (var e2 = t6.locationData.relativeKeypoints.map(function(t7, e3) {
-              return z2(z2({}, t7), { x: t7.x * n.width, y: t7.y * n.height, name: V2[e3] });
-            }), r2 = t6.locationData.relativeBoundingBox, i2 = 0, o = ["width", "xMax", "xMin"]; i2 < o.length; i2++) r2[o[i2]] *= n.width;
-            for (var a = 0, u = ["height", "yMax", "yMin"]; a < u.length; a++) r2[u[a]] *= n.height;
-            return { keypoints: e2, box: r2 };
-          });
-        })];
-      });
-    });
-  }, t3;
-}();
-function ft2(t3) {
-  return U2(this, void 0, void 0, function() {
-    var e, n, r;
-    return N2(this, function(i) {
-      switch (i.label) {
-        case 0:
-          return e = function(t4) {
-            if (null == t4) return z2({}, at2);
-            var e2 = z2({}, t4);
-            return null == e2.modelType && (e2.modelType = at2.modelType), null == e2.maxFaces && (e2.maxFaces = at2.maxFaces), null == e2.detectorModelUrl && ("full" === e2.modelType ? e2.detectorModelUrl = "https://tfhub.dev/mediapipe/tfjs-model/face_detection/full/1" : e2.detectorModelUrl = "https://tfhub.dev/mediapipe/tfjs-model/face_detection/short/1"), e2;
-          }(t3), n = "string" == typeof e.detectorModelUrl && e.detectorModelUrl.indexOf("https://tfhub.dev") > -1, [4, loadGraphModel(e.detectorModelUrl, { fromTFHub: n })];
-        case 1:
-          return r = i.sent(), [2, new lt2(e.modelType, r, e.maxFaces)];
-      }
-    });
-  });
-}
-function dt2(t3, e) {
-  return U2(this, void 0, void 0, function() {
-    var n, r;
-    return N2(this, function(i) {
-      if (t3 === rt2.MediaPipeFaceDetector) {
-        if (r = void 0, null != (n = e)) {
-          if ("tfjs" === n.runtime) return [2, ft2(n)];
-          if ("mediapipe" === n.runtime) return [2, W2(n)];
-          r = n.runtime;
-        }
-        throw new Error("Expect modelConfig.runtime to be either 'tfjs' " + "or 'mediapipe', but got ".concat(r));
-      }
-      throw new Error("".concat(t3, " is not a supported model name."));
-    });
-  });
-}
-function pt2(t3) {
-  return t3.width * t3.height;
-}
-function gt(t3) {
-  var e = t3.xCenter - t3.width / 2, n = e + t3.width, r = t3.yCenter - t3.height / 2;
-  return { xMin: e, xMax: n, yMin: r, yMax: r + t3.height, width: t3.width, height: t3.height };
-}
-function vt(t3, e) {
-  var n = gt(t3), r = gt(e);
-  if (!function(t4, e2) {
-    return !(t4.xMax < e2.xMin || e2.xMax < t4.xMin || t4.yMax < e2.yMin || e2.yMax < t4.yMin);
-  }(n, r)) return 0;
-  var i = pt2(function(t4, e2) {
-    var n2 = Math.max(t4.xMin, e2.xMin), r2 = Math.min(t4.xMax, e2.xMax), i2 = Math.max(t4.yMin, e2.yMin), o2 = Math.min(t4.yMax, e2.yMax);
-    return { xMin: n2, xMax: r2, yMin: i2, yMax: o2, width: Math.max(r2 - n2, 0), height: Math.max(o2 - i2, 0) };
-  }(n, r)), o = pt2(n) + pt2(r) - i;
-  return o > 0 ? i / o : 0;
-}
-function mt(t3, e, n, r) {
-  var i = t3.width, o = t3.height, a = r ? -1 : 1, u = Math.cos(t3.rotation), s = Math.sin(t3.rotation), c = t3.xCenter, h = t3.yCenter, l = 1 / e, f = 1 / n, d = new Array(16);
-  return d[0] = i * u * a * l, d[1] = -o * s * l, d[2] = 0, d[3] = (-0.5 * i * u * a + 0.5 * o * s + c) * l, d[4] = i * s * a * f, d[5] = o * u * f, d[6] = 0, d[7] = (-0.5 * o * u - 0.5 * i * s * a + h) * f, d[8] = 0, d[9] = 0, d[10] = i * l, d[11] = 0, d[12] = 0, d[13] = 0, d[14] = 0, d[15] = 1, function(t4) {
-    if (16 !== t4.length) throw new Error("Array length must be 16 but got " + t4.length);
-    return [[t4[0], t4[1], t4[2], t4[3]], [t4[4], t4[5], t4[6], t4[7]], [t4[8], t4[9], t4[10], t4[11]], [t4[12], t4[13], t4[14], t4[15]]];
-  }(d);
-}
-function yt(t3) {
-  return t3 instanceof Tensor ? { height: t3.shape[0], width: t3.shape[1] } : { height: t3.height, width: t3.width };
-}
-function wt(t3) {
-  return t3 - 2 * Math.PI * Math.floor((t3 + Math.PI) / (2 * Math.PI));
-}
-function bt(t3) {
-  return t3 instanceof Tensor ? t3 : browser_exports.fromPixels(t3);
-}
-function xt(t3, n) {
-  util_exports.assert(0 !== t3.width, function() {
-    return n + " width cannot be 0.";
-  }), util_exports.assert(0 !== t3.height, function() {
-    return n + " height cannot be 0.";
-  });
-}
-function Mt(t3, n) {
-  var r = function(t4, e, n2, r2) {
-    var i = e - t4, o = r2 - n2;
-    if (0 === i) throw new Error("Original min and max are both " + t4 + ", range cannot be 0.");
-    var a = o / i;
-    return { scale: a, offset: n2 - t4 * a };
-  }(0, 255, n[0], n[1]);
-  return tidy(function() {
-    return add2(mul(t3, r.scale), r.offset);
-  });
-}
-function At(t3, n, r) {
-  var i = n.outputTensorSize, o = n.keepAspectRatio, a = n.borderMode, u = n.outputTensorFloatRange, s = yt(t3), c = function(t4, e) {
-    return e ? { xCenter: e.xCenter * t4.width, yCenter: e.yCenter * t4.height, width: e.width * t4.width, height: e.height * t4.height, rotation: e.rotation } : { xCenter: 0.5 * t4.width, yCenter: 0.5 * t4.height, width: t4.width, height: t4.height, rotation: 0 };
-  }(s, r), h = function(t4, e, n2) {
-    if (void 0 === n2 && (n2 = false), !n2) return { top: 0, left: 0, right: 0, bottom: 0 };
-    var r2 = e.height, i2 = e.width;
-    xt(e, "targetSize"), xt(t4, "roi");
-    var o2, a6, u2 = r2 / i2, s2 = t4.height / t4.width, c2 = 0, h2 = 0;
-    return u2 > s2 ? (o2 = t4.width, a6 = t4.width * u2, h2 = (1 - s2 / u2) / 2) : (o2 = t4.height / u2, a6 = t4.height, c2 = (1 - u2 / s2) / 2), t4.width = o2, t4.height = a6, { top: h2, left: c2, right: c2, bottom: h2 };
-  }(c, i, o), l = mt(c, s.width, s.height, false), f = tidy(function() {
-    var n2 = bt(t3), r2 = tensor2d(function(t4, e, n3) {
-      return xt(n3, "inputResolution"), [1 / n3.width * t4[0][0] * e.width, 1 / n3.height * t4[0][1] * e.width, t4[0][3] * e.width, 1 / n3.width * t4[1][0] * e.height, 1 / n3.height * t4[1][1] * e.height, t4[1][3] * e.height, 0, 0];
-    }(l, s, i), [1, 8]), o2 = "zero" === a ? "constant" : "nearest", c2 = image.transform(expandDims(cast(n2, "float32")), r2, "bilinear", o2, 0, [i.height, i.width]);
-    return null != u ? Mt(c2, u) : c2;
-  });
-  return { imageTensor: f, padding: h, transformationMatrix: l };
-}
-function Tt(t3) {
-  return { xCenter: t3.xMin + t3.width / 2, yCenter: t3.yMin + t3.height / 2, width: t3.width, height: t3.height };
-}
-function Et(t3) {
-  var e = t3.relativeKeypoints;
-  if (e.length <= 1) throw new Error("2 or more keypoints required to calculate a rect.");
-  var n = Number.MAX_VALUE, r = Number.MAX_VALUE, i = Number.MIN_VALUE, o = Number.MIN_VALUE;
-  return e.forEach(function(t4) {
-    n = Math.min(n, t4.x), i = Math.max(i, t4.x), r = Math.min(r, t4.y), o = Math.max(o, t4.y);
-  }), { xCenter: (n + i) / 2, yCenter: (r + o) / 2, width: i - n, height: o - r };
-}
-function St(t3, e, n, r, i) {
-  var o = "rect" === n ? function(t4, e2, n2) {
-    var r2, i2 = t4.locationData;
-    if ("boundingbox" === e2) r2 = Tt(i2.boundingBox);
-    else {
-      r2 = Et(i2);
-      var o2 = n2.width, a = n2.height;
-      r2.xCenter = Math.round(r2.xCenter * o2), r2.yCenter = Math.round(r2.yCenter * a), r2.width = Math.round(r2.width * o2), r2.height = Math.round(r2.height * a);
-    }
-    return r2;
-  }(t3, e, r) : function(t4, e2) {
-    var n2 = t4.locationData;
-    return "boundingbox" === e2 ? Tt(n2.relativeBoundingBox) : Et(n2);
-  }(t3, e);
-  return i && (o.rotation = function(t4, e2, n2) {
-    var r2, i2 = t4.locationData, o2 = n2.rotationVectorStartKeypointIndex, a = n2.rotationVectorEndKeypointIndex;
-    r2 = n2.rotationVectorTargetAngle ? n2.rotationVectorTargetAngle : Math.PI * n2.rotationVectorTargetAngleDegree / 180;
-    var u = i2.relativeKeypoints[o2].x * e2.width, s = i2.relativeKeypoints[o2].y * e2.height, c = i2.relativeKeypoints[a].x * e2.width, h = i2.relativeKeypoints[a].y * e2.height;
-    return wt(r2 - Math.atan2(-(h - s), c - u));
-  }(t3, r, i)), o;
-}
-function Ft(t3, e, n) {
-  for (var r = 0; r < e.length; ++r) {
-    var i = e[r], o = n[t3[r]];
-    o.x = i.x, o.y = i.y;
-  }
-}
-function Ct(t3, e, n, r) {
-  if ("string" == typeof e) {
-    if ("copy" === e) for (var i = 0; i < n.length; ++i) r[t3[i]].z = n[i].z;
-  } else {
-    var o = function(t4, e2) {
-      for (var n2 = 0, r2 = 0; r2 < e2.length; ++r2) n2 += t4[e2[r2]].z;
-      return n2 / e2.length;
-    }(r, e);
-    for (i = 0; i < t3.length; ++i) r[t3[i]].z = o;
-  }
-}
-function Ot(t3, e) {
-  for (var n = function(t4) {
-    var e2 = [].concat.apply([], t4.map(function(t5) {
-      return t5.indexesMapping;
-    }));
-    if (0 === e2.length) throw new Error("There should be at least one landmark in indexes mapping");
-    var n2 = e2[0], r2 = e2[0], i2 = new Set(e2);
-    i2.forEach(function(t5) {
-      n2 = Math.min(n2, t5), r2 = Math.max(r2, t5);
-    });
-    var o2 = i2.size;
-    if (0 !== n2) throw new Error("Indexes are expected to start with 0 instead of " + n2);
-    if (r2 + 1 !== o2) throw new Error("Indexes should have no gaps but " + (r2 - o2 + 1) + " indexes are missing");
-    return o2;
-  }(e), r = new Array(n).fill(null).map(Object), i = 0; i < t3.length; ++i) {
-    var o = t3[i], a = e[i];
-    if (o.length !== a.indexesMapping.length) throw new Error("There are " + o.length + " refinement landmarks while mapping has " + a.indexesMapping.length);
-    Ft(a.indexesMapping, o, r), Ct(a.indexesMapping, a.zRefinement, o, r);
-  }
-  return r;
-}
-function _t(t3, e) {
-  return t3.map(function(t4) {
-    var n = E2(E2({}, t4), { x: t4.x * e.width, y: t4.y * e.height });
-    return null != t4.z && (n.z = t4.z * e.width), n;
-  });
-}
-function jt(t3, e) {
-  return "none" === t3 ? e : function(t4) {
-    return 1 / (1 + Math.exp(-t4));
-  }(e);
-}
-function kt(t3, e, n, r) {
-  return S2(this, void 0, void 0, function() {
-    var i, o, a, u, s, c, h, l;
-    return F2(this, function(f) {
-      switch (f.label) {
-        case 0:
-          return n = n || e.flipHorizontally || false, r = r || e.flipVertically || false, i = t3.size, o = i / e.numLandmarks, [4, t3.data()];
-        case 1:
-          for (a = f.sent(), u = [], s = 0; s < e.numLandmarks; ++s) c = s * o, (l = { x: 0, y: 0 }).x = n ? e.inputImageWidth - a[c] : a[c], o > 1 && (l.y = r ? e.inputImageHeight - a[c + 1] : a[c + 1]), o > 2 && (l.z = a[c + 2]), o > 3 && (l.score = jt(e.visibilityActivation, a[c + 3])), u.push(l);
-          for (h = 0; h < u.length; ++h) (l = u[h]).x = l.x / e.inputImageWidth, l.y = l.y / e.inputImageHeight, l.z = l.z / e.inputImageWidth / (e.normalizeZ || 1);
-          return [2, u];
-      }
-    });
-  });
-}
-function Rt(t3, e, n) {
-  var r = t3.width, i = t3.height, o = t3.rotation;
-  if (null == n.rotation && null == n.rotationDegree || (o = function(t4, e2) {
-    null != e2.rotation ? t4 += e2.rotation : null != e2.rotationDegree && (t4 += Math.PI * e2.rotationDegree / 180);
-    return wt(t4);
-  }(o, n)), 0 === o) t3.xCenter = t3.xCenter + r * n.shiftX, t3.yCenter = t3.yCenter + i * n.shiftY;
-  else {
-    var a = (e.width * r * n.shiftX * Math.cos(o) - e.height * i * n.shiftY * Math.sin(o)) / e.width, u = (e.width * r * n.shiftX * Math.sin(o) + e.height * i * n.shiftY * Math.cos(o)) / e.height;
-    t3.xCenter = t3.xCenter + a, t3.yCenter = t3.yCenter + u;
-  }
-  if (n.squareLong) {
-    var s = Math.max(r * e.width, i * e.height);
-    r = s / e.width, i = s / e.height;
-  } else if (n.squareShort) {
-    var c = Math.min(r * e.width, i * e.height);
-    r = c / e.width, i = c / e.height;
-  }
-  return t3.width = r * n.scaleX, t3.height = i * n.scaleY, t3;
-}
-(rt2 || (rt2 = {})).MediaPipeFaceDetector = "MediaPipeFaceDetector";
-var It = { runtime: "tfjs", maxFaces: 1, refineLandmarks: false, landmarkModelUrl: "https://tfhub.dev/mediapipe/tfjs-model/face_landmarks_detection/face_mesh/1" };
-var Lt = { flipHorizontal: false, staticImageMode: false };
-var Bt = { shiftX: 0, shiftY: 0, scaleX: 1.5, scaleY: 1.5, squareLong: true };
-var Dt = { outputTensorSize: { width: 192, height: 192 }, outputTensorFloatRange: [0, 1], borderMode: "replicate" };
-var Pt = { numLandmarks: 468, inputImageWidth: 192, inputImageHeight: 192, visibilityActivation: "none", flipHorizontally: false, flipVertically: false };
-var zt = { numLandmarks: 80, inputImageWidth: 192, inputImageHeight: 192, visibilityActivation: "none", flipHorizontally: false, flipVertically: false };
-var Ut = { numLandmarks: 71, inputImageWidth: 192, inputImageHeight: 192, visibilityActivation: "none", flipHorizontally: false, flipVertically: false };
-var Nt = { numLandmarks: 5, inputImageWidth: 192, inputImageHeight: 192, visibilityActivation: "none", flipHorizontally: false, flipVertically: false };
-var Vt = { indexesMapping: Array.from(Array(468).keys()), zRefinement: "copy" };
-var Ht = { indexesMapping: [61, 146, 91, 181, 84, 17, 314, 405, 321, 375, 291, 185, 40, 39, 37, 0, 267, 269, 270, 409, 78, 95, 88, 178, 87, 14, 317, 402, 318, 324, 308, 191, 80, 81, 82, 13, 312, 311, 310, 415, 76, 77, 90, 180, 85, 16, 315, 404, 320, 307, 306, 184, 74, 73, 72, 11, 302, 303, 304, 408, 62, 96, 89, 179, 86, 15, 316, 403, 319, 325, 292, 183, 42, 41, 38, 12, 268, 271, 272, 407], zRefinement: "none" };
-var Kt = { indexesMapping: [33, 7, 163, 144, 145, 153, 154, 155, 133, 246, 161, 160, 159, 158, 157, 173, 130, 25, 110, 24, 23, 22, 26, 112, 243, 247, 30, 29, 27, 28, 56, 190, 226, 31, 228, 229, 230, 231, 232, 233, 244, 113, 225, 224, 223, 222, 221, 189, 35, 124, 46, 53, 52, 65, 143, 111, 117, 118, 119, 120, 121, 128, 245, 156, 70, 63, 105, 66, 107, 55, 193], zRefinement: "none" };
-var Wt = { indexesMapping: [263, 249, 390, 373, 374, 380, 381, 382, 362, 466, 388, 387, 386, 385, 384, 398, 359, 255, 339, 254, 253, 252, 256, 341, 463, 467, 260, 259, 257, 258, 286, 414, 446, 261, 448, 449, 450, 451, 452, 453, 464, 342, 445, 444, 443, 442, 441, 413, 265, 353, 276, 283, 282, 295, 372, 340, 346, 347, 348, 349, 350, 357, 465, 383, 300, 293, 334, 296, 336, 285, 417], zRefinement: "none" };
-var Gt = { indexesMapping: [468, 469, 470, 471, 472], zRefinement: [33, 7, 163, 144, 145, 153, 154, 155, 133, 246, 161, 160, 159, 158, 157, 173] };
-var Xt = { indexesMapping: [473, 474, 475, 476, 477], zRefinement: [263, 249, 390, 373, 374, 380, 381, 382, 362, 466, 388, 387, 386, 385, 384, 398] };
-var Yt;
-var Jt = function() {
-  function t3(t4, e, n, r) {
-    this.detector = t4, this.landmarkModel = e, this.maxFaces = n, this.withAttention = r, this.prevFaceRectsFromLandmarks = null;
-  }
-  return t3.prototype.estimateFaces = function(t4, n) {
-    return S2(this, void 0, void 0, function() {
-      var r, i, o, a, u, s, c, h, l, f, d, p2, g, v = this;
-      return F2(this, function(m) {
-        switch (m.label) {
-          case 0:
-            return r = function(t5) {
-              if (null == t5) return E2({}, Lt);
-              var e = E2({}, t5);
-              return null == e.flipHorizontal && (e.flipHorizontal = Lt.flipHorizontal), null == e.staticImageMode && (e.staticImageMode = Lt.staticImageMode), e;
-            }(n), null == t4 ? (this.reset(), [2, []]) : (i = yt(t4), o = tidy(function() {
-              var n2 = cast(bt(t4), "float32");
-              if (r.flipHorizontal) {
-                n2 = squeeze(image.flipLeftRight(expandDims(n2, 0)), [0]);
-              }
-              return n2;
-            }), a = this.prevFaceRectsFromLandmarks, r.staticImageMode || null == a || a.length < this.maxFaces ? [4, this.detector.detectFaces(o, false)] : [3, 2]);
-          case 1:
-            return 0 === (s = m.sent()).length ? (this.reset(), o.dispose(), [2, []]) : (u = s.map(function(t5) {
-              return v.faceDetectionFrontDetectionToRoi(t5, i);
-            }), [3, 3]);
-          case 2:
-            u = [], m.label = 3;
-          case 3:
-            return y = 0.5, w = [], [u, a || []].forEach(function(t5) {
-              return t5.forEach(function(t6) {
-                (w = w.filter(function(e) {
-                  return vt(t6, e) <= y;
-                })).push(t6);
-              });
-            }), c = w, [4, Promise.all(c.map(function(t5) {
-              return v.faceLandmark(t5, o);
-            }))];
-          case 4:
-            for (h = m.sent(), l = [], this.prevFaceRectsFromLandmarks = [], f = 0; f < h.length; ++f) null != (d = h[f]) && (this.prevFaceRectsFromLandmarks.push(this.faceLandmarksToRoi(d, i)), null != (p2 = _t(d, i)) && p2.forEach(function(t5, e) {
-              var n2 = k3.get(e);
-              null != n2 && (t5.name = n2);
-            }), g = R2(p2), l.push({ keypoints: p2, box: g.locationData.relativeBoundingBox }));
-            return o.dispose(), [2, l];
-        }
-        var y, w;
-      });
-    });
-  }, t3.prototype.dispose = function() {
-    this.detector.dispose(), this.landmarkModel.dispose();
-  }, t3.prototype.reset = function() {
-    this.detector.reset(), this.prevFaceRectsFromLandmarks = null;
-  }, t3.prototype.faceDetectionFrontDetectionToRoi = function(t4, e) {
-    return Rt(St(t4, "boundingbox", "normRect", e, { rotationVectorStartKeypointIndex: 0, rotationVectorEndKeypointIndex: 1, rotationVectorTargetAngleDegree: 0 }), e, Bt);
-  }, t3.prototype.faceLandmark = function(t4, n) {
-    return S2(this, void 0, void 0, function() {
-      var r, i, o, a, u, s, c;
-      return F2(this, function(h) {
-        switch (h.label) {
-          case 0:
-            return r = At(n, Dt, t4).imageTensor, i = ["output_faceflag"].concat(this.withAttention ? ["output_mesh_identity", "output_lips", "Identity_6:0", "Identity_1:0", "Identity_2:0", "Identity_5:0"] : ["output_mesh"]), o = this.landmarkModel.execute(r, i), a = o[0], u = o.slice(1), [4, a.data()];
-          case 1:
-            return h.sent()[0] < 0.5 ? (dispose(o), dispose(r), [2, null]) : this.withAttention ? [4, this.tensorsToFaceLandmarksWithAttention(u)] : [3, 3];
-          case 2:
-            return s = h.sent(), [3, 5];
-          case 3:
-            return [4, this.tensorsToFaceLandmarks(u)];
-          case 4:
-            s = h.sent(), h.label = 5;
-          case 5:
-            return c = function(t5, e, n2) {
-              void 0 === n2 && (n2 = { ignoreRotation: false });
-              for (var r2 = [], i2 = 0, o2 = t5; i2 < o2.length; i2++) {
-                var a6 = o2[i2], u2 = a6.x - 0.5, s2 = a6.y - 0.5, c2 = n2.ignoreRotation ? 0 : e.rotation, h2 = Math.cos(c2) * u2 - Math.sin(c2) * s2, l = Math.sin(c2) * u2 + Math.cos(c2) * s2;
-                h2 = h2 * e.width + e.xCenter, l = l * e.height + e.yCenter;
-                var f = a6.z * e.width, d = E2({}, a6);
-                d.x = h2, d.y = l, d.z = f, r2.push(d);
-              }
-              return r2;
-            }(s, t4), dispose(o), dispose(r), [2, c];
-        }
-      });
-    });
-  }, t3.prototype.tensorsToFaceLandmarks = function(t4) {
-    return S2(this, void 0, void 0, function() {
-      return F2(this, function(e) {
-        return [2, kt(t4[0], Pt)];
-      });
-    });
-  }, t3.prototype.tensorsToFaceLandmarksWithAttention = function(t4) {
-    return S2(this, void 0, void 0, function() {
-      var e, n, r, i, o, a;
-      return F2(this, function(u) {
-        switch (u.label) {
-          case 0:
-            return [4, kt(t4[0], Pt)];
-          case 1:
-            return e = u.sent(), [4, kt(t4[1], zt)];
-          case 2:
-            return n = u.sent(), [4, kt(t4[3], Ut)];
-          case 3:
-            return r = u.sent(), [4, kt(t4[5], Ut)];
-          case 4:
-            return i = u.sent(), [4, kt(t4[4], Nt)];
-          case 5:
-            return o = u.sent(), [4, kt(t4[2], Nt)];
-          case 6:
-            return a = u.sent(), [2, Ot([e, n, r, i, o, a], [Vt, Ht, Kt, Wt, Gt, Xt])];
-        }
-      });
-    });
-  }, t3.prototype.faceLandmarksToRoi = function(t4, e) {
-    return Rt(St(R2(t4), "boundingbox", "normRect", e, { rotationVectorStartKeypointIndex: 33, rotationVectorEndKeypointIndex: 263, rotationVectorTargetAngleDegree: 0 }), e, Bt);
-  }, t3;
-}();
-function qt(t3) {
-  return S2(this, void 0, void 0, function() {
-    var e, n, r, i;
-    return F2(this, function(o) {
-      switch (o.label) {
-        case 0:
-          return e = function(t4) {
-            if (null == t4) return E2({}, It);
-            var e2 = E2({}, t4);
-            return e2.runtime = "tfjs", null == e2.maxFaces && (e2.maxFaces = It.maxFaces), null == e2.refineLandmarks && (e2.refineLandmarks = It.refineLandmarks), null == e2.landmarkModelUrl && (e2.landmarkModelUrl = e2.refineLandmarks ? "https://tfhub.dev/mediapipe/tfjs-model/face_landmarks_detection/attention_mesh/1" : "https://tfhub.dev/mediapipe/tfjs-model/face_landmarks_detection/face_mesh/1"), e2;
-          }(t3), n = "string" == typeof e.landmarkModelUrl && e.landmarkModelUrl.indexOf("https://tfhub.dev") > -1, [4, loadGraphModel(e.landmarkModelUrl, { fromTFHub: n })];
-        case 1:
-          return r = o.sent(), [4, dt2(rt2.MediaPipeFaceDetector, { modelType: "short", maxFaces: e.maxFaces, detectorModelUrl: e.detectorModelUrl, runtime: e.runtime })];
-        case 2:
-          return i = o.sent(), [2, new Jt(i, r, e.maxFaces, e.refineLandmarks)];
-      }
-    });
-  });
-}
-function $t(t3, e) {
-  return S2(this, void 0, void 0, function() {
-    var n, r;
-    return F2(this, function(i) {
-      if (t3 === Yt.MediaPipeFaceMesh) {
-        if (r = void 0, null != (n = e)) {
-          if ("tfjs" === n.runtime) return [2, qt(n)];
-          if ("mediapipe" === n.runtime) return [2, B2(n)];
-          r = n.runtime;
-        }
-        throw new Error("Expect modelConfig.runtime to be either 'tfjs' or 'mediapipe', but got " + r);
-      }
-      throw new Error(t3 + " is not a supported model name.");
-    });
-  });
-}
-!function(t3) {
-  t3.MediaPipeFaceMesh = "MediaPipeFaceMesh";
-}(Yt || (Yt = {}));
-var Zt = Object.freeze({ __proto__: null, getKeypointIndexByContour: function(t3) {
-  if (t3 === Yt.MediaPipeFaceMesh) return O2;
-  throw new Error("Model " + t3 + " is not supported.");
-}, getAdjacentPairs: function(t3) {
-  if (t3 === Yt.MediaPipeFaceMesh) return _2;
-  throw new Error("Model " + t3 + " is not supported.");
-} });
-
-// extension/src/entry.mjs
 ready().then(() => {
   console.log("tfjs loaded and ready");
 });
-var handModel = dt.MediaPipeHands;
-var loadHandDetector = async () => {
-  return await pt(handModel, {
-    runtime: "tfjs",
-    modelType: "full"
-  });
-};
-var faceModel = Yt.MediaPipeFaceMesh;
-var loadFaceDetector = async () => {
-  return await $t(faceModel, {
-    runtime: "tfjs",
-    refineLandmarks: true,
-    // this enables iris/eye landmark precision
-    maxFaces: 1
-  });
-};
 export {
-  loadFaceDetector,
-  loadHandDetector,
   dist_exports3 as tf
 };
 /*! Bundled license information:
@@ -78505,40 +66017,4 @@ export {
    * limitations under the License.
    * =============================================================================
    *)
-
-@tensorflow-models/hand-pose-detection/dist/hand-pose-detection.esm.js:
-  (**
-      * @license
-      * Copyright 2023 Google LLC. All Rights Reserved.
-      * Licensed under the Apache License, Version 2.0 (the "License");
-      * you may not use this file except in compliance with the License.
-      * You may obtain a copy of the License at
-      *
-      * http://www.apache.org/licenses/LICENSE-2.0
-      *
-      * Unless required by applicable law or agreed to in writing, software
-      * distributed under the License is distributed on an "AS IS" BASIS,
-      * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-      * See the License for the specific language governing permissions and
-      * limitations under the License.
-      * =============================================================================
-      *)
-
-@tensorflow-models/face-landmarks-detection/dist/face-landmarks-detection.esm.js:
-  (**
-      * @license
-      * Copyright 2024 Google LLC. All Rights Reserved.
-      * Licensed under the Apache License, Version 2.0 (the "License");
-      * you may not use this file except in compliance with the License.
-      * You may obtain a copy of the License at
-      *
-      * http://www.apache.org/licenses/LICENSE-2.0
-      *
-      * Unless required by applicable law or agreed to in writing, software
-      * distributed under the License is distributed on an "AS IS" BASIS,
-      * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-      * See the License for the specific language governing permissions and
-      * limitations under the License.
-      * =============================================================================
-      *)
 */
