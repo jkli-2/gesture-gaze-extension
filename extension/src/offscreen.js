@@ -27,10 +27,10 @@ let missedFaceFrames = 0;
 const MAX_MISSED_FACE = 5;
 
 let vw, vh;
-const CANVAS_W = 160;
-const CANVAS_H = 120;
-const VID_CANVAS_W = 160;
-const VID_CANVAS_H = 120;
+const PREVIEW_CANVAS_W = 640;
+const PREVIEW_CANVAS_H = 480;
+const PREDICT_CANVAS_W = 160;
+const PREDICT_CANVAS_H = 120;
 
 const THUMB_TIP = 4;
 const INDEX_TIP = 8;
@@ -44,7 +44,7 @@ const EYES_INDICES = LEFT_EYE_INDICES.concat(RIGHT_EYE_INDICES);
 const EYE_MODEL_INPUT_SHAPE = 224;
 
 const CONFIDENCE_THRESHOLD = 0.8;
-const OK_SIGN_THRESHOLD = 20;
+const OK_SIGN_THRESHOLD = 10;
 
 const CLASS_NAMES = [
     "center",
@@ -159,18 +159,39 @@ function getRelativePose(poseYaw, posePitch) {
 }
 
 function sendRawGazeVector(dx, dy, poseYaw, posePitch) {
-    const flippedDx = dx * -1;
+    const gazeBias = {
+        dx: 0.10,  // favors looking left
+        dy: -0.10  // favors looking up
+    };
+    const biasedDx = dx + gazeBias.dx;
+    const biasedDy = dy + gazeBias.dy;
+    const maxGazeXRange = 5;
+    const maxGazeYRange = 5;
+    const clampedDx = Math.max(-maxGazeXRange, Math.min(maxGazeXRange, biasedDx));
+    const clampedDy = Math.max(-maxGazeYRange, Math.min(maxGazeYRange, biasedDy));
+
+    const flippedDx = clampedDx * -1;
 
     const relativePose = getRelativePose(poseYaw, posePitch);
-    const yawBias = Math.max(-10, Math.min(10, relativePose.yaw)) / 10;
-    const pitchBias = Math.max(-10, Math.min(10, relativePose.pitch * -1)) / 10;
+    const maxYawRange = 10;
+    const maxPitchRange = 20;
+    const minYawRange = -1 * maxYawRange;
+    const minPitchRange = -1 * maxPitchRange;
 
-    const poseCompensationFactor = 0.6;
+    const yawMag = Math.abs(relativePose.yaw);
+    const pitchMag = Math.abs(relativePose.pitch);
+    const yawFactor = 1 + Math.min(yawMag / maxYawRange, 1) * 2.0;
+    const pitchFactor = 1 + Math.min(pitchMag / maxPitchRange, 1) * 0.1;
+
+    const yawBias = (Math.max(minYawRange, Math.min(maxYawRange, relativePose.yaw)) / maxYawRange) * yawFactor;
+    const pitchBias = (Math.max(minPitchRange, Math.min(maxPitchRange, -relativePose.pitch)) / maxPitchRange) * pitchFactor;
+
+    const poseCompensationFactor = 0.5;
     const correctedDx = flippedDx - yawBias * poseCompensationFactor;
-    const correctedDy = dy - pitchBias * poseCompensationFactor;
+    const correctedDy = clampedDy - pitchBias * poseCompensationFactor;
 
-    const magnitude = Math.sqrt(dx * dx + dy * dy);
-    const dynamicFactor = 1 + Math.min(magnitude * 2, 10);
+    const magnitude = Math.sqrt(flippedDx ** 2 + clampedDy ** 2);
+    const dynamicFactor = 1 + Math.min(magnitude * 20, 100);
     const scaledStep = stepSize * dynamicFactor;
 
     const scaledDx = correctedDx * scaledStep;
@@ -238,14 +259,14 @@ const init = async () => {
     await video.play();
 
     video_canvas = document.createElement("canvas");
-    video_canvas.width = VID_CANVAS_W;
-    video_canvas.height = VID_CANVAS_H;
+    video_canvas.width = PREDICT_CANVAS_W;
+    video_canvas.height = PREDICT_CANVAS_H;
     video_ctx = video_canvas.getContext("2d", { willReadFrequently: true });
 
     preview_canvas = document.getElementById("offCanvas");
     preview_ctx = preview_canvas.getContext("2d");
-    preview_canvas.width = CANVAS_W;
-    preview_canvas.height = CANVAS_H;
+    preview_canvas.width = PREVIEW_CANVAS_W;
+    preview_canvas.height = PREVIEW_CANVAS_H;
 
     eye_canvas = document.createElement("canvas");
     eye_canvas.width = EYE_MODEL_INPUT_SHAPE;
@@ -260,8 +281,8 @@ function landmarkCoordScaling(coord, inputDim, outputDim) {
 }
 
 function getEyeBoundingBox(landmarks, indices) {
-    const xs = indices.map((i) => landmarkCoordScaling(landmarks[i].x, VID_CANVAS_W, vw));
-    const ys = indices.map((i) => landmarkCoordScaling(landmarks[i].y, VID_CANVAS_H, vh));
+    const xs = indices.map((i) => landmarkCoordScaling(landmarks[i].x, PREDICT_CANVAS_W, vw));
+    const ys = indices.map((i) => landmarkCoordScaling(landmarks[i].y, PREDICT_CANVAS_H, vh));
 
     const x = Math.min(...xs);
     const y = Math.min(...ys);
@@ -296,10 +317,10 @@ function estimateHeadPose(landmarks) {
 function computeCentroid(landmarks, indices) {
     const points = indices.map((i) => landmarks[i]);
     const x =
-        points.reduce((sum, p) => sum + landmarkCoordScaling(p.x, VID_CANVAS_W, vw), 0) /
+        points.reduce((sum, p) => sum + landmarkCoordScaling(p.x, PREDICT_CANVAS_W, vw), 0) /
         points.length;
     const y =
-        points.reduce((sum, p) => sum + landmarkCoordScaling(p.y, VID_CANVAS_H, vh), 0) /
+        points.reduce((sum, p) => sum + landmarkCoordScaling(p.y, PREDICT_CANVAS_H, vh), 0) /
         points.length;
     return { x, y };
 }
@@ -314,6 +335,8 @@ let paddedBoxDim = null;
 setInterval(async () => {
     if (!video || video.videoWidth === 0 || video.videoHeight === 0) return;
     if (vw < 10 || vh < 10) return;
+    if (!port) return;
+    if (!vidData) return;
 
     const vidTensor = tf.browser.fromPixels(vidData).toFloat();
     const data = Array.from(vidTensor.dataSync());
@@ -459,12 +482,12 @@ setInterval(async () => {
 const drawLoop = async () => {
     if (!video) return;
     preview_ctx.save();
-    preview_ctx.clearRect(0, 0, CANVAS_W, CANVAS_H);
-    preview_ctx.drawImage(video, 0, 0, CANVAS_W, CANVAS_H);
+    preview_ctx.clearRect(0, 0, PREVIEW_CANVAS_W, PREVIEW_CANVAS_H);
+    preview_ctx.drawImage(video, 0, 0, PREVIEW_CANVAS_W, PREVIEW_CANVAS_H);
 
-    video_ctx.clearRect(0, 0, VID_CANVAS_W, VID_CANVAS_H);
-    video_ctx.drawImage(video, 0, 0, VID_CANVAS_W, VID_CANVAS_H);
-    vidData = video_ctx.getImageData(0, 0, VID_CANVAS_W, VID_CANVAS_H);
+    video_ctx.clearRect(0, 0, PREDICT_CANVAS_W, PREDICT_CANVAS_H);
+    video_ctx.drawImage(video, 0, 0, PREDICT_CANVAS_W, PREDICT_CANVAS_H);
+    vidData = video_ctx.getImageData(0, 0, PREDICT_CANVAS_W, PREDICT_CANVAS_H);
 
     for (const landmarks of lastHandLandmarks) {
         drawConnectors(preview_ctx, landmarks, { color: "#FDD835" });
@@ -475,38 +498,38 @@ const drawLoop = async () => {
         preview_ctx.strokeStyle = "#BA68C8";
         preview_ctx.lineWidth = 2;
         preview_ctx.strokeRect(
-            landmarkCoordScaling(paddedBoxDim.squareX, vw, CANVAS_W),
-            landmarkCoordScaling(paddedBoxDim.squareY, vw, CANVAS_W),
-            landmarkCoordScaling(paddedBoxDim.maxSide, vw, CANVAS_W),
-            landmarkCoordScaling(paddedBoxDim.maxSide, vw, CANVAS_W),
+            landmarkCoordScaling(paddedBoxDim.squareX, vw, PREVIEW_CANVAS_W),
+            landmarkCoordScaling(paddedBoxDim.squareY, vw, PREVIEW_CANVAS_W),
+            landmarkCoordScaling(paddedBoxDim.maxSide, vw, PREVIEW_CANVAS_W),
+            landmarkCoordScaling(paddedBoxDim.maxSide, vw, PREVIEW_CANVAS_W),
         );
 
         // drawBox(ctx, drawBoxDim, { color: "#4FC3F7", lineWidth: 2 });
         drawPoint(
             preview_ctx,
             {
-                x: landmarkCoordScaling(leftEyeCenter.x, vw, CANVAS_W),
-                y: landmarkCoordScaling(leftEyeCenter.y, vh, CANVAS_H),
+                x: landmarkCoordScaling(leftEyeCenter.x, vw, PREVIEW_CANVAS_W),
+                y: landmarkCoordScaling(leftEyeCenter.y, vh, PREVIEW_CANVAS_H),
             },
             { color: "#3DDC84" }
         );
         drawPoint(
             preview_ctx,
             {
-                x: landmarkCoordScaling(rightEyeCenter.x, vw, CANVAS_W),
-                y: landmarkCoordScaling(rightEyeCenter.y, vh, CANVAS_H),
+                x: landmarkCoordScaling(rightEyeCenter.x, vw, PREVIEW_CANVAS_W),
+                y: landmarkCoordScaling(rightEyeCenter.y, vh, PREVIEW_CANVAS_H),
             },
             { color: "#3DDC84" }
         );
         drawGazeArrow(
             preview_ctx,
             {
-                x: landmarkCoordScaling(gazeOrigin.x, vw, CANVAS_W),
-                y: landmarkCoordScaling(gazeOrigin.y, vh, CANVAS_H),
+                x: landmarkCoordScaling(gazeOrigin.x, vw, PREVIEW_CANVAS_W),
+                y: landmarkCoordScaling(gazeOrigin.y, vh, PREVIEW_CANVAS_H),
             },
             lastDx,
             lastDy,
-            10,
+            2,
             "#FF6B6B"
         );
 

@@ -92,7 +92,7 @@ function createFloatingPanel() {
             font-size: 24px;
             background: white;
             color: black;
-            padding: 6px 6px;
+            padding: 12px 12px;
             border-radius: 8px;
             text-align: center;
             user-select: none;
