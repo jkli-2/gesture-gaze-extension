@@ -21,6 +21,42 @@ let stickyScrollMode = false;
 let stickScrollToggleButton = null;
 const GAZE_SCROLL_SPEED_X = 1;
 const GAZE_SCROLL_SPEED_Y = 2;
+const PAN_SPEED_X = 3;
+const PAN_SPEED_Y = 3;
+
+function detectCurrentSite() {
+    const { hostname, pathname } = window.location;
+
+    if (hostname.includes("google") && pathname.includes("/maps")) return "google_maps";
+    if (hostname.includes("youtube.com")) return "youtube";
+    if (hostname.includes("github.com")) return "github";
+    if (hostname.includes("canvas") && pathname.includes("/courses")) return "canvas_lms";
+    if (hostname.includes("docs.google.com") && pathname.includes("/document"))
+        return "google_docs";
+    if (hostname.includes("mail.google.com")) return "gmail";
+    if (hostname.includes("drive.google.com")) return "google_drive";
+    if (hostname.includes("outlook.live.com")) return "outlook_mail";
+    if (hostname.includes("chat.openai.com")) return "chatgpt";
+    if (hostname.includes("web.whatsapp.com")) return "whatsapp_web";
+    if (hostname.includes("notion.so") || hostname.includes("notion.site")) return "notion";
+    if (hostname.includes("linkedin.com")) return "linkedin";
+    if (hostname.includes("facebook.com")) return "facebook";
+    if (hostname.includes("twitter.com") || hostname.includes("x.com")) return "twitter";
+    if (hostname.includes("amazon.com")) return "amazon";
+    if (hostname.includes("medium.com")) return "medium";
+
+    return "default";
+}
+let currentSite = detectCurrentSite();
+
+const observer = new MutationObserver(() => {
+    const newSite = detectCurrentSite();
+    if (newSite !== currentSite) {
+        currentSite = newSite;
+        console.log("Site context changed:", currentSite);
+    }
+});
+observer.observe(document.body, { childList: true, subtree: true });
 
 function stickyScroll(startX, startY, dx, dy) {
     const startEvent = new MouseEvent("mousedown", {
@@ -263,7 +299,6 @@ hoverOverlay.style.cssText = `
     display: none;
 `;
 document.body.appendChild(hoverOverlay);
-
 
 function updateBalloonCursor(dx, dy) {
     innerX = Math.min(Math.max(0, innerX + dx), window.innerWidth);
@@ -551,6 +586,75 @@ function scrollOnScrollable(dx, dy) {
     scrollTarget.scrollBy(dx, dy);
 }
 
+function getMapCanvas() {
+    return Array.from(document.querySelectorAll("canvas")).find(
+        (c) => c.clientHeight > 200 && c.clientWidth > 200
+    );
+}
+
+let lastPanTime = 0;
+function panMap(dx, dy) {
+    const now = performance.now();
+    if (now - lastPanTime < 200) return;
+    lastPanTime = now;
+
+    const mapCanvas = getMapCanvas();
+    if (!mapCanvas) return;
+
+    simulateMouseDrag(mapCanvas, -dx, -dy);
+}
+
+function simulateMouseDrag(el, dx, dy, steps = 5, duration = 200) {
+    const rect = el.getBoundingClientRect();
+    const startX = rect.left + rect.width / 2;
+    const startY = rect.top + rect.height / 2;
+    const endX = startX + dx;
+    const endY = startY + dy;
+
+    const stepDelay = duration / steps;
+    let currentStep = 0;
+
+    el.dispatchEvent(
+        new MouseEvent("mousedown", {
+            bubbles: true,
+            clientX: startX,
+            clientY: startY,
+            buttons: 1,
+        })
+    );
+
+    function moveStep() {
+        currentStep++;
+        const t = currentStep / steps;
+        const x = startX + t * dx;
+        const y = startY + t * dy;
+
+        el.dispatchEvent(
+            new MouseEvent("mousemove", {
+                bubbles: true,
+                clientX: x,
+                clientY: y,
+                buttons: 1,
+            })
+        );
+
+        if (currentStep < steps) {
+            setTimeout(moveStep, stepDelay);
+        } else {
+            el.dispatchEvent(
+                new MouseEvent("mouseup", {
+                    bubbles: true,
+                    clientX: endX,
+                    clientY: endY,
+                    buttons: 0,
+                })
+            );
+        }
+    }
+
+    setTimeout(moveStep, stepDelay);
+}
+
 function findScrollables() {
     if (document.scrollingElement?.scrollHeight > window.innerHeight) {
         return document.scrollingElement;
@@ -625,7 +729,11 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     if (msg.type === "GAZE_MOVE") {
         if (gazeScrollMode) {
             // window.scrollBy(msg.dx * GAZE_SCROLL_SPEED_X, msg.dy * GAZE_SCROLL_SPEED_Y);
-            scrollOnScrollable(msg.dx * GAZE_SCROLL_SPEED_X, msg.dy * GAZE_SCROLL_SPEED_Y);
+            if (currentSite === "google_maps") {
+                panMap(msg.dx * PAN_SPEED_X, msg.dy * PAN_SPEED_Y);
+            } else {
+                scrollOnScrollable(msg.dx * GAZE_SCROLL_SPEED_X, msg.dy * GAZE_SCROLL_SPEED_Y);
+            }
         } else {
             updateBalloonCursor(msg.dx, msg.dy);
         }
