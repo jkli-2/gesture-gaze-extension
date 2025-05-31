@@ -250,6 +250,21 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
+const hoverOverlay = document.createElement("div");
+hoverOverlay.id = "gaze-hover-overlay";
+hoverOverlay.style.cssText = `
+    position: fixed;
+    pointer-events: none;
+    border: 2px solid rgba(0, 187, 212, 0.1);
+    border-radius: 8px;
+    background: rgba(0, 188, 212, 0.0);
+    transition: all 0.08s ease;
+    z-index: 999999;
+    display: none;
+`;
+document.body.appendChild(hoverOverlay);
+
+
 function updateBalloonCursor(dx, dy) {
     innerX = Math.min(Math.max(0, innerX + dx), window.innerWidth);
     innerY = Math.min(Math.max(0, innerY + dy), window.innerHeight);
@@ -294,6 +309,13 @@ function updateBalloonCursor(dx, dy) {
                 clientY: outerY,
             })
         );
+
+        const rect = hoveredElement.getBoundingClientRect();
+        hoverOverlay.style.left = `${rect.left}px`;
+        hoverOverlay.style.top = `${rect.top}px`;
+        hoverOverlay.style.width = `${rect.width}px`;
+        hoverOverlay.style.height = `${rect.height}px`;
+        hoverOverlay.style.display = "block";
 
         lastHoveredElement = hoveredElement;
     }
