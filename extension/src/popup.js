@@ -58,5 +58,5 @@ document.addEventListener("DOMContentLoaded", async () => {
     btnCalibrate.addEventListener("click", () => {
         chrome.runtime.sendMessage({ type: "CALIBRATE_POSE" });
         chrome.runtime.sendMessage({ type: "CENTRE_POINTER" });
-});
+    });
 });

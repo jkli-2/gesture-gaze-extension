@@ -44,7 +44,7 @@ const EYES_INDICES = LEFT_EYE_INDICES.concat(RIGHT_EYE_INDICES);
 const EYE_MODEL_INPUT_SHAPE = 224;
 
 const CONFIDENCE_THRESHOLD = 0.8;
-const OK_SIGN_THRESHOLD = 10;
+const OK_SIGN_THRESHOLD = 0.05;
 
 const CLASS_NAMES = [
     "center",
@@ -160,8 +160,8 @@ function getRelativePose(poseYaw, posePitch) {
 
 function sendRawGazeVector(dx, dy, poseYaw, posePitch) {
     const gazeBias = {
-        dx: 0.10,  // favors looking left
-        dy: -0.10  // favors looking up
+        dx: 0.1, // favors looking left
+        dy: -0.1, // favors looking up
     };
     const biasedDx = dx + gazeBias.dx;
     const biasedDy = dy + gazeBias.dy;
@@ -183,8 +183,11 @@ function sendRawGazeVector(dx, dy, poseYaw, posePitch) {
     const yawFactor = 1 + Math.min(yawMag / maxYawRange, 1) * 2.0;
     const pitchFactor = 1 + Math.min(pitchMag / maxPitchRange, 1) * 0.1;
 
-    const yawBias = (Math.max(minYawRange, Math.min(maxYawRange, relativePose.yaw)) / maxYawRange) * yawFactor;
-    const pitchBias = (Math.max(minPitchRange, Math.min(maxPitchRange, -relativePose.pitch)) / maxPitchRange) * pitchFactor;
+    const yawBias =
+        (Math.max(minYawRange, Math.min(maxYawRange, relativePose.yaw)) / maxYawRange) * yawFactor;
+    const pitchBias =
+        (Math.max(minPitchRange, Math.min(maxPitchRange, -relativePose.pitch)) / maxPitchRange) *
+        pitchFactor;
 
     const poseCompensationFactor = 0.5;
     const correctedDx = flippedDx - yawBias * poseCompensationFactor;
@@ -471,7 +474,11 @@ setInterval(async () => {
             }
         } else if (hands.length > 0) {
             const currLandmarks = hands.map((hand) =>
-                hand.keypoints.map(({ x, y, z }) => ({ x, y, z }))
+                hand.keypoints.map(({ x, y, z }) => ({
+                    x: x / PREDICT_CANVAS_W,
+                    y: y / PREDICT_CANVAS_H,
+                    z,
+                }))
             );
             lastHandLandmarks = currLandmarks;
             missedHandFrames = 0;
@@ -490,8 +497,13 @@ const drawLoop = async () => {
     vidData = video_ctx.getImageData(0, 0, PREDICT_CANVAS_W, PREDICT_CANVAS_H);
 
     for (const landmarks of lastHandLandmarks) {
-        drawConnectors(preview_ctx, landmarks, { color: "#FDD835" });
-        drawLandmarks(preview_ctx, landmarks, { color: "#BA68C8" });
+        const scaledLandmarks = landmarks.map(({ x, y, z }) => ({
+            x: x * PREVIEW_CANVAS_W,
+            y: y * PREVIEW_CANVAS_H,
+            z,
+        }));
+        drawConnectors(preview_ctx, scaledLandmarks, { color: "#FDD835" });
+        drawLandmarks(preview_ctx, scaledLandmarks, { color: "#BA68C8" });
     }
 
     if (lastFaceLandmarks.length > 0) {
@@ -501,7 +513,7 @@ const drawLoop = async () => {
             landmarkCoordScaling(paddedBoxDim.squareX, vw, PREVIEW_CANVAS_W),
             landmarkCoordScaling(paddedBoxDim.squareY, vw, PREVIEW_CANVAS_W),
             landmarkCoordScaling(paddedBoxDim.maxSide, vw, PREVIEW_CANVAS_W),
-            landmarkCoordScaling(paddedBoxDim.maxSide, vw, PREVIEW_CANVAS_W),
+            landmarkCoordScaling(paddedBoxDim.maxSide, vw, PREVIEW_CANVAS_W)
         );
 
         // drawBox(ctx, drawBoxDim, { color: "#4FC3F7", lineWidth: 2 });
@@ -550,7 +562,7 @@ const drawLoop = async () => {
         const dx = indexFingerTip.x - thumbFingerTip.x;
         const dy = indexFingerTip.y - thumbFingerTip.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
-        // console.log(distance)
+        // console.log(distance);
         const isOKGesture = distance < OK_SIGN_THRESHOLD;
         if (isOKGesture && !wasOKGesture) {
             console.log("OK gesture detected!");
@@ -563,8 +575,8 @@ const drawLoop = async () => {
         wasOKGesture = false;
     }
     if (lastHandLandmarks.length > 1 && indexFingerTip) {
-        const nx = thumbFingerTip.x / vw;
-        const ny = thumbFingerTip.y / vh;
+        const nx = thumbFingerTip.x;
+        const ny = thumbFingerTip.y;
         const [sx, sy] = smoothGaze(nx, ny);
         chrome.runtime.sendMessage({
             type: "POINTER",

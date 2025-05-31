@@ -24,7 +24,7 @@ loadModelsOnce().then(() => {
 });
 
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-    if (changeInfo.status === 'complete' && modelsLoaded) {
+    if (changeInfo.status === "complete" && modelsLoaded) {
         chrome.tabs.sendMessage(tabId, { type: "MODEL_READY" }, function (response) {
             if (chrome.runtime.lastError) {
                 console.warn("Message failed:", chrome.runtime.lastError.message);
@@ -44,12 +44,22 @@ chrome.runtime.onConnect.addListener(function (port) {
             console.log("Ping received.");
         }
         if (msg.type === "PREDICT_GAZE") {
-            const imageTensor = tf.tensor(msg.imageTensor.data, msg.imageTensor.shape, msg.imageTensor.dtype);
-            const pupilTensor = tf.tensor(msg.pupilTensor.data, msg.pupilTensor.shape, msg.pupilTensor.dtype);
-            const output = gazeModel.predict({
-                "image_input": imageTensor,
-                "pupil_input": pupilTensor
-            }).dataSync();
+            const imageTensor = tf.tensor(
+                msg.imageTensor.data,
+                msg.imageTensor.shape,
+                msg.imageTensor.dtype
+            );
+            const pupilTensor = tf.tensor(
+                msg.pupilTensor.data,
+                msg.pupilTensor.shape,
+                msg.pupilTensor.dtype
+            );
+            const output = gazeModel
+                .predict({
+                    image_input: imageTensor,
+                    pupil_input: pupilTensor,
+                })
+                .dataSync();
             imageTensor.dispose();
             pupilTensor.dispose();
             port.postMessage({ type: "GAZE_RESULT", result: output });
@@ -57,11 +67,11 @@ chrome.runtime.onConnect.addListener(function (port) {
         if (msg.type === "DETECTOR") {
             const imageTensor = tf.tensor(msg.data, msg.shape, msg.dtype);
             if (faceDetector) {
-                const faces = await faceDetector.estimateFaces(imageTensor)
+                const faces = await faceDetector.estimateFaces(imageTensor);
                 port.postMessage({ type: "FACE_RESULT", result: faces });
             }
             if (handDetector) {
-                const hands = await handDetector.estimateHands(imageTensor)
+                const hands = await handDetector.estimateHands(imageTensor);
                 port.postMessage({ type: "HAND_RESULT", result: hands });
             }
             imageTensor.dispose();
@@ -73,7 +83,6 @@ chrome.runtime.onConnect.addListener(function (port) {
         portRef = null;
     });
 });
-
 
 chrome.runtime.onInstalled.addListener((details) => {
     if (details.reason === "install") {
@@ -124,7 +133,7 @@ function initializeUserStorage() {
                     pointerColor: "#ff0000",
                     streamState: true,
                     camDeviceId: null,
-                    neutralPose: { yaw: 0, pitch: 0 }
+                    neutralPose: { yaw: 0, pitch: 0 },
                 },
                 data: [
                     {
@@ -164,10 +173,13 @@ chrome.runtime.onMessage.addListener(async (msg, sender, sendResponse) => {
         chrome.runtime.sendMessage({ type: "START_DETECT" });
         getPreferences((preferences) => {
             if (preferences.neutralPose) {
-                const neutralPose = { yaw: preferences.neutralPose.yaw, pitch: preferences.neutralPose.pitch }
-                chrome.runtime.sendMessage({ type: "SET_NEUTRAL_POSE", pose: neutralPose});
+                const neutralPose = {
+                    yaw: preferences.neutralPose.yaw,
+                    pitch: preferences.neutralPose.pitch,
+                };
+                chrome.runtime.sendMessage({ type: "SET_NEUTRAL_POSE", pose: neutralPose });
             }
-        })
+        });
     }
     if (msg.type === "TOGGLE_DETECT") {
         await ensureOffscreenDoc();

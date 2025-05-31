@@ -26,17 +26,17 @@ function stickyScroll(startX, startY, dx, dy) {
     const startEvent = new MouseEvent("mousedown", {
         clientX: startX,
         clientY: startY,
-        bubbles: true
+        bubbles: true,
     });
     const moveEvent = new MouseEvent("mousemove", {
         clientX: startX + dx,
         clientY: startY + dy,
-        bubbles: true
+        bubbles: true,
     });
     const endEvent = new MouseEvent("mouseup", {
         clientX: startX + dx,
         clientY: startY + dy,
-        bubbles: true
+        bubbles: true,
     });
     const target = document.elementFromPoint(startX, startY);
     if (target) {
@@ -79,7 +79,6 @@ function createFloatingPanel() {
         { label: "arrow_forward", action: () => history.forward(), title: "Forward" },
         { label: "pan_tool", title: "Gaze Scroll Mode" },
         // { label: "open_with", title: "Sticky Scroll Mode" }
-
     ];
     actionButtons.forEach(({ label, action, title }) => {
         const btn = document.createElement("div");
@@ -154,7 +153,6 @@ function setupResize(wrapper, iframe, handle) {
         isIframeResizing = false;
     });
 }
-
 
 function createStreamIframe() {
     const elmt = document.getElementById("streamIframeWrapper");
@@ -272,24 +270,30 @@ function updateBalloonCursor(dx, dy) {
     const hoveredElement = document.elementFromPoint(outerX, outerY);
     if (hoveredElement && hoveredElement !== lastHoveredElement) {
         if (lastHoveredElement) {
-            lastHoveredElement.dispatchEvent(new MouseEvent("mouseout", {
-                bubbles: true,
-                clientX: outerX,
-                clientY: outerY
-            }));
+            lastHoveredElement.dispatchEvent(
+                new MouseEvent("mouseout", {
+                    bubbles: true,
+                    clientX: outerX,
+                    clientY: outerY,
+                })
+            );
         }
 
-        hoveredElement.dispatchEvent(new MouseEvent("mouseover", {
-            bubbles: true,
-            clientX: outerX,
-            clientY: outerY
-        }));
+        hoveredElement.dispatchEvent(
+            new MouseEvent("mouseover", {
+                bubbles: true,
+                clientX: outerX,
+                clientY: outerY,
+            })
+        );
 
-        hoveredElement.dispatchEvent(new MouseEvent("mouseenter", {
-            bubbles: true,
-            clientX: outerX,
-            clientY: outerY
-        }));
+        hoveredElement.dispatchEvent(
+            new MouseEvent("mouseenter", {
+                bubbles: true,
+                clientX: outerX,
+                clientY: outerY,
+            })
+        );
 
         lastHoveredElement = hoveredElement;
     }
@@ -301,9 +305,9 @@ function showElement(id, useOpacity = false) {
         if (useOpacity) {
             elmt.style.opacity = "1";
         } else {
-            elmt.style.display = ""
+            elmt.style.display = "";
         }
-    };
+    }
 }
 
 function hideElement(id, useOpacity = false) {
@@ -324,10 +328,10 @@ function removeElement(id) {
 
 getPreferences((preferences) => {
     if (preferences.streamState === true) {
-        showElement(streamPreviewId, useOpacity=true);
+        showElement(streamPreviewId, (useOpacity = true));
     }
     if (preferences.streamState === false) {
-        hideElement(streamPreviewId, useOpacity=true);
+        hideElement(streamPreviewId, (useOpacity = true));
     }
     if (preferences.pointerState === true) {
         showElement(innerPointerId);
@@ -340,7 +344,9 @@ getPreferences((preferences) => {
     if (preferences.pointerColor) {
         document.getElementById(innerPointerId).style.background = preferences.pointerColor;
         document.getElementById(outerPointerId).style.background = preferences.pointerColor;
-        document.getElementById(outerPointerId).style.borderColor = getContrastyColor(preferences.pointerColor);
+        document.getElementById(outerPointerId).style.borderColor = getContrastyColor(
+            preferences.pointerColor
+        );
         pointerAnimationColor = preferences.pointerColor;
     }
     const state = preferences.detectState;
@@ -486,9 +492,12 @@ function animatePointerUp(x, y) {
 }
 
 function getContrastyColor(hexColor) {
-    if (hexColor.startsWith('#')) hexColor = hexColor.slice(1);
+    if (hexColor.startsWith("#")) hexColor = hexColor.slice(1);
     if (hexColor.length === 3) {
-        hexColor = hexColor.split('').map(c => c + c).join('');
+        hexColor = hexColor
+            .split("")
+            .map((c) => c + c)
+            .join("");
     }
 
     const r = parseInt(hexColor.substring(0, 2), 16);
@@ -497,12 +506,12 @@ function getContrastyColor(hexColor) {
 
     // Calculate luminance (per ITU-R BT.709)
     const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-    return luminance > 160 ? '#000000' : '#FFFFFF';
+    return luminance > 160 ? "#000000" : "#FFFFFF";
 }
 
 function centerPointers() {
-    px = window.innerWidth / 2
-    py = window.innerHeight / 2
+    px = window.innerWidth / 2;
+    py = window.innerHeight / 2;
     outerX = px;
     outerY = py;
     const outer = document.getElementById(outerPointerId);
@@ -533,11 +542,9 @@ function findScrollables() {
         const canScroll = el.scrollHeight > el.clientHeight;
         const overflowY = style.overflowY;
 
-        const isScrollable = canScroll && (
-            overflowY === "auto" ||
-            overflowY === "scroll" ||
-            overflowY === "visible"
-        );
+        const isScrollable =
+            canScroll &&
+            (overflowY === "auto" || overflowY === "scroll" || overflowY === "visible");
 
         if (isScrollable) {
             if (!bestMatch || el.scrollHeight > bestMatch.scrollHeight) {
@@ -553,10 +560,10 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         removeStatusPill();
     }
     if (msg.type === "START_STREAM") {
-        showElement(streamPreviewId, useOpacity=true);
+        showElement(streamPreviewId, (useOpacity = true));
     }
     if (msg.type === "STOP_STREAM") {
-        hideElement(streamPreviewId, useOpacity=true);
+        hideElement(streamPreviewId, (useOpacity = true));
     }
     if (msg.type === "SHOW_POINTER") {
         showElement(innerPointerId);
@@ -576,7 +583,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         const pageW = window.innerWidth;
         const pageH = window.innerHeight;
 
-        const px = (1-msg.x) * pageW;
+        const px = (1 - msg.x) * pageW;
         const py = msg.y * pageH;
 
         innerX = px;
@@ -596,7 +603,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     if (msg.type === "GAZE_MOVE") {
         if (gazeScrollMode) {
             // window.scrollBy(msg.dx * GAZE_SCROLL_SPEED_X, msg.dy * GAZE_SCROLL_SPEED_Y);
-            scrollOnScrollable(msg.dx * GAZE_SCROLL_SPEED_X, msg.dy * GAZE_SCROLL_SPEED_Y)
+            scrollOnScrollable(msg.dx * GAZE_SCROLL_SPEED_X, msg.dy * GAZE_SCROLL_SPEED_Y);
         } else {
             updateBalloonCursor(msg.dx, msg.dy);
         }
@@ -627,7 +634,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
                 clientX: cx,
                 clientY: cy,
                 view: window,
-                buttons: 1
+                buttons: 1,
             };
 
             target.dispatchEvent(new PointerEvent("pointerdown", eventInit));
@@ -655,7 +662,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
                 cancelable: true,
                 clientX: cx,
                 clientY: cy,
-                buttons: 1
+                buttons: 1,
             });
             target.dispatchEvent(event);
         }
