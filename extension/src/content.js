@@ -21,22 +21,58 @@ let stickyScrollMode = false;
 let stickScrollToggleButton = null;
 const GAZE_SCROLL_SPEED_X = 1;
 const GAZE_SCROLL_SPEED_Y = 2;
+const PAN_SPEED_X = 3;
+const PAN_SPEED_Y = 3;
+
+function detectCurrentSite() {
+    const { hostname, pathname } = window.location;
+
+    if (hostname.includes("google") && pathname.includes("/maps")) return "google_maps";
+    if (hostname.includes("youtube.com")) return "youtube";
+    if (hostname.includes("github.com")) return "github";
+    if (hostname.includes("canvas") && pathname.includes("/courses")) return "canvas_lms";
+    if (hostname.includes("docs.google.com") && pathname.includes("/document"))
+        return "google_docs";
+    if (hostname.includes("mail.google.com")) return "gmail";
+    if (hostname.includes("drive.google.com")) return "google_drive";
+    if (hostname.includes("outlook.live.com")) return "outlook_mail";
+    if (hostname.includes("chat.openai.com")) return "chatgpt";
+    if (hostname.includes("web.whatsapp.com")) return "whatsapp_web";
+    if (hostname.includes("notion.so") || hostname.includes("notion.site")) return "notion";
+    if (hostname.includes("linkedin.com")) return "linkedin";
+    if (hostname.includes("facebook.com")) return "facebook";
+    if (hostname.includes("twitter.com") || hostname.includes("x.com")) return "twitter";
+    if (hostname.includes("amazon.com")) return "amazon";
+    if (hostname.includes("medium.com")) return "medium";
+
+    return "default";
+}
+let currentSite = detectCurrentSite();
+
+const observer = new MutationObserver(() => {
+    const newSite = detectCurrentSite();
+    if (newSite !== currentSite) {
+        currentSite = newSite;
+        console.log("Site context changed:", currentSite);
+    }
+});
+observer.observe(document.body, { childList: true, subtree: true });
 
 function stickyScroll(startX, startY, dx, dy) {
     const startEvent = new MouseEvent("mousedown", {
         clientX: startX,
         clientY: startY,
-        bubbles: true
+        bubbles: true,
     });
     const moveEvent = new MouseEvent("mousemove", {
         clientX: startX + dx,
         clientY: startY + dy,
-        bubbles: true
+        bubbles: true,
     });
     const endEvent = new MouseEvent("mouseup", {
         clientX: startX + dx,
         clientY: startY + dy,
-        bubbles: true
+        bubbles: true,
     });
     const target = document.elementFromPoint(startX, startY);
     if (target) {
@@ -59,8 +95,8 @@ function createFloatingPanel() {
     panel.id = "omni-panel";
     panel.style.cssText = `
         position: fixed;
-        top: 120px;
-        right: 20px;
+        top: 240px;
+        right: 40px;
         z-index: 999999;
         display: flex;
         flex-direction: column;
@@ -79,7 +115,6 @@ function createFloatingPanel() {
         { label: "arrow_forward", action: () => history.forward(), title: "Forward" },
         { label: "pan_tool", title: "Gaze Scroll Mode" },
         // { label: "open_with", title: "Sticky Scroll Mode" }
-
     ];
     actionButtons.forEach(({ label, action, title }) => {
         const btn = document.createElement("div");
@@ -92,7 +127,7 @@ function createFloatingPanel() {
             font-size: 24px;
             background: white;
             color: black;
-            padding: 6px 6px;
+            padding: 12px 12px;
             border-radius: 8px;
             text-align: center;
             user-select: none;
@@ -155,7 +190,6 @@ function setupResize(wrapper, iframe, handle) {
     });
 }
 
-
 function createStreamIframe() {
     const elmt = document.getElementById("streamIframeWrapper");
     if (elmt) return;
@@ -175,12 +209,12 @@ function createStreamIframe() {
 
     const handle = document.createElement("div");
     handle.id = "streamIframeResizeHandle";
-    handle.innerHTML = `<span class="material-icons">open_with</span>`;
+    handle.innerHTML = `<span class="material-icons" style="font-size:14px;">open_with</span>`;
     handle.style.position = "absolute";
-    handle.style.width = "24px";
-    handle.style.height = "24px";
-    handle.style.top = "1px";
-    handle.style.left = "1px";
+    handle.style.width = "16px";
+    handle.style.height = "16px";
+    handle.style.bottom = "-4px";
+    handle.style.left = "0px";
     handle.style.cursor = "nwse-resize";
     handle.style.zIndex = "10001";
     handle.style.color = "#aaa";
@@ -194,10 +228,10 @@ function createStreamIframe() {
     const wrapper = document.createElement("div");
     wrapper.id = streamPreviewId;
     wrapper.style.position = "fixed";
-    wrapper.style.bottom = "10px";
+    wrapper.style.top = "10px";
     wrapper.style.right = "10px";
-    wrapper.style.width = "320px";
-    wrapper.style.height = "240px";
+    wrapper.style.width = "160px";
+    wrapper.style.height = "120px";
     wrapper.style.zIndex = "9999";
     wrapper.appendChild(iframe);
     wrapper.appendChild(handle);
@@ -252,6 +286,20 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
+const hoverOverlay = document.createElement("div");
+hoverOverlay.id = "gaze-hover-overlay";
+hoverOverlay.style.cssText = `
+    position: fixed;
+    pointer-events: none;
+    border: 2px solid rgba(0, 187, 212, 0.1);
+    border-radius: 8px;
+    background: rgba(0, 188, 212, 0.0);
+    transition: all 0.08s ease;
+    z-index: 999999;
+    display: none;
+`;
+document.body.appendChild(hoverOverlay);
+
 function updateBalloonCursor(dx, dy) {
     innerX = Math.min(Math.max(0, innerX + dx), window.innerWidth);
     innerY = Math.min(Math.max(0, innerY + dy), window.innerHeight);
@@ -272,24 +320,37 @@ function updateBalloonCursor(dx, dy) {
     const hoveredElement = document.elementFromPoint(outerX, outerY);
     if (hoveredElement && hoveredElement !== lastHoveredElement) {
         if (lastHoveredElement) {
-            lastHoveredElement.dispatchEvent(new MouseEvent("mouseout", {
-                bubbles: true,
-                clientX: outerX,
-                clientY: outerY
-            }));
+            lastHoveredElement.dispatchEvent(
+                new MouseEvent("mouseout", {
+                    bubbles: true,
+                    clientX: outerX,
+                    clientY: outerY,
+                })
+            );
         }
 
-        hoveredElement.dispatchEvent(new MouseEvent("mouseover", {
-            bubbles: true,
-            clientX: outerX,
-            clientY: outerY
-        }));
+        hoveredElement.dispatchEvent(
+            new MouseEvent("mouseover", {
+                bubbles: true,
+                clientX: outerX,
+                clientY: outerY,
+            })
+        );
 
-        hoveredElement.dispatchEvent(new MouseEvent("mouseenter", {
-            bubbles: true,
-            clientX: outerX,
-            clientY: outerY
-        }));
+        hoveredElement.dispatchEvent(
+            new MouseEvent("mouseenter", {
+                bubbles: true,
+                clientX: outerX,
+                clientY: outerY,
+            })
+        );
+
+        const rect = hoveredElement.getBoundingClientRect();
+        hoverOverlay.style.left = `${rect.left}px`;
+        hoverOverlay.style.top = `${rect.top}px`;
+        hoverOverlay.style.width = `${rect.width}px`;
+        hoverOverlay.style.height = `${rect.height}px`;
+        hoverOverlay.style.display = "block";
 
         lastHoveredElement = hoveredElement;
     }
@@ -301,9 +362,9 @@ function showElement(id, useOpacity = false) {
         if (useOpacity) {
             elmt.style.opacity = "1";
         } else {
-            elmt.style.display = ""
+            elmt.style.display = "";
         }
-    };
+    }
 }
 
 function hideElement(id, useOpacity = false) {
@@ -324,10 +385,10 @@ function removeElement(id) {
 
 getPreferences((preferences) => {
     if (preferences.streamState === true) {
-        showElement(streamPreviewId, useOpacity=true);
+        showElement(streamPreviewId, (useOpacity = true));
     }
     if (preferences.streamState === false) {
-        hideElement(streamPreviewId, useOpacity=true);
+        hideElement(streamPreviewId, (useOpacity = true));
     }
     if (preferences.pointerState === true) {
         showElement(innerPointerId);
@@ -340,7 +401,9 @@ getPreferences((preferences) => {
     if (preferences.pointerColor) {
         document.getElementById(innerPointerId).style.background = preferences.pointerColor;
         document.getElementById(outerPointerId).style.background = preferences.pointerColor;
-        document.getElementById(outerPointerId).style.borderColor = getContrastyColor(preferences.pointerColor);
+        document.getElementById(outerPointerId).style.borderColor = getContrastyColor(
+            preferences.pointerColor
+        );
         pointerAnimationColor = preferences.pointerColor;
     }
     const state = preferences.detectState;
@@ -486,9 +549,12 @@ function animatePointerUp(x, y) {
 }
 
 function getContrastyColor(hexColor) {
-    if (hexColor.startsWith('#')) hexColor = hexColor.slice(1);
+    if (hexColor.startsWith("#")) hexColor = hexColor.slice(1);
     if (hexColor.length === 3) {
-        hexColor = hexColor.split('').map(c => c + c).join('');
+        hexColor = hexColor
+            .split("")
+            .map((c) => c + c)
+            .join("");
     }
 
     const r = parseInt(hexColor.substring(0, 2), 16);
@@ -497,12 +563,12 @@ function getContrastyColor(hexColor) {
 
     // Calculate luminance (per ITU-R BT.709)
     const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-    return luminance > 160 ? '#000000' : '#FFFFFF';
+    return luminance > 160 ? "#000000" : "#FFFFFF";
 }
 
 function centerPointers() {
-    px = window.innerWidth / 2
-    py = window.innerHeight / 2
+    px = window.innerWidth / 2;
+    py = window.innerHeight / 2;
     outerX = px;
     outerY = py;
     const outer = document.getElementById(outerPointerId);
@@ -520,6 +586,75 @@ function scrollOnScrollable(dx, dy) {
     scrollTarget.scrollBy(dx, dy);
 }
 
+function getMapCanvas() {
+    return Array.from(document.querySelectorAll("canvas")).find(
+        (c) => c.clientHeight > 200 && c.clientWidth > 200
+    );
+}
+
+let lastPanTime = 0;
+function panMap(dx, dy) {
+    const now = performance.now();
+    if (now - lastPanTime < 200) return;
+    lastPanTime = now;
+
+    const mapCanvas = getMapCanvas();
+    if (!mapCanvas) return;
+
+    simulateMouseDrag(mapCanvas, -dx, -dy);
+}
+
+function simulateMouseDrag(el, dx, dy, steps = 5, duration = 200) {
+    const rect = el.getBoundingClientRect();
+    const startX = rect.left + rect.width / 2;
+    const startY = rect.top + rect.height / 2;
+    const endX = startX + dx;
+    const endY = startY + dy;
+
+    const stepDelay = duration / steps;
+    let currentStep = 0;
+
+    el.dispatchEvent(
+        new MouseEvent("mousedown", {
+            bubbles: true,
+            clientX: startX,
+            clientY: startY,
+            buttons: 1,
+        })
+    );
+
+    function moveStep() {
+        currentStep++;
+        const t = currentStep / steps;
+        const x = startX + t * dx;
+        const y = startY + t * dy;
+
+        el.dispatchEvent(
+            new MouseEvent("mousemove", {
+                bubbles: true,
+                clientX: x,
+                clientY: y,
+                buttons: 1,
+            })
+        );
+
+        if (currentStep < steps) {
+            setTimeout(moveStep, stepDelay);
+        } else {
+            el.dispatchEvent(
+                new MouseEvent("mouseup", {
+                    bubbles: true,
+                    clientX: endX,
+                    clientY: endY,
+                    buttons: 0,
+                })
+            );
+        }
+    }
+
+    setTimeout(moveStep, stepDelay);
+}
+
 function findScrollables() {
     if (document.scrollingElement?.scrollHeight > window.innerHeight) {
         return document.scrollingElement;
@@ -533,11 +668,9 @@ function findScrollables() {
         const canScroll = el.scrollHeight > el.clientHeight;
         const overflowY = style.overflowY;
 
-        const isScrollable = canScroll && (
-            overflowY === "auto" ||
-            overflowY === "scroll" ||
-            overflowY === "visible"
-        );
+        const isScrollable =
+            canScroll &&
+            (overflowY === "auto" || overflowY === "scroll" || overflowY === "visible");
 
         if (isScrollable) {
             if (!bestMatch || el.scrollHeight > bestMatch.scrollHeight) {
@@ -549,14 +682,14 @@ function findScrollables() {
 }
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-    if (msg.type === "OFFSCREEN_READY") {
+    if (msg.type === "MODEL_READY") {
         removeStatusPill();
     }
     if (msg.type === "START_STREAM") {
-        showElement(streamPreviewId, useOpacity=true);
+        showElement(streamPreviewId, (useOpacity = true));
     }
     if (msg.type === "STOP_STREAM") {
-        hideElement(streamPreviewId, useOpacity=true);
+        hideElement(streamPreviewId, (useOpacity = true));
     }
     if (msg.type === "SHOW_POINTER") {
         showElement(innerPointerId);
@@ -576,7 +709,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         const pageW = window.innerWidth;
         const pageH = window.innerHeight;
 
-        const px = (1-msg.x) * pageW;
+        const px = (1 - msg.x) * pageW;
         const py = msg.y * pageH;
 
         innerX = px;
@@ -596,7 +729,11 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     if (msg.type === "GAZE_MOVE") {
         if (gazeScrollMode) {
             // window.scrollBy(msg.dx * GAZE_SCROLL_SPEED_X, msg.dy * GAZE_SCROLL_SPEED_Y);
-            scrollOnScrollable(msg.dx * GAZE_SCROLL_SPEED_X, msg.dy * GAZE_SCROLL_SPEED_Y)
+            if (currentSite === "google_maps") {
+                panMap(msg.dx * PAN_SPEED_X, msg.dy * PAN_SPEED_Y);
+            } else {
+                scrollOnScrollable(msg.dx * GAZE_SCROLL_SPEED_X, msg.dy * GAZE_SCROLL_SPEED_Y);
+            }
         } else {
             updateBalloonCursor(msg.dx, msg.dy);
         }
@@ -627,7 +764,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
                 clientX: cx,
                 clientY: cy,
                 view: window,
-                buttons: 1
+                buttons: 1,
             };
 
             target.dispatchEvent(new PointerEvent("pointerdown", eventInit));
@@ -655,7 +792,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
                 cancelable: true,
                 clientX: cx,
                 clientY: cy,
-                buttons: 1
+                buttons: 1,
             });
             target.dispatchEvent(event);
         }

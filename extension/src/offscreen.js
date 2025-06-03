@@ -1,22 +1,17 @@
-import { tf, loadHandDetector, loadFaceDetector } from "./tfjs-bundle.mjs";
+import { tf } from "./tfjs.mjs";
 
-let modelsLoaded = false;
-let handDetector, faceDetector, gazeModel;
-
-async function loadModelsOnce() {
-    if (modelsLoaded) return;
-    handDetector = await loadHandDetector();
-    faceDetector = await loadFaceDetector();
-    try {
-        gazeModel = await tf.loadGraphModel(chrome.runtime.getURL("models/model.json"));
-    } catch (err) {
-        console.warn("Gaze Model Loading Error:", err);
-    }
-    modelsLoaded = true;
-}
-await loadModelsOnce();
-
-let video, canvas, ctx, stream, hands, face, eye_canvas, eye_ctx;
+let lastGazePredOutput;
+let video,
+    preview_canvas,
+    preview_ctx,
+    stream,
+    hands,
+    face,
+    eye_canvas,
+    eye_ctx,
+    video_canvas,
+    video_ctx,
+    vidData;
 let wasOKGesture = false;
 let lastHandLandmarks = [];
 let lastFaceLandmarks = [];
@@ -31,8 +26,11 @@ const MAX_MISSED_HAND = 5;
 let missedFaceFrames = 0;
 const MAX_MISSED_FACE = 5;
 
-const CANVAS_W = 640;
-const CANVAS_H = 480;
+let vw, vh;
+const PREVIEW_CANVAS_W = 640;
+const PREVIEW_CANVAS_H = 480;
+const PREDICT_CANVAS_W = 160;
+const PREDICT_CANVAS_H = 120;
 
 const THUMB_TIP = 4;
 const INDEX_TIP = 8;
@@ -43,22 +41,22 @@ const PINKY_TIP = 20;
 const LEFT_EYE_INDICES = [33, 133, 160, 159, 158, 157, 173, 246];
 const RIGHT_EYE_INDICES = [362, 263, 387, 386, 385, 384, 398, 466];
 const EYES_INDICES = LEFT_EYE_INDICES.concat(RIGHT_EYE_INDICES);
-const EYE_MODEL_INPUT_SHAPE = 224
+const EYE_MODEL_INPUT_SHAPE = 224;
 
 const CONFIDENCE_THRESHOLD = 0.8;
-const OK_SIGN_THRESHOLD = 20;
+const OK_SIGN_THRESHOLD = 0.05;
 
 const CLASS_NAMES = [
-                "center",
-                "left",
-                "right",
-                "up",
-                "down",
-                "up_left",
-                "up_right",
-                "down_left",
-                "down_right"
-            ];
+    "center",
+    "left",
+    "right",
+    "up",
+    "down",
+    "up_left",
+    "up_right",
+    "down_left",
+    "down_right",
+];
 // const GAZE_DIRECTIONS = {
 //     center: [0, 0],
 //     up: [0, -1],
@@ -70,7 +68,8 @@ const CLASS_NAMES = [
 //     down_left: [-1, 1],
 //     down_right: [1, 1]
 // };
-const GAZE_DIRECTIONS = { // reversed horizontally
+const GAZE_DIRECTIONS = {
+    // reversed horizontally
     center: [0, 0],
     up: [0, -1],
     down: [0, 1],
@@ -79,7 +78,7 @@ const GAZE_DIRECTIONS = { // reversed horizontally
     up_left: [1, -1],
     up_right: [-1, -1],
     down_left: [1, 1],
-    down_right: [-1, 1]
+    down_right: [-1, 1],
 };
 
 const CENTER_BIAS = [1.0, 0.6];
@@ -87,14 +86,31 @@ const CENTER_BIAS = [1.0, 0.6];
 let neutralPose = { pitch: 0, yaw: 0 };
 
 let allowPointerMovementByGaze = true;
-const STEP_SIZE_NORMAL = 5;
-const STEP_SIZE_SLOW = 0.4;
+const STEP_SIZE_NORMAL = 10;
+const STEP_SIZE_SLOW = 1;
 let stepSize = STEP_SIZE_NORMAL;
 
 let smoothedGaze = [0, 0];
 const SMOOTHING_ALPHA = 0.2;
 const DEADZONE_VAL = 1.0;
 let deadzone = DEADZONE_VAL;
+
+const port = chrome.runtime.connect({ name: "gaze-gesture-connection" });
+setInterval(() => {
+    port.postMessage({ type: "PING" });
+}, 20000);
+
+port.onMessage.addListener((msg) => {
+    if (msg.type === "GAZE_RESULT") {
+        lastGazePredOutput = msg.result;
+    }
+    if (msg.type === "FACE_RESULT") {
+        face = msg.result;
+    }
+    if (msg.type === "HAND_RESULT") {
+        hands = msg.result;
+    }
+});
 
 // Exponential Moving Average (EMA) smoothing
 function smoothGaze(gazeX, gazeY) {
@@ -135,20 +151,6 @@ function updatePointerControl(handCount) {
     }
 }
 
-function getPreferences(callback) {
-    chrome.storage.local.get(["preferences"], (result) => {
-        if (chrome.runtime.lastError) {
-            console.error("Error loading preferences:", chrome.runtime.lastError);
-            callback({});
-        } else {
-            callback(result.preferences || {});
-        }
-    });
-}
-getPreferences((preferences) => {
-    neutralPose = { yaw: preferences.neutralPose.yaw, pitch: preferences.neutralPose.pitch }
-})
-
 function getRelativePose(poseYaw, posePitch) {
     return {
         pitch: posePitch - neutralPose.pitch,
@@ -157,18 +159,46 @@ function getRelativePose(poseYaw, posePitch) {
 }
 
 function sendRawGazeVector(dx, dy, poseYaw, posePitch) {
-    const flippedDx = dx * -1;
+    const gazeBias = {
+        dx: 0.1, // favors looking left
+        dy: -0.1, // favors looking up
+    };
+    const biasedDx = dx + gazeBias.dx;
+    const biasedDy = dy + gazeBias.dy;
+    const maxGazeXRange = 5;
+    const maxGazeYRange = 5;
+    const clampedDx = Math.max(-maxGazeXRange, Math.min(maxGazeXRange, biasedDx));
+    const clampedDy = Math.max(-maxGazeYRange, Math.min(maxGazeYRange, biasedDy));
+
+    const flippedDx = clampedDx * -1;
 
     const relativePose = getRelativePose(poseYaw, posePitch);
-    const yawBias = Math.max(-10, Math.min(10, relativePose.yaw)) / 10;
-    const pitchBias = Math.max(-10, Math.min(10, relativePose.pitch*-1)) / 10;
+    const maxYawRange = 10;
+    const maxPitchRange = 20;
+    const minYawRange = -1 * maxYawRange;
+    const minPitchRange = -1 * maxPitchRange;
 
-    const poseCompensationFactor = 0.6;
+    const yawMag = Math.abs(relativePose.yaw);
+    const pitchMag = Math.abs(relativePose.pitch);
+    const yawFactor = 1 + Math.min(yawMag / maxYawRange, 1) * 2.0;
+    const pitchFactor = 1 + Math.min(pitchMag / maxPitchRange, 1) * 0.1;
+
+    const yawBias =
+        (Math.max(minYawRange, Math.min(maxYawRange, relativePose.yaw)) / maxYawRange) * yawFactor;
+    const pitchBias =
+        (Math.max(minPitchRange, Math.min(maxPitchRange, -relativePose.pitch)) / maxPitchRange) *
+        pitchFactor;
+
+    const poseCompensationFactor = 0.5;
     const correctedDx = flippedDx - yawBias * poseCompensationFactor;
-    const correctedDy = dy - pitchBias * poseCompensationFactor;
+    const correctedDy = clampedDy - pitchBias * poseCompensationFactor;
 
-    const scaledDx = correctedDx * stepSize;
-    const scaledDy = correctedDy * stepSize;
+    const magnitude = Math.sqrt(flippedDx ** 2 + clampedDy ** 2);
+    const dynamicFactor = 1 + Math.min(magnitude * 20, 100);
+    const scaledStep = stepSize * dynamicFactor;
+
+    const scaledDx = correctedDx * scaledStep;
+    const scaledDy = correctedDy * scaledStep;
 
     const [stableDx, stableDy] = smoothGaze(scaledDx, scaledDy);
     const [dzDx, dzDy] = applyDeadzone(stableDx, stableDy);
@@ -217,22 +247,29 @@ const init = async () => {
     video = document.createElement("video");
     video.setAttribute("playsinline", true);
     video.autoplay = true;
-    
+
     stream = await navigator.mediaDevices.getUserMedia({ video: true });
     const track = stream.getVideoTracks()[0];
     const settings = track.getSettings();
     video.width = settings.width;
+    vw = settings.width;
     video.height = settings.height;
+    vh = settings.height;
     video.srcObject = stream;
     await new Promise((resolve) => {
         video.onloadedmetadata = () => resolve();
     });
     await video.play();
 
-    canvas = document.getElementById("offCanvas");
-    ctx = canvas.getContext("2d");
-    canvas.width = CANVAS_W;
-    canvas.height = CANVAS_H;
+    video_canvas = document.createElement("canvas");
+    video_canvas.width = PREDICT_CANVAS_W;
+    video_canvas.height = PREDICT_CANVAS_H;
+    video_ctx = video_canvas.getContext("2d", { willReadFrequently: true });
+
+    preview_canvas = document.getElementById("offCanvas");
+    preview_ctx = preview_canvas.getContext("2d");
+    preview_canvas.width = PREVIEW_CANVAS_W;
+    preview_canvas.height = PREVIEW_CANVAS_H;
 
     eye_canvas = document.createElement("canvas");
     eye_canvas.width = EYE_MODEL_INPUT_SHAPE;
@@ -242,9 +279,13 @@ const init = async () => {
     requestAnimationFrame(drawLoop);
 };
 
+function landmarkCoordScaling(coord, inputDim, outputDim) {
+    return (coord / inputDim) * outputDim;
+}
+
 function getEyeBoundingBox(landmarks, indices) {
-    const xs = indices.map(i => landmarks[i].x);
-    const ys = indices.map(i => landmarks[i].y);
+    const xs = indices.map((i) => landmarkCoordScaling(landmarks[i].x, PREDICT_CANVAS_W, vw));
+    const ys = indices.map((i) => landmarkCoordScaling(landmarks[i].y, PREDICT_CANVAS_H, vh));
 
     const x = Math.min(...xs);
     const y = Math.min(...ys);
@@ -277,9 +318,13 @@ function estimateHeadPose(landmarks) {
 }
 
 function computeCentroid(landmarks, indices) {
-    const points = indices.map(i => landmarks[i]);
-    const x = points.reduce((sum, p) => sum + p.x, 0) / points.length;
-    const y = points.reduce((sum, p) => sum + p.y, 0) / points.length;
+    const points = indices.map((i) => landmarks[i]);
+    const x =
+        points.reduce((sum, p) => sum + landmarkCoordScaling(p.x, PREDICT_CANVAS_W, vw), 0) /
+        points.length;
+    const y =
+        points.reduce((sum, p) => sum + landmarkCoordScaling(p.y, PREDICT_CANVAS_H, vh), 0) /
+        points.length;
     return { x, y };
 }
 
@@ -292,12 +337,20 @@ let paddedBoxDim = null;
 
 setInterval(async () => {
     if (!video || video.videoWidth === 0 || video.videoHeight === 0) return;
-    const vw = video.videoWidth;
-    const vh = video.videoHeight;
     if (vw < 10 || vh < 10) return;
+    if (!port) return;
+    if (!vidData) return;
 
-    try {
-        face = await faceDetector.estimateFaces(video);
+    const vidTensor = tf.browser.fromPixels(vidData).toFloat();
+    const data = Array.from(vidTensor.dataSync());
+    port.postMessage({
+        type: "DETECTOR",
+        data,
+        shape: vidTensor.shape,
+        dtype: vidTensor.dtype,
+    });
+
+    if (face) {
         if (face.length === 0) {
             missedFaceFrames++;
             if (missedFaceFrames >= MAX_MISSED_HAND) {
@@ -312,21 +365,23 @@ setInterval(async () => {
             rightEyeCenter = computeCentroid(lastFaceLandmarks, RIGHT_EYE_INDICES);
             gazeOrigin = {
                 x: (leftEyeCenter.x + rightEyeCenter.x) / 2,
-                y: (leftEyeCenter.y + rightEyeCenter.y) / 2
+                y: (leftEyeCenter.y + rightEyeCenter.y) / 2,
             };
-            pupilTensor = tf.tensor2d([[
-                leftEyeCenter.x / vw,
-                leftEyeCenter.y / vh,
-                rightEyeCenter.x / vw,
-                rightEyeCenter.y / vh
-            ]]);
+            pupilTensor = tf.tensor2d([
+                [
+                    leftEyeCenter.x / vw,
+                    leftEyeCenter.y / vh,
+                    rightEyeCenter.x / vw,
+                    rightEyeCenter.y / vh,
+                ],
+            ]);
             const margin_x = box.w * 1;
             const margin_y = box.h;
 
             const cropX1 = Math.max(0, box.x - margin_x);
             const cropY1 = Math.max(0, box.y - margin_y);
-            const cropX2 = Math.min(canvas.width, box.x + box.w + margin_x);
-            const cropY2 = Math.min(canvas.height, box.y + box.h + margin_y);
+            const cropX2 = Math.min(vw, box.x + box.w + margin_x);
+            const cropY2 = Math.min(vh, box.y + box.h + margin_y);
 
             const cropW = cropX2 - cropX1;
             const cropH = cropY2 - cropY1;
@@ -335,7 +390,7 @@ setInterval(async () => {
                 x: cropX1,
                 y: cropY1,
                 w: cropW,
-                h: cropH
+                h: cropH,
             };
 
             // pad to square
@@ -348,54 +403,69 @@ setInterval(async () => {
             paddedBoxDim = {
                 maxSide: maxSide,
                 squareX: squareX,
-                squareY: squareY
-            }
+                squareY: squareY,
+            };
         }
-    } catch (err) {
-        console.warn("Gaze detector error:", err);
-    }
 
-    if (!video || video.videoWidth === 0 || video.videoHeight === 0) return;
-    eye_ctx.fillStyle = "#777"; // or compute avg color later
-    eye_ctx.fillRect(0, 0, EYE_MODEL_INPUT_SHAPE, EYE_MODEL_INPUT_SHAPE);
-    eye_ctx.save()
+        eye_ctx.fillStyle = "#777"; // or compute avg color later
+        eye_ctx.fillRect(0, 0, EYE_MODEL_INPUT_SHAPE, EYE_MODEL_INPUT_SHAPE);
+        eye_ctx.save();
 
-    const aspect = EYE_MODEL_INPUT_SHAPE / paddedBoxDim.maxSide;
-    const drawW = drawBoxDim.w * aspect;
-    const drawH = drawBoxDim.h * aspect;
-    const offsetX = (EYE_MODEL_INPUT_SHAPE - drawW) / 2;
-    const offsetY = (EYE_MODEL_INPUT_SHAPE - drawH) / 2;
+        const aspect = EYE_MODEL_INPUT_SHAPE / paddedBoxDim.maxSide;
+        const drawW = drawBoxDim.w * aspect;
+        const drawH = drawBoxDim.h * aspect;
+        const offsetX = (EYE_MODEL_INPUT_SHAPE - drawW) / 2;
+        const offsetY = (EYE_MODEL_INPUT_SHAPE - drawH) / 2;
 
-    if (
-        drawBoxDim.w <= 0 || drawBoxDim.h <= 0 ||
-        drawW <= 0 || drawH <= 0
-    ) {
-        console.warn("Invalid dimensions", {
-            drawBoxDim, drawW, drawH
+        if (drawBoxDim.w <= 0 || drawBoxDim.h <= 0 || drawW <= 0 || drawH <= 0) {
+            console.warn("Invalid dimensions", {
+                drawBoxDim,
+                drawW,
+                drawH,
+            });
+            return;
+        }
+        eye_ctx.drawImage(
+            video,
+            drawBoxDim.x,
+            drawBoxDim.y,
+            drawBoxDim.w,
+            drawBoxDim.h,
+            offsetX,
+            offsetY,
+            drawW,
+            drawH
+        );
+        eye_ctx.restore();
+        const imageData = eye_ctx.getImageData(0, 0, EYE_MODEL_INPUT_SHAPE, EYE_MODEL_INPUT_SHAPE);
+        const imageTensor = tf.browser
+            .fromPixels(imageData)
+            .toFloat()
+            .div(tf.scalar(255.0))
+            .expandDims();
+        const imageTensor_data = imageTensor.dataSync();
+        const pupilTensor_data = pupilTensor.dataSync();
+        port.postMessage({
+            type: "PREDICT_GAZE",
+            imageTensor: {
+                data: Array.from(imageTensor_data),
+                shape: imageTensor.shape,
+                dtype: imageTensor.dtype,
+            },
+            pupilTensor: {
+                data: Array.from(pupilTensor_data),
+                shape: pupilTensor.shape,
+                dtype: pupilTensor.dtype,
+            },
         });
-        return;
+
+        if (lastGazePredOutput) {
+            lastDx = lastGazePredOutput[0];
+            lastDy = lastGazePredOutput[1];
+        }
     }
-    eye_ctx.drawImage(video, 
-        drawBoxDim.x, drawBoxDim.y, drawBoxDim.w, drawBoxDim.h, 
-        offsetX, offsetY, drawW, drawH);
-    eye_ctx.restore();
-    const imageData = eye_ctx.getImageData(0, 0, EYE_MODEL_INPUT_SHAPE, EYE_MODEL_INPUT_SHAPE);
-    const imageTensor = tf.browser.fromPixels(imageData)
-        .toFloat()
-        .div(tf.scalar(255.0))
-        .expandDims();
-    const output = gazeModel.predict({
-        "image_input": imageTensor,
-        "pupil_input": pupilTensor
-    });
 
-    const [dx, dy] = (await output.data());
-    lastDx = dx;
-    lastDy = dy;
-
-    if (!video || video.videoWidth === 0 || video.videoHeight === 0) return;
-    try {
-        hands = await handDetector.estimateHands(video);
+    if (hands) {
         updatePointerControl(hands.length);
         if (hands.length === 0) {
             missedHandFrames++;
@@ -404,41 +474,81 @@ setInterval(async () => {
             }
         } else if (hands.length > 0) {
             const currLandmarks = hands.map((hand) =>
-                hand.keypoints.map(({ x, y, z }) => ({ x, y, z }))
+                hand.keypoints.map(({ x, y, z }) => ({
+                    x: x / PREDICT_CANVAS_W,
+                    y: y / PREDICT_CANVAS_H,
+                    z,
+                }))
             );
             lastHandLandmarks = currLandmarks;
             missedHandFrames = 0;
         }
-    } catch (err) {
-        console.warn("Hand detector error:", err);
     }
 }, interval);
 
 const drawLoop = async () => {
-    if (!video) { return; }
-    ctx.save();
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    if (!video) return;
+    preview_ctx.save();
+    preview_ctx.clearRect(0, 0, PREVIEW_CANVAS_W, PREVIEW_CANVAS_H);
+    preview_ctx.drawImage(video, 0, 0, PREVIEW_CANVAS_W, PREVIEW_CANVAS_H);
+
+    video_ctx.clearRect(0, 0, PREDICT_CANVAS_W, PREDICT_CANVAS_H);
+    video_ctx.drawImage(video, 0, 0, PREDICT_CANVAS_W, PREDICT_CANVAS_H);
+    vidData = video_ctx.getImageData(0, 0, PREDICT_CANVAS_W, PREDICT_CANVAS_H);
 
     for (const landmarks of lastHandLandmarks) {
-        drawConnectors(ctx, landmarks, { color: "#FDD835" });
-        drawLandmarks(ctx, landmarks, { color: "#BA68C8" });
+        const scaledLandmarks = landmarks.map(({ x, y, z }) => ({
+            x: x * PREVIEW_CANVAS_W,
+            y: y * PREVIEW_CANVAS_H,
+            z,
+        }));
+        drawConnectors(preview_ctx, scaledLandmarks, { color: "#FDD835" });
+        drawLandmarks(preview_ctx, scaledLandmarks, { color: "#BA68C8" });
     }
 
     if (lastFaceLandmarks.length > 0) {
-        ctx.strokeStyle = "#BA68C8";
-        ctx.lineWidth = 2;
-        ctx.strokeRect(paddedBoxDim.squareX, paddedBoxDim.squareY, paddedBoxDim.maxSide, paddedBoxDim.maxSide);
-        
+        preview_ctx.strokeStyle = "#BA68C8";
+        preview_ctx.lineWidth = 2;
+        preview_ctx.strokeRect(
+            landmarkCoordScaling(paddedBoxDim.squareX, vw, PREVIEW_CANVAS_W),
+            landmarkCoordScaling(paddedBoxDim.squareY, vw, PREVIEW_CANVAS_W),
+            landmarkCoordScaling(paddedBoxDim.maxSide, vw, PREVIEW_CANVAS_W),
+            landmarkCoordScaling(paddedBoxDim.maxSide, vw, PREVIEW_CANVAS_W)
+        );
+
         // drawBox(ctx, drawBoxDim, { color: "#4FC3F7", lineWidth: 2 });
-        drawPoint(ctx, leftEyeCenter, { color: "#3DDC84" });
-        drawPoint(ctx, rightEyeCenter, { color: "#3DDC84" });
-        drawGazeArrow(ctx, gazeOrigin, lastDx, lastDy, 10, "#FF6B6B");
-        
-        const {yawDegrees, pitchDegrees} = estimateHeadPose(lastFaceLandmarks);
+        drawPoint(
+            preview_ctx,
+            {
+                x: landmarkCoordScaling(leftEyeCenter.x, vw, PREVIEW_CANVAS_W),
+                y: landmarkCoordScaling(leftEyeCenter.y, vh, PREVIEW_CANVAS_H),
+            },
+            { color: "#3DDC84" }
+        );
+        drawPoint(
+            preview_ctx,
+            {
+                x: landmarkCoordScaling(rightEyeCenter.x, vw, PREVIEW_CANVAS_W),
+                y: landmarkCoordScaling(rightEyeCenter.y, vh, PREVIEW_CANVAS_H),
+            },
+            { color: "#3DDC84" }
+        );
+        drawGazeArrow(
+            preview_ctx,
+            {
+                x: landmarkCoordScaling(gazeOrigin.x, vw, PREVIEW_CANVAS_W),
+                y: landmarkCoordScaling(gazeOrigin.y, vh, PREVIEW_CANVAS_H),
+            },
+            lastDx,
+            lastDy,
+            2,
+            "#FF6B6B"
+        );
+
+        const { yawDegrees, pitchDegrees } = estimateHeadPose(lastFaceLandmarks);
         const norm = Math.hypot(lastDx, lastDy);
         const rawGaze = norm > 0 ? [lastDx / norm, lastDy / norm] : [0, 0];
-        
+
         // dampen sensitivity
         const GAZE_GAIN = 0.3;
         const gazeVec = [rawGaze[0] * GAZE_GAIN, rawGaze[1] * GAZE_GAIN];
@@ -452,12 +562,12 @@ const drawLoop = async () => {
         const dx = indexFingerTip.x - thumbFingerTip.x;
         const dy = indexFingerTip.y - thumbFingerTip.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
-        // console.log(distance)
+        // console.log(distance);
         const isOKGesture = distance < OK_SIGN_THRESHOLD;
         if (isOKGesture && !wasOKGesture) {
             console.log("OK gesture detected!");
             chrome.runtime.sendMessage({
-                type: "CLICK"
+                type: "CLICK",
             });
         }
         wasOKGesture = isOKGesture;
@@ -465,8 +575,8 @@ const drawLoop = async () => {
         wasOKGesture = false;
     }
     if (lastHandLandmarks.length > 1 && indexFingerTip) {
-        const nx = thumbFingerTip.x / video.videoWidth;
-        const ny = thumbFingerTip.y / video.videoHeight;
+        const nx = thumbFingerTip.x;
+        const ny = thumbFingerTip.y;
         const [sx, sy] = smoothGaze(nx, ny);
         chrome.runtime.sendMessage({
             type: "POINTER",
@@ -474,7 +584,7 @@ const drawLoop = async () => {
             y: sy,
         });
     }
-    ctx.restore();
+    preview_ctx.restore();
     requestAnimationFrame(drawLoop);
 };
 
@@ -570,7 +680,6 @@ function drawGazeArrow(ctx, origin, dx, dy, scale = 50, color = "red") {
     ctx.fill();
 }
 
-
 chrome.runtime.onMessage.addListener((msg) => {
     if (msg.type === "START_DETECT") init();
     if (msg.type === "STOP_DETECT" && stream) {
@@ -593,6 +702,9 @@ chrome.runtime.onMessage.addListener((msg) => {
         } else {
             console.warn("Cannot calibrate: no face landmarks yet.");
         }
+    }
+    if (msg.type === "SET_NEUTRAL_POSE") {
+        neutralPose = msg.pose;
     }
 });
 
